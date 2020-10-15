@@ -1,15 +1,11 @@
 <template>
   <article class="flex flex-col justify-center items-center w-full h-full">
     <h1 class="text-center text-6xl my-4">
-      Welcome back,
+      <span>Welcome back,</span>
       <div class="group relative w-content inline-flex">
-        <wp-editable
-          ref="nameRef"
-          :editing="editing"
-          @blur="editing = false"
-          placeholder="Name"
-          >{{ name }}</wp-editable
-        >
+        <wp-editable ref="nameRef" :editing="editing" placeholder="Name" @blur="editing = false">
+          {{ name }}
+        </wp-editable>
         <button
           class="absolute left-100 top-0 h-full flex items-center invisible group-hover:visible text-dark-darkest bg-light-lightest rounded-r"
           @click="startEdit"

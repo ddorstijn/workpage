@@ -1,1 +1,3 @@
-<template>Links</template>
+<template>
+  Links
+</template>

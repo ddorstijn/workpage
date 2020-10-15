@@ -1,8 +1,9 @@
 <template>
   <span
-    ref="inputRef"
     id="input"
+    ref="inputRef"
     :contenteditable="editing"
+    :placeholder="placeholder"
     class="pl-2 pr-4 border-b-2 rounded border-transparent"
     :class="{ 'border-light-lightest': editing, 'bg-dark-darker': editing }"
     @keydown.enter.prevent="blur"
@@ -19,6 +20,7 @@ export default defineComponent({
   emits: ['update:editing'],
   props: {
     editing: { type: Boolean, required: true },
+    placeholder: { type: String, required: true },
   },
   setup() {
     const inputRef = ref()

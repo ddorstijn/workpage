@@ -12,8 +12,14 @@
   <section id="area-bc">
     <wp-links />
   </section>
-  <section id="area-tl"></section>
-  <section id="area-tr"></section>
+  <section id="sidebar" class="flex flex-col justify-between gap-4 h-screen w-full">
+    <section id="area-tr">
+      <wp-tasks />
+    </section>
+    <section id="area-br">
+      <wp-timer />
+    </section>
+  </section>
 </template>
 
 <script lang="ts">
@@ -83,5 +89,21 @@ export default defineComponent({
   grid-area: bc;
   position: relative;
   overflow: hidden;
+}
+
+#area-tr {
+  grid-area: tr;
+  position: relative;
+  overflow: hidden;
+}
+
+#area-br {
+  grid-area: br;
+  position: relative;
+  overflow: hidden;
+}
+
+#sidebar {
+  grid-area: sr;
 }
 </style>
