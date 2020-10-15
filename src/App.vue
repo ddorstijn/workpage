@@ -1,29 +1,84 @@
 <template>
-  <article class="p-5">
-    <h1 class="text-green-800 text-3xl font-bold">Hello Vite + Vue 3!</h1>
-    <p>Edit ./App.vue to test hot module replacement (HMR).</p>
-    <p class="mt-2">
-      <span class="block">Count is: {{ count }}</span>
-      <VButton @click="count++">increment</VButton>
-    </p>
-  </article>
+    <section id="area-tl">
+        <wp-clock />
+    </section>
+   	<section id="area-tc">
+        <wp-projects />
+    </section>
+    <section id="area-cc">
+        <wp-greeter />
+    </section>
+    <section id="area-bl"></section>
+    <section id="area-bc">
+        <wp-links />
+    </section>
+    <!-- <wp-sidebar /> -->
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import VButton from './components/VButton.vue'
+import { defineComponent } from 'vue'
+import Clock from "./components/Clock.vue";
+import Greeter from "./components/Greeter.vue";
+//import Links from "./components/Links.vue";
+//import Projects from "./components/Projects.vue";
+//import Sidebar from "./components/sidebar/Sidebar.vue";
 
 export default defineComponent({
+	name: "App",
   components: {
-    VButton,
-  },
-
-  setup() {
-    const count = ref(0)
-
-    return {
-      count,
-    }
+		"wp-clock": Clock,
+		"wp-greeter": Greeter,
+//		"wp-links": Links,
+//		"wp-projects": Projects,
+//		"wp-sidebar": Sidebar,
   },
 })
 </script>
+
+<style lang="postcss">
+* {
+    box-sizing: border-box;
+}
+
+#app {
+    display: grid;
+    grid-template-areas:
+        "tl tc sr"
+        "tl cc sr"
+        "bl cc sr"
+        "bl bc sr";
+    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-rows: 2fr 1fr 1fr 2fr;
+    gap: 0.75rem;
+}
+
+#area-tl {
+    grid-area: tl;
+    position: relative;
+    overflow: hidden;
+}
+
+#area-tc {
+    grid-area: tc;
+    position: relative;
+    overflow: hidden;
+}
+
+#area-cc {
+    grid-area: cc;
+    position: relative;
+    overflow: hidden;
+}
+
+#area-bl {
+    grid-area: bl;
+    position: relative;
+    overflow: hidden;
+}
+
+#area-bc {
+    grid-area: bc;
+    position: relative;
+    overflow: hidden;
+}
+</style>
