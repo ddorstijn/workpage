@@ -35,6 +35,6 @@ export default defineComponent({
 <style lang="postcss" scoped>
 #input:empty:before {
 	content: attr(placeholder);
-	color: gray;
+	@apply text-light-darkest;
 }
 </style>
