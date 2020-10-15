@@ -1,6 +1,6 @@
-# Vite Typescript Starter
+# Workpage
 
-Starter template for Vite + TypeScript project
+Start browsing with an elegant startpage
 
 ## Getting Started
 
