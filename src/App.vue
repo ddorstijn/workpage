@@ -20,7 +20,7 @@ import { defineComponent } from 'vue'
 import Clock from "./components/Clock.vue";
 import Greeter from "./components/Greeter.vue";
 //import Links from "./components/Links.vue";
-//import Projects from "./components/Projects.vue";
+import Projects from "./components/Projects.vue";
 //import Sidebar from "./components/sidebar/Sidebar.vue";
 
 export default defineComponent({
@@ -29,7 +29,7 @@ export default defineComponent({
 		"wp-clock": Clock,
 		"wp-greeter": Greeter,
 //		"wp-links": Links,
-//		"wp-projects": Projects,
+		"wp-projects": Projects,
 //		"wp-sidebar": Sidebar,
   },
 })
