@@ -26,7 +26,7 @@
     </div>
     <div class="item-actions">
       <button class="material-icons text-base hover:text-blue" @click="startEdit">create</button>
-      <button class="material-icons text-base hover:text-red" @click="$emit('remove')">delete</button>
+      <button class="material-icons text-base hover:text-red" @click="$emit('remove')">close</button>
     </div>
   </div>
 </template>
@@ -91,7 +91,7 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .item-container {
-  @apply flex items-stretch min-h-12 bg-dark border-gray-lighter rounded-r shadow cursor-pointer;
+  @apply flex items-stretch min-h-12 bg-dark border-gray-lighter shadow cursor-pointer;
 }
 
 .item-icon {
@@ -103,6 +103,6 @@ export default defineComponent({
 }
 
 .item-actions {
-  @apply flex items-center gap-2 p-2 ml-auto bg-light text-dark rounded-r;
+  @apply flex items-center gap-2 p-2 ml-auto bg-dark-lighter;
 }
 </style>

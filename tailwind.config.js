@@ -66,6 +66,10 @@ module.exports = {
     }),
     extend: {
       inset: {
+        20: '20%',
+        40: '40%',
+        60: '60%',
+        80: '80%',
         100: '100%',
       },
       minHeight: (theme) => ({

@@ -1,6 +1,10 @@
 <template>
-  <article class="m-2 h-full">
-    <header class="collapsible-header">
+  <article class="my-2 h-full">
+    <header
+      class="collapsible-header"
+      :class="{open: expanded}"
+      @click="expanded = !expanded"
+    >
       <h2 class="text-3xl">
         Tasks
       </h2>
@@ -8,42 +12,49 @@
         chevron_right
       </button>
     </header>
-    <div class="relative">
-      <button
-        class="material-icons my-3 mx-8 text-xl absolute right-0"
-        @click="addTask"
+
+    <transition name="slide-left">
+      <div
+        v-if="expanded"
+        class="relative mx-3 transition-all duration-500 ease-in-out"
       >
-        add
-      </button>
-      <section
-        v-for="list in lists"
-        :key="list.title"
-        class="py-2 px-4 bg-dark-darker shadow-lg mb-1 ml-2"
-      >
-        <h3 class="text-2xl mb-2">
-          {{ list.title }}
-        </h3>
-        <wp-draggable
-          group="tasks"
-          :list="list.items"
-          class="flex flex-col gap-2 dragarea"
+        <button
+          class="material-icons my-3 mx-8 text-xl absolute right-0"
+          @click="addTask"
         >
-          <wp-list-item
-            v-for="task in list.items"
-            :key="task.id"
-            v-model:title="task.title"
-            v-model:details="task.details"
-            class="shadow"
-            @remove="removeItem(list, task)"
-          />
-        </wp-draggable>
-      </section>
-    </div>
+          add
+        </button>
+        <section
+          v-for="(list, index) in lists"
+          :key="list.title"
+          class="py-2 px-4 bg-dark-darker shadow-lg mb-1"
+          :style="`--list-idx: ${index}`"
+        >
+          <h3 class="text-2xl mb-2">
+            {{ list.title }}
+          </h3>
+          <wp-draggable
+            group="tasks"
+            :list="list.items"
+            class="flex flex-col gap-2 dragarea"
+          >
+            <wp-list-item
+              v-for="task in list.items"
+              :key="task.id"
+              v-model:title="task.title"
+              v-model:details="task.details"
+              class="shadow"
+              @remove="removeItem(list, task)"
+            />
+          </wp-draggable>
+        </section>
+      </div>
+    </transition>
   </article>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import useList from '/src/modules/list'
 import ListItem from './util/ListItem.vue'
@@ -54,6 +65,7 @@ export default defineComponent({
     'wp-list-item': ListItem,
   },
   setup() {
+    const expanded = ref(true)
     const { lists, addItem, removeItem, addList } = useList()
     const taskLists = ['Todo', 'Doing', 'Done']
     for (const list of taskLists) {
@@ -83,6 +95,8 @@ export default defineComponent({
     }
 
     return {
+      expanded,
+
       lists,
       addItem,
       removeItem,
@@ -94,10 +108,38 @@ export default defineComponent({
 
 <style lang="postcss">
 .collapsible-header {
-  @apply flex justify-start items-center py-3 pl-8 pr-3 mb-2 cursor-pointer select-none bg-dark shadow-xl;
+  @apply relative left-100 flex justify-start items-center py-3 mb-2 cursor-pointer select-none bg-dark shadow-xl transition-all duration-500 ease-in-out;
+}
+
+.collapsible-header > h2 {
+  @apply transform -translate-x-full px-3 transition-all duration-500 ease-in-out;
+}
+
+.collapsible-header:hover {
+  @apply left-80;
+}
+
+.collapsible-header:hover > h2 {
+  @apply transform -translate-x-1/2;
+}
+
+.collapsible-header.open {
+  @apply left-0 pl-8 pr-3 mx-2 bg-dark shadow-xl;
+}
+
+.collapsible-header.open > h2 {
+  @apply transform translate-x-0 px-0;
 }
 
 .dragarea:empty {
   @apply bg-dark rounded h-1 m-4;
+}
+
+.slide-left-enter-to, .slide-left-leave-from {
+  @apply left-0;
+}
+
+.slide-left-enter-from, .slide-left-leave-to {
+  @apply left-100;
 }
 </style>
