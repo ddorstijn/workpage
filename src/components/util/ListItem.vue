@@ -25,8 +25,8 @@
       </wp-editable>
     </div>
     <div class="item-actions">
-      <button class="material-icons text-base" @click="startEdit">create</button>
-      <button class="material-icons text-base" @click="$emit('remove')">delete</button>
+      <button class="material-icons text-base hover:text-blue" @click="startEdit">create</button>
+      <button class="material-icons text-base hover:text-red" @click="$emit('remove')">delete</button>
     </div>
   </div>
 </template>
