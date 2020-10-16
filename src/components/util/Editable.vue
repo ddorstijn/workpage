@@ -4,8 +4,8 @@
     ref="inputRef"
     :contenteditable="editing"
     :placeholder="placeholder"
-    class="rounded"
-    :class="{ 'bg-dark-darker p-1': editing }"
+    class="block rounded"
+    :class="{ 'bg-dark-darker p-1 cursor-text': editing }"
     @keydown.enter.prevent="blur"
     @keydown.esc="blur"
   >
@@ -42,7 +42,7 @@ export default defineComponent({
 </script>
 
 <style lang="postcss" scoped>
-#input:empty:before {
+#input:empty:after {
   content: attr(placeholder);
   @apply text-light-darkest;
 }

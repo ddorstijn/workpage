@@ -49,8 +49,12 @@ export default defineComponent({
   setup(props) {
     const titleRef = ref()
     const detailsRef = ref()
-    const editing = ref(false)
+    const editing = ref(true)
     const startEdit = () => {
+      if (editing.value) {
+        return;
+      }
+
       editing.value = true
       nextTick(() => {
         titleRef.value.focus()

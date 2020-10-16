@@ -1,7 +1,9 @@
 <template>
   <article class="m-2 h-full">
     <header class="collapsible-header">
-      <h2 class="text-3xl">Tasks</h2>
+      <h2 class="text-3xl">
+        Tasks
+      </h2>
       <button class="material-icons ml-auto text-2xl text-light-darkest">
         chevron_right
       </button>
@@ -25,6 +27,7 @@
           group="tasks"
           :list="list.items"
           class="flex flex-col gap-2 dragarea"
+          @add="draggableCallback"
         >
           <wp-list-item
             v-for="task in list.items"
@@ -80,11 +83,16 @@ export default defineComponent({
       addItem(lists.value[0], item, true)
     }
 
+    const draggableCallback = (ev: Event) => {
+      console.log(document.activeElement?.blur())
+    }
+
     return {
       lists,
       addItem,
       removeItem,
       addTask,
+      draggableCallback,
     }
   },
 })
