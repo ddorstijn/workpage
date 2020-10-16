@@ -49,7 +49,7 @@ export default defineComponent({
   setup(props) {
     const titleRef = ref()
     const detailsRef = ref()
-    const editing = ref(true)
+    const editing = ref(false)
     const startEdit = () => {
       editing.value = true
       nextTick(() => {
@@ -85,7 +85,7 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .item-container {
-  @apply flex items-stretch min-h-12 bg-dark border-gray-lighter rounded-r shadow;
+  @apply flex items-stretch min-h-12 bg-dark border-gray-lighter rounded-r shadow cursor-pointer;
 }
 
 .item-icon {
