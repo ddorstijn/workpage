@@ -4,8 +4,8 @@
     ref="inputRef"
     :contenteditable="editing"
     :placeholder="placeholder"
-    class="pl-2 pr-4 border-b-2 rounded border-transparent"
-    :class="{ 'border-light-lightest': editing, 'bg-dark-darker': editing }"
+    class="rounded"
+    :class="{ 'bg-dark-darker p-1': editing }"
     @keydown.enter.prevent="blur"
     @keydown.esc="blur"
   >
@@ -17,7 +17,6 @@
 import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
-  emits: ['update:editing'],
   props: {
     editing: { type: Boolean, required: true },
     placeholder: { type: String, required: true },

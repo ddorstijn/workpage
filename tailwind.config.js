@@ -68,6 +68,12 @@ module.exports = {
       inset: {
         100: '100%',
       },
+      minHeight: (theme) => ({
+        ...theme('spacing'),
+      }),
+      maxHeight: (theme) => ({
+        ...theme('spacing'),
+      }),
     },
   },
   variants: {
