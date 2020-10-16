@@ -49,7 +49,7 @@ export default defineComponent({
   setup(props) {
     const titleRef = ref()
     const detailsRef = ref()
-    const editing = ref(true)
+    const editing = ref(false)
     const startEdit = () => {
       if (editing.value) {
         return;
@@ -73,7 +73,9 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      titleRef.value.focus()
+      if (!props.title) {
+        startEdit()
+      }
     });
 
     return {

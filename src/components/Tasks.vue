@@ -18,7 +18,7 @@
       <section
         v-for="list in lists"
         :key="list.title"
-        class="py-2 px-4 bg-dark-darker shadow-lg mb-1"
+        class="py-2 px-4 bg-dark-darker shadow-lg mb-1 ml-2"
       >
         <h3 class="text-2xl mb-2">
           {{ list.title }}
@@ -27,7 +27,6 @@
           group="tasks"
           :list="list.items"
           class="flex flex-col gap-2 dragarea"
-          @add="draggableCallback"
         >
           <wp-list-item
             v-for="task in list.items"
@@ -83,16 +82,11 @@ export default defineComponent({
       addItem(lists.value[0], item, true)
     }
 
-    const draggableCallback = (ev: Event) => {
-      console.log(document.activeElement?.blur())
-    }
-
     return {
       lists,
       addItem,
       removeItem,
       addTask,
-      draggableCallback,
     }
   },
 })
