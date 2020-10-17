@@ -1,9 +1,14 @@
 <template>
   <article class="flex flex-col justify-center items-center w-full h-full">
     <h1 class="text-center text-6xl my-4">
-      <span>Welcome back,</span>
+      <span>Welcome back, </span>
       <div class="group relative w-content inline-flex">
-        <wp-editable ref="nameRef" :editing="editing" placeholder="Name" @blur="editing = false">
+        <wp-editable
+          ref="nameRef"
+          :editing="editing"
+          placeholder="Name"
+          @blur="editing = false"
+        >
           {{ name }}
         </wp-editable>
         <button
@@ -35,7 +40,7 @@ export default defineComponent({
     const startEdit = () => {
       editing.value = true
       nextTick(() => {
-        nameRef.value!.focus()
+        nameRef.value?.focus()
       })
     }
 
