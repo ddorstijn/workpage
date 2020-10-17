@@ -10,5 +10,14 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['vue'],
-  rules: {},
+  rules: {
+    'vue/html-self-closing': [
+      'error',
+      {
+        html: {
+          void: 'any',
+        },
+      },
+    ],
+  },
 }

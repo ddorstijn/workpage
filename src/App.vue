@@ -8,11 +8,14 @@
   <section id="area-cc">
     <wp-greeter />
   </section>
-  <section id="area-bl"></section>
+  <section id="area-bl" />
   <section id="area-bc">
     <wp-links />
   </section>
-  <section id="sidebar" class="flex flex-col justify-between gap-4 h-screen w-full">
+  <section
+    id="sidebar"
+    class="flex flex-col justify-between gap-4 h-screen w-full"
+  >
     <section id="area-tr">
       <wp-tasks />
     </section>

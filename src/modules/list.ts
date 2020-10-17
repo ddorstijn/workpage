@@ -12,9 +12,9 @@ interface List {
   items: Item[]
 }
 
-export default function useLists() {
+export default function useLists(startLists: List[]) {
   const uid = ref(0)
-  const lists = ref([] as List[])
+  const lists = ref(startLists)
 
   const addItem = (list: List, item: Item, prepend?: boolean) => {
     if (!item) {
@@ -45,8 +45,8 @@ export default function useLists() {
 
   const addList = (title: String, items: Item[] = []) => {
     const list = {
-      title,
-      items,
+      title: title,
+      items: items,
     } as List
 
     lists.value.push(list)
