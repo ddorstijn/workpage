@@ -2,12 +2,10 @@
   <article class="my-2 h-full">
     <header
       class="collapsible-header"
-      :class="{open: expanded}"
+      :class="{ open: expanded }"
       @click="expanded = !expanded"
     >
-      <h2 class="text-3xl">
-        Tasks
-      </h2>
+      <h2 class="text-3xl">Tasks</h2>
       <button class="material-icons ml-auto text-2xl text-light-darkest">
         chevron_right
       </button>
@@ -131,11 +129,13 @@ export default defineComponent({
   @apply bg-dark rounded h-1 m-4;
 }
 
-.slide-left-enter-to, .slide-left-leave-from {
+.slide-left-enter-to,
+.slide-left-leave-from {
   @apply left-0;
 }
 
-.slide-left-enter-from, .slide-left-leave-to {
+.slide-left-enter-from,
+.slide-left-leave-to {
   @apply left-100;
 }
 </style>

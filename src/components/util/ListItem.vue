@@ -25,8 +25,18 @@
       </wp-editable>
     </div>
     <div class="item-actions">
-      <button class="material-icons text-base hover:text-blue" @click="startEdit">create</button>
-      <button class="material-icons text-base hover:text-red" @click="$emit('remove')">close</button>
+      <button
+        class="material-icons text-base hover:text-blue"
+        @click="startEdit"
+      >
+        create
+      </button>
+      <button
+        class="material-icons text-base hover:text-red"
+        @click="$emit('remove')"
+      >
+        close
+      </button>
     </div>
   </div>
 </template>
@@ -52,7 +62,7 @@ export default defineComponent({
     const editing = ref(false)
     const startEdit = () => {
       if (editing.value) {
-        return;
+        return
       }
 
       editing.value = true
@@ -76,7 +86,7 @@ export default defineComponent({
       if (!props.title) {
         startEdit()
       }
-    });
+    })
 
     return {
       editing,

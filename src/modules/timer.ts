@@ -8,7 +8,7 @@ interface Session {
 export default function useTimer() {
   const intervalHandle = ref()
   const previousSessions = ref([] as Session[])
-  const currentSession = ref({} as Session)
+  const currentSession = ref({ start: 0, end: 0 } as Session)
 
   const elapsedTime = computed(() => {
     let total = 0
@@ -16,7 +16,7 @@ export default function useTimer() {
       total += session.end - session.start
     })
 
-    if (currentSession.value) {
+    if (currentSession.value.start && currentSession.value.end) {
       total += currentSession.value.end - currentSession.value.start
     }
 

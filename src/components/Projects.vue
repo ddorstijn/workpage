@@ -1,3 +1,1 @@
-<template>
-  Projects
-</template>
+<template>Projects</template>
