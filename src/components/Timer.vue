@@ -3,9 +3,9 @@
     <transition name="slide-left">
       <section
         v-if="expanded"
-        class="relative mx-3 transition-all duration-500 ease-in-out"
+        class="relative block mx-3 transition-all duration-500 ease-in-out"
       >
-        <div class="relative flex gap-2 justify-center bg-dark-darker p-6 mb-1">
+        <div class="relative flex w-full h-full gap-2 justify-center bg-dark-darker p-6 mb-1">
           <svg class="flex-1" viewBox="0 0 500 500" transform="rotate(-90)">
             <circle
               class="text-dark stroke-current"
@@ -33,18 +33,16 @@
               stroke-width="1rem"
             />
           </svg>
-          <div
-            class="absolute flex flex-col h-full items-center justify-center"
-          >
-            <span class="">{{ elapsedHuman }}</span>
+          <div class="absolute self-center flex flex-col items-center justify-center">
+            <span class="text-xl">{{ elapsedHuman }}</span>
             <span class="">
               <template v-if="!currentSession.start">
-                <button class="material-icons" @click="startSession">
+                <button class="material-icons text-2xl" @click="startSession">
                   play_arrow
                 </button>
               </template>
               <template v-else>
-                <button class="material-icons" @click="stopSession">
+                <button class="material-icons text-2xl" @click="stopSession">
                   stop
                 </button>
               </template>
