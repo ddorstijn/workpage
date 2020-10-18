@@ -5,7 +5,9 @@
         v-if="expanded"
         class="relative block mx-3 transition-all duration-500 ease-in-out"
       >
-        <div class="relative flex w-full h-full gap-2 justify-center bg-dark-darker p-6 mb-1">
+        <div
+          class="relative flex w-full h-full gap-2 justify-center bg-dark-darker p-6 mb-1"
+        >
           <svg class="flex-1" viewBox="0 0 500 500" transform="rotate(-90)">
             <circle
               class="text-dark stroke-current"
@@ -33,7 +35,9 @@
               stroke-width="1rem"
             />
           </svg>
-          <div class="absolute self-center flex flex-col items-center justify-center">
+          <div
+            class="absolute self-center flex flex-col items-center justify-center"
+          >
             <span class="text-xl">{{ elapsedHuman }}</span>
             <span class="">
               <template v-if="!currentSession.start">
@@ -130,7 +134,7 @@ export default defineComponent({
       }),
       state: computed(() => {
         const percentage = elapsedTime.value / goal.value.timestamp
-				if (percentage > 1) {
+        if (percentage > 1) {
           return 'success'
         }
 

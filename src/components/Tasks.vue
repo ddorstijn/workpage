@@ -64,7 +64,12 @@ export default defineComponent({
   },
   setup() {
     const expanded = ref(true)
-    const { lists, addItem, removeItem } = useList(['Todo', 'Doing', 'Done'])
+    const startLists = [
+      { title: 'Todo', items: [] },
+      { title: 'Doing', items: [] },
+      { title: 'Done', items: [] },
+    ]
+    const { lists, addItem, removeItem } = useList(startLists)
 
     const addTask = () => {
       const date = new Date()
