@@ -1,13 +1,9 @@
 <template>
   <article class="my-2 h-full">
+
     <transition name="slide-left">
-      <section
-        v-if="expanded"
-        class="relative block mx-3 transition-all duration-500 ease-in-out"
-      >
-        <div
-          class="relative flex w-full h-full gap-2 justify-center bg-dark-darker p-6 mb-1"
-        >
+      <div v-if="expanded" class="collapsible-body">
+        <section class="relative flex w-full h-full gap-2 justify-center bg-dark-darker p-6 px-12 mb-1">
           <svg class="flex-1" viewBox="0 0 500 500" transform="rotate(-90)">
             <circle
               class="text-dark stroke-current"
@@ -36,25 +32,23 @@
             />
           </svg>
           <div
-            class="absolute self-center flex flex-col items-center justify-center"
+            class="absolute self-center flex flex-col items-center justify-center mt-6"
           >
             <span class="text-xl">{{ elapsedHuman }}</span>
-            <span class="">
-              <template v-if="!currentSession.start">
-                <button class="material-icons text-2xl" @click="startSession">
-                  play_arrow
-                </button>
-              </template>
-              <template v-else>
-                <button class="material-icons text-2xl" @click="stopSession">
-                  stop
-                </button>
-              </template>
-            </span>
+						<template v-if="!currentSession.start">
+							<button class="material-icons text-2xl" @click="startSession">
+								play_arrow
+							</button>
+						</template>
+						<template v-else>
+							<button class="material-icons text-2xl" @click="stopSession">
+								stop
+							</button>
+						</template>
           </div>
-        </div>
+        </section>
 
-        <div class="flex gap-2 justify-center bg-dark-darker p-2 mb-2">
+        <section class="flex gap-2 justify-center bg-dark-darker p-2 mb-2">
           <span>Goal:</span>
 
           <label for="goal-hours">
@@ -79,9 +73,8 @@
             />
             m
           </label>
-        </div>
-        <div />
-      </section>
+      	</section>
+      </div>
     </transition>
 
     <header
@@ -134,7 +127,7 @@ export default defineComponent({
       }),
       state: computed(() => {
         const percentage = elapsedTime.value / goal.value.timestamp
-        if (percentage > 1) {
+        if (percentage > 1 || goal.value.timestamp == 0) {
           return 'success'
         }
 
@@ -165,6 +158,43 @@ export default defineComponent({
 </script>
 
 <style lang="postcss" scoped>
+.collapsible-header {
+  @apply relative left-100 flex justify-start items-center py-3 mb-2 cursor-pointer select-none bg-dark shadow-xl transition-all duration-500 ease-in-out;
+}
+
+.collapsible-header > h2 {
+  @apply transform -translate-x-full px-8 transition-all duration-500 ease-in-out;
+}
+
+.collapsible-header:hover {
+  @apply left-80;
+}
+
+.collapsible-header:hover > h2 {
+  @apply transform -translate-x-1/2;
+}
+
+.collapsible-header.open {
+  @apply left-0 pl-8 pr-3 mx-2 bg-dark shadow-xl;
+}
+
+.collapsible-header.open > h2 {
+  @apply transform translate-x-0 px-0;
+}
+
+.collapsible-body {
+  @apply relative block mx-2 transition-all duration-500 ease-in-out;
+}
+
+.slide-left-enter-to,
+.slide-left-leave-from {
+  @apply left-0;
+}
+
+.slide-left-enter-from,
+.slide-left-leave-to {
+  @apply left-100;
+}
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

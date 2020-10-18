@@ -12,10 +12,7 @@
     </header>
 
     <transition name="slide-left">
-      <div
-        v-if="expanded"
-        class="relative mx-3 transition-all duration-500 ease-in-out"
-      >
+      <div v-if="expanded" class="collapsible-body">
         <button
           class="material-icons my-3 mx-8 text-xl absolute right-0"
           @click="addTask"
@@ -63,7 +60,7 @@ export default defineComponent({
     'wp-list-item': ListItem,
   },
   setup() {
-    const expanded = ref(true)
+    const expanded = ref(false)
     const startLists = [
       { title: 'Todo', items: [] },
       { title: 'Doing', items: [] },
@@ -105,13 +102,13 @@ export default defineComponent({
 })
 </script>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 .collapsible-header {
   @apply relative left-100 flex justify-start items-center py-3 mb-2 cursor-pointer select-none bg-dark shadow-xl transition-all duration-500 ease-in-out;
 }
 
 .collapsible-header > h2 {
-  @apply transform -translate-x-full px-3 transition-all duration-500 ease-in-out;
+  @apply transform -translate-x-full px-8 transition-all duration-500 ease-in-out;
 }
 
 .collapsible-header:hover {
@@ -128,6 +125,14 @@ export default defineComponent({
 
 .collapsible-header.open > h2 {
   @apply transform translate-x-0 px-0;
+}
+
+.collapsible-body {
+  @apply relative block mx-2 transition-all duration-500 ease-in-out;
+}
+
+.dragarea {
+	@apply overflow-y-scroll;
 }
 
 .dragarea:empty {
