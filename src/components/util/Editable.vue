@@ -1,49 +1,41 @@
 <template>
-  <span
+  <span 
     id="input"
-    ref="inputRef"
-    :contenteditable="editing"
-    :placeholder="placeholder"
-    class="block rounded"
-    :class="{ 'bg-dark-darker p-1 cursor-text': editing }"
-    @keydown.enter.prevent="blur"
-    @keydown.esc="blur"
-  >
-    <slot />
-  </span>
+    class="pb-1 border-b-2 border-transparent focus:border-light"
+		contenteditable
+
+		:value="text"
+    @input="text = $event.target.innerText"
+    @keydown.escape="$event.target.blur()"
+    @keydown.enter="$event.target.blur()"
+  />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, computed } from 'vue'
 
 export default defineComponent({
   props: {
-    editing: { type: Boolean, required: true },
-    placeholder: { type: String, required: true },
+		modelValue: { type: String, required: true },
+    oneliner: { type: Boolean, default: false },
   },
-  setup() {
-    const inputRef = ref()
-    const focus = () => {
-      inputRef.value.focus()
-      document.execCommand('selectAll', false, undefined)
-    }
-
-    const blur = () => {
-      inputRef.value.blur()
-    }
+	emits: ['update:modelValue'],
+  setup(props, { emit }) {
+		const text = computed({ 
+			get: () => props.modelValue, 
+			set: (val: String) => emit('update:modelValue', val)
+		}) 
 
     return {
-      inputRef,
-      focus,
-      blur,
+			text,
     }
   },
 })
 </script>
 
 <style lang="postcss" scoped>
-#input:empty:after {
-  content: attr(placeholder);
-  @apply text-light-darkest;
+#input:empty:before {
+	content: attr(placeholder);
+  @apply text-light-darker;  
 }
 </style>

@@ -1,48 +1,38 @@
 <template>
   <div class="item-container">
+		<span class="material-icons self-center w-5 text-gray">
+			drag_indicator
+		</span>
     <div v-if="icon" class="item-icon">
       <img class="h-8 w-8 rounded-full" :src="icon" alt="icon" />
     </div>
     <div class="item-body">
       <wp-editable
         ref="titleRef"
-        :editing="editing"
         class="text-lg leading-4"
         placeholder="Title"
         @input="$emit('update:title', $event.target.innerText)"
-        @blur="blur"
-      >
-        {{ title }}
-      </wp-editable>
+      />
       <wp-editable
+				v-if="detailsEditable"
         class="leading-4 text-xs text-gray"
-        :editing="editing && detailsEditable"
         placeholder="Details"
-        @input="$emit('update:details', $event.target.innerText)"
-        @blur="blur"
-      >
-        {{ details }}
-      </wp-editable>
+      />
+			<span v-else class="leading-4 text-xs text-gray">
+				{{ details }}
+			</span>
     </div>
-    <div class="item-actions">
-      <button
-        class="material-icons text-base hover:text-blue"
-        @click="startEdit"
-      >
-        create
-      </button>
-      <button
-        class="material-icons text-base hover:text-red"
-        @click="$emit('remove')"
-      >
-        close
-      </button>
-    </div>
+    <button
+      class="material-icons px-2 text-base text-light-darkest hover:text-red"
+      @click="$emit('remove')"
+    >
+      close
+    </button>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, nextTick } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import Editable from './Editable.vue'
 
 export default defineComponent({
@@ -59,41 +49,15 @@ export default defineComponent({
   setup(props) {
     const titleRef = ref()
     const detailsRef = ref()
-    const editing = ref(false)
-    const startEdit = () => {
-      if (editing.value) {
-        return
-      }
-
-      editing.value = true
-      nextTick(() => {
-        titleRef.value.focus()
-      })
-    }
-
-    const blur = (ev: FocusEvent) => {
-      if (props.detailsEditable) {
-        const nextTarget = ev.relatedTarget
-        if (nextTarget === titleRef.value || nextTarget === detailsRef.value) {
-          return
-        }
-      }
-
-      editing.value = false
-    }
 
     onMounted(() => {
       if (!props.title) {
-        startEdit()
       }
     })
 
     return {
-      editing,
-      startEdit,
       titleRef,
       detailsRef,
-      blur,
     }
   },
 })
@@ -110,9 +74,5 @@ export default defineComponent({
 
 .item-body {
   @apply flex flex-col justify-center flex-grow mx-2 py-2;
-}
-
-.item-actions {
-  @apply flex items-center gap-2 p-2 ml-auto bg-dark-lighter;
 }
 </style>

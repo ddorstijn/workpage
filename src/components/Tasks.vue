@@ -5,7 +5,10 @@
       :class="{ open: expanded }"
       @click="expanded = !expanded"
     >
-      <h2 class="text-3xl">Tasks</h2>
+      <h2 class="text-3xl">
+        <span class="material-icons m-1">assignment</span>
+        Tasks
+      </h2>
       <button class="material-icons ml-auto text-2xl text-light-darkest">
         chevron_right
       </button>
@@ -132,7 +135,6 @@ export default defineComponent({
 }
 
 .dragarea {
-	@apply overflow-y-scroll;
 }
 
 .dragarea:empty {

@@ -1,9 +1,10 @@
 <template>
   <article class="my-2 h-full">
-
     <transition name="slide-left">
       <div v-if="expanded" class="collapsible-body">
-        <section class="relative flex w-full h-full gap-2 justify-center bg-dark-darker p-6 px-12 mb-1">
+        <section
+          class="relative flex w-full h-full gap-2 justify-center bg-dark-darker p-6 px-12 mb-1"
+        >
           <svg class="flex-1" viewBox="0 0 500 500" transform="rotate(-90)">
             <circle
               class="text-dark stroke-current"
@@ -35,25 +36,24 @@
             class="absolute self-center flex flex-col items-center justify-center mt-6"
           >
             <span class="text-xl">{{ elapsedHuman }}</span>
-						<template v-if="!currentSession.start">
-							<button class="material-icons text-2xl" @click="startSession">
-								play_arrow
-							</button>
-						</template>
-						<template v-else>
-							<button class="material-icons text-2xl" @click="stopSession">
-								stop
-							</button>
-						</template>
+            <template v-if="!currentSession.start">
+              <button class="material-icons text-2xl" @click="startSession">
+                play_arrow
+              </button>
+            </template>
+            <template v-else>
+              <button class="material-icons text-2xl" @click="stopSession">
+                stop
+              </button>
+            </template>
           </div>
         </section>
 
         <section class="flex gap-2 justify-center bg-dark-darker p-2 mb-2">
           <span>Goal:</span>
-
           <label for="goal-hours">
             <input
-              v-model="goal.hours"
+              v-model.number="goal.hours"
               class="bg-dark w-8 px-2 font-sans text-center rounded focus:outline-none focus:shadow-outline"
               type="number"
               min="0"
@@ -64,7 +64,7 @@
           </label>
           <label for="goal-minutes">
             <input
-              v-model="goal.minutes"
+              v-model.number="goal.minutes"
               class="bg-dark w-8 px-2 font-sans text-center rounded focus:outline-none focus:shadow-outline"
               type="number"
               min="0"
@@ -73,7 +73,7 @@
             />
             m
           </label>
-      	</section>
+        </section>
       </div>
     </transition>
 
@@ -82,7 +82,10 @@
       :class="{ open: expanded }"
       @click="expanded = !expanded"
     >
-      <h2 class="text-3xl">Timer</h2>
+      <h2 class="text-3xl">
+        <span class="material-icons m-1">alarm</span>
+        Timer
+      </h2>
       <button class="material-icons ml-auto text-2xl text-light-darkest">
         chevron_right
       </button>
