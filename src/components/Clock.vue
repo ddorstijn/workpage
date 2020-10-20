@@ -1,5 +1,5 @@
 <template>
-  <article class="w-auto inline-block mx-2">
+  <article class="w-auto inline-block mx-6 my-4">
     <h1 class="text-6xl text-center">{{ time }}</h1>
     <h3 class="text-xl text-center">{{ date }}</h3>
   </article>

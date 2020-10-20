@@ -25,6 +25,7 @@
         <section
           v-for="(list, index) in lists"
           :key="list.title"
+
           class="py-2 px-4 bg-dark-darker shadow-lg mb-1"
           :style="`--list-idx: ${index}`"
         >
@@ -39,9 +40,10 @@
             <wp-list-item
               v-for="task in list.items"
               :key="task.id"
+
+              class="shadow"
               v-model:title="task.title"
               v-model:details="task.details"
-              class="shadow"
               @remove="removeItem(list, task)"
             />
           </wp-draggable>

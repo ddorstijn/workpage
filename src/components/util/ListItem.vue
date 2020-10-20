@@ -1,6 +1,6 @@
 <template>
   <div class="item-container">
-		<span class="material-icons self-center w-5 text-gray">
+		<span class="material-icons self-center text-gray cursor-move">
 			drag_indicator
 		</span>
     <div v-if="icon" class="item-icon">
@@ -8,13 +8,13 @@
     </div>
     <div class="item-body">
       <wp-editable
-        ref="titleRef"
+				v-model="titleVal"
         class="text-lg leading-4"
         placeholder="Title"
-        @input="$emit('update:title', $event.target.innerText)"
       />
       <wp-editable
 				v-if="detailsEditable"
+				v-model="detailsVal"
         class="leading-4 text-xs text-gray"
         placeholder="Details"
       />
@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, computed, onMounted, ref } from 'vue'
 import Editable from './Editable.vue'
 
 export default defineComponent({
@@ -46,18 +46,21 @@ export default defineComponent({
     detailsEditable: { type: Boolean, default: false },
     icon: { type: String, default: '' },
   },
-  setup(props) {
-    const titleRef = ref()
-    const detailsRef = ref()
+  setup(props, { emit }) {
+		const titleVal = computed({ 
+			get: () => props.title, 
+			set: (val: String) => emit('update:title', val)
+		})
 
-    onMounted(() => {
-      if (!props.title) {
-      }
-    })
+
+		const detailsVal = computed({ 
+			get: () => props.details, 
+			set: (val: String) => emit('update:details', val)
+		}) 
 
     return {
-      titleRef,
-      detailsRef,
+			titleVal,
+			detailsVal,
     }
   },
 })

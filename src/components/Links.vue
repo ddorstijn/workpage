@@ -9,9 +9,9 @@
         <span class="material-icons m-1">book</span>
         Links
       </h2>
-      <button class="material-icons ml-auto text-2xl text-light-darkest">
+      <!-- <button class="material-icons ml-auto text-2xl text-light-darkest">
         expand_more
-      </button>
+      </button> -->
     </header>
 
     <transition name="slide-up">
@@ -26,7 +26,7 @@
           <wp-list-item
             title="Google"
             details="www.google.com"
-            :detailsEditable="true"
+            detailsEditable
             icon="www.google.com"
           />
           <wp-list-item
@@ -100,13 +100,16 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .collapsible-header {
-  @apply relative flex justify-center items-center w-48 p-3 mb-2;
+  @apply relative flex justify-center items-center w-48;
+	@apply transform translate-y-full;
   @apply cursor-pointer select-none bg-dark shadow-xl;
   @apply transition-all duration-500 ease-in-out;
 }
 
 .collapsible-header > h2 {
   @apply transition-all duration-500 ease-in-out;
+	@apply transform -translate-y-full;
+	@apply py-6;
 }
 
 .collapsible-header:hover {
@@ -116,9 +119,13 @@ export default defineComponent({
 }
 
 .collapsible-header.open {
+	@apply transform translate-y-0;
+	@apply p-3 mb-2;
 }
 
 .collapsible-header.open > h2 {
+	@apply transform translate-y-0;
+	@apply p-0;
 }
 
 .collapsible-body {
@@ -138,9 +145,11 @@ export default defineComponent({
 
 .slide-up-enter-to,
 .slide-up-leave-from {
+	@apply top-0;
 }
 
 .slide-up-enter-from,
 .slide-up-leave-to {
+	@apply top-100;
 }
 </style>
