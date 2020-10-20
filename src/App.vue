@@ -91,7 +91,7 @@ export default defineComponent({
 #area-bc {
   grid-area: bc;
   position: relative;
-  /* overflow: hidden;*/
+  overflow: hidden;
 }
 
 #area-tr {

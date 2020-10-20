@@ -2,7 +2,7 @@
   <span 
 		ref="inputRef"
     id="input"
-    class="cursor-text pb-1 border-b-2 border-transparent focus:border-light"
+    class="cursor-text border-b-2 border-transparent focus:border-light"
 		contenteditable
 
     @input="text = $event.target.innerText"
@@ -17,7 +17,7 @@ import { defineComponent, ref, computed, onMounted } from 'vue'
 
 export default defineComponent({
   props: {
-		modelValue: { type: String, required: true },
+		modelValue: { type: String, default: '' },
     oneliner: { type: Boolean, default: false },
   },
 	emits: ['update:modelValue'],

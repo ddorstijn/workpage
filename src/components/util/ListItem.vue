@@ -72,7 +72,7 @@ export default defineComponent({
 }
 
 .item-icon {
-  @apply flex justify-center items-center w-12 min-h-12 bg-dark-darkest;
+  @apply flex justify-center items-center w-12 min-h-12;
 }
 
 .item-body {

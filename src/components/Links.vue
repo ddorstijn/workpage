@@ -1,12 +1,12 @@
 <template>
-  <article class="h-full flex flex-col justify-end items-center">
+  <article class="absolute bottom-0 w-full flex flex-col items-center">
     <header
       class="collapsible-header"
       :class="{ open: expanded }"
       @click="expanded = !expanded"
     >
+      <span class="material-icons">book</span>
       <h2 class="text-3xl">
-        <span class="material-icons m-1">book</span>
         Links
       </h2>
       <!-- <button class="material-icons ml-auto text-2xl text-light-darkest">
@@ -15,58 +15,37 @@
     </header>
 
     <transition name="slide-up">
-      <div v-if="expanded" class="collapsible-body">
+      <section
+        v-show="expanded"
+        class="collapsible-body"
+      >
         <wp-draggable class="dragarea">
           <wp-list-item
             title="Google"
             details="www.google.com"
-            :detailsEditable="true"
             icon="www.google.com"
+            details-editable
           />
           <wp-list-item
             title="Google"
             details="www.google.com"
-            detailsEditable
             icon="www.google.com"
+            details-editable
           />
           <wp-list-item
             title="Google"
             details="www.google.com"
-            :detailsEditable="true"
             icon="www.google.com"
+            details-editable
           />
           <wp-list-item
             title="Google"
             details="www.google.com"
-            :detailsEditable="true"
             icon="www.google.com"
-          />
-          <wp-list-item
-            title="Google"
-            details="www.google.com"
-            :detailsEditable="true"
-            icon="www.google.com"
-          />
-          <wp-list-item
-            title="Google"
-            details="www.google.com"
-            :detailsEditable="true"
-            icon="www.google.com"
-          />
-          <wp-list-item
-            title="Google"
-            details="www.google.com"
-            :detailsEditable="true"
-            icon="www.google.com"
-          />
-          <wp-list-item
-            title="Google"
-            details="www.google.com"
-            :detailsEditable="true"
-            icon="www.google.com"
+            details-editable
           />
         </wp-draggable>
-      </div>
+      </section>
     </transition>
   </article>
 </template>
@@ -83,7 +62,7 @@ export default defineComponent({
     'wp-list-item': ListItem,
   },
   setup() {
-    const expanded = ref(false)
+    const expanded = ref(true)
     const startLists = [{ title: '', items: [] }]
     const { lists, addItem, removeItem } = useList(startLists)
 
@@ -100,42 +79,38 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .collapsible-header {
-  @apply relative flex justify-center items-center w-48;
-	@apply transform translate-y-full;
+  @apply ;
+
+  @apply flex justify-center items-center w-32;
   @apply cursor-pointer select-none bg-dark shadow-xl;
   @apply transition-all duration-500 ease-in-out;
 }
 
 .collapsible-header > h2 {
   @apply transition-all duration-500 ease-in-out;
-	@apply transform -translate-y-full;
-	@apply py-6;
 }
 
-.collapsible-header:hover {
+.collapsible-header:hover:not(.open) {
 }
 
-.collapsible-header:hover > h2 {
+.collapsible-header:hover:not(.open) > h2 {
 }
 
 .collapsible-header.open {
-	@apply transform translate-y-0;
-	@apply p-3 mb-2;
+  @apply my-2;
 }
 
 .collapsible-header.open > h2 {
-	@apply transform translate-y-0;
-	@apply p-0;
 }
 
 .collapsible-body {
-  @apply relative flex w-full min-h-32 mb-2 p-6;
+  @apply relative flex mb-2 p-2 w-full;
   @apply transition-all duration-500 ease-in-out;
   @apply bg-dark-darker;
 }
 
 .dragarea {
-  @apply grid grid-cols-4 grid-rows-2 grid-flow-row gap-2;
+  @apply grid grid-cols-4 grid-flow-row gap-2;
   @apply w-full;
 }
 
