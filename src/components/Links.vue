@@ -5,8 +5,8 @@
       :class="{ open: expanded }"
       @click="expanded = !expanded"
     >
-      <span class="material-icons">book</span>
       <h2 class="text-3xl">
+        <span class="material-icons">book</span>
         Links
       </h2>
       <!-- <button class="material-icons ml-auto text-2xl text-light-darkest">
@@ -14,34 +14,41 @@
       </button> -->
     </header>
 
-    <transition name="slide-up">
-      <section
-        v-show="expanded"
-        class="collapsible-body"
-      >
+    <transition
+      name="slide-up"
+      v-on:before-enter="beforeEnter"
+      v-on:enter="enter"
+      v-on:leave="leave"
+      v-bind:css="false"
+    >
+      <section 
+				v-if="expanded" 
+				class="collapsible-body"
+      	:class="{ open: expanded }"
+			>
         <wp-draggable class="dragarea">
           <wp-list-item
             title="Google"
             details="www.google.com"
-            icon="www.google.com"
+            icon="https://cdn-media-1.freecodecamp.org/images/0*xkJgg-6HskYrQ3N7.jpeg"
             details-editable
           />
           <wp-list-item
             title="Google"
             details="www.google.com"
-            icon="www.google.com"
+            icon="https://cdn-media-1.freecodecamp.org/images/0*xkJgg-6HskYrQ3N7.jpeg"
             details-editable
           />
           <wp-list-item
             title="Google"
             details="www.google.com"
-            icon="www.google.com"
+            icon="https://cdn-media-1.freecodecamp.org/images/0*xkJgg-6HskYrQ3N7.jpeg"
             details-editable
           />
           <wp-list-item
             title="Google"
             details="www.google.com"
-            icon="www.google.com"
+            icon="https://cdn-media-1.freecodecamp.org/images/0*xkJgg-6HskYrQ3N7.jpeg"
             details-editable
           />
         </wp-draggable>
@@ -53,6 +60,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
+import Velocity from "velocity-animate";
 import useList from '/src/modules/list'
 import ListItem from './util/ListItem.vue'
 
@@ -66,12 +74,36 @@ export default defineComponent({
     const startLists = [{ title: '', items: [] }]
     const { lists, addItem, removeItem } = useList(startLists)
 
+		const beforeEnter = (el: HTMLElement) => {
+			console.log("starting transition")
+      el.style.maxHeight = 0;
+    }
+    const enter = (el: HTMLElement, done) => {
+			Velocity(
+        el,
+        { maxHeight: "100%" },
+        { duration: 300, complete: done }
+      );
+			console.log("Done enter")
+    }
+    const leave = (el: HTMLElement, done) => {
+			Velocity(
+        el,
+        { maxHeight: "0%" },
+        { duration: 300, complete: done }
+      );
+    }
+
     return {
       expanded,
 
       lists,
       addItem,
       removeItem,
+
+			beforeEnter,
+			enter,
+			leave,
     }
   },
 })
@@ -79,9 +111,9 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .collapsible-header {
-  @apply ;
+  @apply;
 
-  @apply flex justify-center items-center w-32;
+  @apply flex justify-center items-center px-4 py-2;
   @apply cursor-pointer select-none bg-dark shadow-xl;
   @apply transition-all duration-500 ease-in-out;
 }
@@ -104,9 +136,13 @@ export default defineComponent({
 }
 
 .collapsible-body {
-  @apply relative flex mb-2 p-2 w-full;
-  @apply transition-all duration-500 ease-in-out;
+  @apply relative flex mb-0 p-0 w-full;
   @apply bg-dark-darker;
+  transition: all 0.5s ease;
+}
+
+.collapsible-body.open {
+	@apply mb-2 p-2;
 }
 
 .dragarea {
@@ -116,15 +152,5 @@ export default defineComponent({
 
 .dragarea:empty {
   @apply bg-dark rounded h-1 m-4;
-}
-
-.slide-up-enter-to,
-.slide-up-leave-from {
-	@apply top-0;
-}
-
-.slide-up-enter-from,
-.slide-up-leave-to {
-	@apply top-100;
 }
 </style>

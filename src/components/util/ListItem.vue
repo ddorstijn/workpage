@@ -1,38 +1,37 @@
 <template>
-  <div class="item-container">
-		<span class="material-icons self-center text-gray cursor-move">
-			drag_indicator
-		</span>
-    <div v-if="icon" class="item-icon">
-      <img class="h-8 w-8 rounded-full" :src="icon" alt="icon" />
+  <div class="bg-dark shadow-lg p-2 rounded-lg flex justify-between w-full">
+    <div class="flex items-center">
+      <img v-if="icon" class="w-10 h-10 rounded-full" :src="icon" alt="icon" />
+      <div class="ml-3">
+        <wp-editable
+          v-model="titleVal"
+          class="font-sans tracking-wide text-md"
+          placeholder="Title"
+        />
+        <wp-editable
+          v-if="detailsEditable"
+          v-model="detailsVal"
+          class="text-gray text-sm"
+          placeholder="Details"
+        />
+        <p v-else class="leading-4 text-xs text-gray">
+          {{ details }}
+        </p>
+      </div>
     </div>
-    <div class="item-body">
-      <wp-editable
-				v-model="titleVal"
-        class="text-lg leading-4"
-        placeholder="Title"
-      />
-      <wp-editable
-				v-if="detailsEditable"
-				v-model="detailsVal"
-        class="leading-4 text-xs text-gray"
-        placeholder="Details"
-      />
-			<span v-else class="leading-4 text-xs text-gray">
-				{{ details }}
-			</span>
+    <div class="flex items-center">
+      <button
+        class="material-icons px-2 text-base text-light-darkest hover:text-red"
+        @click="$emit('remove')"
+      >
+        close
+      </button>
     </div>
-    <button
-      class="material-icons px-2 text-base text-light-darkest hover:text-red"
-      @click="$emit('remove')"
-    >
-      close
-    </button>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted, ref } from 'vue'
+import { defineComponent, computed } from 'vue'
 import Editable from './Editable.vue'
 
 export default defineComponent({
@@ -47,35 +46,22 @@ export default defineComponent({
     icon: { type: String, default: '' },
   },
   setup(props, { emit }) {
-		const titleVal = computed({ 
-			get: () => props.title, 
-			set: (val: String) => emit('update:title', val)
-		})
+    const titleVal = computed({
+      get: () => props.title,
+      set: (val: String) => emit('update:title', val),
+    })
 
-
-		const detailsVal = computed({ 
-			get: () => props.details, 
-			set: (val: String) => emit('update:details', val)
-		}) 
+    const detailsVal = computed({
+      get: () => props.details,
+      set: (val: String) => emit('update:details', val),
+    })
 
     return {
-			titleVal,
-			detailsVal,
+      titleVal,
+      detailsVal,
     }
   },
 })
 </script>
 
-<style lang="postcss" scoped>
-.item-container {
-  @apply flex items-stretch min-h-12 bg-dark border-gray-lighter shadow cursor-pointer;
-}
-
-.item-icon {
-  @apply flex justify-center items-center w-12 min-h-12;
-}
-
-.item-body {
-  @apply flex flex-col justify-center flex-grow mx-2 py-2;
-}
-</style>
+<style lang="postcss" scoped></style>
