@@ -21,11 +21,11 @@
       v-on:leave="leave"
       v-bind:css="false"
     >
-      <section 
-				v-if="expanded" 
-				class="collapsible-body"
-      	:class="{ open: expanded }"
-			>
+      <section
+        v-if="expanded"
+        class="collapsible-body"
+        :class="{ open: expanded }"
+      >
         <wp-draggable class="dragarea">
           <wp-list-item
             title="Google"
@@ -60,7 +60,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
-import Velocity from "velocity-animate";
+import Velocity from 'velocity-animate'
 import useList from '/src/modules/list'
 import ListItem from './util/ListItem.vue'
 
@@ -74,24 +74,16 @@ export default defineComponent({
     const startLists = [{ title: '', items: [] }]
     const { lists, addItem, removeItem } = useList(startLists)
 
-		const beforeEnter = (el: HTMLElement) => {
-			console.log("starting transition")
-      el.style.maxHeight = 0;
+    const beforeEnter = (el: HTMLElement) => {
+      console.log('starting transition')
+      el.style.maxHeight = 0
     }
     const enter = (el: HTMLElement, done) => {
-			Velocity(
-        el,
-        { maxHeight: "100%" },
-        { duration: 300, complete: done }
-      );
-			console.log("Done enter")
+      Velocity(el, { maxHeight: '100%' }, { duration: 300, complete: done })
+      console.log('Done enter')
     }
     const leave = (el: HTMLElement, done) => {
-			Velocity(
-        el,
-        { maxHeight: "0%" },
-        { duration: 300, complete: done }
-      );
+      Velocity(el, { maxHeight: '0%' }, { duration: 300, complete: done })
     }
 
     return {
@@ -101,9 +93,9 @@ export default defineComponent({
       addItem,
       removeItem,
 
-			beforeEnter,
-			enter,
-			leave,
+      beforeEnter,
+      enter,
+      leave,
     }
   },
 })
@@ -142,7 +134,7 @@ export default defineComponent({
 }
 
 .collapsible-body.open {
-	@apply mb-2 p-2;
+  @apply mb-2 p-2;
 }
 
 .dragarea {

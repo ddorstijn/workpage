@@ -5,24 +5,21 @@
         <section
           class="relative flex w-full h-full gap-2 justify-center bg-dark-darker p-6 px-12 mb-1"
         >
-          <svg class="dial" viewBox="0 0 100 100">
-            <clipPath id="myClip">
-              <circle cx="50" cy="50" r="50" />
-            </clipPath>
-            
-            <defs>
-              <linearGradient id="linear" x1="0%" y1="100%" x2="100%" y2="0%"> 
-                <stop offset="0%" stop-color="#fb4934" />
-                <stop offset="25%" stop-color="#fb4934" />
-                <stop offset="30%" stop-color="#fabd2f" />
-                <stop offset="70%" stop-color="#fabd2f" />
-                <stop offset="75%" stop-color="#b8bb26" />
-                <stop offset="100%" stop-color="#b8bb26" />
-              </linearGradient>
-            </defs>
-            
-            <path id="arc" stroke="gray" stroke-width="1" d="M97.5,50 a47.5,47.5 0 1,0 -47.5,47.5" transform="rotate(45, 50, 50)" fill="none" />
-            <path id="arc" stroke="url(#linear)" stroke-dashoffset="-210" stroke-dasharray="235.6" stroke-width="10" d="M100,50 a50,50 0 1,0 -50,50" transform="rotate(45, 50, 50)" fill="none" clip-path="url(#myClip)" />
+          <svg ref="dialRef" class="dial" viewBox="0 0 100 100">
+            <g transform="rotate(45, 50, 50)" stroke-width="5" fill="none">
+              <path
+                stroke="#928374"
+                stroke-linecap="round"
+                d="M100,50 a47.5,47.5 0 1,0 -50,50"
+              />
+              <path
+								:class="['stroke-current', dial.color]"
+                stroke-linecap="round"
+                :stroke-dasharray="dial.length"
+                :stroke-dashoffset="dial.offset"
+                d="M100,50 a47.5,47.5 0 1,0 -50,50"
+              />
+            </g>
           </svg>
           <div
             class="absolute self-center flex flex-col items-center justify-center mt-6"
@@ -110,38 +107,33 @@ export default defineComponent({
       }),
     })
 
-    const circle = reactive({
-      circumference: 2 * Math.PI * 250,
+    const dial = reactive({
+      length: 2 * Math.PI * 50 * 0.75,
       offset: computed(() => {
         if (!elapsedTime.value || elapsedTime.value > goal.value.timestamp) {
           return 0
         }
 
-        const step = circle.circumference / goal.value.timestamp
-        return circle.circumference - elapsedTime.value * step
+        const step = dial.length / goal.value.timestamp
+        return -dial.length + elapsedTime.value * step
       }),
-      state: computed(() => {
-        const percentage = elapsedTime.value / goal.value.timestamp
-        if (percentage > 1 || goal.value.timestamp == 0) {
-          return 'success'
+      color: computed(() => {
+        const percentage = 1 - Math.abs(dial.offset) / dial.length
+				console.log(percentage)
+        if (percentage < 0.25) {
+          return 'text-red'
+        } else if (percentage < 0.75) {
+          return 'text-yellow'
         }
 
-        if (percentage > 0.25) {
-          return 'info'
-        }
-
-        if (percentage > 0.1) {
-          return 'warning'
-        }
-
-        return 'alert'
+				return 'text-green'
       }),
     })
 
     return {
       expanded,
       goal,
-      circle,
+      dial,
       elapsedHuman,
       previousSessions,
       currentSession,
