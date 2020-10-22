@@ -5,32 +5,24 @@
         <section
           class="relative flex w-full h-full gap-2 justify-center bg-dark-darker p-6 px-12 mb-1"
         >
-          <svg class="flex-1" viewBox="0 0 500 500" transform="rotate(-90)">
-            <circle
-              class="text-dark stroke-current"
-              r="240"
-              cy="250"
-              cx="250"
-              fill="none"
-              stroke-width="0.5rem"
-              stroke-linecap="round"
-            />
-            <circle
-              :class="{
-                'text-green': circle.state == 'success',
-                'text-blue': circle.state == 'info',
-                'text-yellow': circle.state == 'warning',
-                'text-red': circle.state == 'alert',
-              }"
-              class="stroke-current"
-              :stroke-dashoffset="circle.offset"
-              :stroke-dasharray="circle.circumference"
-              r="240"
-              cy="250"
-              cx="250"
-              fill="none"
-              stroke-width="1rem"
-            />
+          <svg class="dial" viewBox="0 0 100 100">
+            <clipPath id="myClip">
+              <circle cx="50" cy="50" r="50" />
+            </clipPath>
+            
+            <defs>
+              <linearGradient id="linear" x1="0%" y1="100%" x2="100%" y2="0%"> 
+                <stop offset="0%" stop-color="#fb4934" />
+                <stop offset="25%" stop-color="#fb4934" />
+                <stop offset="30%" stop-color="#fabd2f" />
+                <stop offset="70%" stop-color="#fabd2f" />
+                <stop offset="75%" stop-color="#b8bb26" />
+                <stop offset="100%" stop-color="#b8bb26" />
+              </linearGradient>
+            </defs>
+            
+            <path id="arc" stroke="gray" stroke-width="1" d="M97.5,50 a47.5,47.5 0 1,0 -47.5,47.5" transform="rotate(45, 50, 50)" fill="none" />
+            <path id="arc" stroke="url(#linear)" stroke-dashoffset="-210" stroke-dasharray="235.6" stroke-width="10" d="M100,50 a50,50 0 1,0 -50,50" transform="rotate(45, 50, 50)" fill="none" clip-path="url(#myClip)" />
           </svg>
           <div
             class="absolute self-center flex flex-col items-center justify-center mt-6"
