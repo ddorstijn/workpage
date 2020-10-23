@@ -21,10 +21,12 @@
     </div>
     <div class="flex items-center">
       <button
-        class="material-icons px-2 text-base text-light-darkest hover:text-red"
+        class="px-2 text-base text-light-darkest hover:text-red"
         @click="$emit('remove')"
       >
-        close
+				<svg class="h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+				</svg>
       </button>
     </div>
   </div>
