@@ -13,29 +13,51 @@
                 d="M100,50 a47.5,47.5 0 1,0 -50,50"
               />
               <path
-								:class="['stroke-current', dial.color]"
+                :class="['stroke-current', dial.color]"
                 stroke-linecap="round"
                 :stroke-dasharray="dial.length"
                 :stroke-dashoffset="dial.offset"
                 d="M100,50 a47.5,47.5 0 1,0 -50,50"
               />
             </g>
+            <text
+              x="50"
+              y="50"
+              font-size="12"
+              dominant-baseline="middle"
+              text-anchor="middle"
+              fill="#ebdbb2"
+            >
+              {{ elapsedHuman }}
+            </text>
+            <g transform="translate(35 70)" @click="toggleTimer">
+              <circle cx="15" cy="15" r="15" fill="#ebdbb2" />
+              <polygon
+                points="10.5,8.25 10.5,21.75 21.75,15 21.75,15"
+                fill="#282828"
+                stroke="#282828"
+                stroke-width="3"
+                stroke-linejoin="round"
+              >
+                <animate
+									ref="playpauseRef"
+                  begin="indefinite"
+                  attributeName="points"
+                  dur="250ms"
+                  to="8.25,8.25 8.25,21.75 21.75,21.75 21.75,8.25"
+                  fill="freeze"
+                />
+                <animate
+									ref="pauseplayRef"
+                  begin="indefinite"
+                  attributeName="points"
+                  dur="250ms"
+                  to="10.5,8.25 10.5,21.75 21.75,15 21.75,15"
+                  fill="freeze"
+                />
+              </polygon>
+            </g>
           </svg>
-          <div
-            class="absolute self-center flex flex-col items-center justify-center mt-6"
-          >
-            <span class="text-xl">{{ elapsedHuman }}</span>
-            <template v-if="!currentSession.start">
-              <button class="material-icons text-2xl" @click="startSession">
-                play_arrow
-              </button>
-            </template>
-            <template v-else>
-              <button class="material-icons text-2xl" @click="stopSession">
-                stop
-              </button>
-            </template>
-          </div>
         </section>
 
         <section class="flex gap-2 justify-center bg-dark-darker p-2 mb-2">
@@ -89,6 +111,8 @@ import useTimer from '/src/modules/timer'
 export default defineComponent({
   setup() {
     const expanded = ref(false)
+		const playpauseRef = ref()
+		const pauseplayRef = ref()
 
     const {
       previousSessions,
@@ -98,6 +122,16 @@ export default defineComponent({
       startSession,
       stopSession,
     } = useTimer()
+
+		const toggleTimer = () => {
+			if (!currentSession.value.start) {
+				playpauseRef.value.beginElement()
+				startSession()
+			} else {
+				pauseplayRef.value.beginElement()
+				stopSession()
+			}
+		}
 
     const goal = ref({
       hours: 0,
@@ -119,19 +153,20 @@ export default defineComponent({
       }),
       color: computed(() => {
         const percentage = 1 - Math.abs(dial.offset) / dial.length
-				console.log(percentage)
         if (percentage < 0.25) {
           return 'text-red'
         } else if (percentage < 0.75) {
           return 'text-yellow'
         }
 
-				return 'text-green'
+        return 'text-green'
       }),
     })
 
     return {
       expanded,
+			playpauseRef,
+			pauseplayRef,
       goal,
       dial,
       elapsedHuman,
@@ -139,6 +174,7 @@ export default defineComponent({
       currentSession,
       startSession,
       stopSession,
+			toggleTimer,
     }
   },
 })
