@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "Workpage",
+  "version": "0.2",
+
+  "description": "Custom new tab page for a good start.",
+
+  "icons": {
+    "48": "/icon.png"
+  },
+
+	"chrome_url_overrides": {
+		"newtab": "dist/index.html"
+	}
+}
