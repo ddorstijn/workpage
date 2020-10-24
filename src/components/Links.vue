@@ -1,61 +1,61 @@
 <template>
-  <article class="absolute bottom-0 w-full flex flex-col items-center">
+  <article class="flex flex-col justify-end m-4 h-full border-2 border-light-darker rounded-lg">
+    <section
+      v-if="expanded"
+      class="w-full flex flex-col gap-2"
+      :class="{ open: expanded }"
+    >
+      <wp-draggable class="dragarea">
+        <wp-list-item
+          title="Google"
+          details="www.google.com"
+          icon="https://cdn-media-1.freecodecamp.org/images/0*xkJgg-6HskYrQ3N7.jpeg"
+          details-editable
+        />
+        <wp-list-item
+          title="Google"
+          details="www.google.com"
+          icon="https://cdn-media-1.freecodecamp.org/images/0*xkJgg-6HskYrQ3N7.jpeg"
+          details-editable
+        />
+        <wp-list-item
+          title="Google"
+          details="www.google.com"
+          icon="https://cdn-media-1.freecodecamp.org/images/0*xkJgg-6HskYrQ3N7.jpeg"
+          details-editable
+        />
+        <wp-list-item
+          title="Google"
+          details="www.google.com"
+          icon="https://cdn-media-1.freecodecamp.org/images/0*xkJgg-6HskYrQ3N7.jpeg"
+          details-editable
+        />
+      </wp-draggable>
+    </section>
+
     <header
       class="collapsible-header"
       :class="{ open: expanded }"
       @click="expanded = !expanded"
     >
-      <h2 class="text-3xl flex items-end gap-1">
-				<svg class="h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 4v12l-4-2-4 2V4M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-				</svg>
+      <h2 class="text-2xl flex items-center gap-1">
+        <svg
+          class="h-6"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1"
+            d="M16 4v12l-4-2-4 2V4M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
+        </svg>
         Links
       </h2>
-      <!-- <button class="material-icons ml-auto text-2xl text-light-darkest">
-        expand_more
-      </button> -->
     </header>
-
-    <transition
-      name="slide-up"
-      v-on:before-enter="beforeEnter"
-      v-on:enter="enter"
-      v-on:leave="leave"
-      v-bind:css="false"
-    >
-      <section
-        v-if="expanded"
-        class="collapsible-body"
-        :class="{ open: expanded }"
-      >
-        <wp-draggable class="dragarea">
-          <wp-list-item
-            title="Google"
-            details="www.google.com"
-            icon="https://cdn-media-1.freecodecamp.org/images/0*xkJgg-6HskYrQ3N7.jpeg"
-            details-editable
-          />
-          <wp-list-item
-            title="Google"
-            details="www.google.com"
-            icon="https://cdn-media-1.freecodecamp.org/images/0*xkJgg-6HskYrQ3N7.jpeg"
-            details-editable
-          />
-          <wp-list-item
-            title="Google"
-            details="www.google.com"
-            icon="https://cdn-media-1.freecodecamp.org/images/0*xkJgg-6HskYrQ3N7.jpeg"
-            details-editable
-          />
-          <wp-list-item
-            title="Google"
-            details="www.google.com"
-            icon="https://cdn-media-1.freecodecamp.org/images/0*xkJgg-6HskYrQ3N7.jpeg"
-            details-editable
-          />
-        </wp-draggable>
-      </section>
-    </transition>
   </article>
 </template>
 
@@ -105,43 +105,12 @@ export default defineComponent({
 
 <style lang="postcss" scoped>
 .collapsible-header {
-  @apply;
-
   @apply flex justify-center items-center px-4 py-2;
-  @apply cursor-pointer select-none bg-dark shadow-xl;
-  @apply transition-all duration-500 ease-in-out;
-}
-
-.collapsible-header > h2 {
-  @apply transition-all duration-500 ease-in-out;
-}
-
-.collapsible-header:hover:not(.open) {
-}
-
-.collapsible-header:hover:not(.open) > h2 {
-}
-
-.collapsible-header.open {
-  @apply my-2;
-}
-
-.collapsible-header.open > h2 {
+  @apply cursor-pointer select-none;
 }
 
 .collapsible-body {
   @apply relative flex mb-0 p-0 w-full;
-  @apply bg-dark-darker;
-  transition: all 0.5s ease;
-}
-
-.collapsible-body.open {
-  @apply mb-2 p-2;
-}
-
-.dragarea {
-  @apply grid grid-cols-4 grid-flow-row gap-2;
-  @apply w-full;
 }
 
 .dragarea:empty {

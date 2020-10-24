@@ -1,6 +1,5 @@
 <template>
-  <article class="my-2 h-full">
-    <transition name="slide-left">
+  <article class="m-4 h-full border-2 border-light-darker rounded-lg">
       <div v-if="expanded" class="collapsible-body">
         <section
           class="relative flex w-full h-full gap-2 justify-center bg-dark-darker p-6 px-12 mb-1"
@@ -40,7 +39,7 @@
                 stroke-linejoin="round"
               >
                 <animate
-									ref="playpauseRef"
+                  ref="playpauseRef"
                   begin="indefinite"
                   attributeName="points"
                   dur="250ms"
@@ -48,7 +47,7 @@
                   fill="freeze"
                 />
                 <animate
-									ref="pauseplayRef"
+                  ref="pauseplayRef"
                   begin="indefinite"
                   attributeName="points"
                   dur="250ms"
@@ -86,24 +85,29 @@
           </label>
         </section>
       </div>
-    </transition>
 
     <header
-      class="collapsible-header"
+      class="flex justify-center items-center px-4 py-2 cursor-pointer select-none"
       :class="{ open: expanded }"
       @click="expanded = !expanded"
     >
-      <h2 class="text-3xl flex items-end gap-1">
-				<svg class="h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-				</svg>
+      <h2 class="text-2xl flex items-center gap-1">
+        <svg
+          class="h-6"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1"
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
         Timer
       </h2>
-      <button class="ml-auto text-2xl text-light-darkest">
-				<svg class="h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-				</svg>
-      </button>
     </header>
   </article>
 </template>
@@ -115,8 +119,8 @@ import useTimer from '/src/modules/timer'
 export default defineComponent({
   setup() {
     const expanded = ref(false)
-		const playpauseRef = ref()
-		const pauseplayRef = ref()
+    const playpauseRef = ref()
+    const pauseplayRef = ref()
 
     const {
       previousSessions,
@@ -127,15 +131,15 @@ export default defineComponent({
       stopSession,
     } = useTimer()
 
-		const toggleTimer = () => {
-			if (!currentSession.value.start) {
-				playpauseRef.value.beginElement()
-				startSession()
-			} else {
-				pauseplayRef.value.beginElement()
-				stopSession()
-			}
-		}
+    const toggleTimer = () => {
+      if (!currentSession.value.start) {
+        playpauseRef.value.beginElement()
+        startSession()
+      } else {
+        pauseplayRef.value.beginElement()
+        stopSession()
+      }
+    }
 
     const goal = ref({
       hours: 0,
@@ -169,8 +173,8 @@ export default defineComponent({
 
     return {
       expanded,
-			playpauseRef,
-			pauseplayRef,
+      playpauseRef,
+      pauseplayRef,
       goal,
       dial,
       elapsedHuman,
@@ -178,50 +182,13 @@ export default defineComponent({
       currentSession,
       startSession,
       stopSession,
-			toggleTimer,
+      toggleTimer,
     }
   },
 })
 </script>
 
 <style lang="postcss" scoped>
-.collapsible-header {
-  @apply relative left-100 flex justify-start items-center py-3 mb-2 cursor-pointer select-none bg-dark shadow-xl transition-all duration-500 ease-in-out;
-}
-
-.collapsible-header > h2 {
-  @apply transform -translate-x-full px-8 transition-all duration-500 ease-in-out;
-}
-
-.collapsible-header:hover {
-  @apply left-80;
-}
-
-.collapsible-header:hover > h2 {
-  @apply transform -translate-x-1/2;
-}
-
-.collapsible-header.open {
-  @apply left-0 pl-8 pr-3 mx-2 bg-dark shadow-xl;
-}
-
-.collapsible-header.open > h2 {
-  @apply transform translate-x-0 px-0;
-}
-
-.collapsible-body {
-  @apply relative block mx-2 transition-all duration-500 ease-in-out;
-}
-
-.slide-left-enter-to,
-.slide-left-leave-from {
-  @apply left-0;
-}
-
-.slide-left-enter-from,
-.slide-left-leave-to {
-  @apply left-100;
-}
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

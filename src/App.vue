@@ -1,17 +1,15 @@
 <template>
   <section id="area-tl">
-    <wp-clock />
-  </section>
-  <section id="area-tc">
     <wp-projects />
   </section>
+  <section id="area-tc"></section>
   <section id="area-cc">
-    <wp-greeter />
+    <wp-clock />
   </section>
-  <section id="area-bl" />
-  <section id="area-bc">
+  <section id="area-bl">
     <wp-links />
   </section>
+  <section id="area-bc"></section>
   <section
     id="sidebar"
     class="flex flex-col justify-between gap-4 h-screen w-full"
@@ -28,7 +26,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import Clock from './components/Clock.vue'
-import Greeter from './components/Greeter.vue'
 import Links from './components/Links.vue'
 import Projects from './components/Projects.vue'
 import Tasks from './components/Tasks.vue'
@@ -38,7 +35,6 @@ export default defineComponent({
   name: 'App',
   components: {
     'wp-clock': Clock,
-    'wp-greeter': Greeter,
     'wp-links': Links,
     'wp-projects': Projects,
     'wp-tasks': Tasks,
