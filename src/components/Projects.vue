@@ -1,10 +1,6 @@
 <template>
-  <article class="m-4 h-full border-2 border-light-darker rounded-lg">
-    <header
-      class="collapsible-header"
-      :class="{ open: expanded }"
-      @click="expanded = !expanded"
-    >
+  <article class="m-4 border-2 border-light-darkest rounded-lg shadow-lg cursor-pointer select-none">
+    <header class="flex justify-center items-center m-2">
       <h2 class="text-2xl flex items-center gap-1">
         <svg
           class="h-6"
@@ -23,68 +19,20 @@
         Projects
       </h2>
     </header>
-    <section
-      v-if="expanded"
-      class="collapsible-body"
-      :class="{ open: expanded }"
-    >
-      <wp-draggable class="w-full flex flex-col gap-2">
-        <wp-list-item title="Workpage" details="Personal" details-editable />
-        <wp-list-item
-          title="Lamp ophangen"
-          details="Personal"
-          details-editable
-        />
+    <section class="relative flex mb-0 p-0 w-full">
         <wp-list-item title="Quizzer" details="Work" details-editable />
-        <wp-list-item title="VuR" details="Personal" details-editable />
-      </wp-draggable>
     </section>
   </article>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { VueDraggableNext } from 'vue-draggable-next'
-import useList from '/src/modules/list'
+import { defineComponent } from 'vue'
 import ListItem from './util/ListItem.vue'
 
 export default defineComponent({
   components: {
-    'wp-draggable': VueDraggableNext,
     'wp-list-item': ListItem,
-  },
-  setup() {
-    const expanded = ref(true)
-    const startLists = [{ title: '', items: [] }]
-    const { lists, addItem, removeItem } = useList(startLists)
-
-    return {
-      expanded,
-
-      lists,
-      addItem,
-      removeItem,
-    }
   },
 })
 </script>
 
-<style lang="postcss" scoped>
-.collapsible-header {
-  @apply flex justify-center items-center px-4 py-2 mt-2;
-  @apply cursor-pointer select-none;
-}
-
-.collapsible-body {
-  @apply relative flex mb-0 p-0 w-full;
-  transition: all 0.5s ease;
-}
-
-.collapsible-body.open {
-  @apply mb-2 p-2;
-}
-
-.dragarea:empty {
-  @apply bg-dark rounded h-1 m-4;
-}
-</style>

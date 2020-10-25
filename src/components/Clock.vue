@@ -1,5 +1,5 @@
 <template>
-  <article class="h-full w-full flex flex-col items-center justify-center">
+  <article class="h-full w-full flex flex-col items-center justify-center gap-2">
     <h1 class="text-6xl text-center">{{ time }}</h1>
     <h3 class="text-xl text-center">{{ date }}</h3>
   </article>

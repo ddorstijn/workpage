@@ -1,25 +1,14 @@
 <template>
-  <section id="area-tl">
+  <section class="area" id="area-left">
     <wp-projects />
-  </section>
-  <section id="area-tc"></section>
-  <section id="area-cc">
+    <wp-links />
+	</section>
+  <section class="area" id="area-center">
     <wp-clock />
   </section>
-  <section id="area-bl">
-    <wp-links />
-  </section>
-  <section id="area-bc"></section>
-  <section
-    id="sidebar"
-    class="flex flex-col justify-between gap-4 h-screen w-full"
-  >
-    <section id="area-tr">
-      <wp-tasks />
-    </section>
-    <section id="area-br">
-      <wp-timer />
-    </section>
+  <section class="area" id="area-right">
+		<wp-tasks />
+		<wp-timer />
   </section>
 </template>
 
@@ -49,60 +38,30 @@ export default defineComponent({
 }
 
 #app {
+	width: 100vw;
+	height: 100vh;
   display: grid;
-  grid-template-areas:
-    'tl tc sr'
-    'tl cc sr'
-    'bl cc sr'
-    'bl bc sr';
+  grid-template-areas: 'l c r';
   grid-template-columns: 1fr 3fr 1fr;
-  grid-template-rows: 2fr 1fr 1fr 2fr;
   gap: 0.75rem;
+
+	background: radial-gradient(#3c3836 0%, #282828 70%);
 }
 
-#area-tl {
-  grid-area: tl;
-  position: relative;
-  overflow: hidden;
+.area {
+	@apply flex flex-col h-full;
 }
 
-#area-tc {
-  grid-area: tc;
-  position: relative;
-  overflow: hidden;
+
+#area-left {
+  grid-area: l;
 }
 
-#area-cc {
-  grid-area: cc;
-  position: relative;
-  overflow: hidden;
+#area-center {
+  grid-area: c;
 }
 
-#area-bl {
-  grid-area: bl;
-  position: relative;
-  overflow: hidden;
-}
-
-#area-bc {
-  grid-area: bc;
-  position: relative;
-  overflow: hidden;
-}
-
-#area-tr {
-  grid-area: tr;
-  position: relative;
-  overflow: hidden;
-}
-
-#area-br {
-  grid-area: br;
-  position: relative;
-  overflow: hidden;
-}
-
-#sidebar {
-  grid-area: sr;
+#area-right {
+  grid-area: r;
 }
 </style>

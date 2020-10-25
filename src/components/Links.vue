@@ -1,8 +1,8 @@
 <template>
-  <article class="flex flex-col justify-end m-4 h-full border-2 border-light-darker rounded-lg">
+  <article class="mt-auto flex flex-col justify-end m-4 border-2 border-light-darkest rounded-lg shadow-lg">
     <section
       v-if="expanded"
-      class="w-full flex flex-col gap-2"
+      class="flex flex-col gap-2"
       :class="{ open: expanded }"
     >
       <wp-draggable class="dragarea">

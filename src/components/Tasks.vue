@@ -1,7 +1,7 @@
 <template>
-  <article class="m-4 h-full border-2 border-light-darker rounded-lg">
+  <article class="flex-grow m-4 border-2 border-light-darkest rounded-lg shadow-lg">
     <header
-      class="flex justify-center items-center cursor-pointer select-none"
+      class="flex justify-center items-center m-2 cursor-pointer select-none"
       :class="{ open: expanded }"
       @click="expanded = !expanded"
     >
@@ -44,7 +44,7 @@
         <section
           v-for="(list, index) in lists"
           :key="list.title"
-          class="py-2 px-4 bg-dark-darker shadow-lg mb-1"
+          class="py-2 px-4 mb-1"
           :style="`--list-idx: ${index}`"
         >
           <h3 class="text-2xl mb-2">

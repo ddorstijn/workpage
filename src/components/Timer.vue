@@ -1,65 +1,10 @@
 <template>
-  <article class="m-4 h-full border-2 border-light-darker rounded-lg">
-      <div v-if="expanded" class="collapsible-body">
-        <section
-          class="relative flex w-full h-full gap-2 justify-center bg-dark-darker p-6 px-12 mb-1"
-        >
-          <svg ref="dialRef" class="dial" viewBox="0 0 100 100">
-            <g transform="rotate(45, 50, 50)" stroke-width="5" fill="none">
-              <path
-                stroke="#928374"
-                stroke-linecap="round"
-                d="M100,50 a47.5,47.5 0 1,0 -50,50"
-              />
-              <path
-                :class="['stroke-current', dial.color]"
-                stroke-linecap="round"
-                :stroke-dasharray="dial.length"
-                :stroke-dashoffset="dial.offset"
-                d="M100,50 a47.5,47.5 0 1,0 -50,50"
-              />
-            </g>
-            <text
-              x="50"
-              y="50"
-              font-size="12"
-              dominant-baseline="middle"
-              text-anchor="middle"
-              fill="#ebdbb2"
-            >
-              {{ elapsedHuman }}
-            </text>
-            <g transform="translate(35 70)" @click="toggleTimer">
-              <circle cx="15" cy="15" r="15" fill="#ebdbb2" />
-              <polygon
-                points="10.5,8.25 10.5,21.75 21.75,15 21.75,15"
-                fill="#282828"
-                stroke="#282828"
-                stroke-width="3"
-                stroke-linejoin="round"
-              >
-                <animate
-                  ref="playpauseRef"
-                  begin="indefinite"
-                  attributeName="points"
-                  dur="250ms"
-                  to="8.25,8.25 8.25,21.75 21.75,21.75 21.75,8.25"
-                  fill="freeze"
-                />
-                <animate
-                  ref="pauseplayRef"
-                  begin="indefinite"
-                  attributeName="points"
-                  dur="250ms"
-                  to="10.5,8.25 10.5,21.75 21.75,15 21.75,15"
-                  fill="freeze"
-                />
-              </polygon>
-            </g>
-          </svg>
+  <article class="m-4 border-2 border-light-darkest rounded-lg shadow-lg">
+      <div v-if="expanded">
+        <section class="relative flex w-full h-full gap-2 justify-center p-6 px-12 mb-1">
         </section>
 
-        <section class="flex gap-2 justify-center bg-dark-darker p-2 mb-2">
+        <section class="flex gap-2 justify-center p-2 mb-2">
           <span>Goal:</span>
           <label for="goal-hours">
             <input
