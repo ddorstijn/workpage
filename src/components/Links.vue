@@ -1,5 +1,5 @@
 <template>
-  <article class="mt-auto">
+  <article class="">
     <section
       v-if="expanded"
       class="flex flex-col gap-2"
@@ -32,24 +32,6 @@
         />
       </wp-draggable>
     </section>
-
-    <header
-      class="flex justify-center items-center px-4 py-2 cursor-pointer select-none"
-      :class="{ open: expanded }"
-      @click="expanded = !expanded"
-    >
-      <h2 class="text-2xl flex items-center gap-1">
-        <svg
-          class="h-6 stroke-current"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
-        </svg>
-        Links
-      </h2>
-    </header>
   </article>
 </template>
 

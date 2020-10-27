@@ -19,7 +19,6 @@
             clip-rule="evenodd"
           />
         </svg>
-        Tasks
       </h2>
     </header>
 

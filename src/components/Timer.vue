@@ -1,58 +1,50 @@
 <template>
-  <article class="mt-auto">
-    <div v-if="expanded">
-      <section
-        class="relative flex w-full h-full gap-2 justify-center p-6 px-12 mb-1"
-      />
-
-      <section class="flex gap-2 justify-center p-2 mb-2">
-        <span>Goal:</span>
-        <label for="goal-hours">
-          <input
-            v-model.number="goal.hours"
-            class="bg-dark w-8 px-2 font-sans text-center rounded focus:outline-none focus:shadow-outline"
-            type="number"
-            min="0"
-            max="24"
-            maxlength="2"
-          />
-          h
-        </label>
-        <label for="goal-minutes">
-          <input
-            v-model.number="goal.minutes"
-            class="bg-dark w-8 px-2 font-sans text-center rounded focus:outline-none focus:shadow-outline"
-            type="number"
-            min="0"
-            max="60"
-            maxlength="2"
-          />
-          m
-        </label>
-      </section>
-    </div>
-
+  <article class="container gap-x-4 gap-y-1">
     <header
-      class="flex justify-center items-center px-4 py-2 cursor-pointer select-none"
-      :class="{ open: expanded }"
-      @click="expanded = !expanded"
+			id="header"
+      class="flex justify-center items-center cursor-pointer select-none"
     >
-      <h2 class="text-2xl flex items-center gap-1">
-        <svg
-          class="h-6"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-            clip-rule="evenodd"
-          />
-        </svg>
-        Timer
-      </h2>
+      <svg
+        class="h-10"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+          clip-rule="evenodd"
+        />
+      </svg>
     </header>
+    <section id="status" class="flex flex-col">
+      <h3 class="text-3xl">{{ elapsedHuman }}</h3>
+      <h4>Session: 0h 12m 36s</h4>
+    </section>
+		<section id="goal" class="flex flex-col justify-end items-end px-2">
+			<h4 class="text-xl text-center">Goal:</h4>
+			<h5 class="text-center">0h 30m</h5>
+		</section>
+    <svg id="bar" class="w-full h-1" viewBox="0 0 100 2" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" >
+      <line
+        x1="1"
+        y1="1"
+        x2="99"
+        y2="1"
+        stroke="#928374"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
+      <line
+        x1="1"
+        y1="1"
+        x2="19"
+        y2="1"
+        stroke="#fb4934"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
+    </svg>
   </article>
 </template>
 
@@ -62,7 +54,6 @@ import useTimer from '/src/modules/timer'
 
 export default defineComponent({
   setup() {
-    const expanded = ref(false)
     const playpauseRef = ref()
     const pauseplayRef = ref()
 
@@ -116,7 +107,6 @@ export default defineComponent({
     })
 
     return {
-      expanded,
       playpauseRef,
       pauseplayRef,
       goal,
@@ -133,6 +123,29 @@ export default defineComponent({
 </script>
 
 <style lang="postcss" scoped>
+.container {
+  display: grid;
+  grid-template:
+    'header status goal' 1fr
+    'header bar    bar ' min-content / min-content 3fr 1fr;
+}
+
+#header {
+	grid-area: header;
+}
+
+#status {
+	grid-area: status;
+}
+
+#goal {
+	grid-area: goal;
+}
+
+#bar {
+  grid-area: bar;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

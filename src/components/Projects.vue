@@ -17,12 +17,9 @@
             clip-rule="evenodd"
           />
         </svg>
-        Projects
+        Project title
       </h2>
     </header>
-    <section class="relative flex mb-0 p-0 w-full">
-      <wp-list-item title="Quizzer" details="Work" details-editable />
-    </section>
   </article>
 </template>
 

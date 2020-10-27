@@ -1,24 +1,15 @@
 <template>
-  <section
-    id="area-left"
-    class="area"
-  >
+  <main class="area area-main">
+    <wp-clock />
     <wp-projects />
     <wp-links />
-  </section>
-  <section
-    id="area-center"
-    class="area"
-  >
-    <wp-clock />
-  </section>
-  <section
-    id="area-right"
-    class="area"
-  >
+  </main>
+  <aside class="area area-tasks">
     <wp-tasks />
+  </aside>
+  <aside class="area area-timer">
     <wp-timer />
-  </section>
+  </aside>
 </template>
 
 <script lang="ts">
@@ -47,29 +38,30 @@ export default defineComponent({
 }
 
 #app {
-	width: 100vw;
-	height: 100vh;
+  width: 100vw;
+  height: 100vh;
   display: grid;
-  grid-template-areas: 'l c r';
-  grid-template-columns: 1fr 3fr 1fr;
+  grid-template:
+    'main tasks' 1fr
+    'main timer' min-content / 1.618fr 1fr;
   gap: 0.75rem;
 
-	background: radial-gradient(#3c3836 0%, #282828 70%);
+  background: radial-gradient(#3c3836 0%, #282828 70%);
 }
 
 .area {
-	@apply flex flex-col h-full p-2;
+  @apply flex flex-col items-center justify-center flex-grow p-16;
 }
 
-#area-left {
-  grid-area: l;
+.area-main {
+  grid-area: main;
 }
 
-#area-center {
-  grid-area: c;
+.area-tasks {
+  grid-area: tasks;
 }
 
-#area-right {
-  grid-area: r;
+.area-timer {
+  grid-area: timer;
 }
 </style>
