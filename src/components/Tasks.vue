@@ -1,27 +1,7 @@
 <template>
-  <article class="h-full w-full justify-self-start">
-    <header class="flex gap-8">
-      <form class="flex-grow flex justify-around items-center">
-        <input
-          placeholder="Add a new goal"
-          class="w-full bg-transparent border-b-2"
-        />
-        <button class="h-6">
-          <svg
-            class="h-6"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </button>
-      </form>
-      <h2 class="text-2xl flex items-center gap-1 cursor-pointer select-none">
+  <article class="h-full w-full">
+    <header class="flex gap-8 justify-center">
+      <h2 class="text-2xl flex items-center gap-1 cursor-pointer">
         <svg
           class="h-10"
           xmlns="http://www.w3.org/2000/svg"
@@ -38,7 +18,7 @@
       </h2>
     </header>
 
-    <section v-for="list in lists" :key="list.title" class="w-full mt-6">
+    <section v-for="list in lists" :key="list.title" class="w-full h-auto mt-6">
       <wp-draggable
         group="tasks"
         :list="list.items"
@@ -50,12 +30,41 @@
           v-model:title="task.title"
           v-model:details="task.details"
           @remove="removeItem(list, task)"
-        />
+        >
+          <template #icon>
+            <svg
+              class="h-full text-green"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 10 m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </template>
+        </wp-list-item>
       </wp-draggable>
     </section>
-    <section>
-      <wp-draggable> </wp-draggable>
-    </section>
+    <button class="w-full h-12 flex justify-center items-center p-4">
+      <span>Add a new goal</span>
+      <svg
+        class="h-6"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </button>
   </article>
 </template>
 
@@ -77,47 +86,43 @@ export default defineComponent({
         items: [
           {
             id: 0,
-            title: 'This is an example todo',
+            title:
+              'Create a yocto recipe that auto inits the different gadget drivers',
             details: 'Created: 22 Nov, Spent: 2h 0m 24s',
           },
           {
             id: 1,
-            title: 'This is an example todo',
+            title: 'Create a script that initializes configfs',
             details: 'Created: 22 Nov, Spent: 2h 0m 24s',
           },
           {
             id: 2,
-            title: 'This is another example todo',
+            title: 'Allow for the creation of ACM ECM and RNDIS drivers',
             details: 'Created: 22 Nov, Spent: 2h 0m 24s',
           },
           {
             id: 3,
-            title: 'This is a crazy one',
+            title: 'Create the hid driver',
             details: 'Created: 22 Nov, Spent: 2h 0m 24s',
           },
           {
             id: 4,
-            title: 'Example todo #5',
+            title: 'Test the tool with a Windows host PC',
             details: 'Created: 22 Nov, Spent: 2h 0m 24s',
           },
           {
             id: 5,
-            title: 'This example todo number 6',
+            title: 'Build the Kappl project',
             details: 'Created: 22 Nov, Spent: 2h 0m 24s',
           },
           {
             id: 6,
-            title: 'This is an example todo',
+            title: 'Install Cygwin with Perl and XML support',
             details: 'Created: 22 Nov, Spent: 2h 0m 24s',
           },
           {
             id: 7,
-            title: 'This is an example todo',
-            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
-          },
-          {
-            id: 8,
-            title: 'This is an example todo',
+            title: 'Build Kappl for ARM devices',
             details: 'Created: 22 Nov, Spent: 2h 0m 24s',
           },
         ],
