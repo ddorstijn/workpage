@@ -1,7 +1,7 @@
 <template>
   <article class="container gap-x-4 gap-y-1">
     <header
-			id="header"
+      id="header"
       class="flex justify-center items-center cursor-pointer select-none"
     >
       <svg
@@ -21,11 +21,16 @@
       <h3 class="text-3xl">{{ elapsedHuman }}</h3>
       <h4>Session: 0h 12m 36s</h4>
     </section>
-		<section id="goal" class="flex flex-col justify-end items-end px-2">
-			<h4 class="text-xl text-center">Goal:</h4>
-			<h5 class="text-center">0h 30m</h5>
-		</section>
-    <svg id="bar" class="w-full h-1" viewBox="0 0 100 2" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" >
+    <section id="goal" class="flex flex-col justify-end items-end px-2">
+      <h5 class="text-center">0h 30m</h5>
+    </section>
+    <svg
+      id="bar"
+      class="w-full h-1"
+      viewBox="0 0 100 2"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <line
         x1="1"
         y1="1"
@@ -131,15 +136,15 @@ export default defineComponent({
 }
 
 #header {
-	grid-area: header;
+  grid-area: header;
 }
 
 #status {
-	grid-area: status;
+  grid-area: status;
 }
 
 #goal {
-	grid-area: goal;
+  grid-area: goal;
 }
 
 #bar {

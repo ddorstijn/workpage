@@ -4,6 +4,7 @@
     <wp-projects />
     <wp-links />
   </main>
+  <div id="vert-sep" class="bg-dark-lighter h-auto" />
   <aside class="area area-tasks">
     <wp-tasks />
   </aside>
@@ -42,19 +43,24 @@ export default defineComponent({
   height: 100vh;
   display: grid;
   grid-template:
-    'main tasks' 1fr
-    'main timer' min-content / 1.618fr 1fr;
-  gap: 0.75rem;
+    'main sep tasks' 1fr
+    'main sep timer' min-content / 2fr min-content 1fr;
 
   background: radial-gradient(#3c3836 0%, #282828 70%);
+  @apply text-light-lighter font-sans gap-16 p-16;
 }
 
 .area {
-  @apply flex flex-col items-center justify-center flex-grow p-16;
+  @apply flex flex-col items-center justify-center flex-grow;
 }
 
 .area-main {
   grid-area: main;
+}
+
+#vert-sep {
+  grid-area: sep;
+  width: 1px;
 }
 
 .area-tasks {

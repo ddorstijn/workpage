@@ -1,13 +1,29 @@
 <template>
-  <article class="">
-    <header
-      class="flex justify-center items-center m-2 cursor-pointer select-none"
-      :class="{ open: expanded }"
-      @click="expanded = !expanded"
-    >
-      <h2 class="text-2xl flex items-center gap-1">
+  <article class="h-full w-full justify-self-start">
+    <header class="flex gap-8">
+      <form class="flex-grow flex justify-around items-center">
+        <input
+          placeholder="Add a new goal"
+          class="w-full bg-transparent border-b-2"
+        />
+        <button class="h-6">
+          <svg
+            class="h-6"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </form>
+      <h2 class="text-2xl flex items-center gap-1 cursor-pointer select-none">
         <svg
-          class="h-6"
+          class="h-10"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
@@ -22,41 +38,29 @@
       </h2>
     </header>
 
-    <div v-if="expanded">
-      <section
-        v-for="(list, index) in lists"
-        :key="list.title"
-        class="py-2 px-4 mb-1"
-        :style="`--list-idx: ${index}`"
+    <section v-for="list in lists" :key="list.title" class="w-full mt-6">
+      <wp-draggable
+        group="tasks"
+        :list="list.items"
+        class="flex flex-col gap-2 dragarea"
       >
-        <form class="w-full flex">
-          <input class="bg-dark-darker w-full" />
-          <input type="button" value="Add" class="bg-light text-dark" />
-        </form>
-        <wp-draggable
-          group="tasks"
-          :list="list.items"
-          class="flex flex-col gap-2 dragarea"
-        >
-          <wp-list-item
-            v-for="task in list.items"
-            :key="task.id"
-            v-model:title="task.title"
-            v-model:details="task.details"
-            class="shadow"
-            @remove="removeItem(list, task)"
-          />
-        </wp-draggable>
-      </section>
-      <section>
-        <wp-draggable> </wp-draggable>
-      </section>
-    </div>
+        <wp-list-item
+          v-for="task in list.items"
+          :key="task.id"
+          v-model:title="task.title"
+          v-model:details="task.details"
+          @remove="removeItem(list, task)"
+        />
+      </wp-draggable>
+    </section>
+    <section>
+      <wp-draggable> </wp-draggable>
+    </section>
   </article>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import useList from '/src/modules/list'
 import ListItem from './util/ListItem.vue'
@@ -67,8 +71,58 @@ export default defineComponent({
     'wp-list-item': ListItem,
   },
   setup() {
-    const expanded = ref(false)
-    const startLists = [{ title: 'Todo', items: [] }]
+    const startLists = [
+      {
+        title: 'Todo',
+        items: [
+          {
+            id: 0,
+            title: 'This is an example todo',
+            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+          },
+          {
+            id: 1,
+            title: 'This is an example todo',
+            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+          },
+          {
+            id: 2,
+            title: 'This is another example todo',
+            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+          },
+          {
+            id: 3,
+            title: 'This is a crazy one',
+            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+          },
+          {
+            id: 4,
+            title: 'Example todo #5',
+            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+          },
+          {
+            id: 5,
+            title: 'This example todo number 6',
+            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+          },
+          {
+            id: 6,
+            title: 'This is an example todo',
+            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+          },
+          {
+            id: 7,
+            title: 'This is an example todo',
+            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+          },
+          {
+            id: 8,
+            title: 'This is an example todo',
+            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+          },
+        ],
+      },
+    ]
     const { lists, addItem, removeItem } = useList(startLists)
 
     const addTask = () => {
@@ -94,8 +148,6 @@ export default defineComponent({
     }
 
     return {
-      expanded,
-
       lists,
       addItem,
       removeItem,

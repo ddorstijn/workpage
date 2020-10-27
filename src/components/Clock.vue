@@ -1,7 +1,7 @@
 <template>
   <article class="flex flex-col items-center justify-center">
-    <h1 class="text-6xl text-center">{{ time }}</h1>
-    <h3 class="text-xl text-center">{{ date }}</h3>
+    <h1 class="text-7xl text-center">{{ time }}</h1>
+    <h3 class="text-2xl text-center">{{ date }}</h3>
   </article>
 </template>
 
