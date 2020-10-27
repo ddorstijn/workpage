@@ -1,5 +1,5 @@
 <template>
-  <article class="flex-grow m-4 border-2 border-light-darkest rounded-lg shadow-lg">
+  <article class="">
     <header
       class="flex justify-center items-center m-2 cursor-pointer select-none"
       :class="{ open: expanded }"
@@ -9,63 +9,50 @@
         <svg
           class="h-6"
           xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+          viewBox="0 0 20 20"
+          fill="currentColor"
         >
+          <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1"
-            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+            fill-rule="evenodd"
+            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clip-rule="evenodd"
           />
         </svg>
         Tasks
       </h2>
     </header>
 
-      <div v-if="expanded" class="collapsible-body">
-        <button class="my-3 mx-8 text-xl absolute right-0" @click="addTask">
-          <svg
-            class="h-6"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            />
-          </svg>
-        </button>
-        <section
-          v-for="(list, index) in lists"
-          :key="list.title"
-          class="py-2 px-4 mb-1"
-          :style="`--list-idx: ${index}`"
+    <div v-if="expanded">
+      <section
+        v-for="(list, index) in lists"
+        :key="list.title"
+        class="py-2 px-4 mb-1"
+        :style="`--list-idx: ${index}`"
+      >
+        <form class="w-full flex">
+          <input class="bg-dark-darker w-full" />
+          <input type="button" value="Add" class="bg-light text-dark" />
+        </form>
+        <wp-draggable
+          group="tasks"
+          :list="list.items"
+          class="flex flex-col gap-2 dragarea"
         >
-          <h3 class="text-2xl mb-2">
-            {{ list.title }}
-          </h3>
-          <wp-draggable
-            group="tasks"
-            :list="list.items"
-            class="flex flex-col gap-2 dragarea"
-          >
-            <wp-list-item
-              v-for="task in list.items"
-              :key="task.id"
-              class="shadow"
-              v-model:title="task.title"
-              v-model:details="task.details"
-              @remove="removeItem(list, task)"
-            />
-          </wp-draggable>
-        </section>
-      </div>
+          <wp-list-item
+            v-for="task in list.items"
+            :key="task.id"
+            v-model:title="task.title"
+            v-model:details="task.details"
+            class="shadow"
+            @remove="removeItem(list, task)"
+          />
+        </wp-draggable>
+      </section>
+      <section>
+        <wp-draggable> </wp-draggable>
+      </section>
+    </div>
   </article>
 </template>
 
@@ -82,11 +69,7 @@ export default defineComponent({
   },
   setup() {
     const expanded = ref(false)
-    const startLists = [
-      { title: 'Todo', items: [] },
-      { title: 'Doing', items: [] },
-      { title: 'Done', items: [] },
-    ]
+    const startLists = [{ title: 'Todo', items: [] }]
     const { lists, addItem, removeItem } = useList(startLists)
 
     const addTask = () => {
@@ -127,5 +110,4 @@ export default defineComponent({
 .dragarea:empty {
   @apply bg-dark rounded h-1 m-4;
 }
-
 </style>

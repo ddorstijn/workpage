@@ -1,14 +1,23 @@
 <template>
-  <section class="area" id="area-left">
+  <section
+    id="area-left"
+    class="area"
+  >
     <wp-projects />
     <wp-links />
-	</section>
-  <section class="area" id="area-center">
+  </section>
+  <section
+    id="area-center"
+    class="area"
+  >
     <wp-clock />
   </section>
-  <section class="area" id="area-right">
-		<wp-tasks />
-		<wp-timer />
+  <section
+    id="area-right"
+    class="area"
+  >
+    <wp-tasks />
+    <wp-timer />
   </section>
 </template>
 
@@ -49,9 +58,8 @@ export default defineComponent({
 }
 
 .area {
-	@apply flex flex-col h-full;
+	@apply flex flex-col h-full p-2;
 }
-
 
 #area-left {
   grid-area: l;

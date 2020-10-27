@@ -1,5 +1,5 @@
 <template>
-  <article class="mt-auto flex flex-col justify-end m-4 border-2 border-light-darkest rounded-lg shadow-lg">
+  <article class="mt-auto">
     <section
       v-if="expanded"
       class="flex flex-col gap-2"
@@ -34,24 +34,18 @@
     </section>
 
     <header
-      class="collapsible-header"
+      class="flex justify-center items-center px-4 py-2 cursor-pointer select-none"
       :class="{ open: expanded }"
       @click="expanded = !expanded"
     >
       <h2 class="text-2xl flex items-center gap-1">
         <svg
-          class="h-6"
+          class="h-6 stroke-current"
           xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+          viewBox="0 0 20 20"
+          fill="currentColor"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1"
-            d="M16 4v12l-4-2-4 2V4M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-          />
+          <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
         </svg>
         Links
       </h2>
@@ -62,7 +56,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
-import Velocity from 'velocity-animate'
 import useList from '/src/modules/list'
 import ListItem from './util/ListItem.vue'
 
@@ -76,43 +69,18 @@ export default defineComponent({
     const startLists = [{ title: '', items: [] }]
     const { lists, addItem, removeItem } = useList(startLists)
 
-    const beforeEnter = (el: HTMLElement) => {
-      console.log('starting transition')
-      el.style.maxHeight = 0
-    }
-    const enter = (el: HTMLElement, done) => {
-      Velocity(el, { maxHeight: '100%' }, { duration: 300, complete: done })
-      console.log('Done enter')
-    }
-    const leave = (el: HTMLElement, done) => {
-      Velocity(el, { maxHeight: '0%' }, { duration: 300, complete: done })
-    }
-
     return {
       expanded,
 
       lists,
       addItem,
       removeItem,
-
-      beforeEnter,
-      enter,
-      leave,
     }
   },
 })
 </script>
 
 <style lang="postcss" scoped>
-.collapsible-header {
-  @apply flex justify-center items-center px-4 py-2;
-  @apply cursor-pointer select-none;
-}
-
-.collapsible-body {
-  @apply relative flex mb-0 p-0 w-full;
-}
-
 .dragarea:empty {
   @apply bg-dark rounded h-1 m-4;
 }

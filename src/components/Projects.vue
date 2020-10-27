@@ -1,26 +1,27 @@
 <template>
-  <article class="m-4 border-2 border-light-darkest rounded-lg shadow-lg cursor-pointer select-none">
-    <header class="flex justify-center items-center m-2">
+  <article class="">
+    <header
+      class="flex justify-center items-center m-2 cursor-pointer select-none"
+    >
       <h2 class="text-2xl flex items-center gap-1">
         <svg
           class="h-6"
           xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+          viewBox="0 0 20 20"
+          fill="currentColor"
         >
+          <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
           <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+            fill-rule="evenodd"
+            d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
+            clip-rule="evenodd"
           />
         </svg>
         Projects
       </h2>
     </header>
     <section class="relative flex mb-0 p-0 w-full">
-        <wp-list-item title="Quizzer" details="Work" details-editable />
+      <wp-list-item title="Quizzer" details="Work" details-editable />
     </section>
   </article>
 </template>
@@ -35,4 +36,3 @@ export default defineComponent({
   },
 })
 </script>
-

@@ -1,35 +1,36 @@
 <template>
-  <article class="m-4 border-2 border-light-darkest rounded-lg shadow-lg">
-      <div v-if="expanded">
-        <section class="relative flex w-full h-full gap-2 justify-center p-6 px-12 mb-1">
-        </section>
+  <article class="mt-auto">
+    <div v-if="expanded">
+      <section
+        class="relative flex w-full h-full gap-2 justify-center p-6 px-12 mb-1"
+      />
 
-        <section class="flex gap-2 justify-center p-2 mb-2">
-          <span>Goal:</span>
-          <label for="goal-hours">
-            <input
-              v-model.number="goal.hours"
-              class="bg-dark w-8 px-2 font-sans text-center rounded focus:outline-none focus:shadow-outline"
-              type="number"
-              min="0"
-              max="24"
-              maxlength="2"
-            />
-            h
-          </label>
-          <label for="goal-minutes">
-            <input
-              v-model.number="goal.minutes"
-              class="bg-dark w-8 px-2 font-sans text-center rounded focus:outline-none focus:shadow-outline"
-              type="number"
-              min="0"
-              max="60"
-              maxlength="2"
-            />
-            m
-          </label>
-        </section>
-      </div>
+      <section class="flex gap-2 justify-center p-2 mb-2">
+        <span>Goal:</span>
+        <label for="goal-hours">
+          <input
+            v-model.number="goal.hours"
+            class="bg-dark w-8 px-2 font-sans text-center rounded focus:outline-none focus:shadow-outline"
+            type="number"
+            min="0"
+            max="24"
+            maxlength="2"
+          />
+          h
+        </label>
+        <label for="goal-minutes">
+          <input
+            v-model.number="goal.minutes"
+            class="bg-dark w-8 px-2 font-sans text-center rounded focus:outline-none focus:shadow-outline"
+            type="number"
+            min="0"
+            max="60"
+            maxlength="2"
+          />
+          m
+        </label>
+      </section>
+    </div>
 
     <header
       class="flex justify-center items-center px-4 py-2 cursor-pointer select-none"
@@ -40,15 +41,13 @@
         <svg
           class="h-6"
           xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+          viewBox="0 0 20 20"
+          fill="currentColor"
         >
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1"
-            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+            clip-rule="evenodd"
           />
         </svg>
         Timer
