@@ -64,6 +64,11 @@ module.exports = {
     textColor: (theme) => ({
       ...theme('colors'),
     }),
+    fontFamily: {
+      sans: ['montserrat', 'system-ui'],
+      serif: ['Georgia', 'Cambria'],
+      mono: ['SFMono-Regular'],
+    },
     extend: {
       inset: {
         20: '20%',
@@ -78,6 +83,10 @@ module.exports = {
       maxHeight: (theme) => ({
         ...theme('spacing'),
       }),
+      fontSize: {
+        '7xl': ['5rem', '5rem'],
+        '8xl': ['6rem', '6rem'],
+      },
     },
   },
   variants: {
