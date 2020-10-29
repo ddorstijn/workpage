@@ -1,9 +1,9 @@
 <template>
   <div class="p-2 rounded-lg flex justify-between w-full group">
     <div class="flex items-center">
-			<div class="h-5 invisible group-hover:visible">
-				<slot name="icon" />
-			</div>
+      <div class="h-5 visible group-hover:visible mr-1">
+        <slot name="icon" />
+      </div>
 
       <div class="mx-3 w-11/12">
         <wp-editable

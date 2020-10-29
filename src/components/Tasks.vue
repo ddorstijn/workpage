@@ -1,56 +1,58 @@
 <template>
   <article class="h-full w-full">
-    <header class="flex gap-8 justify-center">
-      <h2 class="text-2xl flex items-center gap-1 cursor-pointer">
-        <svg
-          class="h-10"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-          <path
-            fill-rule="evenodd"
-            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      </h2>
+    <header class="w-full flex justify-center items-center gap-2 w-full mb-6">
+      <h1 class="text-3xl">
+				Todo
+      </h1>
+			<svg
+				class="h-10"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 20 20"
+				fill="currentColor"
+			>
+				<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+				<path
+					fill-rule="evenodd"
+					d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+					clip-rule="evenodd"
+				/>
+			</svg>
     </header>
 
-    <section v-for="list in lists" :key="list.title" class="w-full h-auto mt-6">
+		<section class="bg-dark p-2 px-4 rounded">
+			<h2 class="font-bold">Current task:</h2>
+      <wp-draggable class="pl-3">
+				<wp-task 
+					title="The task that is currently on the doing task field"
+					due="28 Oct"
+					spent="22h 12m"
+					estimate="25h 0m"
+					doing
+				>
+				</wp-task>
+			</wp-draggable>
+		</section>
+    <section v-for="list in lists" :key="list.title" class="h-64 overflow-y-scroll">
       <wp-draggable
         group="tasks"
         :list="list.items"
         class="flex flex-col gap-2 dragarea"
       >
-        <wp-list-item
+        <wp-task
           v-for="task in list.items"
           :key="task.id"
+
+					class="py-2 pl-4 rounded"
           v-model:title="task.title"
-          v-model:details="task.details"
+          :due="task.details.due"
+          :spent="task.details.spent"
+          :estimate="task.details.estimate"
           @remove="removeItem(list, task)"
         >
-          <template #icon>
-            <svg
-              class="h-full text-green"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 10 m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </template>
-        </wp-list-item>
+        </wp-task>
       </wp-draggable>
     </section>
-    <button class="w-full h-12 flex justify-center items-center p-4">
+    <button class="flex justify-center gap-2 items-center mt-4 mx-auto">
       <span>Add a new goal</span>
       <svg
         class="h-6"
@@ -72,12 +74,12 @@
 import { defineComponent } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import useList from '/src/modules/list'
-import ListItem from './util/ListItem.vue'
+import TaskItem from './util/TaskItem.vue'
 
 export default defineComponent({
   components: {
     'wp-draggable': VueDraggableNext,
-    'wp-list-item': ListItem,
+    'wp-task': TaskItem,
   },
   setup() {
     const startLists = [
@@ -88,42 +90,82 @@ export default defineComponent({
             id: 0,
             title:
               'Create a yocto recipe that auto inits the different gadget drivers',
-            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+            details: {
+              created: new Date('22 Nov 2020'),
+              due: new Date('25 Nov 2020'),
+              spent: '2h 0m 24s',
+              estimate: '3h 0m',
+            },
           },
           {
             id: 1,
             title: 'Create a script that initializes configfs',
-            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+            details: {
+              created: new Date('22 Nov 2020'),
+              due: new Date('25 Nov 2020'),
+              spent: '2h 0m 24s',
+              estimate: '2h 20m',
+            },
           },
           {
             id: 2,
             title: 'Allow for the creation of ACM ECM and RNDIS drivers',
-            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+            details: {
+              created: new Date('22 Nov 2020'),
+              due: new Date('25 Nov 2020'),
+              spent: '2h 0m 24s',
+              estimate: '1h 30m',
+            },
           },
           {
             id: 3,
             title: 'Create the hid driver',
-            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+            details: {
+              created: new Date('22 Nov 2020'),
+              due: new Date('25 Nov 2020'),
+              spent: '2h 0m 24s',
+              estimate: '1h 30m',
+            },
           },
           {
             id: 4,
             title: 'Test the tool with a Windows host PC',
-            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+            details: {
+              created: new Date('22 Nov 2020'),
+              due: new Date('25 Nov 2020'),
+              spent: '2h 0m 24s',
+              estimate: '1h 30m',
+            },
           },
           {
             id: 5,
             title: 'Build the Kappl project',
-            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+            details: {
+              created: new Date('22 Nov 2020'),
+              due: new Date('25 Nov 2020'),
+              spent: '2h 0m 24s',
+              estimate: '1h 30m',
+            },
           },
           {
             id: 6,
             title: 'Install Cygwin with Perl and XML support',
-            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+            details: {
+              created: new Date('22 Nov 2020'),
+              due: new Date('25 Nov 2020'),
+              spent: '2h 0m 24s',
+              estimate: '1h 30m',
+            },
           },
           {
             id: 7,
             title: 'Build Kappl for ARM devices',
-            details: 'Created: 22 Nov, Spent: 2h 0m 24s',
+            details: {
+              created: new Date('22 Nov 2020'),
+              due: new Date('25 Nov 2020'),
+              spent: '2h 0m 24s',
+              estimate: '1h 30m',
+            },
           },
         ],
       },

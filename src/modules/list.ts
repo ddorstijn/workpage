@@ -3,8 +3,7 @@ import { ref } from 'vue'
 interface Item {
   id: number
   title: string
-  details: string
-  icon?: string
+  details: object
 }
 
 interface List {
@@ -21,7 +20,7 @@ export default function useLists(startLists: List[]) {
       item = {
         id: uid.value++,
         title: '',
-        details: '',
+        details: null,
       }
     }
 

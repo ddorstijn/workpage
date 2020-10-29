@@ -1,5 +1,5 @@
 <template>
-  <article class="container gap-x-4 gap-y-1">
+  <article class="container gap-x-4 gap-y-2">
     <header
       id="header"
       class="flex justify-center items-center cursor-pointer select-none"
@@ -18,11 +18,23 @@
       </svg>
     </header>
     <section id="status" class="flex flex-col">
-      <h3 class="text-3xl">{{ elapsedHuman }}</h3>
-      <h4>Session: 0h 12m 36s</h4>
+      <h3 class="text-xl">{{ elapsedHuman }}</h3>
+      <h4 class="text-sm">Session: 0h 12m 36s</h4>
     </section>
-    <section id="goal" class="flex flex-col justify-end items-end px-2">
-      <h5 class="text-center">0h 30m</h5>
+    <section id="goal" class="flex justify-end items-center gap-1 px-2 mt-auto">
+      <svg
+        class="w-4 text-light-darker"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      <h5 class="text-sm text-center">0h 30m</h5>
     </section>
     <svg
       id="bar"
@@ -32,20 +44,20 @@
       xmlns="http://www.w3.org/2000/svg"
     >
       <line
+        class="stroke-current text-dark"
         x1="1"
         y1="1"
         x2="99"
         y2="1"
-        stroke="#928374"
         stroke-width="2"
         stroke-linecap="round"
       />
       <line
+        class="stroke-current text-light"
         x1="1"
         y1="1"
         x2="19"
         y2="1"
-        stroke="#fb4934"
         stroke-width="2"
         stroke-linecap="round"
       />
