@@ -1,6 +1,6 @@
 <template>
   <button
-    class="flex justify-center items-center cursor-pointer select-none bg-light-lighter text-dark-darker py-1 pr-4 rounded m-4"
+    class="flex justify-center items-center cursor-pointer select-none bg-light-lighter text-dark-darker py-1 pr-4 rounded mt-4 mx-auto"
   >
     <h2 class="text-2xl flex items-center gap-1">
       <svg

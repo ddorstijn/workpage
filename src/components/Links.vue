@@ -2,7 +2,7 @@
   <article class="w-full mt-16 flex flex-col gap-12 items-center">
     <section class="flex justify-between w-full">
       <div
-        v-for="(list, idx) in lists"
+        v-for="(list, idx) in linkLists"
         :key="list.title"
         class="flex flex-col gap-2 w-3/12"
       >
@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import useList from '/src/modules/list'
 
@@ -44,7 +44,7 @@ export default defineComponent({
     'wp-draggable': VueDraggableNext,
   },
   setup() {
-    const startLists = [
+    const linkLists = ref([
       {
         title: 'Articles',
         items: [
@@ -108,11 +108,11 @@ export default defineComponent({
           },
         ],
       },
-    ]
-    const { lists, addItem, removeItem } = useList(startLists)
+    ])
+    const { addItem, removeItem } = useList()
 
     return {
-      lists,
+      linkLists,
       addItem,
       removeItem,
     }

@@ -1,14 +1,11 @@
 <template>
-  <main class="area area-main">
+  <main class="my-auto w-4/6">
     <wp-clock />
     <wp-projects />
     <wp-links />
   </main>
-  <div id="vert-sep" class="bg-dark-lighter h-auto" />
-  <aside class="area area-tasks">
+  <aside class="w-2/6 h-full flex flex-col gap-6 justify-between">
     <wp-tasks />
-  </aside>
-  <aside class="area area-timer">
     <wp-timer />
   </aside>
 </template>
@@ -41,33 +38,8 @@ export default defineComponent({
 #app {
   width: 100vw;
   height: 100vh;
-  display: grid;
-  grid-template:
-    'main sep tasks' 1fr
-    'main sep timer' min-content / 2fr min-content 1fr;
 
   background: radial-gradient(#3c3836 0%, #282828 70%);
-  @apply text-light-lighter font-sans gap-16 p-16;
-}
-
-.area {
-  @apply flex flex-col items-center justify-center flex-grow;
-}
-
-.area-main {
-  grid-area: main;
-}
-
-#vert-sep {
-  grid-area: sep;
-  width: 1px;
-}
-
-.area-tasks {
-  grid-area: tasks;
-}
-
-.area-timer {
-  grid-area: timer;
+  @apply flex gap-32 p-16 text-light-lighter font-sans;
 }
 </style>
