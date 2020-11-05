@@ -1,18 +1,21 @@
 <template>
   <article class="flex flex-col items-center justify-center">
-    <h1 class="text-7xl text-center">{{ time }}</h1>
-    <h3 class="text-2xl text-center">{{ date }}</h3>
+    <h1 class="text-7xl text-center">
+      {{ time }}
+    </h1>
+    <h3 class="text-2xl text-center">
+      {{ date }}
+    </h3>
   </article>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onUnmounted } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   setup() {
     const date = ref()
     const time = ref()
-    const interval = ref()
 
     const getTimeAndDate = () => {
       const d = new Date()
@@ -29,20 +32,17 @@ export default defineComponent({
 
       date.value = new Intl.DateTimeFormat('en-GB', dateOptions).format(d)
       time.value = new Intl.DateTimeFormat('en-GB', timeOptions).format(d)
+
+      setTimeout(() => {
+        getTimeAndDate()
+      }, 5000)
     }
 
-    onUnmounted(() => {
-      clearInterval(interval.value)
-    })
-
     getTimeAndDate()
-    interval.value = setInterval(getTimeAndDate, 5000)
 
     return {
       date,
       time,
-      interval,
-      getTimeAndDate,
     }
   },
 })

@@ -1,27 +1,28 @@
 <template>
-  <p
+  <a
     ref="inputRef"
     id="input"
     class="cursor-text -mb-1 border-b-2 border-transparent focus:border-light"
-    contenteditable
+    :contenteditable="editing"
+    @click="enableEdit"
     @input="text = $event.target.innerText"
     @keydown.escape="$event.target.blur()"
     @keydown.enter="$event.target.blur()"
     v-once
   >
     {{ text }}
-  </p>
+  </a>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted } from 'vue'
+import { defineComponent, ref, computed, onMounted, nextTick } from 'vue'
 
 export default defineComponent({
   props: {
     modelValue: { type: String, default: '' },
-    oneliner: { type: Boolean, default: false },
+    editing: { type: Boolean, default: false },
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'update:editing'],
   setup(props, { emit }) {
     const inputRef = ref()
     const text = computed({
@@ -31,13 +32,22 @@ export default defineComponent({
 
     onMounted(() => {
       if (!props.modelValue) {
-        inputRef.value.focus()
+        enableEdit()
       }
     })
+
+    const enableEdit = () => {
+      emit('update:editing', true)
+      nextTick(() => {
+        inputRef.value.focus()
+        console.log(props.editing)
+      })
+    }
 
     return {
       inputRef,
       text,
+      enableEdit,
     }
   },
 })

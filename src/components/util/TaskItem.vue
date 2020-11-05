@@ -1,10 +1,18 @@
 <template>
-  <div class="flex justify-between w-full group hover:bg-dark-darker">
+  <div
+    class="flex justify-between w-full group hover:bg-dark-darkest py-2 pl-4 rounded"
+  >
     <div class="w-full flex flex-col">
-      <wp-editable
-        v-model="titleVal"
-        class="font-sans tracking-wide text-md"
-        placeholder="Title"
+      <textarea
+        v-model="title"
+        class="font-sans tracking-wide text-md bg-transparent resize-none"
+        rows="1"
+        readonly
+        oninput="this.style.height='auto'; this.style.height=this.scrollHeight+'px';"
+        onclick="this.readOnly = false"
+        onblur="this.readOnly = true"
+        @keydown.escape="$event.target.blur()"
+        @keydown.enter.prevent="$event.target.blur()"
       />
       <div class="flex gap-2 items-center text-gray text-sm">
         <div class="flex items-center">
@@ -20,14 +28,11 @@
               clip-rule="evenodd"
             />
           </svg>
-          <p>
-            {{
-              due.toLocaleString('en-gb', {
-                month: 'short',
-                day: 'numeric',
-              })
-            }}
-          </p>
+          <p
+            v-text="
+              due.toLocaleString('en-gb', { month: 'short', day: 'numeric' })
+            "
+          />
         </div>
 
         <div class="flex items-center">
@@ -43,10 +48,7 @@
               clip-rule="evenodd"
             />
           </svg>
-          <p>
-            <span class="whitespace-pre">{{ spent }}</span> /
-            <span>{{ estimate }}</span>
-          </p>
+          <p>{{ spent }} / {{ estimate }}</p>
         </div>
       </div>
     </div>
@@ -74,20 +76,17 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import Editable from './Editable.vue'
 
 export default defineComponent({
-  components: {
-    'wp-editable': Editable,
-  },
   emits: ['remove', 'update:title', 'update:details'],
   props: {
-    title: { type: String, required: true },
+    title: { type: String },
     created: { type: Date },
     due: { type: Date },
     spent: { type: String },
     estimate: { type: String },
-    doing: { type: Boolean, default: false },
+    doing: { type: Boolean },
+    completed: { type: Boolean },
   },
   setup(props, { emit }) {
     const titleVal = computed({

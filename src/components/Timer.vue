@@ -1,14 +1,18 @@
 <template>
-  <article class="container gap-x-4 gap-y-2">
+  <article
+    class="grid gap-x-4 gap-y-1"
+    style="
+          grid-template-rows: 1fr min-content;
+          grid-template-columns: min-content 2fr 1fr;
+        "
+  >
     <header
-      id="header"
-      class="flex justify-center items-center cursor-pointer select-none"
+      class="row-span-2 flex justify-center items-center cursor-pointer select-none"
     >
       <svg
-        class="h-10"
+        class="h-10 fill-current"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
-        fill="currentColor"
       >
         <path
           fill-rule="evenodd"
@@ -17,46 +21,111 @@
         />
       </svg>
     </header>
-    <section id="status" class="flex flex-col">
-      <h3 class="text-xl">{{ elapsedHuman }}</h3>
-      <h4 class="text-sm">Session: 0h 12m 36s</h4>
-    </section>
-    <section id="goal" class="flex justify-end items-center gap-1 px-2 mt-auto">
-      <svg
-        class="w-4 text-light-darker"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z"
-          clip-rule="evenodd"
+    <section class="flex flex-col">
+      <h3
+        class="text-xl"
+        v-text="timeToHuman(elapsed)"
+      />
+      <h4 class="text-sm">
+        session:
+        <span
+          v-text="timeToHuman(sessions[0].end - sessions[0].start)"
         />
-      </svg>
-      <h5 class="text-sm text-center">0h 30m</h5>
+      </h4>
+    </section>
+    <section class="flex flex-col items-end gap-1 px-2 mt-auto">
+      <template v-if="!running">
+        <button
+          class="flex items-center gap-1 px-1 rounded bg-light-lighter text-dark-darker"
+          @click="startSession()"
+        >
+          <svg
+            class="h-4 fill-current"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Start
+        </button>
+      </template>
+      <template v-if="running">
+        <button
+          class="flex items-center gap-1 px-1 rounded bg-light-lighter text-dark-darker"
+          @click="endSession()"
+        >
+          <svg
+            class="h-4 fill-current"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Stop
+        </button>
+      </template>
+      <div class="relative">
+        <form
+          v-if="open"
+          class="absolute w-32 -ml-16 p-2 rounded shadow-xl bg-dark-lighter left-50 bottom-100 flex flex-col gap-2"
+        >
+          <label class="text-xs">
+            Hours:
+            <input
+              v-model="goal.hours"
+              type="number"
+              class="w-full mt-1 p-1 rounded text-sm bg-dark text-light-lighter"
+            />
+          </label>
+          <label class="text-xs">
+            Minutes:
+            <input
+              v-model="goal.minutes"
+              type="number"
+              class="w-full mt-1 p-1 rounded text-sm bg-dark text-light-lighter"
+            />
+          </label>
+        </form>
+        <button
+          class="inline-block"
+          @click="open = !open"
+        >
+          goal:
+          <h5
+            class="inline text-sm text-center"
+            v-text="`${goal.hours}h ${goal.minutes}m`"
+          />
+        </button>
+      </div>
     </section>
     <svg
-      id="bar"
-      class="w-full h-1"
-      viewBox="0 0 100 2"
+      class="col-span-2 w-full h-1"
+      viewBox="-1 0 102 2"
       preserveAspectRatio="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <line
         class="stroke-current text-dark"
-        x1="1"
+        x1="0"
         y1="1"
-        x2="99"
+        x2="100"
         y2="1"
         stroke-width="2"
         stroke-linecap="round"
       />
       <line
         class="stroke-current text-light"
-        x1="1"
+        x1="0"
         y1="1"
-        x2="19"
+        :x2="progress"
         y2="1"
         stroke-width="2"
         stroke-linecap="round"
@@ -66,103 +135,61 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed } from 'vue'
-import useTimer from '/src/modules/timer'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  setup() {
-    const playpauseRef = ref()
-    const pauseplayRef = ref()
-
-    const {
-      previousSessions,
-      currentSession,
-      elapsedTime,
-      elapsedHuman,
-      startSession,
-      stopSession,
-    } = useTimer()
-
-    const toggleTimer = () => {
-      if (!currentSession.value.start) {
-        playpauseRef.value.beginElement()
-        startSession()
-      } else {
-        pauseplayRef.value.beginElement()
-        stopSession()
-      }
-    }
-
-    const goal = ref({
-      hours: 0,
-      minutes: 0,
-      timestamp: computed(() => {
-        return goal.value.hours * 3600000 + goal.value.minutes * 60000
-      }),
-    })
-
-    const dial = reactive({
-      length: 2 * Math.PI * 50 * 0.75,
-      offset: computed(() => {
-        if (!elapsedTime.value || elapsedTime.value > goal.value.timestamp) {
-          return 0
-        }
-
-        const step = dial.length / goal.value.timestamp
-        return -dial.length + elapsedTime.value * step
-      }),
-      color: computed(() => {
-        const percentage = 1 - Math.abs(dial.offset) / dial.length
-        if (percentage < 0.25) {
-          return 'text-red'
-        } else if (percentage < 0.75) {
-          return 'text-yellow'
-        }
-
-        return 'text-green'
-      }),
-    })
-
+  data() {
     return {
-      playpauseRef,
-      pauseplayRef,
-      goal,
-      dial,
-      elapsedHuman,
-      previousSessions,
-      currentSession,
-      startSession,
-      stopSession,
-      toggleTimer,
+      open: false,
+      running: false,
+      goal: { hours: 1, minutes: 30 },
+      sessions: [{ start: 0, end: 0 }],
     }
   },
+  computed: {
+    elapsed() {
+      return this.sessions.reduce((accumulator: number, session: number) => {
+        return accumulator + session.end - session.start;
+      }, 0)
+    },
+    goalTime() {
+      return this.goal.hours * 360000 + this.goal.minutes * 60000;
+    },
+    progress() {
+      return Math.min(100, (100 * this.elapsed) / this.goalTime);
+    },
+  },
+  methods: {
+    startSession() {
+      const now = Date.now();
+      this.running = true;
+      this.sessions[0] = { start: now, end: now };
+      this.update();
+    },
+    endSession() {
+      this.running = false;
+      this.sessions.unshift({ start: 0, end: 0 });
+    },
+    update() {
+      if (!this.running) return;
+
+      this.sessions[0].end = Date.now();
+      setTimeout(() => {
+        this.update();
+      }, 1000)
+    },
+    timeToHuman(time: number) {
+      const date = new Date(time);
+      const hours = date.getUTCHours();
+      const minutes = date.getUTCMinutes();
+      const seconds = date.getUTCSeconds();
+      return `${hours}h ${minutes}m ${seconds}s`;
+    },
+  }
 })
 </script>
 
 <style lang="postcss" scoped>
-.container {
-  display: grid;
-  grid-template:
-    'header status goal' 1fr
-    'header bar    bar ' min-content / min-content 3fr 1fr;
-}
-
-#header {
-  grid-area: header;
-}
-
-#status {
-  grid-area: status;
-}
-
-#goal {
-  grid-area: goal;
-}
-
-#bar {
-  grid-area: bar;
-}
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

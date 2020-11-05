@@ -1,12 +1,12 @@
 <template>
+  <!-- Tasks -->
   <article class="w-full h-full">
     <header class="flex justify-center items-center gap-2 mb-6">
       <h1 class="text-3xl">Todo</h1>
       <svg
-        class="h-10"
+        class="h-10 fill-current"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
-        fill="currentColor"
       >
         <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
         <path
@@ -20,36 +20,31 @@
     <section>
       <div class="bg-dark p-2 px-4 rounded">
         <h2 class="font-bold">Current task:</h2>
-        <wp-draggable>
-          <wp-task
-            class="pl-3 py-1 rounded"
-            title="The task that is currently on the doing task field"
-            due="28 Oct"
-            spent="22h 12m"
-            estimate="25h 0m"
-            doing
-          >
-          </wp-task>
-        </wp-draggable>
+        <ul>
+          <li class="pl-3 py-1 rounded">
+            <template v-if="doing.length == 0">
+              <p class="text-sm text-gray-lighter">
+                You currently do not have a task you are working on. Drag an
+                item here to start working on it.
+              </p>
+            </template>
+          </li>
+        </ul>
       </div>
-			<div class="max-h-1/2-screen overflow-auto">
-				<wp-draggable
-					group="tasks"
-					:list="todoList"
-				>
-					<wp-task
-						v-for="task in todoList"
-						:key="task.id"
-						class="py-2 pl-4 rounded"
-						v-model:title="task.title"
-						:due="task.details.due"
-						:spent="task.details.spent"
-						:estimate="task.details.estimate"
-						@remove="removeTask(task)"
-					>
-					</wp-task>
-				</wp-draggable>
-			</div>
+      <div class="max-h-1/2-screen overflow-auto">
+        <!-- Task item -->
+        <template v-for="task in tasks" :key="task.id">
+          <wp-task
+            :title="task.title"
+            :created="task.created"
+            :due="task.due"
+            :spent="task.spent"
+            :estimate="task.estimate"
+            :doing="task.doing"
+            :completed="task.completed"
+          />
+        </template>
+      </div>
     </section>
     <button
       class="flex justify-center gap-2 items-center mt-4 mx-auto"
@@ -57,10 +52,9 @@
     >
       <span>Add a new goal</span>
       <svg
-        class="h-6"
+        class="h-6 fill-current"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
-        fill="currentColor"
       >
         <path
           fill-rule="evenodd"
@@ -75,7 +69,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
-import useList from '/src/modules/list'
 import TaskItem from './util/TaskItem.vue'
 
 export default defineComponent({
@@ -84,115 +77,109 @@ export default defineComponent({
     'wp-task': TaskItem,
   },
   setup() {
-    const todoList = ref([
+    const currentID = 0
+    const doing = ref([])
+    const tasks = ref([
       {
         id: 0,
         title:
           'Create a yocto recipe that auto inits the different gadget drivers',
-        details: {
-          created: new Date('22 Nov 2020'),
-          due: new Date('25 Nov 2020'),
-          spent: '2h 0m 24s',
-          estimate: '3h 0m',
-        },
+        created: new Date('22 Nov 2020'),
+        due: new Date('25 Nov 2020'),
+        spent: '2h 0m 24s',
+        estimate: '3h 0m',
+        completed: false,
       },
       {
         id: 1,
         title: 'Create a script that initializes configfs',
-        details: {
-          created: new Date('22 Nov 2020'),
-          due: new Date('25 Nov 2020'),
-          spent: '2h 0m 24s',
-          estimate: '2h 20m',
-        },
+        created: new Date('22 Nov 2020'),
+        due: new Date('25 Nov 2020'),
+        spent: '2h 0m 24s',
+        estimate: '2h 20m',
+        completed: false,
       },
       {
         id: 2,
         title: 'Allow for the creation of ACM ECM and RNDIS drivers',
-        details: {
-          created: new Date('22 Nov 2020'),
-          due: new Date('25 Nov 2020'),
-          spent: '2h 0m 24s',
-          estimate: '1h 30m',
-        },
+        created: new Date('22 Nov 2020'),
+        due: new Date('25 Nov 2020'),
+        spent: '2h 0m 24s',
+        estimate: '1h 30m',
+        completed: false,
       },
       {
         id: 3,
         title: 'Create the hid driver',
-        details: {
-          created: new Date('22 Nov 2020'),
-          due: new Date('25 Nov 2020'),
-          spent: '2h 0m 24s',
-          estimate: '1h 30m',
-        },
+        created: new Date('22 Nov 2020'),
+        due: new Date('25 Nov 2020'),
+        spent: '2h 0m 24s',
+        estimate: '1h 30m',
+        completed: false,
       },
       {
         id: 4,
         title: 'Test the tool with a Windows host PC',
-        details: {
-          created: new Date('22 Nov 2020'),
-          due: new Date('25 Nov 2020'),
-          spent: '2h 0m 24s',
-          estimate: '1h 30m',
-        },
+        created: new Date('22 Nov 2020'),
+        due: new Date('25 Nov 2020'),
+        spent: '2h 0m 24s',
+        estimate: '1h 30m',
+        completed: false,
       },
       {
         id: 5,
         title: 'Build the Kappl project',
-        details: {
-          created: new Date('22 Nov 2020'),
-          due: new Date('25 Nov 2020'),
-          spent: '2h 0m 24s',
-          estimate: '1h 30m',
-        },
+        created: new Date('22 Nov 2020'),
+        due: new Date('25 Nov 2020'),
+        spent: '2h 0m 24s',
+        estimate: '1h 30m',
+        completed: false,
       },
       {
         id: 6,
         title: 'Install Cygwin with Perl and XML support',
-        details: {
-          created: new Date('22 Nov 2020'),
-          due: new Date('25 Nov 2020'),
-          spent: '2h 0m 24s',
-          estimate: '1h 30m',
-        },
+        created: new Date('22 Nov 2020'),
+        due: new Date('25 Nov 2020'),
+        spent: '2h 0m 24s',
+        estimate: '1h 30m',
+        completed: false,
       },
       {
         id: 7,
         title: 'Build Kappl for ARM devices',
-        details: {
-          created: new Date('22 Nov 2020'),
-          due: new Date('25 Nov 2020'),
-          spent: '2h 0m 24s',
-          estimate: '1h 30m',
-        },
+        created: new Date('22 Nov 2020'),
+        due: new Date('25 Nov 2020'),
+        spent: '2h 0m 24s',
+        estimate: '1h 30m',
+        completed: false,
       },
     ])
-    const { addItem, removeItem } = useList()
 
     const addTask = () => {
       const today = new Date()
       const item = {
-        id: -1,
+        id: currentID,
         title: '',
-        details: {
-          created: today,
-          due: new Date('25 Aug 2020'),
-          spent: '0h 0m',
-          estimate: '1h 0m',
-        },
+        created: today,
+        due: new Date(),
+        spent: '0h 0m',
+        estimate: '0h 0m',
+        completed: false,
       }
 
-      addItem(todoList.value, item, true)
+      tasks.value.push(item)
     }
 
-    const removeTask = (item) => {
-      removeItem(todoList.value, item)
+    const removeTask = (item: any) => {
+      const index = tasks.value.indexOf(item)
+      if (index > -1) {
+        tasks.value.splice(index, 1)
+      }
     }
 
     return {
-      todoList,
-      addItem,
-      removeItem,
+      tasks,
+      doing,
       addTask,
       removeTask,
     }
