@@ -1,5 +1,5 @@
 <template>
-  <div class="p-2 rounded-lg flex justify-between w-full group">
+  <li class="p-2 rounded-lg flex justify-between w-full group">
     <div class="flex items-center">
       <div class="h-5 visible group-hover:visible mr-1">
         <slot name="icon" />
@@ -57,17 +57,13 @@
         </svg>
       </button>
     </div>
-  </div>
+  </li>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import Editable from './Editable.vue'
 
 export default defineComponent({
-  components: {
-    'wp-editable': Editable,
-  },
   emits: ['remove', 'update:title', 'update:details'],
   props: {
     title: { type: String, required: true },

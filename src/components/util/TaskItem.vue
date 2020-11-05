@@ -1,10 +1,10 @@
 <template>
-  <div
+  <li
     class="flex justify-between w-full group hover:bg-dark-darkest py-2 pl-4 rounded"
   >
     <div class="w-full flex flex-col">
       <textarea
-        v-model="title"
+        v-model="titleVal"
         class="font-sans tracking-wide text-md bg-transparent resize-none"
         rows="1"
         readonly
@@ -28,11 +28,7 @@
               clip-rule="evenodd"
             />
           </svg>
-          <p
-            v-text="
-              due.toLocaleString('en-gb', { month: 'short', day: 'numeric' })
-            "
-          />
+          <p>{{ due.toLocaleString('en-gb', { month: 'short', day: 'numeric' }) }}</p>
         </div>
 
         <div class="flex items-center">
@@ -52,7 +48,7 @@
         </div>
       </div>
     </div>
-    <div v-if="!doing" class="flex items-center invisible group-hover:visible">
+    <div class="flex items-center invisible group-hover:visible">
       <button
         class="px-2 text-base text-light-darkest hover:text-red"
         @click="$emit('remove')"
@@ -71,31 +67,31 @@
         </svg>
       </button>
     </div>
-  </div>
+  </li>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  emits: ['remove', 'update:title', 'update:details'],
   props: {
-    title: { type: String },
-    created: { type: Date },
-    due: { type: Date },
-    spent: { type: String },
-    estimate: { type: String },
-    doing: { type: Boolean },
-    completed: { type: Boolean },
+    title: { type: String, required: true },
+    created: { type: Date, required: true },
+    due: { type: Date, required: true },
+    spent: { type: String, required: true },
+    estimate: { type: String, required: true },
+    completed: { type: Boolean, required: true },
+    doing: { type: Boolean, default: false },
   },
-  setup(props, { emit }) {
-    const titleVal = computed({
-      get: () => props.title,
-      set: (val: String) => emit('update:title', val),
-    })
-
-    return {
-      titleVal,
+  emits: ['remove', 'update:title'],
+  computed: {
+    titleVal: {
+      get(): string { 
+        return this.title
+      },
+      set(val: string) { 
+        this.$emit('update:title', val) 
+      }
     }
   },
 })

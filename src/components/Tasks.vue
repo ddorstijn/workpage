@@ -20,31 +20,38 @@
     <section>
       <div class="bg-dark p-2 px-4 rounded">
         <h2 class="font-bold">Current task:</h2>
-        <ul>
-          <li class="pl-3 py-1 rounded">
-            <template v-if="doing.length == 0">
-              <p class="text-sm text-gray-lighter">
-                You currently do not have a task you are working on. Drag an
-                item here to start working on it.
-              </p>
-            </template>
-          </li>
-        </ul>
+          <wp-draggable tag="ul" class="pl-3 py-1 rounded" group="tasks" :list="doing">
+            <p v-if="doing.length == 0" class="text-sm text-gray-lighter">
+              You currently do not have a task you are working on. Drag an
+              item here to start working on it.
+            </p>              
+            <template v-for="task in doing" :key="task.id">
+                <wp-task
+                  v-model:title="task.title"
+                  :created="task.created"
+                  :due="task.due"
+                  :spent="task.spent"
+                  :estimate="task.estimate"
+                  :completed="task.completed"
+                  doing
+                />
+              </template>
+          </wp-draggable>
       </div>
-      <div class="max-h-1/2-screen overflow-auto">
+      <wp-draggable tag="ul" class="max-h-1/2-screen overflow-auto" group="tasks" :list="tasks">
         <!-- Task item -->
         <template v-for="task in tasks" :key="task.id">
           <wp-task
-            :title="task.title"
+            v-model:title="task.title"
             :created="task.created"
             :due="task.due"
             :spent="task.spent"
             :estimate="task.estimate"
-            :doing="task.doing"
             :completed="task.completed"
+            @remove="removeTask(task)"
           />
         </template>
-      </div>
+      </wp-draggable>
     </section>
     <button
       class="flex justify-center gap-2 items-center mt-4 mx-auto"
@@ -156,11 +163,10 @@ export default defineComponent({
     ])
 
     const addTask = () => {
-      const today = new Date()
       const item = {
         id: currentID,
         title: '',
-        created: today,
+        created: new Date(),
         due: new Date(),
         spent: '0h 0m',
         estimate: '0h 0m',

@@ -4,12 +4,18 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: ['plugin:vue/vue3-recommended', 'eslint:recommended', 'prettier'],
+  extends: [
+    'plugin:vue/vue3-recommended',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'prettier',
+  ],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: ['vue'],
+  plugins: ['@typescript-eslint', 'vue'],
   rules: {
     'vue/html-self-closing': [
       'error',
