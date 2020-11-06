@@ -1,6 +1,6 @@
 <template>
-  <article class="w-full h-full flex flex-col overflow-hidden">
-    <header class="w-full mb-6">
+  <article class="w-full flex flex-col overflow-hidden">
+    <header class="flex justify-center mb-6">
 			<button class="w-full flex justify-center items-center gap-2">
 				<h2 class="text-3xl">Todo</h2>
 				<svg
