@@ -21,15 +21,22 @@
       </h2>
     </button>
 
-    <section
+    <div
       v-show="open"
       class="absolute top-0 left-0 w-full h-full p-16"
       @click.self="open = false"
     >
-      <div class="bg-dark-darkest w-full h-full border rounded-xl p-8">
-        <h1 class="text-3xl">Projects</h1>
-      </div>
-    </section>
+      <section class="bg-dark-darkest w-full h-full border rounded-xl p-8">
+				<header class="flex justify-between">
+					<h1 class="text-3xl">Projects</h1>
+					<button @click="open = false">
+						<svg class="h-8 text-gray hover:text-light-lighter fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+							<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+						</svg>
+					</button>
+				</header>
+      </section>
+    </div>
   </article>
 </template>
 

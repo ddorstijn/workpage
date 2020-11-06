@@ -1,16 +1,17 @@
 <template>
   <li
-    class="flex justify-between w-full group hover:bg-dark-darkest py-2 pl-4 rounded"
+    class="flex justify-between w-full group hover:bg-dark-lighter py-2 pl-4 rounded"
   >
     <div class="w-full flex flex-col">
       <textarea
         v-model="titleVal"
         class="font-sans tracking-wide text-md bg-transparent resize-none"
+				ref="title"
         rows="1"
         readonly
-        oninput="this.style.height='auto'; this.style.height=this.scrollHeight+'px';"
         onclick="this.readOnly = false"
         onblur="this.readOnly = true"
+				@input="resize"
         @keydown.escape="$event.target.blur()"
         @keydown.enter.prevent="$event.target.blur()"
       />
@@ -50,7 +51,7 @@
     </div>
     <div class="flex items-center invisible group-hover:visible">
       <button
-        class="px-2 text-base text-light-darkest hover:text-red"
+        class="pl-2 pr-4 text-base text-light-darkest hover:text-red"
         @click="$emit('remove')"
       >
         <svg
@@ -80,8 +81,6 @@ export default defineComponent({
     due: { type: Date, required: true },
     spent: { type: String, required: true },
     estimate: { type: String, required: true },
-    completed: { type: Boolean, required: true },
-    doing: { type: Boolean, default: false },
   },
   emits: ['remove', 'update:title'],
   computed: {
@@ -94,5 +93,13 @@ export default defineComponent({
       }
     }
   },
+	mounted() {
+		this.resize();
+	},
+	methods: {
+		resize() {
+			this.$refs.title.style.height = `${this.$refs.title.scrollHeight}px`
+		}
+	}
 })
 </script>

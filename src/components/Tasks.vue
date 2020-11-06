@@ -1,45 +1,43 @@
 <template>
-  <!-- Tasks -->
-  <article class="w-full h-full">
-    <header class="flex justify-center items-center gap-2 mb-6">
-      <h1 class="text-3xl">Todo</h1>
-      <svg
-        class="h-10 fill-current"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20"
-      >
-        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-        <path
-          fill-rule="evenodd"
-          d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-          clip-rule="evenodd"
-        />
-      </svg>
+  <article class="w-full h-full flex flex-col overflow-hidden">
+    <header class="w-full mb-6">
+			<button class="w-full flex justify-center items-center gap-2">
+				<h2 class="text-3xl">Todo</h2>
+				<svg
+					class="h-10 fill-current"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 20 20"
+				>
+					<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+					<path
+						fill-rule="evenodd"
+						d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+			</button>
     </header>
 
-    <section>
-      <div class="bg-dark p-2 px-4 rounded">
-        <h2 class="font-bold">Current task:</h2>
-          <wp-draggable tag="ul" class="pl-3 py-1 rounded" group="tasks" :list="doing">
-            <p v-if="doing.length == 0" class="text-sm text-gray-lighter">
-              You currently do not have a task you are working on. Drag an
-              item here to start working on it.
-            </p>              
-            <template v-for="task in doing" :key="task.id">
-                <wp-task
-                  v-model:title="task.title"
-                  :created="task.created"
-                  :due="task.due"
-                  :spent="task.spent"
-                  :estimate="task.estimate"
-                  :completed="task.completed"
-                  doing
-                />
-              </template>
-          </wp-draggable>
-      </div>
-      <wp-draggable tag="ul" class="max-h-1/2-screen overflow-auto" group="tasks" :list="tasks">
-        <!-- Task item -->
+		<section class="bg-dark p-2 px-4 mb-2 rounded shadow-lg">
+			<h2 class="font-bold">Current task:</h2>
+				<wp-draggable tag="ul" class="py-1 rounded" group="tasks" :list="doing" filter="textarea" :preventOnFilter="false">
+					<p v-if="doing.length == 0" class="text-sm text-gray-lighter">
+						You currently do not have a task you are working on. Drag an
+						item here to start working on it.
+					</p>
+					<template v-for="task in doing" :key="task.id">
+							<wp-task
+								v-model:title="task.title"
+								:created="task.created"
+								:due="task.due"
+								:spent="task.spent"
+								:estimate="task.estimate"
+							/>
+						</template>
+				</wp-draggable>
+		</section>
+    <section class="min-h-0 flex-1 flex-grow overflow-auto">
+      <wp-draggable tag="ul" group="tasks" :list="tasks" filter="textarea" :preventOnFilter="false">
         <template v-for="task in tasks" :key="task.id">
           <wp-task
             v-model:title="task.title"
@@ -47,7 +45,6 @@
             :due="task.due"
             :spent="task.spent"
             :estimate="task.estimate"
-            :completed="task.completed"
             @remove="removeTask(task)"
           />
         </template>
