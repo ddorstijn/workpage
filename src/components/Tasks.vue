@@ -1,8 +1,8 @@
 <template>
   <article class="w-full flex flex-col overflow-hidden">
-    <header class="flex justify-center mb-6">
-			<button class="w-full flex justify-center items-center gap-2">
-				<h2 class="text-3xl">Todo</h2>
+    <header class="mx-auto mb-6">
+			<button class="w-full flex justify-center items-center gap-2" @click="viewDone = !viewDone">
+				<h2 class="text-3xl"> {{ viewDone ? 'Done' : 'Todo' }}</h2>
 				<svg
 					class="h-10 fill-current"
 					xmlns="http://www.w3.org/2000/svg"
@@ -36,8 +36,19 @@
 						</template>
 				</wp-draggable>
 		</section>
-    <section class="min-h-0 flex-1 flex-grow overflow-auto">
-      <wp-draggable tag="ul" group="tasks" :list="tasks" filter="textarea" :preventOnFilter="false">
+		<div v-if="viewDone">
+        <template v-for="task in done" :key="task.id">
+          <wp-task
+            v-model:title="task.title"
+            :created="task.created"
+            :due="task.due"
+            :spent="task.spent"
+            :estimate="task.estimate"
+          />
+        </template>
+		</div>
+    <section v-else class="min-h-0 flex-1 flex-grow overflow-auto">
+      <wp-draggable tag="ul" group="tasks" :list="tasks" filter="textarea" :preventOnFilter="false" @start="startDrag" @end="endDrag">
         <template v-for="task in tasks" :key="task.id">
           <wp-task
             v-model:title="task.title"
@@ -50,28 +61,30 @@
         </template>
       </wp-draggable>
     </section>
-    <button
-      class="flex justify-center gap-2 items-center mt-4 mx-auto"
-      @click="addTask"
-    >
-      <span>Add a new goal</span>
-      <svg
-        class="h-6 fill-current"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-          clip-rule="evenodd"
-        />
-      </svg>
-    </button>
+		<section>
+			<wp-draggable v-if="dragging" class="flex p-4 bg-green" :list="done" group="tasks">
+				Mark as completed!
+			</wp-draggable>
+			<button v-else class="flex justify-center gap-2 items-center mt-4 mx-auto" @click="addTask">
+				<span>Add a new task</span>
+				<svg
+					class="h-6 fill-current"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 20 20"
+				>
+					<path
+						fill-rule="evenodd"
+						d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+			</button>
+		</section>
   </article>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { VueDraggableNext } from 'vue-draggable-next'
 import TaskItem from './util/TaskItem.vue'
 
@@ -80,112 +93,39 @@ export default defineComponent({
     'wp-draggable': VueDraggableNext,
     'wp-task': TaskItem,
   },
-  setup() {
-    const currentID = 0
-    const doing = ref([])
-    const tasks = ref([
-      {
-        id: 0,
-        title:
-          'Create a yocto recipe that auto inits the different gadget drivers',
-        created: new Date('22 Nov 2020'),
-        due: new Date('25 Nov 2020'),
-        spent: '2h 0m 24s',
-        estimate: '3h 0m',
-        completed: false,
-      },
-      {
-        id: 1,
-        title: 'Create a script that initializes configfs',
-        created: new Date('22 Nov 2020'),
-        due: new Date('25 Nov 2020'),
-        spent: '2h 0m 24s',
-        estimate: '2h 20m',
-        completed: false,
-      },
-      {
-        id: 2,
-        title: 'Allow for the creation of ACM ECM and RNDIS drivers',
-        created: new Date('22 Nov 2020'),
-        due: new Date('25 Nov 2020'),
-        spent: '2h 0m 24s',
-        estimate: '1h 30m',
-        completed: false,
-      },
-      {
-        id: 3,
-        title: 'Create the hid driver',
-        created: new Date('22 Nov 2020'),
-        due: new Date('25 Nov 2020'),
-        spent: '2h 0m 24s',
-        estimate: '1h 30m',
-        completed: false,
-      },
-      {
-        id: 4,
-        title: 'Test the tool with a Windows host PC',
-        created: new Date('22 Nov 2020'),
-        due: new Date('25 Nov 2020'),
-        spent: '2h 0m 24s',
-        estimate: '1h 30m',
-        completed: false,
-      },
-      {
-        id: 5,
-        title: 'Build the Kappl project',
-        created: new Date('22 Nov 2020'),
-        due: new Date('25 Nov 2020'),
-        spent: '2h 0m 24s',
-        estimate: '1h 30m',
-        completed: false,
-      },
-      {
-        id: 6,
-        title: 'Install Cygwin with Perl and XML support',
-        created: new Date('22 Nov 2020'),
-        due: new Date('25 Nov 2020'),
-        spent: '2h 0m 24s',
-        estimate: '1h 30m',
-        completed: false,
-      },
-      {
-        id: 7,
-        title: 'Build Kappl for ARM devices',
-        created: new Date('22 Nov 2020'),
-        due: new Date('25 Nov 2020'),
-        spent: '2h 0m 24s',
-        estimate: '1h 30m',
-        completed: false,
-      },
-    ])
-
-    const addTask = () => {
-      const item = {
-        id: currentID,
+	data() {
+		return {
+			viewDone: false,
+			dragging: false,
+			currentID: 1,
+			tasks: [],
+			doing: [],
+			done: [],
+		}
+	},
+	methods: {
+    addTask() {
+      this.tasks.push({
+        id: this.currentID++,
         title: '',
         created: new Date(),
         due: new Date(),
         spent: '0h 0m',
         estimate: '0h 0m',
-        completed: false,
-      }
-
-      tasks.value.push(item)
-    }
-
-    const removeTask = (item: any) => {
-      const index = tasks.value.indexOf(item)
+			})
+    },
+    removeTask(item: any) {
+      const index = this.tasks.indexOf(item)
       if (index > -1) {
-        tasks.value.splice(index, 1)
+        this.tasks.splice(index, 1)
       }
-    }
-
-    return {
-      tasks,
-      doing,
-      addTask,
-      removeTask,
-    }
-  },
+    },
+		startDrag(ev) {
+			this.dragging = true
+		},
+		endDrag(ev) {
+			this.dragging = false
+		},
+	},
 })
 </script>
