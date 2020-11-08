@@ -17,7 +17,7 @@
             clip-rule="evenodd"
           />
         </svg>
-        {{ projects[activeProject] }}
+        {{ activeProject }}
       </h2>
     </button>
 
@@ -36,22 +36,37 @@
 					</button>
 				</header>
 
-				<section>
-					<wp-draggable 
-						tag="ul" 
-						group="projects" 
-						:list="projects" 
-						filter="textarea" 
-						:preventOnFilter="false"
-					>
-						<template v-for="project in projects" :key="project.id">
+				<div>
+					<div>
+						Current active item:
+						<wp-draggable>
+							<wp-project v-for="project in activeProject">
+						</wp-draggable>
+					</div>
+
+					<section v-for="list in projects" :key="list.title">
+						<header>
+							{{ list.title }}
+						</header>
+						<wp-draggable 
+							tag="ul" 
+							group="projects" 
+							:list="list.items"
+							filter="textarea" 
+							:preventOnFilter="false"
+						>
 							<wp-project
+								v-for="project in list.items" 
+								:key="project.id"
+
 								v-model:title="project.title"
+								:created="project.created"
 								@remove="removeProject(project)"
 							/>
-						</template>
-					</wp-draggable>
-				</section>
+						</wp-draggable>
+					</section>
+
+				</div>
       </article>
     </div>
   </article>
@@ -73,11 +88,17 @@ export default defineComponent({
 			projects: [
 				{
 					title: "Love you",
-					items: [],
+					items: [
+						{
+							id: 0,
+							title: "Titisa",
+							created: new Date()
+						}
+					],
 				}
 			],
-			currentID: [],
-			activeProject: 0,
+			currentID: 0,
+			activeProject: "Default",
 		}
 	},
 })
