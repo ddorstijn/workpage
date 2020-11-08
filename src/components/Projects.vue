@@ -17,7 +17,7 @@
             clip-rule="evenodd"
           />
         </svg>
-        {{ projects[activeID] }}
+        {{ projects[activeProject] }}
       </h2>
     </button>
 
@@ -26,7 +26,7 @@
       class="absolute top-0 left-0 w-full h-full p-16"
       @click.self="open = false"
     >
-      <section class="bg-dark-darkest w-full h-full border rounded-xl p-8">
+      <article class="bg-dark-darkest w-full h-full border rounded-xl p-8">
 				<header class="flex justify-between">
 					<h1 class="text-3xl">Projects</h1>
 					<button @click="open = false">
@@ -35,29 +35,50 @@
 						</svg>
 					</button>
 				</header>
-      </section>
+
+				<section>
+					<wp-draggable 
+						tag="ul" 
+						group="projects" 
+						:list="projects" 
+						filter="textarea" 
+						:preventOnFilter="false"
+					>
+						<template v-for="project in projects" :key="project.id">
+							<wp-project
+								v-model:title="project.title"
+								@remove="removeProject(project)"
+							/>
+						</template>
+					</wp-draggable>
+				</section>
+      </article>
     </div>
   </article>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import ListItem from './util/ListItem.vue'
+import { defineComponent } from 'vue'
+import { VueDraggableNext } from 'vue-draggable-next'
+import ProjectItem from './util/ProjectItem.vue'
 
 export default defineComponent({
   components: {
-    'wp-list-item': ListItem,
+    'wp-project': ProjectItem,
+    'wp-draggable': VueDraggableNext,
   },
-  setup() {
-    const open = ref(false)
-    const projects = ref(['Project title'])
-    const activeID = ref(0)
-
-    return {
-      open,
-      projects,
-      activeID,
-    }
-  },
+	data() {
+		return {
+			open: false,
+			projects: [
+				{
+					title: "Love you",
+					items: [],
+				}
+			],
+			currentID: [],
+			activeProject: 0,
+		}
+	},
 })
 </script>

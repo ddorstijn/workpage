@@ -20,7 +20,18 @@
 
 		<section class="bg-dark p-2 px-4 mb-2 rounded shadow-lg">
 			<h2 class="font-bold">Current task:</h2>
-				<wp-draggable tag="ul" class="py-1 rounded" group="tasks" :list="doing" filter="textarea" :preventOnFilter="false">
+				<wp-draggable 
+					tag="ul" 
+					class="py-1
+					rounded"
+					group="tasks"
+					:list="doing"
+					filter="textarea"
+					:preventOnFilter="false"
+					@start="dragging = true"
+					@end="dragging = false"
+					@change="onChange"
+				>
 					<p v-if="doing.length == 0" class="text-sm text-gray-lighter">
 						You currently do not have a task you are working on. Drag an
 						item here to start working on it.
@@ -32,6 +43,7 @@
 								:due="task.due"
 								:spent="task.spent"
 								:estimate="task.estimate"
+            		@remove="removeTask(task)"
 							/>
 						</template>
 				</wp-draggable>
@@ -48,7 +60,15 @@
         </template>
 		</div>
     <section v-else class="min-h-0 flex-1 flex-grow overflow-auto">
-      <wp-draggable tag="ul" group="tasks" :list="tasks" filter="textarea" :preventOnFilter="false" @start="startDrag" @end="endDrag">
+      <wp-draggable 
+				tag="ul" 
+				group="tasks" 
+				:list="tasks" 
+				filter="textarea" 
+				:preventOnFilter="false"
+				@start="dragging = true" 
+				@end="dragging = false"
+			>
         <template v-for="task in tasks" :key="task.id">
           <wp-task
             v-model:title="task.title"
@@ -120,12 +140,19 @@ export default defineComponent({
         this.tasks.splice(index, 1)
       }
     },
-		startDrag(ev) {
-			this.dragging = true
-		},
-		endDrag(ev) {
-			this.dragging = false
-		},
+    onChange(evt) {
+			if (this.doing.length == 0) {
+				return
+			}
+
+      const currentDoing = this.doing[!evt.added.newIndex]
+			const index = this.tasks.indexOf(currentDoing)
+			if (index > -1) {
+				this.doing.splice(index, 1)
+			}
+
+			this.tasks.push(currentDoing);
+    }
 	},
 })
 </script>
