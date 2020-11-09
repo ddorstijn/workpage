@@ -49,6 +49,9 @@
 				</wp-draggable>
 		</section>
 		<div v-if="viewDone">
+				<p v-if="done.length == 0" class="mt-4 text-center text-sm text-gray">
+					You currently don't have any tasks marked as done.
+				</p>
         <template v-for="task in done" :key="task.id">
           <wp-task
             v-model:title="task.title"
@@ -61,6 +64,7 @@
 		</div>
     <section v-else class="min-h-0 flex-1 flex-grow overflow-auto">
       <wp-draggable 
+				class="mb-2"
 				tag="ul" 
 				group="tasks" 
 				:list="tasks" 
@@ -85,7 +89,7 @@
 			<wp-draggable v-if="dragging" class="flex p-4 bg-green" :list="done" group="tasks">
 				Mark as completed!
 			</wp-draggable>
-			<button v-else class="flex justify-center gap-2 items-center mt-4 mx-auto" @click="addTask">
+			<button v-else-if="!viewDone" class="flex justify-center gap-2 items-center mt-4 mx-auto" @click="addTask">
 				<span>Add a new task</span>
 				<svg
 					class="h-6 fill-current"

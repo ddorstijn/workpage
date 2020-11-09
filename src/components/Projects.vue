@@ -17,7 +17,7 @@
             clip-rule="evenodd"
           />
         </svg>
-        {{ activeProject }}
+        {{ activeProject[0].title }}
       </h2>
     </button>
 
@@ -27,46 +27,66 @@
       @click.self="open = false"
     >
       <article class="bg-dark-darkest w-full h-full border rounded-xl p-8">
-				<header class="flex justify-between">
-					<h1 class="text-3xl">Projects</h1>
-					<button @click="open = false">
-						<svg class="h-8 text-gray hover:text-light-lighter fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-							<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-						</svg>
-					</button>
-				</header>
+        <header class="flex justify-between mb-6">
+          <h1 class="text-3xl">Projects</h1>
+          <button @click="open = false">
+            <svg
+              class="h-8 text-gray hover:text-light-lighter fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </header>
 
-				<div>
-					<div>
-						Current active item:
-						<wp-draggable>
-							<wp-project v-for="project in activeProject">
-						</wp-draggable>
-					</div>
-
-					<section v-for="list in projects" :key="list.title">
-						<header>
-							{{ list.title }}
-						</header>
-						<wp-draggable 
-							tag="ul" 
-							group="projects" 
-							:list="list.items"
-							filter="textarea" 
-							:preventOnFilter="false"
-						>
-							<wp-project
-								v-for="project in list.items" 
-								:key="project.id"
-
-								v-model:title="project.title"
-								:created="project.created"
-								@remove="removeProject(project)"
-							/>
-						</wp-draggable>
-					</section>
-
-				</div>
+        <section class="flex flex-col">
+          <header class="my-6 p-2 self-center flex flex-col w-1/4 bg-dark rounded">
+            Current active item:
+            <wp-draggable group="projects">
+              <wp-project
+                v-for="project in activeProject"
+                :key="project.id"
+                v-model:title="project.title"
+                :created="project.created"
+                @remove="removeProject(project)"
+              />
+            </wp-draggable>
+          </header>
+          
+          <div class="w-full flex divide-x divide-dark">
+            <section 
+              v-for="list in projects" 
+              :key="list.title"
+              class="flex-col w-1/4 px-4"
+            >
+              <header class="text-xl">
+                {{ list.title }}
+              </header>
+              <wp-draggable
+                class="w-full"
+                tag="ul"
+                group="projects"
+                :list="list.items"
+                filter="textarea"
+                :preventOnFilter="false"
+              >
+                <wp-project
+                  v-for="project in list.items"
+                  :key="project.id"
+                  
+                  v-model:title="project.title"
+                  :created="project.created"
+                  @remove="removeProject(list.items, project)"
+                />
+              </wp-draggable>
+            </section>
+          </div>
+        </section>
       </article>
     </div>
   </article>
@@ -82,24 +102,68 @@ export default defineComponent({
     'wp-project': ProjectItem,
     'wp-draggable': VueDraggableNext,
   },
-	data() {
-		return {
-			open: false,
-			projects: [
-				{
-					title: "Love you",
-					items: [
-						{
-							id: 0,
-							title: "Titisa",
-							created: new Date()
-						}
-					],
-				}
-			],
-			currentID: 0,
-			activeProject: "Default",
-		}
-	},
+  data() {
+    return {
+      open: false,
+      projects: [
+        {
+          title: 'Project 1',
+          items: [
+            {
+              id: 0,
+              title: 'Item 1',
+              created: new Date(),
+            },
+          ],
+        },
+        {
+          title: 'Project 2',
+          items: [
+            {
+              id: 1,
+              title: 'Item 1',
+              created: new Date(),
+            },
+          ],
+        },
+        {
+          title: 'Project 3',
+          items: [
+            {
+              id: 1,
+              title: 'Item 1',
+              created: new Date(),
+            },
+          ],
+        },
+        {
+          title: 'Project 4',
+          items: [
+            {
+              id: 1,
+              title: 'Item 1',
+              created: new Date(),
+            },
+          ],
+        },
+      ],
+      currentID: 0,
+      activeProject: [
+        {
+          id: 0,
+          title: 'Titisa',
+          created: new Date(),
+        },
+      ],
+    }
+  },
+  methods: {
+    removeProject(list: Object[], project: Object) {
+      const index = list.indexOf(project)
+      if (index > -1) {
+        list.splice(index, 1)
+      }
+    }
+  }
 })
 </script>
