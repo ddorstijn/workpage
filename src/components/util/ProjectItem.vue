@@ -3,17 +3,19 @@
     class="flex justify-between w-full group hover:bg-dark-lighter py-2 pl-4 rounded"
   >
     <div class="w-full flex flex-col">
+      <p v-if="editing" class="font-sans tracking-wide text-md bg-transparent resize-none">
+        {{ title }}
+      </p>
       <textarea
+        v-else
         v-model="titleVal"
         class="font-sans tracking-wide text-md bg-transparent resize-none"
 				ref="title"
         rows="1"
-        readonly
-				onclick="this.readOnly = false"
-        onblur="this.readOnly = true"
 				@input="resize"
-        @keydown.escape="$event.target.blur()"
-        @keydown.enter.prevent="$event.target.blur()"
+				@blur="editable = false"
+        @keydown.escape="editable = false"
+        @keydown.enter.prevent="editable = false"
       />
       <div class="flex gap-2 items-center text-gray text-sm">
         <div class="flex items-center">
@@ -64,6 +66,11 @@ export default defineComponent({
     created: { type: Date, required: true },
   },
   emits: ['remove', 'update:title'],
+  data() {
+    return {
+      editing: true,
+    }
+  },
   computed: {
     titleVal: {
       get(): string { 

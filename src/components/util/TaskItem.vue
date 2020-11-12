@@ -3,17 +3,22 @@
     class="flex justify-between w-full group hover:bg-dark-lighter py-2 pl-4 rounded"
   >
     <div class="w-full flex flex-col">
+      <p
+        v-if="!editing"
+        class="font-sans tracking-wide text-md bg-transparent resize-none"
+      >
+        {{ title }}
+      </p>
       <textarea
+        v-else
         v-model="titleVal"
         class="font-sans tracking-wide text-md bg-transparent resize-none"
-				ref="title"
+        ref="title"
         rows="1"
-        readonly
-				onclick="this.readOnly = false"
-        onblur="this.readOnly = true"
-				@input="resize"
-        @keydown.escape="$event.target.blur()"
-        @keydown.enter.prevent="$event.target.blur()"
+        @input="resize"
+        @blur="editing = false"
+        @keydown.escape="editing = false"
+        @keydown.enter.prevent="editing = false"
       />
       <div class="flex gap-2 items-center text-gray text-sm">
         <div class="flex items-center">
@@ -29,7 +34,11 @@
               clip-rule="evenodd"
             />
           </svg>
-          <p>{{ due.toLocaleString('en-gb', { month: 'short', day: 'numeric' }) }}</p>
+          <p>
+            {{
+              due.toLocaleString('en-gb', { month: 'short', day: 'numeric' })
+            }}
+          </p>
         </div>
 
         <div class="flex items-center">
@@ -49,32 +58,69 @@
         </div>
       </div>
     </div>
-    <div class="flex items-center invisible group-hover:visible">
-      <button
-        class="pl-2 pr-4 text-base text-light-darkest hover:text-red"
-        @click="$emit('remove')"
-      >
-        <svg
-          class="h-4"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      </button>
+    <div class="relative flex items-center invisible group-hover:visible">
+      <wp-popup>
+        <template #tooltip>
+          <ul class="rounded-lg py-2 bg-light-lighter text-dark-darker">
+            <li class="flex items-center px-2">
+              <svg
+                class="h-4"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+                />
+              </svg>
+              <span>Edit</span>
+            </li>
+            <li class="flex items-center px-2" @click="$emit('remove')">
+              <svg
+                class="h-4"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <span>Delete</span>
+            </li>
+          </ul>
+        </template>
+        <button class="p-1 mr-2 rounded-full text-base text-light-darkest hover:text-dark-darker hover:bg-light-darker">
+          <svg
+            class="h-4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+            />
+          </svg>
+        </button>
+      </wp-popup>
     </div>
   </li>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import Popup from './Popup.vue'
 
 export default defineComponent({
+  components: {
+    'wp-popup': Popup,
+  },
   props: {
     title: { type: String, required: true },
     created: { type: Date, required: true },
@@ -83,23 +129,28 @@ export default defineComponent({
     estimate: { type: String, required: true },
   },
   emits: ['remove', 'update:title'],
-  computed: {
-    titleVal: {
-      get(): string { 
-        return this.title
-      },
-      set(val: string) { 
-        this.$emit('update:title', val) 
-      }
+  data() {
+    return {
+      editing: true,
     }
   },
-	mounted() {
-		this.resize();
-	},
-	methods: {
-		resize() {
-			this.$refs.title.style.height = `${this.$refs.title.scrollHeight}px`
-		}
-	}
+  computed: {
+    titleVal: {
+      get(): string {
+        return this.title
+      },
+      set(val: string) {
+        this.$emit('update:title', val)
+      },
+    },
+  },
+  mounted() {
+    this.resize()
+  },
+  methods: {
+    resize() {
+      this.$refs.title.style.height = `${this.$refs.title.scrollHeight}px`
+    },
+  },
 })
 </script>

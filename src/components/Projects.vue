@@ -62,6 +62,7 @@
             <section 
               v-for="list in projects" 
               :key="list.title"
+              
               class="flex-col w-1/4 px-4"
             >
               <header class="text-xl">
