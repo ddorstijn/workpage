@@ -77,7 +77,7 @@
           />
         </svg>
         <template #tooltip>
-          <ul class="rounded-lg py-2 bg-light-lighter text-dark-darker">
+          <ul class="py-2">
             <li class="flex items-center px-2 cursor-pointer" @click="editing = true">
               <svg
                 class="h-4"

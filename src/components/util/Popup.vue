@@ -8,13 +8,13 @@
     <slot></slot>
   </button>
   <div
-    class="tooltip"
+    class="tooltip z-40 rounded-lg bg-light-lighter text-dark-darker"
     ref="popper"
     role="tooltip"
     v-show="showPopper"
     @click.stop=""
   >
-    <slot name="tooltip">Please add content to this tooltip.</slot>
+    <slot name="tooltip"></slot>
     <div class="arrow" data-popper-arrow></div>
   </div>
 </template>
