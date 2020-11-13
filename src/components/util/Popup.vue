@@ -23,12 +23,15 @@
 import { createPopper } from '@popperjs/core'
 
 export default {
+	props: {
+		placement: { type: String, default: "top" },
+	},
   data() {
     return {
       popperJS: null,
       showPopper: false,
       popperOptions: {
-        placement: 'top',
+        placement: this.placement,
       },
     }
   },

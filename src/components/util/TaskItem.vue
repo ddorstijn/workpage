@@ -60,7 +60,7 @@
     </div>
     <div class="relative flex items-center invisible group-hover:visible">
       <wp-popup
-        class="p-1 mr-2 rounded-full text-base text-light-darkest hover:text-dark-darker hover:bg-light-darker"
+        class="p-1 mr-2 text-base text-light-darkest hover:text-dark-darker"
       >
         <svg
           class="h-4"
