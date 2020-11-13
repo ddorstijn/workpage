@@ -128,8 +128,8 @@
 							name="title"
 							ref="newTitle"
 							rows="1"
+							required
 							class="font-sans tracking-wide text-base bg-light-lighter text-dark-darker rounded resize-none"
-							class="bg-light-lighter text-dark-darker rounded p-1"
 							@input="resize"
 						/>
 					</label>
@@ -181,6 +181,17 @@ export default defineComponent({
       done: [],
     }
   },
+	watch {
+		creating(newVal, oldVal) {
+			if (oldVal == false && newVal == true) {
+        document.addEventListener('click', this.handleDocumentClick)
+        document.addEventListener('click', this.handleDocumentClick)
+			} else if (oldVal == true && newVal == false) {
+				document.removeEventListener('click', this.handleDocumentClick)
+				document.removeEventListener('click', this.handleDocumentClick)
+			}
+		}
+	},
   methods: {
     addTask(evt) {
 			const formData = new FormData(evt.target);
