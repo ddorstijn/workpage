@@ -30,7 +30,7 @@
         :list="doing"
         filter="textarea"
         :preventOnFilter="false"
-				ghost-class="hidden"
+        ghost-class="hidden"
         @start="dragging = true"
         @end="dragging = false"
         @change="onChange"
@@ -94,7 +94,7 @@
         class="flex p-4 bg-green"
         :list="done"
         group="tasks"
-				ghost-class="hidden"
+        ghost-class="hidden"
       >
         Mark as completed!
       </wp-draggable>
@@ -158,13 +158,13 @@ export default defineComponent({
       }
     },
     onChange(evt) {
-			if (evt.added) {
-				if (this.doing.length > 1) {
-					this.tasks.unshift(this.doing[1 - evt.added.newIndex]);
-				}
+      if (evt.added) {
+        if (this.doing.length > 1) {
+          this.tasks.unshift(this.doing[1 - evt.added.newIndex])
+        }
 
-				this.doing = [evt.added.element];
-			}
+        this.doing = [evt.added.element]
+      }
     },
   },
 })

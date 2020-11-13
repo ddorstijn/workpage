@@ -78,7 +78,10 @@
         </svg>
         <template #tooltip>
           <ul class="py-2">
-            <li class="flex items-center px-2 cursor-pointer" @click="editing = true">
+            <li
+              class="flex items-center px-2 cursor-pointer"
+              @click="editing = true"
+            >
               <svg
                 class="h-4"
                 xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +94,10 @@
               </svg>
               <span>Edit</span>
             </li>
-            <li class="flex items-center px-2 cursor-pointer" @click="$emit('remove')">
+            <li
+              class="flex items-center px-2 cursor-pointer"
+              @click="$emit('remove')"
+            >
               <svg
                 class="h-4"
                 xmlns="http://www.w3.org/2000/svg"
@@ -145,13 +151,13 @@ export default defineComponent({
     },
   },
   mounted() {
-		if (!this.title) {
-			this.editing = true;
-    	this.$nextTick(() => {
-				this.resize();
-				this.$refs.title.focus();
-			});
-		}
+    if (!this.title) {
+      this.editing = true
+      this.$nextTick(() => {
+        this.resize()
+        this.$refs.title.focus()
+      })
+    }
   },
   methods: {
     resize() {

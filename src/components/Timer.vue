@@ -67,37 +67,37 @@
           Stop
         </button>
       </template>
-			<wp-popup>
-				<span>
-				goal:
-					<h5
-						class="inline text-sm text-center"
-						v-text="`${goal.hours}h ${goal.minutes}m`"
-					/>
-				</span>
-				<template #tooltip>
-					<form class="w-40 p-2 flex flex-col gap-2">
-						<label class="text-sm flex items-center justify-between gap-2">
-							Hours:
-							<input
-								v-model="goal.hours"
-								type="number"
-								size="2"
-								class="w-auto p-1 px-2 rounded text-center text-light bg-dark"
-							/>
-						</label>
-						<label class="text-sm flex items-center justify-between gap-2">
-							Minutes:
-							<input
-								v-model="goal.minutes"
-								type="number"
-								size="2"
-								class="w-auto p-1 px-2 rounded text-center text-light bg-dark"
-							/>
-						</label>
-					</form>
-				</template>
-			</wp-popup>
+      <wp-popup>
+        <span>
+          goal:
+          <h5
+            class="inline text-sm text-center"
+            v-text="`${goal.hours}h ${goal.minutes}m`"
+          />
+        </span>
+        <template #tooltip>
+          <form class="w-40 p-2 flex flex-col gap-2">
+            <label class="text-sm flex items-center justify-between gap-2">
+              Hours:
+              <input
+                v-model="goal.hours"
+                type="number"
+                size="2"
+                class="w-auto p-1 px-2 rounded text-center text-light bg-dark"
+              />
+            </label>
+            <label class="text-sm flex items-center justify-between gap-2">
+              Minutes:
+              <input
+                v-model="goal.minutes"
+                type="number"
+                size="2"
+                class="w-auto p-1 px-2 rounded text-center text-light bg-dark"
+              />
+            </label>
+          </form>
+        </template>
+      </wp-popup>
     </section>
     <svg
       class="col-span-2 w-full h-1"
@@ -132,9 +132,9 @@ import { defineComponent } from 'vue'
 import Popup from './util/Popup.vue'
 
 export default defineComponent({
-	components: {
-		"wp-popup": Popup,
-	},
+  components: {
+    'wp-popup': Popup,
+  },
   data() {
     return {
       running: false,

@@ -23,9 +23,9 @@
 import { createPopper } from '@popperjs/core'
 
 export default {
-	props: {
-		placement: { type: String, default: "top" },
-	},
+  props: {
+    placement: { type: String, default: 'top' },
+  },
   data() {
     return {
       popperJS: null,
@@ -108,7 +108,7 @@ export default {
 .arrow::before {
   content: '';
   transform: rotate(45deg);
-	@apply bg-light-lighter;
+  @apply bg-light-lighter;
 }
 
 .tooltip[data-popper-placement^='top'] > .arrow {
