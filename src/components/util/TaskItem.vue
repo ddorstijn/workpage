@@ -131,7 +131,7 @@ export default defineComponent({
   emits: ['remove', 'update:title'],
   data() {
     return {
-      editing: true,
+      editing: false,
     }
   },
   computed: {
@@ -145,7 +145,13 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.resize()
+		if (!this.title) {
+			this.editing = true;
+    	this.$nextTick(() => {
+				this.resize();
+				this.$refs.title.focus();
+			});
+		}
   },
   methods: {
     resize() {
