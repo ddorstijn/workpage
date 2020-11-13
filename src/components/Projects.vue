@@ -57,7 +57,6 @@
               />
             </wp-draggable>
           </header>
-
           <div class="w-full flex z-40 bg-dark-darker">
 						<section class="w-full flex justify-center gap-12">
 							<template v-for="(list, index) in lists" :key="index">
