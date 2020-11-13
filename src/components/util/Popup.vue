@@ -8,7 +8,7 @@
     <slot></slot>
   </button>
   <div
-    class="tooltip z-40 rounded-lg bg-light-lighter text-dark-darker"
+    class="tooltip z-40 rounded-lg bg-light-lighter text-dark-darker shadow-xl"
     ref="popper"
     role="tooltip"
     v-show="showPopper"

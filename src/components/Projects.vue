@@ -65,11 +65,7 @@
                 <div class="h-full flex flex-col gap-2 w-3/12 shadow-lg">
                   <header
                     class="text-2xl px-4 py-1"
-                    :class="{
-                      'bg-red-lighter': index == 0,
-                      'bg-blue-lighter': index == 1,
-                      'bg-green': index == 2,
-                    }"
+                    :class="sectionColor(index)"
                   >
                     {{ list.title }}
                   </header>
@@ -140,7 +136,7 @@ export default defineComponent({
           title: 'Project 3',
           items: [
             {
-              id: 1,
+              id: 2,
               title: 'Item 1',
               created: new Date(),
             },
@@ -150,7 +146,7 @@ export default defineComponent({
           title: 'Project 4',
           items: [
             {
-              id: 1,
+              id: 3,
               title: 'Item 1',
               created: new Date(),
             },
@@ -173,6 +169,10 @@ export default defineComponent({
       if (index > -1) {
         list.splice(index, 1)
       }
+    },
+    sectionColor(idx) {
+      const colors = ['bg-red', 'bg-blue', 'bg-green', 'bg-purple', 'bg-aqua']
+      return colors[idx]
     },
   },
 })
