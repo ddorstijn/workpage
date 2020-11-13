@@ -45,7 +45,9 @@
         </header>
 
         <section class="flex flex-col">
-          <header class="my-6 p-2 self-center flex flex-col w-1/4 bg-dark rounded">
+          <header
+            class="my-6 p-2 self-center flex flex-col w-1/4 bg-dark rounded"
+          >
             Current active item:
             <wp-draggable group="projects">
               <wp-project
@@ -58,42 +60,41 @@
             </wp-draggable>
           </header>
           <div class="w-full flex z-40 bg-dark-darker">
-						<section class="w-full flex justify-center gap-12">
-							<template v-for="(list, index) in lists" :key="index">
-								<div class="h-full flex flex-col gap-2 w-3/12 shadow-lg">
-									<header
-										class="text-2xl px-4 py-1"
-										:class="{
-											'bg-red-lighter': index == 0,
-											'bg-blue-lighter': index == 1,
-											'bg-green': index == 2,
-										}"
-									>
-										{{ list.title }}
-									</header>
-									<wp-draggable
-										class="min-h-6 bg-light-lighter text-dark-darker p-2 px-4"
-										tag="ul"
-										group="projects"
-										:list="list.items"
-										filter="textarea"
-										:preventOnFilter="false"
-									>
-										<template v-if="list.items.length == 0">
-											<p>There are no items here yet</p>
-										</template>
-										<wp-project
-											v-for="project in list.items"
-											:key="project.id"
-
-											v-model:title="project.title"
-											:created="project.created"
-											@remove="removeProject(list.items, project)"
-										/>
-									</wp-draggable>
-								</div>
-							</template>
-						</section>
+            <section class="w-full flex justify-center gap-12">
+              <template v-for="(list, index) in lists" :key="index">
+                <div class="h-full flex flex-col gap-2 w-3/12 shadow-lg">
+                  <header
+                    class="text-2xl px-4 py-1"
+                    :class="{
+                      'bg-red-lighter': index == 0,
+                      'bg-blue-lighter': index == 1,
+                      'bg-green': index == 2,
+                    }"
+                  >
+                    {{ list.title }}
+                  </header>
+                  <wp-draggable
+                    class="min-h-6 bg-light-lighter text-dark-darker p-2 px-4"
+                    tag="ul"
+                    group="projects"
+                    :list="list.items"
+                    filter="textarea"
+                    :preventOnFilter="false"
+                  >
+                    <template v-if="list.items.length == 0">
+                      <p>There are no items here yet</p>
+                    </template>
+                    <wp-project
+                      v-for="project in list.items"
+                      :key="project.id"
+                      v-model:title="project.title"
+                      :created="project.created"
+                      @remove="removeProject(list.items, project)"
+                    />
+                  </wp-draggable>
+                </div>
+              </template>
+            </section>
           </div>
         </section>
       </article>
@@ -172,7 +173,7 @@ export default defineComponent({
       if (index > -1) {
         list.splice(index, 1)
       }
-    }
-  }
+    },
+  },
 })
 </script>

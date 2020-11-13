@@ -4,7 +4,9 @@
     <wp-projects />
     <wp-links />
   </main>
-  <aside class="w-2/6 h-full flex flex-col gap-12 justify-between border-l border-dark-lighter pl-16">
+  <aside
+    class="w-2/6 h-full flex flex-col gap-12 justify-between border-l border-dark-lighter pl-16"
+  >
     <wp-tasks />
     <wp-timer />
   </aside>
@@ -34,7 +36,7 @@ export default defineComponent({
 * {
   box-sizing: border-box;
   scrollbar-color: #7c6f64 #3c3836;
-	scrollbar-width: thin;
+  scrollbar-width: thin;
 }
 
 #app {

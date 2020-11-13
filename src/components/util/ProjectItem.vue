@@ -3,17 +3,20 @@
     class="flex justify-between w-full group hover:bg-dark-lighter py-2 pl-4 rounded"
   >
     <div class="w-full flex flex-col">
-      <p v-if="editing" class="font-sans tracking-wide text-md bg-transparent resize-none">
+      <p
+        v-if="editing"
+        class="font-sans tracking-wide text-md bg-transparent resize-none"
+      >
         {{ title }}
       </p>
       <textarea
         v-else
         v-model="titleVal"
         class="font-sans tracking-wide text-md bg-transparent resize-none"
-				ref="title"
+        ref="title"
         rows="1"
-				@input="resize"
-				@blur="editable = false"
+        @input="resize"
+        @blur="editable = false"
         @keydown.escape="editable = false"
         @keydown.enter.prevent="editable = false"
       />
@@ -31,7 +34,14 @@
               clip-rule="evenodd"
             />
           </svg>
-          <p>{{ created.toLocaleString('en-gb', { month: 'short', day: 'numeric' }) }}</p>
+          <p>
+            {{
+              created.toLocaleString('en-gb', {
+                month: 'short',
+                day: 'numeric',
+              })
+            }}
+          </p>
         </div>
       </div>
     </div>
@@ -73,21 +83,21 @@ export default defineComponent({
   },
   computed: {
     titleVal: {
-      get(): string { 
+      get(): string {
         return this.title
       },
-      set(val: string) { 
-        this.$emit('update:title', val) 
-      }
-    }
+      set(val: string) {
+        this.$emit('update:title', val)
+      },
+    },
   },
-	updated() {
-		this.resize();
-	},
-	methods: {
-		resize() {
-			this.$refs.title.style.height = `${this.$refs.title.scrollHeight}px`
-		}
-	}
+  updated() {
+    this.resize()
+  },
+  methods: {
+    resize() {
+      this.$refs.title.style.height = `${this.$refs.title.scrollHeight}px`
+    },
+  },
 })
 </script>

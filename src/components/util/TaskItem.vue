@@ -59,10 +59,26 @@
       </div>
     </div>
     <div class="relative flex items-center invisible group-hover:visible">
-      <wp-popup>
+      <wp-popup
+        class="p-1 mr-2 rounded-full text-base text-light-darkest hover:text-dark-darker hover:bg-light-darker"
+      >
+        <svg
+          class="h-4"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+          />
+        </svg>
         <template #tooltip>
           <ul class="rounded-lg py-2 bg-light-lighter text-dark-darker">
-            <li class="flex items-center px-2">
+            <li class="flex items-center px-2 cursor-pointer" @click="editing = true">
               <svg
                 class="h-4"
                 xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +91,7 @@
               </svg>
               <span>Edit</span>
             </li>
-            <li class="flex items-center px-2" @click="$emit('remove')">
+            <li class="flex items-center px-2 cursor-pointer" @click="$emit('remove')">
               <svg
                 class="h-4"
                 xmlns="http://www.w3.org/2000/svg"
@@ -92,22 +108,6 @@
             </li>
           </ul>
         </template>
-        <button class="p-1 mr-2 rounded-full text-base text-light-darkest hover:text-dark-darker hover:bg-light-darker">
-          <svg
-            class="h-4"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-            />
-          </svg>
-        </button>
       </wp-popup>
     </div>
   </li>

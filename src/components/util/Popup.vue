@@ -1,88 +1,126 @@
 <template>
-  <div> 
-    <button ref="button" aria-describedby="tooltip">
-      <slot></slot>
-    </button>
-    <div v-if="show" ref="tooltip" role="tooltip">
-      <button
-        v-if="closeButton"
-        type="button"
-        @click="show = false"
-      >
-        <svg class="h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-
-      <slot id="tooltip" name="tooltip"></slot>
-      <div id="arrow" data-popper-arrow></div>
-    </div>
+  <button
+    ref="reference"
+    aria-describedby="tooltip"
+    v-bind="$attrs"
+    @click.stop="show()"
+  >
+    <slot></slot>
+  </button>
+  <div
+    class="tooltip"
+    ref="popper"
+    role="tooltip"
+    v-show="showPopper"
+    @click.stop=""
+  >
+    <slot name="tooltip">Please add content to this tooltip.</slot>
+    <div class="arrow" data-popper-arrow></div>
   </div>
 </template>
 
 <script>
 import { createPopper } from '@popperjs/core'
-import { defineComponent } from 'vue'
 
-export default defineComponent({
-  props: {
-    closeButton: { type: Boolean, default: false },
-  },
+export default {
   data() {
     return {
-      show: true,
+      popperJS: null,
+      showPopper: false,
+      popperOptions: {
+        placement: 'top',
+      },
     }
   },
-  mounted() {
-    console.log(this.$refs.button)
-    createPopper(this.$refs.button, this.$refs.tooltip, {
 
-      onFirstUpdate: state => console.log('Popper positioned on', state.placement),
-    });
+  methods: {
+    show() {
+      if (!this.popperJS) {
+        this.createPopper()
+
+        this.showPopper = true
+        document.addEventListener('click', this.handleDocumentClick)
+      }
+    },
+
+    hide() {
+      this.destroyPopper()
+      this.showPopper = false
+      document.removeEventListener('click', this.handleDocumentClick)
+    },
+
+    createPopper() {
+      this.$nextTick(() => {
+        if (this.popperJS && this.popperJS.destroy) {
+          this.popperJS.destroyPopper()
+        }
+
+        this.popperOptions.onCreate = () => {
+          this.$emit('created', this)
+          this.$nextTick(this.updatePopper)
+        }
+
+        this.popperJS = createPopper(
+          this.$refs.reference,
+          this.$refs.popper,
+          this.popperOptions
+        )
+      })
+    },
+
+    destroyPopper() {
+      this.showPopper = false
+
+      if (this.popperJS) {
+        this.popperJS.destroy()
+        this.popperJS = null
+      }
+    },
+
+    updatePopper() {
+      this.popperJS ? this.popperJS.scheduleUpdate() : this.createPopper()
+    },
+
+    handleDocumentClick(e) {
+      this.$emit('click-away', this)
+      this.hide()
+    },
   },
-  beforeUnmount() {
-    
-  }
-})
+
+  unmounted() {
+    this.destroyPopper()
+  },
+}
 </script>
 
-<style lang="postcss" scoped>
-#arrow,
-#arrow::before {
+<style scoped>
+.arrow,
+.arrow::before {
   position: absolute;
   width: 8px;
   height: 8px;
   z-index: -1;
 }
 
-#arrow::before {
+.arrow::before {
   content: '';
   transform: rotate(45deg);
-  @apply bg-light-lighter
+	@apply bg-light-lighter;
 }
 
-#tooltip[data-popper-placement^='top'] > #arrow {
+.tooltip[data-popper-placement^='top'] > .arrow {
   bottom: -4px;
 }
 
-#tooltip[data-popper-placement^='bottom'] > #arrow {
+.tooltip[data-popper-placement^='bottom'] > .arrow {
   top: -4px;
 }
 
-#tooltip[data-popper-placement^='left'] > #arrow {
+.tooltip[data-popper-placement^='left'] > .arrow {
   right: -4px;
 }
 
-#tooltip[data-popper-placement^='right'] > #arrow {
+.tooltip[data-popper-placement^='right'] > .arrow {
   left: -4px;
-}
-
-#tooltip {
-  /* ... */
-  display: none;
-}
-
-#tooltip[data-show] {
-  display: block;
 }
 </style>

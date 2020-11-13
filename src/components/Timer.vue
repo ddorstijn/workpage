@@ -2,9 +2,9 @@
   <article
     class="grid gap-x-4 gap-y-1"
     style="
-          grid-template-rows: 1fr min-content;
-          grid-template-columns: min-content 2fr 1fr;
-        "
+      grid-template-rows: 1fr min-content;
+      grid-template-columns: min-content 2fr 1fr;
+    "
   >
     <header
       class="row-span-2 flex justify-center items-center cursor-pointer select-none"
@@ -22,15 +22,10 @@
       </svg>
     </header>
     <section class="flex flex-col">
-      <h3
-        class="text-xl"
-        v-text="timeToHuman(elapsed)"
-      />
+      <h3 class="text-xl" v-text="timeToHuman(elapsed)" />
       <h4 class="text-sm">
         session:
-        <span
-          v-text="timeToHuman(sessions[0].end - sessions[0].start)"
-        />
+        <span v-text="timeToHuman(sessions[0].end - sessions[0].start)" />
       </h4>
     </section>
     <section class="flex flex-col items-end gap-1 px-2 mt-auto">
@@ -72,39 +67,36 @@
           Stop
         </button>
       </template>
-      <div class="relative">
-        <form
-          v-if="open"
-          class="absolute w-32 -ml-16 p-2 rounded shadow-xl bg-dark-lighter left-50 bottom-100 flex flex-col gap-2"
-        >
-          <label class="text-xs">
-            Hours:
-            <input
-              v-model="goal.hours"
-              type="number"
-              class="w-full mt-1 p-1 rounded text-sm bg-dark text-light-lighter"
-            />
-          </label>
-          <label class="text-xs">
-            Minutes:
-            <input
-              v-model="goal.minutes"
-              type="number"
-              class="w-full mt-1 p-1 rounded text-sm bg-dark text-light-lighter"
-            />
-          </label>
-        </form>
-        <button
-          class="block"
-          @click="open = !open"
-        >
-          goal:
-          <h5
-            class="inline text-sm text-center"
-            v-text="`${goal.hours}h ${goal.minutes}m`"
-          />
-        </button>
-      </div>
+			<wp-popup>
+				goal:
+				<h5
+					class="inline text-sm text-center"
+					v-text="`${goal.hours}h ${goal.minutes}m`"
+				/>
+				<template #tooltip>
+					<form
+						v-if="open"
+						class="absolute w-32 -ml-16 p-2 rounded shadow-xl bg-dark-lighter left-50 bottom-100 flex flex-col gap-2"
+					>
+						<label class="text-xs">
+							Hours:
+							<input
+								v-model="goal.hours"
+								type="number"
+								class="w-full mt-1 p-1 rounded text-sm bg-dark text-light-lighter"
+							/>
+						</label>
+						<label class="text-xs">
+							Minutes:
+							<input
+								v-model="goal.minutes"
+								type="number"
+								class="w-full mt-1 p-1 rounded text-sm bg-dark text-light-lighter"
+							/>
+						</label>
+					</form>
+				</template>
+			</wp-popup>
     </section>
     <svg
       class="col-span-2 w-full h-1"
@@ -136,8 +128,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import Popup from './util/Popup.vue'
 
 export default defineComponent({
+	components: {
+		"wp-popup": Popup,
+	},
   data() {
     return {
       open: false,
@@ -149,43 +145,43 @@ export default defineComponent({
   computed: {
     elapsed() {
       return this.sessions.reduce((accumulator: number, session: number) => {
-        return accumulator + session.end - session.start;
+        return accumulator + session.end - session.start
       }, 0)
     },
     goalTime() {
-      return this.goal.hours * 360000 + this.goal.minutes * 60000;
+      return this.goal.hours * 360000 + this.goal.minutes * 60000
     },
     progress() {
-      return Math.min(100, (100 * this.elapsed) / this.goalTime);
+      return Math.min(100, (100 * this.elapsed) / this.goalTime)
     },
   },
   methods: {
     startSession() {
-      const now = Date.now();
-      this.running = true;
-      this.sessions[0] = { start: now, end: now };
-      this.update();
+      const now = Date.now()
+      this.running = true
+      this.sessions[0] = { start: now, end: now }
+      this.update()
     },
     endSession() {
-      this.running = false;
-      this.sessions.unshift({ start: 0, end: 0 });
+      this.running = false
+      this.sessions.unshift({ start: 0, end: 0 })
     },
     update() {
-      if (!this.running) return;
+      if (!this.running) return
 
-      this.sessions[0].end = Date.now();
+      this.sessions[0].end = Date.now()
       setTimeout(() => {
-        this.update();
+        this.update()
       }, 1000)
     },
     timeToHuman(time: number) {
-      const date = new Date(time);
-      const hours = date.getUTCHours();
-      const minutes = date.getUTCMinutes();
-      const seconds = date.getUTCSeconds();
-      return `${hours}h ${minutes}m ${seconds}s`;
+      const date = new Date(time)
+      const hours = date.getUTCHours()
+      const minutes = date.getUTCMinutes()
+      const seconds = date.getUTCSeconds()
+      return `${hours}h ${minutes}m ${seconds}s`
     },
-  }
+  },
 })
 </script>
 
