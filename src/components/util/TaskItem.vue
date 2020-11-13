@@ -12,7 +12,7 @@
       <textarea
         v-else
         v-model="titleVal"
-        class="font-sans tracking-wide text-md bg-transparent resize-none"
+        class="font-sans tracking-wide text-base bg-transparent resize-none"
         ref="title"
         rows="1"
         @input="resize"
@@ -161,6 +161,7 @@ export default defineComponent({
   },
   methods: {
     resize() {
+			this.$refs.title.style.height = 'auto';
       this.$refs.title.style.height = `${this.$refs.title.scrollHeight}px`
     },
   },

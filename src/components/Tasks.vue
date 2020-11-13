@@ -1,5 +1,5 @@
 <template>
-  <article class="w-full flex flex-col overflow-hidden">
+  <article class="relative w-full flex flex-col">
     <header class="mx-auto mb-6">
       <button
         class="w-full flex justify-center items-center gap-2"
@@ -101,7 +101,7 @@
       <button
         v-else-if="!viewDone"
         class="flex justify-center gap-2 items-center mt-4 mx-auto"
-        @click="addTask"
+        @click="creating = true"
       >
         <span>Add a new task</span>
         <svg
@@ -117,6 +117,46 @@
         </svg>
       </button>
     </section>
+		<section v-if="creating" class="absolute inset-x-0 p-2 pt-24 h-full overflow-visible">
+			<div class="p-6 bg-dark-lighter rounded-lg shadow-xl">
+				<header class="flex justify-center text-2xl mb-6 mt-2">Add new task</header>
+				<form class="flex flex-col gap-4" @submit.prevent="addTask">
+					<label class="flex justify-between items-center">
+						Task name:
+						<textarea 
+							id="title"
+							name="title"
+							ref="newTitle"
+							rows="1"
+							class="font-sans tracking-wide text-base bg-light-lighter text-dark-darker rounded resize-none"
+							class="bg-light-lighter text-dark-darker rounded p-1"
+							@input="resize"
+						/>
+					</label>
+					
+					<label class="flex justify-between items-center">
+						Due date:
+						<input id="due" name="due" type="date" class="bg-light-lighter text-dark-darker rounded p-1" />
+					</label>
+
+					<div class="flex justify-between items-center">
+						Time estimate:
+						<div class="flex gap-2">
+							<label class="flex gap-1 items-center text-light-lighter">
+								h
+								<input id="goal-hours" type="number" name="goal-hours" size="2" class="bg-light-lighter text-dark-darker rounded p-1 w-12" />
+							</label>
+							<label class="flex gap-1 items-center text-light-lighter">
+								m
+								<input id="goal-minutes" type="number" name="goal-minutes" size="2" class="bg-light-lighter text-dark-darker rounded p-1 w-12" />
+							</label>
+						</div>
+					</div>
+
+					<button class="bg-green-dark p-2 mx-8">Add task</button>
+				</form>
+			</div>
+		</section>
   </article>
 </template>
 
@@ -134,6 +174,7 @@ export default defineComponent({
     return {
       viewDone: false,
       dragging: false,
+			creating: false,
       currentID: 1,
       tasks: [],
       doing: [],
@@ -141,15 +182,24 @@ export default defineComponent({
     }
   },
   methods: {
-    addTask() {
+    addTask(evt) {
+			const formData = new FormData(evt.target);
+
+			const title = formData.get('title');
+			const due = formData.get('due');
+			const goalHours = formData.get('goal-hours');
+			const goalMinutes = formData.get('goal-minutes');
+
       this.tasks.push({
         id: this.currentID++,
-        title: '',
+        title: title,
         created: new Date(),
-        due: new Date(),
+        due: due,
         spent: '0h 0m',
-        estimate: '0h 0m',
-      })
+        estimate: `${goalHours}h ${goalMinutes}m`,
+      });
+
+			this.creating = false;
     },
     removeTask(item: any) {
       const index = this.tasks.indexOf(item)
@@ -165,6 +215,10 @@ export default defineComponent({
 
         this.doing = [evt.added.element]
       }
+    },
+    resize() {
+			this.$refs.newTitle.style.height = 'auto';
+      this.$refs.newTitle.style.height = `${this.$refs.newTitle.scrollHeight}px`
     },
   },
 })
