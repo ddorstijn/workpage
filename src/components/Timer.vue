@@ -95,7 +95,7 @@
           </label>
         </form>
         <button
-          class="inline-block"
+          class="block"
           @click="open = !open"
         >
           goal:

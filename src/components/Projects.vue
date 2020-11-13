@@ -57,34 +57,44 @@
               />
             </wp-draggable>
           </header>
-          
-          <div class="w-full flex divide-x divide-dark">
-            <section 
-              v-for="list in projects" 
-              :key="list.title"
-              class="flex-col w-1/4 px-4"
-            >
-              <header class="text-xl">
-                {{ list.title }}
-              </header>
-              <wp-draggable
-                class="w-full"
-                tag="ul"
-                group="projects"
-                :list="list.items"
-                filter="textarea"
-                :preventOnFilter="false"
-              >
-                <wp-project
-                  v-for="project in list.items"
-                  :key="project.id"
-                  
-                  v-model:title="project.title"
-                  :created="project.created"
-                  @remove="removeProject(list.items, project)"
-                />
-              </wp-draggable>
-            </section>
+
+          <div class="w-full flex z-40 bg-dark-darker">
+						<section class="w-full flex justify-center gap-12">
+							<template v-for="(list, index) in lists" :key="index">
+								<div class="h-full flex flex-col gap-2 w-3/12 shadow-lg">
+									<header
+										class="text-2xl px-4 py-1"
+										:class="{
+											'bg-red-lighter': index == 0,
+											'bg-blue-lighter': index == 1,
+											'bg-green': index == 2,
+										}"
+									>
+										{{ list.title }}
+									</header>
+									<wp-draggable
+										class="min-h-6 bg-light-lighter text-dark-darker p-2 px-4"
+										tag="ul"
+										group="projects"
+										:list="list.items"
+										filter="textarea"
+										:preventOnFilter="false"
+									>
+										<template v-if="list.items.length == 0">
+											<p>There are no items here yet</p>
+										</template>
+										<wp-project
+											v-for="project in list.items"
+											:key="project.id"
+
+											v-model:title="project.title"
+											:created="project.created"
+											@remove="removeProject(list.items, project)"
+										/>
+									</wp-draggable>
+								</div>
+							</template>
+						</section>
           </div>
         </section>
       </article>
@@ -105,7 +115,7 @@ export default defineComponent({
   data() {
     return {
       open: false,
-      projects: [
+      lists: [
         {
           title: 'Project 1',
           items: [

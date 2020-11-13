@@ -81,6 +81,12 @@ module.exports = {
         ...theme('spacing'),
       }),
       maxHeight: (theme) => ({
+				'1/4': '25%',
+				'1/2': '50%',
+				'3/4': '75%',
+				'1/4-screen': '25vh',
+				'1/2-screen': '55vh',
+				'3/4-screen': '75vh',
         ...theme('spacing'),
       }),
       fontSize: {
