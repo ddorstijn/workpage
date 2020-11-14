@@ -60,7 +60,9 @@
     </div>
     <div class="relative flex items-center invisible group-hover:visible">
       <wp-popup
+				ref="popup"
         class="p-1 mr-2 text-base text-light-darkest hover:text-dark-darker"
+				placement="left"
       >
         <svg
           class="h-4"
@@ -77,13 +79,13 @@
           />
         </svg>
         <template #tooltip>
-          <ul class="py-2">
+          <ul class="py-2 flex">
             <li
-              class="flex items-center px-2 cursor-pointer"
-              @click="editing = true"
+              class="flex items-center px-2 cursor-pointer hover:text-blue"
+              @click="editing = true; $refs.popup.hide(); $nextTick(() => { $refs.title.focus() });"
             >
               <svg
-                class="h-4"
+                class="h-5"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
@@ -92,14 +94,13 @@
                   d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
                 />
               </svg>
-              <span>Edit</span>
             </li>
             <li
-              class="flex items-center px-2 cursor-pointer"
+              class="flex items-center px-2 cursor-pointer hover:text-red"
               @click="$emit('remove')"
             >
               <svg
-                class="h-4"
+                class="h-5"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
@@ -110,7 +111,6 @@
                   clip-rule="evenodd"
                 />
               </svg>
-              <span>Delete</span>
             </li>
           </ul>
         </template>

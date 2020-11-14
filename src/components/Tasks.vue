@@ -101,7 +101,7 @@
       <button
         v-else-if="!viewDone"
         class="flex justify-center gap-2 items-center mt-4 mx-auto"
-        @click="creating = true"
+        @click.stop="creating = true"
       >
         <span>Add a new task</span>
         <svg
@@ -118,7 +118,7 @@
       </button>
     </section>
 		<section v-if="creating" class="absolute inset-x-0 p-2 pt-24 h-full overflow-visible">
-			<div class="p-6 bg-dark-lighter rounded-lg shadow-xl">
+			<div class="p-6 bg-dark-lighter rounded-lg shadow-xl" @click.stop="">
 				<header class="flex justify-center text-2xl mb-6 mt-2">Add new task</header>
 				<form class="flex flex-col gap-4" @submit.prevent="addTask">
 					<label class="flex justify-between items-center">
@@ -129,7 +129,8 @@
 							ref="newTitle"
 							rows="1"
 							required
-							class="font-sans tracking-wide text-base bg-light-lighter text-dark-darker rounded resize-none"
+							class="font-sans tracking-wide text-base bg-light-lighter text-dark-darker rounded resize-none p-1"
+							@keydown.enter.prevent="$event.target.blur()"
 							@input="resize"
 						/>
 					</label>
@@ -181,13 +182,16 @@ export default defineComponent({
       done: [],
     }
   },
-	watch {
+	watch: {
 		creating(newVal, oldVal) {
+			console.log("Watching")
 			if (oldVal == false && newVal == true) {
         document.addEventListener('click', this.handleDocumentClick)
-        document.addEventListener('click', this.handleDocumentClick)
+
+				this.$nextTick(() => {
+					this.$refs.newTitle.focus();
+				});
 			} else if (oldVal == true && newVal == false) {
-				document.removeEventListener('click', this.handleDocumentClick)
 				document.removeEventListener('click', this.handleDocumentClick)
 			}
 		}
@@ -231,6 +235,9 @@ export default defineComponent({
 			this.$refs.newTitle.style.height = 'auto';
       this.$refs.newTitle.style.height = `${this.$refs.newTitle.scrollHeight}px`
     },
+		handleDocumentClick() {
+			this.creating = false;
+		},
   },
 })
 </script>

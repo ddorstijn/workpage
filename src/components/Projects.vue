@@ -17,13 +17,13 @@
             clip-rule="evenodd"
           />
         </svg>
-        {{ activeProject[0].title }}
+        {{ activeProject.length > 0 ? activeProject[0].title : "No active Project" }}
       </h2>
     </button>
 
     <div
       v-show="open"
-      class="absolute top-0 left-0 w-full h-full p-16"
+      class="absolute top-0 left-0 w-full h-full p-16 z-40"
       @click.self="open = false"
     >
       <article class="bg-dark-darkest w-full h-full border rounded-xl p-8">
@@ -46,7 +46,7 @@
 
         <section class="flex flex-col">
           <header
-            class="my-6 p-2 self-center flex flex-col w-1/4 bg-dark rounded"
+            class="my-6 p-2 self-center flex flex-col w-1/4 rounded"
           >
             Current active item:
             <wp-draggable group="projects">
@@ -59,18 +59,18 @@
               />
             </wp-draggable>
           </header>
-          <div class="w-full flex z-40 bg-dark-darker">
+          <div class="w-full flex">
             <section class="w-full flex justify-center gap-12">
               <template v-for="(list, index) in lists" :key="index">
-                <div class="h-full flex flex-col gap-2 w-3/12 shadow-lg">
+                <div class="flex flex-col gap-2 w-3/12">
                   <header
-                    class="text-2xl px-4 py-1"
+                    class="text-2xl px-4 py-1 shadow-lg"
                     :class="sectionColor(index)"
                   >
                     {{ list.title }}
                   </header>
                   <wp-draggable
-                    class="min-h-6 bg-light-lighter text-dark-darker p-2 px-4"
+                    class="min-h-6 bg-light-lighter text-dark-darker p-2 px-4 shadow-lg"
                     tag="ul"
                     group="projects"
                     :list="list.items"
@@ -111,56 +111,9 @@ export default defineComponent({
   data() {
     return {
       open: false,
-      lists: [
-        {
-          title: 'Project 1',
-          items: [
-            {
-              id: 0,
-              title: 'Item 1',
-              created: new Date(),
-            },
-          ],
-        },
-        {
-          title: 'Project 2',
-          items: [
-            {
-              id: 1,
-              title: 'Item 1',
-              created: new Date(),
-            },
-          ],
-        },
-        {
-          title: 'Project 3',
-          items: [
-            {
-              id: 2,
-              title: 'Item 1',
-              created: new Date(),
-            },
-          ],
-        },
-        {
-          title: 'Project 4',
-          items: [
-            {
-              id: 3,
-              title: 'Item 1',
-              created: new Date(),
-            },
-          ],
-        },
-      ],
+      lists: [],
       currentID: 0,
-      activeProject: [
-        {
-          id: 0,
-          title: 'Titisa',
-          created: new Date(),
-        },
-      ],
+      activeProject: [],
     }
   },
   methods: {
