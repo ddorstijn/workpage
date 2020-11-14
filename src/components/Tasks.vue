@@ -134,25 +134,25 @@
 							@input="resize"
 						/>
 					</label>
+
+					<div class="flex justify-between items-center">
+						Time estimate:
+						<div class="flex justify-between gap-2">
+							<label class="flex gap-1 items-center text-light-lighter">
+								Hours: 
+								<input id="goal-hours" type="number" name="goal-hours" size="2" class="bg-light-lighter text-dark-darker rounded p-1 w-12" />
+							</label>
+							<label class="flex gap-1 items-center text-light-lighter">
+								Minutes: 
+								<input id="goal-minutes" type="number" name="goal-minutes" size="2" class="bg-light-lighter text-dark-darker rounded p-1 w-12" />
+							</label>
+						</div>
+					</div>
 					
 					<label class="flex justify-between items-center">
 						Due date:
 						<input id="due" name="due" type="date" class="bg-light-lighter text-dark-darker rounded p-1" />
 					</label>
-
-					<div class="flex justify-between items-center">
-						Time estimate:
-						<div class="flex gap-2">
-							<label class="flex gap-1 items-center text-light-lighter">
-								h
-								<input id="goal-hours" type="number" name="goal-hours" size="2" class="bg-light-lighter text-dark-darker rounded p-1 w-12" />
-							</label>
-							<label class="flex gap-1 items-center text-light-lighter">
-								m
-								<input id="goal-minutes" type="number" name="goal-minutes" size="2" class="bg-light-lighter text-dark-darker rounded p-1 w-12" />
-							</label>
-						</div>
-					</div>
 
 					<button class="bg-green-dark p-2 mx-8">Add task</button>
 				</form>

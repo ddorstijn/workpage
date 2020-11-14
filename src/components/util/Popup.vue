@@ -8,11 +8,11 @@
     <slot></slot>
   </button>
   <div
-    class="tooltip z-40 rounded-lg bg-light-lighter text-dark-darker shadow-xl"
+    class="tooltip z-40 rounded shadow-xl"
+		:class="[backgroundColor, textColor]"
     ref="popper"
     role="tooltip"
     v-show="showPopper"
-    @click.stop=""
   >
     <slot name="tooltip"></slot>
     <div class="arrow" data-popper-arrow></div>
@@ -25,6 +25,8 @@ import { createPopper } from '@popperjs/core'
 export default {
   props: {
     placement: { type: String, default: 'top' },
+		backgroundColor: { type: String, default: 'bg-light-lighter' },
+		textColor: { type: String, default: 'text-dark-darker' },
   },
   data() {
     return {
@@ -85,6 +87,10 @@ export default {
     },
 
     handleDocumentClick(e) {
+			if (this.$refs.reference.contains(e.target)) {
+				return;
+			}
+
       this.$emit('click-away', this)
       this.hide()
     },
