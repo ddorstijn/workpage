@@ -24,7 +24,8 @@
                 <ul class="py-2 text-base">
                   <li
                     class="flex items-center px-2 cursor-pointer gap-1 hover:bg-light"
-                    @click="editing = true"
+										ref="createPopup"
+                    @click="creating = true"
                   >
                     <svg class="h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
 											<path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
@@ -54,9 +55,9 @@
             </wp-popup>
           </header>
           <section class="relative bg-light-lighter text-dark-darker p-2 px-4">
-						<section v-if="creating" class="absolute inset-x-0 p-2 h-full overflow-visible">
+						<section v-if="creating" ref="addLink" class="absolute inset-x-0 p-2 h-full overflow-visible">
 							<div class="p-6 bg-dark rounded-lg shadow-xl" @click.stop="">
-								<form class="flex flex-col gap-4 text-light-lighter" @submit.prevent="addTask">
+								<form class="flex flex-col gap-4 text-light-lighter" @submit.prevent="addLink">
 									<label class="flex justify-between items-center gap-4">
 										Title
 										<input 
@@ -74,13 +75,12 @@
 									<label class="flex justify-between items-center gap-4 text-light-lighter">
 										URL
 										<input 
-											id="title"
+											id="url"
 											class="font-sans text-base bg-light-lighter text-dark-darker rounded p-1 w-full"
 
 											type="url"
 											size="2"
-											name="title"
-											ref="newTitle"
+											name="url"
 											required
 										/>
 									</label>
@@ -136,7 +136,7 @@
 												</li>
 												<li
 													class="flex items-center px-2 cursor-pointer hover:text-red"
-													@click="list.items.splice(list.items.indexOf(link), 1)"
+													@click="$refs.popup.hide(); items.splice(items.indexOf(link), 1)"
 												>
 													<svg
 														class="h-5"
@@ -181,5 +181,39 @@ import Popup from './Popup.vue'
 		return {
 			creating: false,
 		}
+	},
+	watch: {
+		creating(newVal, oldVal) {
+			if (oldVal == false && newVal == true) {
+        document.addEventListener('click', this.handleDocumentClick)
+
+				this.$nextTick(() => {
+					this.$refs.newTitle.focus();
+				});
+			} else if (oldVal == true && newVal == false) {
+				document.removeEventListener('click', this.handleDocumentClick)
+			}
+		}
+	},
+	methods: {
+		addLink(evt) {
+			const formData = new FormData(evt.target);
+			const title = formData.get('title');
+			const url = formData.get('url');
+
+			this.items.push({
+				title: title,
+				url: url,
+			});
+			
+			this.creating = false;
+		},
+		handleDocumentClick(e) {
+			if (this.$refs.createPopup.contains(e.target) || this.$refs.addLink.contains(e.target)) {
+				return;
+			}
+
+			this.creating = false;
+		},
 	}
  })

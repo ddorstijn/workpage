@@ -100,8 +100,9 @@
       </wp-draggable>
       <button
         v-else-if="!viewDone"
+				ref="addTask"
         class="flex justify-center gap-2 items-center mt-4 mx-auto"
-        @click.stop="creating = true"
+        @click="creating = true"
       >
         <span>Add a new task</span>
         <svg
@@ -118,7 +119,7 @@
       </button>
     </section>
 		<section v-if="creating" class="absolute inset-x-0 p-2 pt-24 h-full overflow-visible">
-			<div class="p-6 bg-dark-lighter rounded-lg shadow-xl" @click.stop="">
+			<div ref="createPopup" class="p-6 bg-dark-lighter rounded-lg shadow-xl">
 				<header class="flex justify-center text-2xl mb-6 mt-2">Add new task</header>
 				<form class="flex flex-col gap-4" @submit.prevent="addTask">
 					<label class="flex justify-between items-center">
@@ -154,7 +155,7 @@
 						<input id="due" name="due" type="date" class="bg-light-lighter text-dark-darker rounded p-1" />
 					</label>
 
-					<button class="bg-green-dark p-2 mx-8">Add task</button>
+					<input type="submit" value="Add task" class="bg-green-dark p-2 mx-8" />
 				</form>
 			</div>
 		</section>
@@ -184,7 +185,6 @@ export default defineComponent({
   },
 	watch: {
 		creating(newVal, oldVal) {
-			console.log("Watching")
 			if (oldVal == false && newVal == true) {
         document.addEventListener('click', this.handleDocumentClick)
 
@@ -235,7 +235,11 @@ export default defineComponent({
 			this.$refs.newTitle.style.height = 'auto';
       this.$refs.newTitle.style.height = `${this.$refs.newTitle.scrollHeight}px`
     },
-		handleDocumentClick() {
+		handleDocumentClick(e) {
+			if (this.$refs.createPopup.contains(e.target) || this.$refs.addTask.contains(e.target)) {
+				return;
+			}
+
 			this.creating = false;
 		},
   },

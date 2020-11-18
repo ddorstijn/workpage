@@ -3,13 +3,12 @@
     ref="reference"
     aria-describedby="tooltip"
     v-bind="$attrs"
-    @click.stop="show()"
+    @click="show()"
   >
     <slot></slot>
   </button>
   <div
-    class="tooltip z-40 rounded shadow-xl"
-		:class="[backgroundColor, textColor]"
+    class="tooltip z-40 rounded shadow-xl bg-light-lighter text-dark-darker"
     ref="popper"
     role="tooltip"
     v-show="showPopper"
@@ -25,8 +24,6 @@ import { createPopper } from '@popperjs/core'
 export default {
   props: {
     placement: { type: String, default: 'top' },
-		backgroundColor: { type: String, default: 'bg-light-lighter' },
-		textColor: { type: String, default: 'text-dark-darker' },
   },
   data() {
     return {
@@ -87,7 +84,7 @@ export default {
     },
 
     handleDocumentClick(e) {
-			if (this.$refs.reference.contains(e.target)) {
+			if (this.$refs.reference && this.$refs.reference.contains(e.target)) {
 				return;
 			}
 
