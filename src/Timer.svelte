@@ -25,6 +25,14 @@
 		running = false;
 		sessions.unshift({ start: 0, end: 0 });
 	};
+
+	function toggleSession() {
+		if (running) {
+			endSession();
+		} else {
+			startSession();
+		}
+	}
 	
 	function timeToHuman(time) {
 		const date = new Date(time);
@@ -35,24 +43,26 @@
 	};
 	
 	$: elapsed = sessions.reduce((accumulator, session) => {
-			return accumulator + session.end - session.start;
-		}, 0);
+		return accumulator + session.end - session.start;
+	}, 0);
 	
 	$: goalTime = goal.hours * 360000 + goal.minutes * 60000;
 	$: progress = Math.min(100, (100 * elapsed) / goalTime);
 </script>
 
 <style>
-	/* Timer */
 	article {
 		display: grid;
 		gap: var(--space-4) var(--space-1);
 		grid-template-rows: 1fr min-content;
 		grid-template-columns: min-content 2fr 1fr;
+		justify-content: end;
 	}
 
 	header {
 		width: var(--size-5xl);
+		margin-right: var(--space-4);
+		align-self: center;
 		grid-row: span 2;
 	}
 
@@ -63,8 +73,8 @@
 		gap: var(--space-1);
 	}
 	
-	button > svg {
-		height: var(--size-lg);
+	.inline-icon {
+		height: 1em;
 	}
 	
 	article > svg {
@@ -83,15 +93,26 @@
 	.foreground {
 		stroke: var(--tone-900);
 	}
+
+	.info > h2 {
+		font-size: var(--size-2xl);
+	}
+
+	form {
+		display: flex;
+		flex-direction: column;
+	}
 </style>
 
 <article>
 	<header>
-		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-			<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-		</svg>
+		<button on:click={toggleSession}>
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+				<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+			</svg>
+		</button>
 	</header>
-	<section id="timer-info">
+	<section class="info">
 		<h2>
 			{timeToHuman(elapsed)}
 		</h2>
@@ -100,42 +121,24 @@
 			<span>{timeToHuman(sessions[0].end - sessions[0].start)}</span>
 		</h3>
 	</section>
-	<section class="actions">
-		{#if !running}
-		<button on:click={startSession}>
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-				<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+	<Popup placement="top-start">
+		<h5>
+			{`${goal.hours}h ${goal.minutes}m`}
+			<svg class="inline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+				<path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" />
 			</svg>
-			Start
-		</button>
-		{:else}
-		<button on:click={endSession}>
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-				<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clip-rule="evenodd" />
-			</svg>
-			Stop
-		</button>
-		{/if}
-		<!-- Popup -->
-		<Popup>
-			<span>
-				goal:
-				<h5>
-					{`${goal.hours}h ${goal.minutes}m`}
-				</h5>
-			</span>
-			<form slot="tooltip">
-				<label>
-					Hours:
-					<input bind:value={goal.hours} type="number" size="2" />
-				</label>
-				<label>
-					Minutes:
-					<input bind:value={goal.minutes} type="number" size="2" />
-				</label>
-			</form>
-		</Popup>
-	</section>
+		</h5>
+		<form slot="tooltip">
+			<label>
+				Hours:
+				<input bind:value={goal.hours} type="number" />
+			</label>
+			<label>
+				Minutes:
+				<input bind:value={goal.minutes} type="number" />
+			</label>
+		</form>
+	</Popup>
 	<svg viewBox="-1 0 102 2" preserveAspectRatio="none">
 		<line
 					class="background"

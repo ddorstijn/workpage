@@ -2,26 +2,27 @@
 	import { createPopper } from '@popperjs/core';
 	import { onMount } from 'svelte';
 
+	export let placement;
 	let reference;
 	let popup;
 	let show = false;
 
 	onMount(() => {
-		console.log(reference);
-		console.log(popup);
 		createPopper(reference, popup, {
-			placement: 'top',
+			placement: placement,
 		});
 	});
 </script>
 
 <style>
-	.popup {
-		position: relative;
+	button {
+		white-space: nowrap;
+		align-self: end;
+		justify-self: end;
 	}
 
 	.tooltip {
-		position: absolute;	
+		width: 200px;
 		background: var(--tone-900);
 		color: var(--tone-100);
 		padding: var(--space-2);
@@ -31,7 +32,6 @@
 
 	.arrow,
 	.arrow::before {
-		position: absolute;
 		width: 8px;
 		height: 8px;
 		z-index: -1;
@@ -60,12 +60,10 @@
 	}
 </style>
 
-<div class="popup">
-	<button bind:this={reference} on:click="{() => show = !show}">
-		<slot></slot>
-	</button>
-	<div class="tooltip" bind:this={popup} hidden={!show}>
-		<slot name="tooltip"></slot>	
-		<div class="arrow" data-popper-arrow></div>
-	</div>
+<button bind:this={reference} on:click="{() => show = !show}">
+	<slot></slot>
+</button>
+<div class="tooltip" bind:this={popup} hidden={!show}>
+	<slot name="tooltip"></slot>	
+	<div class="arrow" data-popper-arrow></div>
 </div>
