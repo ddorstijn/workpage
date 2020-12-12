@@ -3,6 +3,7 @@
 	import { onMount } from "svelte";
 
 	import Task from "./Task.svelte";
+	import Popup from './Popup.svelte';
 
 	let viewDone = false;
 	let dragging = false;
@@ -30,6 +31,7 @@
 			animation: 100
 		});
 	});
+
 	function addTask(evt) {
 		const formData = new FormData(evt.target);
 
@@ -46,6 +48,8 @@
 			spent: '0h 0m',
 			estimate: `${goalHours}h ${goalMinutes}m`,
 		};
+
+		console.log(task);
 		
 		tasks = [...tasks, task];
 		creating = false;
@@ -118,13 +122,21 @@ textarea {
 				to start working on it.
 			</p>
 			{/if}
-			{#each doing as task}
-
-			{/each}
+			<ul bind:this="{doingEl}" hidden="{doingEl}">
+				{#each doing as task}
+				<Task
+					title="task.title"
+					created="task.created"
+					due="task.due"
+					spent="task.spent"
+					estimate="task.estimate"
+					on:remove="{() => removeTask(task)}"
+				/>
+				{/each}
+			</ul>
 		</div>
 	</section>
-	{#if viewDone}
-	<ul bind:this="{doingEl}">
+	<ul bind:this="{doneEl}" hidden="{!viewDone}">
 		{#if !done.length}
 		<p>You currently don't have any tasks marked as done.</p>
 		{/if}
@@ -137,41 +149,31 @@ textarea {
 			on:remove="{() => removeTask(task)}"
 		/>
 	</ul>
-	{:else}
-	<section>
-		<ul bind:this="{tasksEl}">
-			{#each tasks as task}
-			<Task
-				title="task.title"
-				created="task.created"
-				due="task.due"
-				spent="task.spent"
-				estimate="task.estimate"
-				on:remove="{() => removeTask(task)}"
-			/>
-			{/each}
-		</ul>
-	</section>
-	{/if}
+	<ul bind:this="{tasksEl}" hidden="{viewDone}">
+		{#each tasks as task}
+		<Task
+			title="task.title"
+			created="task.created"
+			due="task.due"
+			spent="task.spent"
+			estimate="task.estimate"
+			on:remove="{() => removeTask(task)}"
+		/>
+		{/each}
+	</ul>
 	<section>
 		{#if dragging}
 		<ul bind:this="{doneEl}">
 			Mark as completed!
 		</ul>
 		{:else if !viewDone}
-		<button on:click="{() => creating = true}">
+		<Popup placement="top">
 			<span>Add a new task</span>
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
 				<path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
 			</svg>
-		</button>
-		{/if}
-	</section>
-	{#if creating}
-	<section>
-		<div>
-			<header>Add new task</header>
-			<form on:submit|preventDefault="{addTask}">
+			<form on:submit|preventDefault="{addTask}" slot="tooltip">
+				<header>Add new task</header>
 				<label>
 					Task name:
 					<textarea 
@@ -201,7 +203,7 @@ textarea {
 				</label>
 				<input type="submit" value="Add task">
 			</form>
-		</div>
+		</Popup>
+		{/if}
 	</section>
-	{/if}
 </article>

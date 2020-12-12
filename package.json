@@ -6,7 +6,8 @@
   },
   "devDependencies": {
     "@snowpack/plugin-svelte": "^3.3.1",
-    "snowpack": "^2.18.2"
+    "snowpack": "^2.18.2",
+    "svelte-popperjs": "^1.0.13"
   },
   "dependencies": {
     "@popperjs/core": "^2.5.4",

@@ -97,6 +97,7 @@ body {
 	display: flex;
 	gap: var(--space-16);
 
+	overflow: hidden;
 	background: radial-gradient(var(--tone-100) 0%, var(--tone-50) 70%);
 	color: var(--tone-900);
 }

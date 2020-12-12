@@ -1,5 +1,5 @@
 <script>
-	import Popup from './Popup.svelte'
+  import { createPopperActions } from 'svelte-popperjs';
 
 	let running = false;
 	let goal = { hours: 1, minutes: 30 };
@@ -48,6 +48,16 @@
 	
 	$: goalTime = goal.hours * 360000 + goal.minutes * 60000;
 	$: progress = Math.min(100, (100 * elapsed) / goalTime);
+
+  const [ popperRef, popperContent ] = createPopperActions();
+  const popperOptions = {
+		placement: "top",
+    modifiers: [
+      { name: 'offset', options: { offset: [0, 8] } }
+    ],
+  };
+
+  let showTooltip = false;
 </script>
 
 <style>
@@ -102,6 +112,50 @@
 		display: flex;
 		flex-direction: column;
 	}
+
+	#reference {
+		white-space: nowrap;
+		align-self: end;
+		justify-self: end;
+	}
+
+	#tooltip {
+		width: 200px;
+		background: var(--tone-900);
+		color: var(--tone-100);
+		padding: var(--space-2);
+		border-radius: var(--rounded);
+		box-shadow: var(--shadow-lg);
+	}
+
+	.arrow,
+	.arrow::before {
+		width: 8px;
+		height: 8px;
+		z-index: -1;
+	}
+
+	.arrow::before {
+		content: '';
+		transform: rotate(45deg);
+		background: var(--tone-900);
+	}
+
+	.tooltip[data-popper-placement^='top'] > .arrow {
+		bottom: -4px;
+	}
+
+	.tooltip[data-popper-placement^='bottom'] > .arrow {
+		top: -4px;
+	}
+
+	.tooltip[data-popper-placement^='left'] > .arrow {
+		right: -4px;
+	}
+
+	.tooltip[data-popper-placement^='right'] > .arrow {
+		left: -4px;
+	}
 </style>
 
 <article>
@@ -121,24 +175,32 @@
 			<span>{timeToHuman(sessions[0].end - sessions[0].start)}</span>
 		</h3>
 	</section>
-	<Popup placement="top-start">
-		<h5>
-			{`${goal.hours}h ${goal.minutes}m`}
-			<svg class="inline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-				<path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" />
-			</svg>
-		</h5>
-		<form slot="tooltip">
-			<label>
-				Hours:
-				<input bind:value={goal.hours} type="number" />
-			</label>
-			<label>
-				Minutes:
-				<input bind:value={goal.minutes} type="number" />
-			</label>
-		</form>
-	</Popup>
+
+	<div>
+		<button id="reference" use:popperRef on:click="{() => showTooltip = !showTooltip}">
+			<h5>
+				{`${goal.hours}h ${goal.minutes}m`}
+				<svg class="inline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+					<path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" />
+				</svg>
+			</h5>
+		</button>
+		{#if showTooltip}
+		<div id="tooltip" use:popperContent={popperOptions}>
+			<form>
+				<label>
+					Hours:
+					<input bind:value={goal.hours} type="number" />
+				</label>
+				<label>
+					Minutes:
+					<input bind:value={goal.minutes} type="number" />
+				</label>
+			</form>
+			<div id="arrow" data-popper-arrow />
+		</div>
+		{/if}
+	</div>
 	<svg viewBox="-1 0 102 2" preserveAspectRatio="none">
 		<line
 					class="background"
