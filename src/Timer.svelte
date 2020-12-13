@@ -76,7 +76,7 @@
 		grid-row: span 2;
 	}
 
-	button {
+	header > button {
 		padding: var(--space-1);
 		display: flex;
 		align-items: center;
@@ -111,6 +111,18 @@
 	form {
 		display: flex;
 		flex-direction: column;
+		gap: var(--space-2);
+	}
+
+	form > h4 {
+		text-align: center;
+		font-weight: bold;
+		margin-bottom: var(--space-1);
+	}
+
+	form input {
+		width: 5ch;
+		text-align: center;
 	}
 
 	#reference {
@@ -120,9 +132,8 @@
 	}
 
 	#tooltip {
-		width: 200px;
-		background: var(--tone-900);
-		color: var(--tone-100);
+		background: var(--tone-200);
+		color: var(--tone-800);
 		padding: var(--space-2);
 		border-radius: var(--rounded);
 		box-shadow: var(--shadow-lg);
@@ -176,31 +187,30 @@
 		</h3>
 	</section>
 
-	<div>
-		<button id="reference" use:popperRef on:click="{() => showTooltip = !showTooltip}">
-			<h5>
-				{`${goal.hours}h ${goal.minutes}m`}
-				<svg class="inline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-					<path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" />
-				</svg>
-			</h5>
-		</button>
-		{#if showTooltip}
-		<div id="tooltip" use:popperContent={popperOptions}>
-			<form>
-				<label>
-					Hours:
-					<input bind:value={goal.hours} type="number" />
-				</label>
-				<label>
-					Minutes:
-					<input bind:value={goal.minutes} type="number" />
-				</label>
-			</form>
-			<div id="arrow" data-popper-arrow />
-		</div>
-		{/if}
+	<button id="reference" use:popperRef on:click="{() => showTooltip = !showTooltip}">
+		<h5>
+			{`${goal.hours}h ${goal.minutes}m`}
+			<svg class="inline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+				<path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" />
+			</svg>
+		</h5>
+	</button>
+	{#if showTooltip}
+	<div id="tooltip" use:popperContent={popperOptions}>
+		<form>
+			<h4>Set goal</h4>
+			<label>
+				Hours:
+				<input bind:value={goal.hours} type="number" size="2" min="0" max="24" required />
+			</label>
+			<label>
+				Minutes:
+				<input bind:value={goal.minutes} type="number" size="2" min="0" max="60" required />
+			</label>
+		</form>
+		<div class="arrow" data-popper-arrow />
 	</div>
+	{/if}
 	<svg viewBox="-1 0 102 2" preserveAspectRatio="none">
 		<line
 					class="background"
