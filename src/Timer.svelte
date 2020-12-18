@@ -1,4 +1,5 @@
 <script>
+	import {clickOutside} from './click_outside.js';
   import { createPopperActions } from 'svelte-popperjs';
 
 	let running = false;
@@ -131,7 +132,7 @@
 		justify-self: end;
 	}
 
-	#tooltip {
+	.tooltip {
 		background: var(--tone-200);
 		color: var(--tone-800);
 		padding: var(--space-2);
@@ -139,33 +140,8 @@
 		box-shadow: var(--shadow-lg);
 	}
 
-	.arrow,
-	.arrow::before {
-		width: 8px;
-		height: 8px;
-		z-index: -1;
-	}
-
-	.arrow::before {
-		content: '';
-		transform: rotate(45deg);
-		background: var(--tone-900);
-	}
-
-	.tooltip[data-popper-placement^='top'] > .arrow {
-		bottom: -4px;
-	}
-
-	.tooltip[data-popper-placement^='bottom'] > .arrow {
-		top: -4px;
-	}
-
-	.tooltip[data-popper-placement^='left'] > .arrow {
-		right: -4px;
-	}
-
-	.tooltip[data-popper-placement^='right'] > .arrow {
-		left: -4px;
+	[data-popper-arrow]::before {
+		background-color: var(--tone-200);
 	}
 </style>
 
@@ -187,7 +163,7 @@
 		</h3>
 	</section>
 
-	<button id="reference" use:popperRef on:click="{() => showTooltip = !showTooltip}">
+	<button id="reference" use:popperRef on:click="{() => showTooltip = true}">
 		<h5>
 			{`${goal.hours}h ${goal.minutes}m`}
 			<svg class="inline-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -196,7 +172,7 @@
 		</h5>
 	</button>
 	{#if showTooltip}
-	<div id="tooltip" use:popperContent={popperOptions}>
+	<div class="tooltip" use:popperContent={popperOptions} use:clickOutside on:click_outside="{() => showTooltip = false}">
 		<form>
 			<h4>Set goal</h4>
 			<label>
@@ -208,7 +184,7 @@
 				<input bind:value={goal.minutes} type="number" size="2" min="0" max="60" required />
 			</label>
 		</form>
-		<div class="arrow" data-popper-arrow />
+		<div data-popper-arrow />
 	</div>
 	{/if}
 	<svg viewBox="-1 0 102 2" preserveAspectRatio="none">

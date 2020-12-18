@@ -1,10 +1,10 @@
 <script>
+  import { createPopperActions } from 'svelte-popperjs';
+	import { clickOutside } from './click_outside.js';
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	import Popup from './Popup.svelte';
-
-	export let title;
+	export let description;
 	export let created;
 	export let due;
 	export let spent;
@@ -16,15 +16,32 @@
 		editing = true; 
 	}
 
+	function resize(evt) {
+		evt.target.style.height = 'auto';
+		evt.target.style.height = `${evt.target.scrollHeight}px`
+	};
+
 	function handleInput(evt) {
 		if (evt.key === 'Enter' || evt.key === 'Escape') {
 			evt.preventDefault();
 			evt.target.blur();
 		}
 	}
+
+  const [ popperRef, popperContent ] = createPopperActions();
+  const popperOptions = {
+		placement: "left",
+  };
+
+  let showTooltip = false;
 </script>
 
 <style>
+	ul {
+		display: flex;
+		align-items: center;
+	}
+
 	li {
 		display: flex;
 		justify-content: space-between;
@@ -63,11 +80,11 @@
 	<div>
 		{#if !editing}
 		<p>
-			{ title }
+			{ description }
 		</p>
 		{:else}
 		<textarea
-			bind:value="{title}"
+			bind:value="{description}"
 			rows="1"
 			on:input="{resize}"
 			on:blur="{() => editing = false}"
@@ -100,7 +117,7 @@
 			</div>
 		</div>
 	</div>
-	<Popup placement="left">
+	<button use:popperRef on:click="{() => showTooltip = !showTooltip}">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
@@ -114,24 +131,26 @@
 				d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
 			/>
 		</svg>
-		<ul slot="tooltip">
-			<li on:click="{startEdit}">
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-					<path
-						d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
-					/>
-				</svg>
-			</li>
-			<li on:click="{() => dispatch('remove')}">
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-					<path
-						fill-rule="evenodd"
-						d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-						clip-rule="evenodd"
-					/>
-				</svg>
-			</li>
-		</ul>
-	</Popup>
+	</button>
+	{#if showTooltip}
+	<ul use:popperContent={popperOptions} use:clickOutside on:click_outside="{() => showTooltip = false}">
+		<li on:click="{startEdit}">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+				<path
+					d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+				/>
+			</svg>
+		</li>
+		<li on:click="{() => dispatch('remove')}">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+				<path
+					fill-rule="evenodd"
+					d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+					clip-rule="evenodd"
+				/>
+			</svg>
+		</li>
+	</ul>
+	{/if}
 </li>
 
