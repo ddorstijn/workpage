@@ -1,43 +1,43 @@
 <script>
   import { createPopperActions } from 'svelte-popperjs';
-	import { clickOutside } from './click_outside.js';
-	import { createEventDispatcher } from 'svelte';
-	const dispatch = createEventDispatcher();
+  import { clickOutside } from './click_outside.js';
+  import { createEventDispatcher } from 'svelte';
+  const dispatch = createEventDispatcher();
 
-	export let description;
-	export let created;
-	export let due;
-	export let spent;
-	export let estimate;
+  export let description;
+  export let created;
+  export let due;
+  export let spent;
+  export let estimate;
 
-	let editing = false;
+  let editing = false;
   let showTooltip = false;
 
-	function startEdit() {
-		showTooltip = false;
-		editing = true; 
-	}
+  function startEdit() {
+    showTooltip = false;
+    editing = true; 
+  }
 
-	function removeTask() {
-		showTooltip = false;
-		dispatch('remove');
-	}
+  function removeTask() {
+    showTooltip = false;
+    dispatch('remove');
+  }
 
-	function resize(evt) {
-		evt.target.style.height = 'auto';
-		evt.target.style.height = `${evt.target.scrollHeight}px`
-	};
+  function resize(evt) {
+    evt.target.style.height = 'auto';
+    evt.target.style.height = `${evt.target.scrollHeight}px`
+  };
 
-	function handleInput(evt) {
-		if (evt.key === 'Enter' || evt.key === 'Escape') {
-			evt.preventDefault();
-			evt.target.blur();
-		}
-	}
+  function handleInput(evt) {
+    if (evt.key === 'Enter' || evt.key === 'Escape') {
+      evt.preventDefault();
+      evt.target.blur();
+    }
+  }
 
   const [ popperRef, popperContent ] = createPopperActions();
   const popperOptions = {
-		placement: "left",
+    placement: "left",
   };
 </script>
 

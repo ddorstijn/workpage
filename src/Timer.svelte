@@ -1,5 +1,5 @@
 <script>
-	import {clickOutside} from './click_outside.js';
+  import { clickOutside } from './click_outside.js';
   import { createPopperActions } from 'svelte-popperjs';
 
 	let running = false;
@@ -79,13 +79,12 @@
 
 	header > button {
 		padding: var(--space-1);
+
 		display: flex;
 		align-items: center;
 		gap: var(--space-1);
-	}
-	
-	.inline-icon {
-		height: 1em;
+
+        font-size: var(--size-5xl);
 	}
 	
 	article > svg {

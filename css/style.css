@@ -101,3 +101,46 @@ body {
 	background: radial-gradient(var(--tone-100) 0%, var(--tone-50) 70%);
 	color: var(--tone-900);
 }
+
+textarea {
+	resize: none;
+	scrollbar-width: none;
+	border: 1px solid var(--tone-400);
+	border-radius: 3px;
+	padding: 5px;
+}
+
+svg {
+	height: 1em;
+}
+
+[data-popper-placement^='top'] > [data-popper-arrow] {
+ bottom:-4px;
+}
+
+[data-popper-placement^='right'] > [data-popper-arrow] {
+ left:-4px;
+}
+
+[data-popper-placement^='bottom'] > [data-popper-arrow] {
+ top:-4px;
+}
+
+[data-popper-placement^='left'] > [data-popper-arrow] {
+ right:-4px;
+}
+
+[data-popper-arrow],
+[data-popper-arrow]::before {
+	position: absolute;
+	display: block;
+	width: 8px;
+	height: 8px;
+	z-index: -1;
+}
+
+[data-popper-arrow]::before {
+	content: '';
+	transform: rotate(45deg);
+}
+

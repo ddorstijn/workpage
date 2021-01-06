@@ -1,4 +1,6 @@
 <script>
+	import { clickOutside } from './click_outside.js';
+
 	let show = false;
 	let lists = [];
 	let currentID = 0;

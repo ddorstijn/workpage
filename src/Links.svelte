@@ -28,25 +28,25 @@
 
 <style>
 #links {
-	margin-top: var(--space-16);	
-	
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: var(--space-12);
 }
 
 #links > ul {
-	width: 100%;
-
 	display: flex;
 	justify-content: center;
 	gap: var(--space-12);
 }
 
+.links-list > :global(.list-card) {
+	margin-top: var(--space-16);
+}
+
 #links > button {
+	width: 100%;
+	margin-top:  var(--space-12);
+
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	gap: var(--space-1);
 }
 
@@ -58,12 +58,12 @@
 
 <!-- Links -->
 <article id="links">
-	<ul>
+	<ul class="links-list">
 		{#each lists as list}
-			<ListCard title={list.title} items={list.items} on:remove={() => removeSection(list)} />
+			<ListCard class="list-card" title={list.title} items={list.items} on:remove="{() => removeSection(list)}" />
 		{/each}
 	</ul>
-	<button on:click={addSection}>
+	<button class="links-add" on:click={addSection}>
 		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
 		</svg>

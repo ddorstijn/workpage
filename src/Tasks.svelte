@@ -1,92 +1,84 @@
 <script>
   import { createPopperActions } from 'svelte-popperjs';
-	import {clickOutside} from './click_outside.js';
-	import Sortable from "sortablejs";
-	import { onMount } from "svelte";
+  import { clickOutside } from './click_outside.js';
 
-	import Task from "./Task.svelte";
+  import SortableList from './SortableList.svelte';
+  import Task from './Task.svelte';
 
-	let viewDone = false;
-	let dragging = false;
-	let creating = false;
-	let currentID = 0;
-	let tasks = [];
-	let doing = [];
-	let done = [];
+  let viewDone = false;
+  let dragging = false;
+  let creating = false;
+  let currentID = 0;
+  let tasks = [];
+  let doing = [];
+  let done = [];
 
-	let tasksEl, doingEl, doneEl;
+  const sortableOptions = {
+    group: "tasks", 
+    animation: 100, 
+    onStart: () => {
+      dragging = true;
+    },
+    onEnd: () => {
+      dragging = false;
+    },
+  };
 
-	onMount(async function() {
-		Sortable.create(tasksEl, {
-			group: 'tasks',
-			animation: 100
-		});
+  function addTask(evt) {
+    const formData = new FormData(evt.target);
 
-		Sortable.create(doingEl, {
-			group: 'tasks',
-			animation: 100
-		});
+    const description = formData.get('description');
+    const due = formData.get('due');
+    const goalHours = formData.get('goal-hours');
+    const goalMinutes = formData.get('goal-minutes');
 
-		Sortable.create(doneEl, {
-			group: 'tasks',
-			animation: 100
-		});
-	});
+    let task = {
+      id: currentID++,
+      description: description,
+      created: new Date(),
+      due: due,
+      spent: '0h 0m',
+      estimate: `${goalHours}h ${goalMinutes}m`,
+    };
 
-	function addTask(evt) {
-		const formData = new FormData(evt.target);
+    tasks = [...tasks, task];
+    creating = false;
+  };
 
-		const description = formData.get('description');
-		const due = formData.get('due');
-		const goalHours = formData.get('goal-hours');
-		const goalMinutes = formData.get('goal-minutes');
+  function removeTask(item) {
+    let index = tasks.indexOf(item)
+    if (index > -1) {
+      tasks.splice(index, 1)
+      tasks = tasks;
+    }
+  };
 
-		let task = {
-			id: currentID++,
-			description: description,
-			created: new Date(),
-			due: due,
-			spent: '0h 0m',
-			estimate: `${goalHours}h ${goalMinutes}m`,
-		};
+  function resize(evt) {
+    evt.target.style.height = 'auto';
+    evt.target.style.height = `${evt.target.scrollHeight}px`
+  };
 
-		tasks = [...tasks, task];
-		creating = false;
-	};
-
-	function removeTask(item) {
-		let index = tasks.indexOf(item)
-		if (index > -1) {
-			tasks.splice(index, 1)
-			tasks = tasks;
-		}
-	};
-
-	function resize(evt) {
-		evt.target.style.height = 'auto';
-		evt.target.style.height = `${evt.target.scrollHeight}px`
-	};
-
-	function handleInput(evt) {
-		if (evt.key === 'Enter') {
-			evt.preventDefault();
-			evt.target.blur();
-		}
-	}
+  function handleInput(evt) {
+    if (evt.key === 'Enter') {
+      evt.preventDefault();
+      // Make textarea behave the same as a normal input
+      evt.target.form.dispatchEvent(new Event("submit", {cancelable: true}));
+    }
+  }
 
   const [ popperRef, popperContent ] = createPopperActions();
   const popperOptions = {
-		placement: "top",
+    placement: "top",
   };
 </script>
 
 <style>
-header {
+.tasks-header {
 	font-size: var(--size-3xl);
 	margin-bottom: var(--space-6);
 }
 
-button {
+.tasks-header > button {
 	width: 100%;
 	display: flex;
 	align-items: center;
@@ -94,16 +86,35 @@ button {
 	gap: var(--space-2);
 }
 
-header svg { 
+.tasks-header svg { 
 	height: var(--size-5xl);
 }
 
-svg {
-	height: 1em;
+.tasks-doing {
+  background: var(--tone-200);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--rounded-lg);
 }
 
-textarea {
-	resize: none;
+.tasks-doing > h2 {
+  font-size: var(--size-lg);
+}
+
+.tasks-doing p {
+  padding-top: var(--space-1);
+  font-size: var(--size-sm);
+  color: var(--tone-700);
+}
+
+.tasks-actions {
+	margin-top: var(--space-4);
+}
+
+.tasks-actions > button {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .tooltip {
@@ -117,10 +128,48 @@ textarea {
 [data-popper-arrow]::before {
 	background-color: var(--tone-200);
 }
-</style>
 
-<article>
-	<header>
+.tooltip > form {
+	padding: var(--space-2);
+}
+
+.tooltip > form > header {
+	font-size: var(--size-3xl);
+	margin-bottom: var(--space-2);
+}
+
+.addtask-actions {
+	margin-top: var(--space-4);
+
+	display: flex;
+	justify-content: space-around;
+}
+
+.addtask-actions > button {
+	padding: var(--space-2);
+	border-radius: var(--rounded);
+}
+
+.addtask-actions > button[type="submit"] {
+	background: var(--green);
+}
+
+.sortable {
+	width: 100%;
+	padding: var(--space-1);
+}
+
+#tasks-done {
+	background: var(--green);
+    padding: var(--space-2);
+}
+
+.ghost-hidden {
+	display: none;
+}
+</style>
+<article class="tasks-container">
+	<header class="tasks-header">
 		{#if viewDone}
 		<button title="View todo's" on:click="{() => viewDone = false}">
 			<h2>Done</h2>
@@ -139,7 +188,7 @@ textarea {
 		</button>
 		{/if}
 	</header>
-	<section>
+	<section class="tasks-doing">
 		<h2>Current task:</h2>
 		<div>
 			{#if !doing.length}
@@ -148,21 +197,19 @@ textarea {
 				to start working on it.
 			</p>
 			{/if}
-			<ul bind:this="{doingEl}" hidden="{doingEl}">
-				{#each doing as task}
-				<Task
-					description="{task.description}"
-					created="{task.created}"
-					due="{task.due}"
-					spent="{task.spent}"
-					estimate="{task.estimate}"
-					on:remove="{() => removeTask(task)}"
-				/>
-				{/each}
-			</ul>
+            <SortableList class="sortable" { sortableOptions } bind:items="{doing}" let:item { getItemById } liClass="largerFont">
+              <Task
+                description="{task.description}"
+                created="{task.created}"
+                due="{task.due}"
+                spent="{task.spent}"
+                estimate="{task.estimate}"
+                on:remove="{() => removeTask(task)}"
+              />
+			</SortableList>
 		</div>
 	</section>
-	<ul bind:this="{doneEl}" hidden="{!viewDone}">
+	<ul class="sortable" bind:this="{doneEl}" hidden="{!viewDone}">
 		{#if !done.length}
 		<p>You currently don't have any tasks marked as done.</p>
 		{/if}
@@ -177,7 +224,7 @@ textarea {
 		/>
 		{/each}
 	</ul>
-	<ul bind:this="{tasksEl}" hidden="{viewDone}">
+	<ul class="sortable" bind:this="{tasksEl}" hidden="{viewDone}">
 		{#each tasks as task}
 		<Task
 			description="{task.description}"
@@ -189,54 +236,65 @@ textarea {
 		/>
 		{/each}
 	</ul>
-	<section>
-		{#if dragging}
-		<ul bind:this="{doneEl}">
-			Mark as completed!
-		</ul>
-		{:else if !viewDone}
-		<button id="reference" use:popperRef on:click="{() => creating = !creating}">
-			Add a new task
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-				<path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-			</svg>
-		</button>
-		{#if creating}
-		<div class="tooltip" use:popperContent={popperOptions} use:clickOutside on:click_outside="{() => creating = false}">
-			<form on:submit|preventDefault="{addTask}">
-				<header>Add new task</header>
-				<label>
-					Task name:
-					<textarea 
-						name="description" 
-						rows="1" 
-						required
-						on:keydown="{handleInput}"
-						on:input="{resize}"
-					></textarea>
-				</label>
-				<div>
-					Time estimate:
-					<div>
-						<label>
-							Hours: 
-							<input type="number" name="goal-hours" size="2">
-						</label>
-						<label>
-							Minutes: 
-							<input type="number" name="goal-minutes" size="2">
-						</label>
-					</div>
-				</div>
-				<label>
-					Due date:
-					<input name="due" type="date">
-				</label>
-				<input type="submit" value="Add task">
-			</form>
-			<div data-popper-arrow />
-		</div>
-		{/if}
-		{/if}
-	</section>
+  <section class="tasks-actions">
+    <div id="tasks-done" hidden="{!dragging}">
+      <h2>Mark as completed!</h2>
+      <ul class="sortable" bind:this="{doneEl}">
+        {#each done as task}
+        <Task
+          description="{task.description}"
+          created="{task.created}"
+          due="{task.due}"
+          spent="{task.spent}"
+          estimate="{task.estimate}"
+          on:remove="{() => removeTask(task)}"
+        />
+        {/each}
+      </ul>
+    </div>
+    {#if (!viewDone && !dragging)}
+    <button id="reference" use:popperRef on:click="{() => creating = !creating}">
+      Add a new task
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+      </svg>
+    </button>
+    {#if creating}
+    <div class="tooltip" use:popperContent={popperOptions} use:clickOutside on:click_outside="{() => creating = false}">
+      <form on:submit|preventDefault="{addTask}">
+        <header>Add new task</header>
+        <label>
+          Task description
+          <textarea 
+              name="description" 
+              rows="1" 
+              required
+              on:keydown="{handleInput}"
+              on:input="{resize}"
+          ></textarea>
+        </label>
+        <div>
+          <label>
+            Hours: 
+            <input type="number" placeholder="0" name="goal-hours" size="2">
+          </label>
+          <label>
+            Minutes: 
+            <input type="number" placeholder="0" name="goal-minutes" size="2">
+          </label>
+        </div>
+        <label>
+          Due date:
+          <input name="due" type="date">
+        </label>
+        <div class="addtask-actions">
+          <button>Cancel</button>
+          <button type="submit">Add task</button>
+        </div>
+      </form>
+      <div data-popper-arrow />
+    </div>
+    {/if}
+    {/if}
+  </section>
 </article>
