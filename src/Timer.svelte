@@ -1,14 +1,15 @@
 <script>
+	import { activeProjectID } from './store.js';
   import { clickOutside } from './click_outside.js';
   import { createPopperActions } from 'svelte-popperjs';
 
-  let running = false;
+	let isRunning = false;
   let goal = { hours: 1, minutes: 30 };
   let sessions = [{ start: 0, end: 0 }];
   let showTooltip = false;
 
   function update() {
-    if (!running) return;
+    if (!isRunning) return;
 
     sessions[0].end = Date.now();
     setTimeout(() => {
@@ -18,18 +19,18 @@
 
   function startSession() {
     const now = Date.now();
-    running = true;
+    isRunning = true;
     sessions[0] = { start: now, end: now };
     update();
   };
 
   function endSession() {
-    running = false;
+    isRunning = false;
     sessions.unshift({ start: 0, end: 0 });
   };
 
   function toggleSession() {
-    if (running) {
+    if (isRunning) {
       endSession();
     } else {
       startSession();
@@ -62,7 +63,7 @@
 
 <article>
   <header>
-    <button on:click={toggleSession}>
+		<button on:click={toggleSession} title={isRunning ? 'Click to stop timer' : 'Click to start timer'}>
       <svg class="h-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
       </svg>

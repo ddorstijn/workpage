@@ -1,6 +1,7 @@
 <script>
   import { createPopperActions } from 'svelte-popperjs';
   import { clickOutside } from './click_outside.js';
+	import { currentID, activeProjectID } from './store.js';
 
   import List from './List.svelte';
   import CurrentActive from "./CurrentActive.svelte"; 
@@ -9,11 +10,19 @@
 
   let viewDone = false;
   let creating = false;
-  let currentID = 0;
 
   let todo = [];
+	$: localStorage.setItem(`todo${$activeProjectID}`, JSON.stringify(todo));
   let doing = [];
+	$: localStorage.setItem(`doing${$activeProjectID}`, JSON.stringify(doing));
   let done = [];
+	$: localStorage.setItem(`done${$activeProjectID}`, JSON.stringify(done));
+	activeProjectID.subscribe(val => {
+		todo = JSON.parse(localStorage.getItem(`todo${val}`)) || [];
+		doing = JSON.parse(localStorage.getItem(`doing${val}`)) || [];
+		done = JSON.parse(localStorage.getItem(`done${val}`)) || [];
+	});
+
   let swap = null;
 
   function onDropTodo(items, info) {
@@ -56,7 +65,7 @@
     const goalMinutes = fd.get('goal-minutes');
 
     todo = [...todo, {
-      id: currentID++,
+      id: $currentID++,
       estimate: `${goalHours}h ${goalMinutes}m`,
       created: new Date(),
       spent: '0h 0m',
@@ -109,7 +118,7 @@
 
   <div class="px-4 py-2">
     {#if viewDone}
-      <List items={done} itemComponent={TaskItem} type="tasks">
+      <List items={done} itemComponent={TaskItem} type="tasks" disable>
         <p class="mt-4 text-sm text-gray-700 text-center">You currently don't have any tasks marked as done.</p>
       </List>
     {:else}
