@@ -27,8 +27,8 @@
 	};
 
 	function onRemove(link) {
-		item.lists.splice(item.items.indexOf(link), 1);
-		item.lists = item.items;
+		item.items.splice(item.items.indexOf(link), 1);
+		item.items = item.items;
 	}
 
 	function onDrop(newitems, info) {
