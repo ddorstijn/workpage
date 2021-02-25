@@ -1,7 +1,7 @@
 <script>
   import { createPopperActions } from 'svelte-popperjs';
   import { clickOutside } from './click_outside.js';
-	import { currentID, activeProjectID } from './store.js';
+	import { currentID, activeId } from './store.js';
 
   import List from './List.svelte';
   import CurrentActive from "./CurrentActive.svelte"; 
@@ -12,12 +12,12 @@
   let creating = false;
 
   let todo = [];
-	$: localStorage.setItem(`todo${$activeProjectID}`, JSON.stringify(todo));
+	$: localStorage.setItem(`todo${$activeId}`, JSON.stringify(todo));
   let doing = [];
-	$: localStorage.setItem(`doing${$activeProjectID}`, JSON.stringify(doing));
+	$: localStorage.setItem(`doing${$activeId}`, JSON.stringify(doing));
   let done = [];
-	$: localStorage.setItem(`done${$activeProjectID}`, JSON.stringify(done));
-	activeProjectID.subscribe(val => {
+	$: localStorage.setItem(`done${$activeId}`, JSON.stringify(done));
+	activeId.subscribe(val => {
 		todo = JSON.parse(localStorage.getItem(`todo${val}`)) || [];
 		doing = JSON.parse(localStorage.getItem(`doing${val}`)) || [];
 		done = JSON.parse(localStorage.getItem(`done${val}`)) || [];

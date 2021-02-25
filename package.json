@@ -29,6 +29,7 @@
     "prettier": "^2.2.1",
     "prettier-plugin-svelte": "^1.4.1",
     "snowpack": "^2.17.1",
-    "svelte-preprocess": "^4.1.1"
+    "svelte-preprocess": "^4.1.1",
+    "svelte-previous": "^2.0.0"
   }
 }

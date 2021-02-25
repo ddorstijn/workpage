@@ -2,7 +2,7 @@
 	import CurrentActive from "./CurrentActive.svelte"; 
 	import ProjectCard from "./ProjectCard.svelte";
 	import ProjectItem from "./ProjectItem.svelte";
-	import { currentID, activeProjectID } from "./store.js";
+	import { currentID, activeId } from "./store.js";
 
 	let projects = JSON.parse(localStorage.getItem("projects"));
 	let activeProject = [];
@@ -28,7 +28,7 @@
 		let active = null;
 		let projectsLength = projects.length;
 		for (let i = 0; i < projectsLength; i++) {
-			let pRef = projects[i].items.find(p => p.id == $activeProjectID);
+			let pRef = projects[i].items.find(p => p.id == $activeId);
 			if (pRef) {
 				active = {
 					id: $currentID++,
@@ -44,7 +44,7 @@
 		activeProject = [active];
 	}
 
-	$: if (activeProject[0]) $activeProjectID = activeProject[0].refID;
+	$: if (activeProject[0]) $activeId = activeProject[0].refID;
 	$: localStorage.setItem("projects", JSON.stringify(projects));
 
 	let show = false;
@@ -85,7 +85,7 @@
 
 <article class="projects">
 	<button class="banner [ mx-auto mt-4 p-2 pr-4 ] [ bg-gray-900 text-gray-100 ]" on:click="{() => show = true}">
-		<svg class="h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+		<svg class="h-7 fill-current text-gray-100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
 			<path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
 			<path fill-rule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd" />
 		</svg>

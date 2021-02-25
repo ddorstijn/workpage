@@ -1,12 +1,12 @@
 export const themes = [
 	{
-		red: "#fb4934",
-		orange: "#fe8019",
-		yellow: "#fabd2f",
+		red: "#cc241d",
+		orange: "#d65d0e",
+		yellow: "#d79921",
 		green: "#98971a",
-		aqua: "#8ec07c",
-		blue: "#83a598",
-		purple: "#d3869b",
+		aqua: "#689d5a",
+		blue: "#458588",
+		purple: "#b16286",
 		gray: {
 			50:  "#282828",
 			100: "#3c3836",

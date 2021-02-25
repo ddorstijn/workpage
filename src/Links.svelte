@@ -1,11 +1,11 @@
 <script>
 	import List from './List.svelte';
 	import LinkCard from './LinkCard.svelte';
-	import { currentID, activeProjectID } from './store.js';
+	import { currentID, activeId } from './store.js';
 
 	let links = [];
-	activeProjectID.subscribe(val => links = JSON.parse(localStorage.getItem(`links${val}`)) || []);
-	$: localStorage.setItem(`links${$activeProjectID}`, JSON.stringify(links));
+	activeId.subscribe(val => links = JSON.parse(localStorage.getItem(`links${val}`)) || []);
+	$: localStorage.setItem(`links${$activeId}`, JSON.stringify(links));
 
 	function addSection() {
 		// Max lists
