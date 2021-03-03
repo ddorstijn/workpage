@@ -8,7 +8,13 @@
 	import { themes } from './themes.js';
 
 	// Custom themes
-	let themeIndex = localStorage.getItem("themeIndex") || 0;
+	let themeIndex = 0;
+	chrome.storage.sync.get(["themeIndex"], function(result) {
+		console.log("Get themeindex: " + JSON.stringify(result));
+		if (result.key) {
+			themeIndex = result.key;
+		}
+	});
 
 	function nextTheme() {
 		themeIndex++;
@@ -16,8 +22,10 @@
 			themeIndex = 0;
 		}
 
-		console.log("Next Theme: " + themeIndex);
-		localStorage.setItem("themeIndex", themeIndex);
+		chrome.storage.sync.set({themeIndex: themeIndex}, function() {
+			console.log("Set theme");
+		});
+
 		updateTheme();
 	}
 
@@ -71,8 +79,7 @@
 	@tailwind utilities;
 
 	body {
-		@apply w-screen h-screen overflow-hidden p-16 flex gap-16 text-gray-900;
-		background: radial-gradient(var(--gray-100) 0%, var(--gray-50) 70%);
+		@apply w-screen h-screen overflow-hidden p-16 flex gap-16 bg-gray-50 text-gray-900;
 	}
 
 	aside {

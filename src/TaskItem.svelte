@@ -4,9 +4,12 @@
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 
+	import { timerRunning } from './store.js';
+
 	export let item;
 	export let disable= false;
 
+	let sessions = [{ start: 0, end: 0, start: 0, end: item.spent }];
 	let editing = false;
 	let showTooltip = false;
 
@@ -32,6 +35,47 @@
 		}
 	}
 
+	timerRunning.subscribe(val => {
+		if (!item.doing) return;
+		if (val) {
+			startSession();			
+			return;
+		}
+		
+		endSession();
+	});
+
+	function update() {
+		if (!$timerRunning) return;
+
+		sessions[0].end = Date.now();
+		setTimeout(() => {
+			update();
+		}, 5000);
+	};
+
+	function startSession() {
+		const now = Date.now();
+		sessions[0] = { start: now, end: now };
+		update();
+	};
+
+	function endSession() {
+		if (sessions[0] == { start: 0, end: 0}) return;
+		sessions.unshift({ start: 0, end: 0 });
+	};
+
+	function timeToHuman(time) {
+		const date = new Date(time);
+		const hours = date.getUTCHours();
+		const minutes = date.getUTCMinutes();
+		return `${hours}h ${minutes}m`;
+	};
+
+	$: item.spent = sessions.reduce((accumulator, session) => {
+		return accumulator + session.end - session.start;
+	}, 0);
+
 	const [ popperRef, popperContent ] = createPopperActions();
 	const popperOptions = {
 		placement: "left",
@@ -53,23 +97,29 @@
 			/>
 		{/if}
 		<div class="task-details">
-			<svg class="h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-				<path
-					fill-rule="evenodd"
-					d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-					clip-rule="evenodd"
-				/>
-			</svg>
-			<p>{item.due.toLocaleString('en-gb', {month: 'short', day: 'numeric'})}</p>
+			{#if item.due}
+				<div class="flex gap-1 items-center rounded-full px-2 py-1 text-sm bg-gray-100" class:error={new Date() > Date.parse(item.due)}>
+					<svg class="h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+						<path
+							fill-rule="evenodd"
+							d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+							clip-rule="evenodd"
+						/>
+					</svg>
+					<p>{item.due.toLocaleString('en-gb', {month: 'short', day: 'numeric'})}</p>
+				</div>
+			{/if}
 
-			<svg class="h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-				<path
-					fill-rule="evenodd"
-					d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-					clip-rule="evenodd"
-				/>
-			</svg>
-			<p>{item.spent} / {item.estimate}</p>
+			{#if item.estimate}
+				<svg class="h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+					<path
+						fill-rule="evenodd"
+						d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+				<p><span>{timeToHuman(item.spent)}</span> / <span>{timeToHuman(item.estimate)}</span></p>
+			{/if}
 		</div>
 	</div>
 	{#if !disable}
@@ -106,6 +156,10 @@
 </div>
 
 <style lang="postcss">
+	.error {
+		@apply bg-red;
+	}
+
 	.task-wrapper {
 		@apply flex justify-between rounded;
 	}

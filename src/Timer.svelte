@@ -1,5 +1,5 @@
 <script>
-	import { activeId } from './store.js';
+	import { activeId, timerRunning } from './store.js';
 	import { onDestroy } from 'svelte';
 	import { clickOutside } from './click_outside.js';
 	import { createPopperActions } from 'svelte-popperjs';
@@ -7,23 +7,22 @@
 	let goal;
 	let sessions;
 
-	let isRunning = false;
 	let showTooltip = false;
 	let activeProjectId;
 
 	const unsubscribe = activeId.subscribe(val => {
-		if (isRunning) {
+		if ($timerRunning) {
 			endSession();
 		}
 
-		goal = JSON.parse(localStorage.getItem(`goal${activeProjectId || val}`)) || { hours: 1, minutes: 30 }; 
-		sessions = JSON.parse(localStorage.getItem(`sessions${activeProjectId || val}`)) || [{ start: 0, end: 0 }];
+		goal = JSON.parse(localStorage.getItem(`goal${val}`)) || { hours: 1, minutes: 30 }; 
+		sessions = JSON.parse(localStorage.getItem(`sessions${val}`)) || [{ start: 0, end: 0 }];
 
 		activeProjectId = val;
 	});
 
 	function update() {
-		if (!isRunning) return;
+		if (!$timerRunning) return;
 
 		sessions[0].end = Date.now();
 		setTimeout(() => {
@@ -33,19 +32,19 @@
 
 	function startSession() {
 		const now = Date.now();
-		isRunning = true;
+		$timerRunning = true;
 		sessions[0] = { start: now, end: now };
 		update();
 	};
 
 	function endSession() {
-		isRunning = false;
+		$timerRunning = false;
 		sessions.unshift({ start: 0, end: 0 });
 		localStorage.setItem(`sessions${activeProjectId}`, JSON.stringify(sessions));
 	};
 
 	function toggleSession() {
-		if (isRunning) {
+		if ($timerRunning) {
 			endSession();
 		} else {
 			startSession();
@@ -82,7 +81,7 @@
 
 <article>
 	<header>
-		<button on:click={toggleSession} title={isRunning ? 'Click to stop timer' : 'Click to start timer'}>
+		<button on:click={toggleSession} title={$timerRunning ? 'Click to stop timer' : 'Click to start timer'}>
 			<svg class="h-12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
 				<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
 			</svg>
@@ -90,7 +89,7 @@
 	</header>
 	<section class="info">
 		<h2>{timeToHuman(elapsed)}</h2>
-		<h3> session: <span>{timeToHuman(sessions[0].end - sessions[0].start)}</span> </h3>
+		<h3>session: <span>{timeToHuman(sessions[0].end - sessions[0].start)}</span></h3>
 	</section>
 
 	<button id="reference" use:popperRef on:click="{() => showTooltip = true}">

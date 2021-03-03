@@ -1,77 +1,30 @@
 <script>
-	import CurrentActive from "./CurrentActive.svelte"; 
 	import ProjectCard from "./ProjectCard.svelte";
-	import ProjectItem from "./ProjectItem.svelte";
 	import { currentID, activeId } from "./store.js";
 
+	let show = false;
 	let projects = JSON.parse(localStorage.getItem("projects"));
-	let activeProject = [];
-
 	if (projects == null) {
+		activeId.set($currentID++);
 		projects = [{
 			id: $currentID++,
 			title: "Default",
 			items: [{
-					id: $currentID++,
+					id: $activeId,
 					title: "Default project",
 					showOptions: false,
 			}],
 		}];
-
-		activeProject = [{
-			id: $currentID++,
-			refID: projects[0].items[0].id,
-			title: "Default project",
-			showOptions: false,
-		}];
-	} else {
-		let active = null;
-		let projectsLength = projects.length;
-		for (let i = 0; i < projectsLength; i++) {
-			let pRef = projects[i].items.find(p => p.id == $activeId);
-			if (pRef) {
-				active = {
-					id: $currentID++,
-					refID: pRef.id,
-					title: pRef.title,
-					showOptions: false
-				}
-
-				break;
-			}
-		}
-
-		activeProject = [active];
 	}
 
-	$: if (activeProject[0]) $activeId = activeProject[0].refID;
-	$: localStorage.setItem("projects", JSON.stringify(projects));
-
-	let show = false;
-
-	function onDropActive(newItems, info) {
-		if (info.trigger === "droppedIntoZone") {
-			let pRef = newItems.find(x => x.id === info.id);
-
-			activeProject = [{
-				refID: pRef.id,
-				id: $currentID++,
-				title: pRef.title,
-				showOptions: false
-			}];
-		} else {
-			activeProject = newItems;
-		}
-	};
-
 	function addGroup() {
-		if (projects.length <= 4) {
-			projects = [...projects, {
-				id: $currentID++,
-				title: "New group",
-				items: [],
-			}];
-		}
+		if (projects.length >= 4) return;
+
+		projects = [...projects, {
+			id: $currentID++,
+			title: "New group",
+			items: [],
+		}];
 	};
 
 	function removeGroup(group) {
@@ -79,6 +32,17 @@
 		if (index > -1) {
 			projects.splice(index, 1);
 			projects = projects;
+		}
+	}
+
+	// Getter
+	function getProjectTitle(id) {
+		let projectsLength = projects.length;
+		for (let i = 0; i < projectsLength; i++) {
+			let project = projects[i].items.find(p => p.id == id);
+			if (project) {
+				return project.title;
+			}
 		}
 	}
 </script>
@@ -89,7 +53,7 @@
 			<path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
 			<path fill-rule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd" />
 		</svg>
-		<h2 class="text-2xl">{activeProject.length ? activeProject[0].title : 'No active project'}</h2>
+		<h2 class="text-2xl">{getProjectTitle($activeId)}</h2>
 	</button>
 
 	{#if show === true}
@@ -103,10 +67,7 @@
 						</svg>
 					</button>
 				</header>
-				<div class="mx-auto w-1/2">
-					<CurrentActive name="project" items={activeProject} component={ProjectItem} type="projects" onDrop={onDropActive} />
-				</div>
-				<div class="mt-12 grid grid-cols-2 justify-items-center gap-4">
+				<div class="mt-12 grid justify-items-center gap-4" class:grid-cols-2={projects.length > 1}>
 					{#each projects as group}
 						<ProjectCard bind:item={group} on:remove={removeGroup(group)} />
 					{/each}
