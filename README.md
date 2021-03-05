@@ -1,44 +1,123 @@
-# Svelte with TailwindCSS - Snowpack
+# Svelte + TailwindCSS 2.0 + RollupJS starter
 
-> ✨ Community template for Svelte and Tailwind.
+Starter template for [Svelte](https://svelte.dev) + [TailwindCSS](https://tailwindcss.com) apps.
 
-![npm](https://img.shields.io/npm/v/svelte-tailwind-snowpack?logoColor=%23cd3534&style=flat-square)
-![Twitter Follow](https://img.shields.io/twitter/follow/agneymenon?style=flat-square)
+It has built-in support for TailwindCSS 2.0, while the bundling is handled by Rollup.
 
-Create a new project with:
+There's also a simple dark/light mode switch, and a surprise button 👇
 
-```bash
-npx create-snowpack-app dir-name --template svelte-tailwind-snowpack
+![Light theme](https://user-images.githubusercontent.com/17433578/103722821-7285eb80-4f96-11eb-85d8-07549005b98c.png)
+
+![Dark theme](https://user-images.githubusercontent.com/17433578/103722826-774a9f80-4f96-11eb-97c6-fa4a34587f9b.png)
+
+## 🚨 Limitations
+
+In **development** mode (running `npm run dev` / `yarn dev`), the CSS bundle includes *all* of TailwindCSS and weighs in at ~6.8MB. You don't want to deploy this to production.
+
+In **production** mode (running `npm run build` / `yarn build`), all the unused CSS styles are purged, dropping the bundle to a much more manageable size (~7KB in this case). However, I haven't yet found a way to stop Tailwind from purging dynamic Svelte classes (such as `class:dark` or `class:from-blue-700={$dark}`).
+
+As a result, the production bundle won't contain such dynamic classes. To get around this, in `tailwind.config.js`, under `purge`, add an `options` object with a `safelist` array containing all the classes you wish to protect from purging:
+
+```diff
+purge: {
+    enabled: production,
+    content: [
+        './src/**/*.html',
+        './src/**/*.svelte',
+    ],
+    options: {
+        safelist: [
+            'border-blue-300',
+            'border-orange-500',
+            'border-pink-100',
+            'border-pink-900',
+            'dark',
+            'from-blue-500',
+            'from-blue-700',
+            'from-yellow-200',
+            'text-pink-100',
+            'text-pink-900',
+            'to-blue-800',
+            'to-pink-300',
+            'to-purple-800',
+            'to-yellow-500',
+        ],
+    }
+},
 ```
 
-Uses `svelte-preprocess`.
+## Get started
 
-- TailwindCSS with Autoprefixer
-- Testing with [@testing-library/svelte](https://testing-library.com/docs/svelte-testing-library/intro/) and Web test runner
-- Prettier with [svelte-plugin](https://github.com/sveltejs/prettier-plugin-svelte)
+Install the dependencies...
 
-## Available Scripts
+```bash
+cd svelte-app
+npm install
+```
 
-### npm start
+...then start [Rollup](https://rollupjs.org):
 
-Runs the app in the development mode.
-Open http://localhost:8080 to view it in the browser.
+```bash
+npm run dev
+```
 
-The page will reload if you make edits.
-You will also see any lint errors in the console.
+Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
 
-### npm test
+By default, the server will only respond to requests from localhost. To allow connections from other computers, edit the `sirv` commands in package.json to include the option `--host 0.0.0.0`.
 
-Launches the test runner in the interactive watch mode.
-See the section about running tests for more information.
 
-### npm run build
+## Building and running in production mode
 
-Builds a static copy of your site to the `build/` folder.
-Your app is ready to be deployed!
+To create an optimised (production) version of the app:
 
-**For the best production performance:** Add a build bundler plugin like "@snowpack/plugin-webpack" or "@snowpack/plugin-parcel" to your `snowpack.config.json` config file.
+```bash
+npm run build
+```
 
-### Q: What about Eject?
+You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
 
-No eject needed! Snowpack guarantees zero lock-in, and CSA strives for the same.
+
+## Single-page app mode
+
+By default, sirv will only respond to requests that match files in `public`. This is to maximise compatibility with static fileservers, allowing you to deploy your app anywhere.
+
+If you're building a single-page app (SPA) with multiple routes, sirv needs to be able to respond to requests for *any* path. You can make it so by editing the `"start"` command in package.json:
+
+```js
+"start": "sirv public --single"
+```
+
+
+## Deploying to the web
+
+### With [now](https://zeit.co/now)
+
+Install `now` if you haven't already:
+
+```bash
+npm install -g now
+```
+
+Then, from within your project folder:
+
+```bash
+cd public
+now deploy --name my-project
+```
+
+As an alternative, use the [Now desktop client](https://zeit.co/download) and simply drag the unzipped project folder to the taskbar icon.
+
+### With [surge](https://surge.sh/)
+
+Install `surge` if you haven't already:
+
+```bash
+npm install -g surge
+```
+
+Then, from within your project folder:
+
+```bash
+npm run build
+surge public my-project.surge.sh
+```

@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+
+button {
+	@apply p-1 rounded border-2 hover:bg-gray-100;
+}
+
+@tailwind utilities;

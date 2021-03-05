@@ -1,0 +1,18 @@
+{
+	"name": "Webextension test",
+	"description": "Test.",
+	"homepage_url": "https://github.com/ddorstijn/workpage-tailwind",
+	"manifest_version": 2,
+	"version": "0.1",
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "dannydorstijn1997@gmail.com",
+			"strict_min_version": "42.0"
+		}
+	},
+	"chrome_url_overrides" : {
+		"newtab": "index.html"
+	},
+	"permissions": ["storage"]
+}
+
