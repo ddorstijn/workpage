@@ -1,8 +1,8 @@
 @tailwind base;
 @tailwind components;
 
-button {
-	@apply p-1 rounded border-2 hover:bg-gray-100;
+body {
+	@apply w-screen h-screen overflow-hidden p-16 flex gap-16 text-gray-900;
 }
 
 @tailwind utilities;

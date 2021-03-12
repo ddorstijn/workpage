@@ -2,7 +2,8 @@
 	import { currentId, activeId } from "../store.js";
 
 	// -- Members -- \\
-	let editing = null;
+	let creatingGroup = false;
+	let creatingLink = false;
 	let links = [];
 
 	// -- Initialization -- \\
@@ -25,14 +26,20 @@
 
 	// -- Functions -- \\
 	async function addGroup() {
+		let title = this.elements[0].value;
+		let color = this.elements[1].value;
+		
 		if (links.length >= 4) return;
 		links.push({
 			id: $currentId++,
-			title: "New group",
+			title,
+			color,
 			items: [],
 		});
 
 		syncLinks();
+		this.reset();
+		creatingGroup = false;
 	}
 
 	async function removeGroup(group) {
@@ -43,78 +50,101 @@
 		}
 	}
 
-	async function editGroup(group) {
-		editing = group.id;
-	}
+	async function addLink() {
+		const groupId = Number(this.elements[0].value);
+		const title = this.elements[1].value;
+		const url = this.elements[2].value;
+		const group = links.find(group => group.id === groupId);
 
-	async function addItem(group) {
 		group.items.push({
 			id: $currentId++,
-			title: "New link",
-			url: "https://www.google.com",
+			title,
+			url,
 		});
 
 		syncLinks();
+		this.reset();
+		creatingLink = false;
 	}
 
-	async function removeItem(group, item) {
+	async function removeLink(group, item) {
 		const index = group.items.indexOf(item);
 		if (index > -1) {
 			group.items.splice(index, 1);
 			syncLinks();
 		}
 	}
-
-	async function editItem(item) {
-		editing = item.id;
-	}
-
-	async function stopEdit() {
-		editing = null;
-		syncLinks();
-	}
 </script>
 
-<article>
-	<header class="mb-2 pb-1 flex justify-center gap-2 border-b">
-		<button on:click={addGroup}>Add link group</button>
-	</header>
-	{#each links as group}
-		<ul>
-			<header>
-				{#if editing === group.id}
-					<form on:submit|preventDefault={stopEdit}>
-						<input
-							placeholder="Group name"
-							bind:value={group.title}
-							on:blur={stopEdit}
-						/>
-						<input type="submit" hidden />
-					</form>
-				{:else}
-					<span>{group.title}</span>
-				{/if}
-				<button on:click={addItem(group)}>Add item</button>
-				<button on:click={removeGroup(group)}>Remove group</button>
-				<button on:click={editGroup(group)}>Edit group</button>
-			</header>
-			<ul class="ml-4">
-				{#each group.items as item}
-					<li>
-						{#if editing === item.id}
-							<form on:submit|preventDefault={stopEdit}>
-								<input placeholder="Item name" bind:value={item.title} />
-								<input placeholder="Item url" bind:value={item.url} />
-								<input type="submit" hidden />
-							</form>
-						{:else}
-							<a href={item.url}>{item.title}</a>
-						{/if}
-						<button on:click={removeItem(group, item)}>Remove item</button>
-						<button on:click={editItem(item)}>Edit item</button>
-					</li>
-				{/each}
+<article class="relative w-full">
+	<div class="grid grid-flow-col auto-cols-fr gap-4 justify-center place-items-center">
+		{#each links as group}
+			<ul>
+				<header class="group relative">
+					<span class="text-lg">{group.title}</span>
+					<button class="absolute opacity-0 group-hover:opacity-100" on:click={removeGroup(group)}>remove</button>
+				</header>
+				<div>
+					{#each group.items as item}
+						<div class="group relative">
+							<a href={item.url} class="text-sm">{item.title}</a>
+							<button class="absolute opacity-0 group-hover:opacity-100" on:click={removeLink(group, item)}>remove</button>
+						</div>
+					{/each}
+				</div>
 			</ul>
-		</ul>
-	{/each}
+		{/each}
+	</div>
+	<div class="mt-12 flex justify-center gap-2">
+		<button class="block" on:click={() => creatingLink = true}>Add link</button>
+		<button class="block" on:click={() => creatingGroup = true}>Add group</button>
+	</div>
+{#if creatingLink}
+	<div class="absolute inset-0 flex items-center justify-center">
+		<form class="bg-gray-200 p-6" on:submit|preventDefault={addLink}>
+			<label>
+				Group
+				<select>
+					{#each links as link}
+						<option value={link.id}>{ link.title }</option>
+					{/each}
+				</select>
+			</label>
+			<label class="block">
+				Title
+				<input placeholder="Name" />
+			</label>
+
+			<label class="block">
+				Url
+				<input type="url" placeholder="www.example.com" />
+			</label>
+
+			<div>
+				<button type="button" on:click={() => creatingLink = false}>close</button>
+				<input type="submit" value="Add link" />
+			</div>
+		</form>
+	</div>
+{/if}
+{#if creatingGroup}
+	<div class="absolute inset-0 flex items-center justify-center">
+		<form class="bg-gray-200 p-6" on:submit|preventDefault={addGroup}>
+			<label class="block mb-2">
+				<h3 class="block">Title</h3>
+				<input placeholder="Name" />
+			</label>
+
+			<label class="block mb-2">
+				<h3 class="block">Color</h3>
+				<input type="color" />
+			</label>
+
+			<div class="flex justify-between">
+				<button type="button" on:click={() => creatingGroup = false}>close</button>
+				<input type="submit" value="Add group" />
+			</div>
+		</form>
+	</div>
+{/if}
 </article>

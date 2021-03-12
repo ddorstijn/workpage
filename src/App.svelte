@@ -1,50 +1,30 @@
-<script>
+<script lang="ts">
 	import { loaded } from "./store.js";
-
-	let active = 0;
 </script>
 
-<div class="absolute w-full flex items-center justify-center">
-	<button class:selected={active == 0} on:click={() => active = 0}>Clock</button>
-	<button class:selected={active == 1} on:click={() => active = 1}>Projects</button>
-	<button class:selected={active == 2} on:click={() => active = 2}>Links</button>
-	<button class:selected={active == 3} on:click={() => active = 3}>Tasks</button>
-	<button class:selected={active == 4} on:click={() => active = 4}>Timer</button>
-</div>
-<main class="w-full h-screen p-16 flex items-center justify-center bg-gray-300">
-	{#await loaded() }
-		Loading...
-	{:then}
-		<div hidden={active !== 0}>
-			{#await import("./components/Clock.svelte") then c}
-				<svelte:component this={c.default} />
-			{/await}
-		</div>
-		<div hidden={active !== 1}>
-			{#await import("./components/Projects.svelte") then c}
-				<svelte:component this={c.default} />
-			{/await}
-		</div>
-		<div hidden={active !== 2}>
-			{#await import("./components/Links.svelte") then c}
-				<svelte:component this={c.default} />
-			{/await}
-		</div>
-		<div hidden={active !== 3}>
-			{#await import("./components/Tasks.svelte") then c}
-				<svelte:component this={c.default} />
-			{/await}
-		</div>
-		<div hidden={active !== 4}>
-			{#await import("./components/Timer.svelte") then c}
-				<svelte:component this={c.default} />
-			{/await}
-		</div>
-	{/await}
-</main>
+{#await loaded() }
+	Loading...
+{:then}
+	<main class="w-2/3 flex flex-col items-center justify-center gap-6">
+		{#await import("./components/Clock.svelte") then c}
+			<svelte:component this={c.default} />
+		{/await}
+		{#await import("./components/Projects.svelte") then c}
+			<svelte:component this={c.default} />
+		{/await}
+		{#await import("./components/Links.svelte") then c}
+			<svelte:component this={c.default} />
+		{/await}
+	</main>
+	<aside class="w-1/3 pl-16 flex flex-col justify-between gap-12 border-l">
+		{#await import("./components/Tasks.svelte") then c}
+			<svelte:component this={c.default} />
+		{/await}
+		{#await import("./components/Timer.svelte") then c}
+			<svelte:component this={c.default} />
+		{/await}
+	</aside>
+{/await}
 
 <style lang="postcss">
-.selected {
-	@apply bg-gray-400;
-}
 </style>

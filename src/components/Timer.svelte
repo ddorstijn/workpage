@@ -7,10 +7,8 @@
 	let loaded = false;
 
 	// -- Members -- \\
-	let goal = { hours: 1, minutes: 30 };
 	let sessions = [{ start: 0, end: 0 }];
 	let isRunning = false;
-	let editing = false;
 
 	// -- Initialization -- \\
 	const unsubscribe = activeId.subscribe((val) => {
@@ -18,20 +16,17 @@
 			endSession();
 		}
 
-		let goalId = `goal-${val}`;
 		let sessionsId = `sessions-${val}`;
 		let isRunningId = `isRunning-${val}`;
 
 		chrome.storage.sync.get(
-			[goalId, sessionsId, isRunningId],
+			[sessionsId, isRunningId],
 			function (result) {
 				sessions = result[sessionsId] ?? [{ start: 0, end: 0 }];
-				goal = result[goalId] ?? { hours: 1, minutes: 30 };
 				isRunning = result[isRunningId] ?? false;
 
 				update();
 
-				syncGoal();
 				syncSessions();
 				syncRunning();
 			}
@@ -42,15 +37,6 @@
 	});
 
 	// -- Synchronization -- \\
-	async function syncGoal() {
-		try {
-			chrome.storage.sync.set({ [`goal-${activeProjectId}`]: goal });
-			goal = goal;
-		} catch (e) {
-			console.error(e);
-		}
-	}
-
 	async function syncSessions() {
 		try {
 			chrome.storage.sync.set({ [`sessions-${activeProjectId}`]: sessions });
@@ -102,28 +88,23 @@
 	async function toggleSession() {
 		if (isRunning) {
 			endSession();
-		} else {
-			startSession();
+			return;
 		}
-	}
 
-	async function editGoal() {
-		editing = true;
-	}
-
-	async function stopEdit() {
-		editing = false;
-		goal = { hours: this.elements[0].value, minutes: this.elements[1].value };
-		syncGoal();
+		startSession();
 	}
 
 	// -- Human readability -- \\
-	function timeToHuman(time) {
+	function timeToHuman(time, showSeconds = true) {
 		const date = new Date(time);
 		const hours = date.getUTCHours();
 		const minutes = date.getUTCMinutes();
 		const seconds = date.getUTCSeconds();
-		return `${hours}h ${minutes}m ${seconds}s`;
+		if (showSeconds) {
+			return `${hours}h ${minutes}m ${seconds}s`;
+		}
+
+		return `${hours}h ${minutes}m`;
 	}
 
 	$: elapsed = sessions.reduce((accumulator, session) => {
@@ -133,28 +114,20 @@
 	onDestroy(unsubscribe);
 </script>
 
-<article>
-	<header class="mb-2 pb-1 flex justify-center gap-2 border-b">
-		<button on:click={toggleSession}> Toggle timer </button>
-		<button on:click={editGoal}> Edit goal </button>
-	</header>
-	{#if editing}
-		<form on:submit|preventDefault={stopEdit}>
-			<input type="number" value={goal.hours} />
-			<input type="number" value={goal.minutes} />
-			<input type="submit" value="Change" />
-		</form>
-	{/if}
-	<section>
-		<h2>{timeToHuman(elapsed)}</h2>
-		<h3>
-			session: <span>{timeToHuman(sessions[0].end - sessions[0].start)}</span>
-		</h3>
-	</section>
-
-	<h5>
-		goal: {`${goal.hours}h ${goal.minutes}m`}
-	</h5>
+<article class="flex justify-between">
+	<div>
+		<h2 class="text-lg">{timeToHuman(sessions[0].end - sessions[0].start)}</h2>
+		<h3 class="text-sm">total: {timeToHuman(elapsed, false)}</h3>
+	</div>
+	<div>
+		<button on:click={toggleSession}> 
+			{#if isRunning}
+				Stop
+			{:else}
+				Start
+			{/if}
+		</button>
+	</div>
 </article>
 
 <style>

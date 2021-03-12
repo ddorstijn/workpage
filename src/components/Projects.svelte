@@ -3,6 +3,7 @@
 
 	// -- Members -- \\
 	let editing = null;
+	let open = false;
 
 	// -- Initialization -- \\
 	projects.subscribe((val) => {
@@ -82,49 +83,57 @@
 </script>
 
 <article>
-	<header class="mb-2 pb-1 flex items-baseline justify-center gap-2 border-b">
-		<h1>Active id: {getProjectFromId($activeId).title}</h1>
-		<button on:click={addGroup}>Add project group</button>
-	</header>
-	{#each $projects as group}
-		<ul class="mb-2">
-			<header>
-				{#if editing === group.id}
-					<form on:submit|preventDefault={stopEdit}>
-						<input
-							placeholder="Group name"
-							bind:value={group.title}
-							on:blur={stopEdit}
-						/>
-						<input type="submit" hidden />
-					</form>
-				{:else}
-					<span>{group.title}</span>
-				{/if}
-				<button on:click={addItem(group)}>Add item</button>
-				<button on:click={removeGroup(group)}>Remove group</button>
-				<button on:click={editGroup(group)}>Edit group</button>
+	<button class="text-2xl" on:click={() => open = true}>{getProjectFromId($activeId).title}</button>
+
+{#if open}
+	<div class="absolute w-screen h-screen inset-0 flex justify-center items-center">
+		<div class="w-1/2 p-8 bg-gray-100">
+			<header class="flex justify-between">
+				<button on:click={addGroup}>Add project group</button>
+				<button on:click={() => open = false}>close</button>
 			</header>
-			<ul class="ml-4">
-				{#each group.items as item}
-					<li on:click={setActive(item)}>
-						{#if editing === item.id}
+			{#each $projects as group}
+				<ul class="mb-2">
+					<header>
+						{#if editing === group.id}
 							<form on:submit|preventDefault={stopEdit}>
 								<input
-									placeholder="Item name"
-									bind:value={item.title}
+									placeholder="Group name"
+									bind:value={group.title}
 									on:blur={stopEdit}
 								/>
 								<input type="submit" hidden />
 							</form>
 						{:else}
-							<span>{item.title}</span>
+							<span>{group.title}</span>
 						{/if}
-						<button on:click={removeItem(group, item)}>Remove item</button>
-						<button on:click={editItem(item)}>Edit item</button>
-					</li>
-				{/each}
-			</ul>
-		</ul>
-	{/each}
+						<button on:click={addItem(group)}>Add item</button>
+						<button on:click={removeGroup(group)}>Remove group</button>
+						<button on:click={editGroup(group)}>Edit group</button>
+					</header>
+					<ul class="ml-4">
+						{#each group.items as item}
+							<li on:click={setActive(item)}>
+								{#if editing === item.id}
+									<form on:submit|preventDefault={stopEdit}>
+										<input
+											placeholder="Item name"
+											bind:value={item.title}
+											on:blur={stopEdit}
+										/>
+										<input type="submit" hidden />
+									</form>
+								{:else}
+									<span>{item.title}</span>
+								{/if}
+								<button on:click={removeItem(group, item)}>Remove item</button>
+								<button on:click={editItem(item)}>Edit item</button>
+							</li>
+						{/each}
+					</ul>
+				</ul>
+			{/each}
+		</div>
+	</div>
+{/if}
 </article>

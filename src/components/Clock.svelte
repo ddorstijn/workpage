@@ -1,12 +1,12 @@
-<script>
+<script lang="ts">
 	import { onMount } from "svelte";
 
 	// -- Members -- \\
-	let date;
-	let time;
+	let date: string;
+	let time: string;
 
 	// -- Initialization -- \\
-	onMount(() => {
+	onMount(async () => {
 		update();
 	});
 
@@ -32,6 +32,6 @@
 </script>
 
 <article>
-	<h1>{time}</h1>
-	<p>{date}</p>
+	<h1 class="text-6xl text-center">{time}</h1>
+	<p class="text-lg text-center">{date}</p>
 </article>

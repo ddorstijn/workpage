@@ -2,6 +2,7 @@
 	import { currentId, activeId } from "../store.js";
 
 	// -- Members -- \\
+	let viewDone = false;
 	let creating = false;
 	let todo = [];
 	let done = [];
@@ -54,7 +55,7 @@
 		const index = todo.indexOf(item);
 		if (index > -1) {
 			const [item] = todo.splice(index, 1);
-			done.push({
+			done.unshift({
 				id: item.id,
 				title: item.title,
 				finished: new Date().toISOString().slice(0, 10),
@@ -66,36 +67,50 @@
 	}
 </script>
 
-<article>
-	<header class="mb-2 pb-1 flex justify-center gap-2 border-b">
-		<button on:click={() => (creating = true)}>Add todo</button>
-	</header>
-	{#if creating}
-		<form on:submit|preventDefault={addTodo}>
-			<input placeholder="Task description" />
-			<input type="date" />
-			<input type="submit" value="Add" />
-		</form>
-	{/if}
-
-	<h1>Todo:</h1>
+<article class="relative">
+{#if viewDone}
+	<ul>
+		{#each done.slice(0, 5) as item}
+			<li>
+				<h3 class="block line-through">{item.title}</h3>
+				<p class="text-xs text-gray-500 text-left">Finished: {item.finished}</p>
+			</li>
+		{/each}
+	</ul>
+{:else}
 	<ul>
 		{#each todo as item}
 			<li>
-				{item.title}
-				{item.due}
-				<button on:click={markDone(item)}>Mark done</button>
+				<button class="group" on:click={markDone(item)}>
+					<h3 class="block text-lg group-hover:line-through">{item.title}</h3>
+					<p class="text-xs text-gray-500 text-left">{item.due}</p>
+				</button>
 			</li>
 		{/each}
 	</ul>
+{/if}
+{#if creating}
+	<div class="absolute inset-0 mt-2 flex items-center justify-center">
+		<form class="bg-gray-200 p-6" on:submit|preventDefault={addTodo}>
+			<label class="block mb-2">
+				<h3 class="block">Description</h3>
+				<input placeholder="Task description" required />
+			</label>
 
-	<h1>Done:</h1>
-	<ul>
-		{#each done as item}
-			<li>
-				{item.title}
-				{item.finished}
-			</li>
-		{/each}
-	</ul>
+			<label class="block mb-2">
+				<h3 class="block">Due date</h3>
+				<input type="date" />
+			</label>
+
+			<div class="flex justify-between">
+				<button type="button" on:click={() => creating = false}>cancel</button>
+				<input type="submit" value="Add todo" />
+			</div>
+		</form>
+	</div>
+{/if}
+<div class="flex justify-center gap-2">
+	<button on:click={() => (viewDone = !viewDone)}>Toggle view</button>
+	<button on:click={() => (creating = true)}>Add todo</button>
+</div>
 </article>
