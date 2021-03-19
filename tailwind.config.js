@@ -8,8 +8,11 @@ module.exports = {
             './src/**/*.svelte',
         ]
     },
-    darkMode: 'class', // 'media' / 'class' / 'false'
+    darkMode: 'media',
     theme: {
+        fontFamily: {
+            'sans': ['"Open Sans"'],
+        },
         extend: {},
     },
     variants: {

@@ -1,8 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 
 body {
-	@apply w-screen h-screen overflow-hidden p-16 flex gap-16 text-gray-900;
+	@apply w-screen h-screen overflow-hidden flex bg-gray-200 text-base;
 }
+
+/* PopperJS */
+
+.tooltip {
+	@apply p-1 bg-white rounded overflow-hidden;
+} 
+
+.tooltip[data-popper-placement^='top'] > .arrow {
+  bottom: -4px;
+}
+
+.tooltip[data-popper-placement^='bottom'] > .arrow {
+  top: -4px;
+}
+
+.tooltip[data-popper-placement^='left'] > .arrow {
+  right: -4px;
+}
+
+.tooltip[data-popper-placement^='right'] > .arrow {
+  left: -4px;
+}
+
+.arrow,
+.arrow::before {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+	@apply bg-green-500;
+}
+
+.arrow {
+  visibility: hidden;
+}
+
+.arrow::before {
+  visibility: visible;
+  content: '';
+  transform: rotate(45deg);
+}
+
 
 @tailwind utilities;
