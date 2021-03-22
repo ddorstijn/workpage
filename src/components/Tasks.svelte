@@ -131,13 +131,13 @@
 					/>
 				</svg>
 			</button>
-		</form>
 		{#if showTooltip}
 			<div class="tooltip" use:popperContent={popperOptions}>
 				<input type="date" />
 				<div class="arrow" data-popper-arrow />
 			</div>
 		{/if}
+		</form>
 	</header>
 	<div class="min-h-0 flex-1 flex-grow overflow-auto">
 		<ul

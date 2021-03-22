@@ -83,15 +83,15 @@
 <article class="relative w-full">
 	<div class="link-wrapper flex justify-center gap-6">
 		{#each links as group}
-			<ul class="link-group px-4 py-2 dark:bg-gray-800 rounded shadow-lg">
-				<header class="group relative text-center">
+			<ul class="link-group">
+				<header class="mb-1 p-1 group relative border-b dark:border-gray-100">
 					<span class="text-xl font-bold">{group.title}</span>
 					<button
 						class="absolute opacity-0 group-hover:opacity-100"
 						on:click={removeGroup(group)}>remove</button
 					>
 				</header>
-				<div>
+				<div class="px-1 dark:text-gray-300">
 					{#each group.items as item}
 						<div class="group relative">
 							<a href={item.url} class="text-sm">{item.title}</a>
@@ -109,14 +109,14 @@
 	</div>
 	<div class="mt-12 flex justify-center divide-x">
 		<button
-			class="block px-4"
+			class="px-4"
 			on:click={() => (creatingLink = true)}
 			use:linkPopperRef
 		>
 			Add link
 		</button>
 		<button
-			class="block px-4"
+			class="px-4"
 			on:click={() => (creatingGroup = true)}
 			use:groupPopperRef
 		>
@@ -187,10 +187,10 @@
 
 <style>
 	.link-wrapper {
-		gap: 3.333%;
+		gap: 6%;
 	}
 
 	.link-group {
-		width: 22.5%;
+		width: 20.5%;
 	}
 </style>
