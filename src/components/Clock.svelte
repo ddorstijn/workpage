@@ -32,6 +32,6 @@
 </script>
 
 <article>
-	<h1 class="text-6xl text-center">{time}</h1>
-	<p class="text-lg text-center">{date}</p>
+	<h1 class="mb-2 text-6xl text-center">{time}</h1>
+	<p class="text-center">{date}</p>
 </article>

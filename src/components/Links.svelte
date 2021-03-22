@@ -1,5 +1,11 @@
 <script>
 	import { currentId, activeId } from "../store.js";
+	import { createPopperActions } from "svelte-popperjs";
+	const [linkPopperRef, linkPopperContent] = createPopperActions();
+	const [groupPopperRef, groupPopperContent] = createPopperActions();
+	const popperOptions = {
+		placement: "top",
+	};
 
 	// -- Members -- \\
 	let creatingGroup = false;
@@ -26,14 +32,12 @@
 
 	// -- Functions -- \\
 	async function addGroup() {
-		let title = this.elements[0].value;
-		let color = this.elements[1].value;
-		
+		let title = this.elements[1].value;
+
 		if (links.length >= 4) return;
 		links.push({
 			id: $currentId++,
 			title,
-			color,
 			items: [],
 		});
 
@@ -51,10 +55,10 @@
 	}
 
 	async function addLink() {
-		const groupId = Number(this.elements[0].value);
-		const title = this.elements[1].value;
-		const url = this.elements[2].value;
-		const group = links.find(group => group.id === groupId);
+		const groupId = Number(this.elements[1].value);
+		const title = this.elements[2].value;
+		const url = this.elements[3].value;
+		const group = links.find((group) => group.id === groupId);
 
 		group.items.push({
 			id: $currentId++,
@@ -77,74 +81,116 @@
 </script>
 
 <article class="relative w-full">
-	<div class="grid grid-flow-col auto-cols-fr gap-4 justify-center place-items-center">
+	<div class="link-wrapper flex justify-center gap-6">
 		{#each links as group}
-			<ul>
-				<header class="group relative">
-					<span class="text-lg">{group.title}</span>
-					<button class="absolute opacity-0 group-hover:opacity-100" on:click={removeGroup(group)}>remove</button>
+			<ul class="link-group px-4 py-2 dark:bg-gray-800 rounded shadow-lg">
+				<header class="group relative text-center">
+					<span class="text-xl font-bold">{group.title}</span>
+					<button
+						class="absolute opacity-0 group-hover:opacity-100"
+						on:click={removeGroup(group)}>remove</button
+					>
 				</header>
 				<div>
 					{#each group.items as item}
 						<div class="group relative">
 							<a href={item.url} class="text-sm">{item.title}</a>
-							<button class="absolute opacity-0 group-hover:opacity-100" on:click={removeLink(group, item)}>remove</button>
+							<button
+								class="absolute opacity-0 group-hover:opacity-100"
+								on:click={removeLink(group, item)}
+							>
+								remove
+							</button>
 						</div>
 					{/each}
 				</div>
 			</ul>
 		{/each}
 	</div>
-	<div class="mt-12 flex justify-center gap-2">
-		<button class="block" on:click={() => creatingLink = true}>Add link</button>
-		<button class="block" on:click={() => creatingGroup = true}>Add group</button>
+	<div class="mt-12 flex justify-center divide-x">
+		<button
+			class="block px-4"
+			on:click={() => (creatingLink = true)}
+			use:linkPopperRef
+		>
+			Add link
+		</button>
+		<button
+			class="block px-4"
+			on:click={() => (creatingGroup = true)}
+			use:groupPopperRef
+		>
+			Add group
+		</button>
 	</div>
-{#if creatingLink}
-	<div class="absolute inset-0 flex items-center justify-center">
-		<form class="bg-gray-200 p-6" on:submit|preventDefault={addLink}>
+	{#if creatingLink}
+		<form
+			class="tooltip p-6"
+			use:linkPopperContent={popperOptions}
+			on:submit|preventDefault={addLink}
+		>
+			<button
+				class="float-right text-gray-400"
+				type="button"
+				on:click={() => (creatingLink = false)}
+			>
+				close
+			</button>
+
 			<label>
-				Group
+				<span class="block">Group</span>
 				<select>
 					{#each links as link}
-						<option value={link.id}>{ link.title }</option>
+						<option value={link.id}>{link.title}</option>
 					{/each}
 				</select>
 			</label>
-			<label class="block">
-				Title
+
+			<label>
+				<span class="block">Title</span>
 				<input placeholder="Name" />
 			</label>
 
-			<label class="block">
-				Url
+			<label>
+				<span class="block">Url</span>
 				<input type="url" placeholder="www.example.com" />
 			</label>
 
-			<div>
-				<button type="button" on:click={() => creatingLink = false}>close</button>
-				<input type="submit" value="Add link" />
-			</div>
+			<input type="submit" value="Add link" />
+			<div class="arrow" data-popper-arrow />
 		</form>
-	</div>
-{/if}
-{#if creatingGroup}
-	<div class="absolute inset-0 flex items-center justify-center">
-		<form class="bg-gray-200 p-6" on:submit|preventDefault={addGroup}>
+	{/if}
+	{#if creatingGroup}
+		<form
+			class="tooltip p-6"
+			use:groupPopperContent={popperOptions}
+			on:submit|preventDefault={addGroup}
+		>
+			<button
+				class="float-right text-gray-400"
+				type="button"
+				on:click={() => (creatingGroup = false)}
+			>
+				close
+			</button>
+
 			<label class="block mb-2">
 				<h3 class="block">Title</h3>
 				<input placeholder="Name" />
 			</label>
 
-			<label class="block mb-2">
-				<h3 class="block">Color</h3>
-				<input type="color" />
-			</label>
-
-			<div class="flex justify-between">
-				<button type="button" on:click={() => creatingGroup = false}>close</button>
-				<input type="submit" value="Add group" />
-			</div>
+			<input type="submit" value="Add group" />
+			<div class="arrow" data-popper-arrow />
 		</form>
-	</div>
-{/if}
+	{/if}
 </article>
+
+<style>
+	.link-wrapper {
+		gap: 3.333%;
+	}
+
+	.link-group {
+		width: 22.5%;
+	}
+</style>

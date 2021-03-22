@@ -1,16 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;600&display=swap');
-
 @tailwind base;
 @tailwind components;
 
 body {
-	@apply w-screen h-screen overflow-hidden flex bg-gray-200 text-base;
+	@apply w-screen h-screen p-16 overflow-hidden flex gap-16 text-base bg-gray-50 dark:bg-gray-900 dark:text-white;
+}
+
+input, select {
+  background: transparent;
 }
 
 /* PopperJS */
 
 .tooltip {
-	@apply p-1 bg-white rounded overflow-hidden;
+	@apply p-1 bg-white dark:bg-gray-700 rounded;
 } 
 
 .tooltip[data-popper-placement^='top'] > .arrow {
@@ -34,7 +36,7 @@ body {
   position: absolute;
   width: 8px;
   height: 8px;
-	@apply bg-green-500;
+  background: inherit;
 }
 
 .arrow {
