@@ -56,8 +56,8 @@
 	async function addTodo() {
 		todo.unshift({
 			id: $currentId++,
-			title: this.elements[0].value,
-			due: this.elements[1].value,
+			title: this.querySelector("input[type='text']").value,
+			due: this.querySelector("input[type='date']").value,
 		});
 
 		this.reset();
@@ -105,6 +105,7 @@
 		>
 			<input
 				class="p-2 flex-1 bg-transparent"
+				type="text"
 				placeholder="Write a new task..."
 				required
 			/>
@@ -152,17 +153,17 @@
 		>
 			{#each todo as item (item.id)}
 				<li
-					class="my-2 pl-4 p-2 flex justify-between items-center"
+					class="pl-4 p-2 flex justify-between items-center"
 					animate:flip={{ duration: flipDurationMs }}
 				>
 					<div>
 						<button on:click={markDone(item)}>
-							<h2 class="my-1 line-hover">{item.title}</h2>
+							<h2 class="line-hover text-gray-300">{item.title}</h2>
 						</button>
 						{#if item.due}
 							<span class="flex items-center gap-1 text-xs text-gray-400">
 								<svg
-									class="text-gray-400 h-3"
+									class="text-gray-600 h-3"
 									xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 20 20"
 									fill="currentColor"
@@ -204,7 +205,12 @@
 		</ul>
 	</div>
 	<div class="flex justify-center gap-2">
-		<button on:click={() => (viewDone = !viewDone)}>View history</button>
+		<button class="flex items-center gap-2" on:click={() => (viewDone = !viewDone)}>
+			<svg height="1em" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+			</svg>
+			<span>History</span>
+		</button>
 	</div>
 </article>
 

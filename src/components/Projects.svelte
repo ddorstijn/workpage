@@ -83,7 +83,7 @@
 </script>
 
 <article>
-	<button class="px-3 py-2 bg-gray-200 flex items-center gap-2 dark:bg-gray-800 text-xl rounded shadow" on:click={() => (open = true)}>
+	<button class="mb-6 px-3 py-2 bg-gray-200 flex items-center gap-2 dark:bg-gray-800 rounded shadow" on:click={() => (open = true)}>
 		<svg height="1.1em" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
 		</svg>
@@ -92,7 +92,7 @@
 
 	{#if open}
 		<div
-			class="absolute w-screen h-screen inset-0 flex justify-center items-center"
+			class="absolute w-screen h-screen inset-0 flex justify-center items-center z-10"
 		>
 			<div class="w-1/2 p-8 bg-gray-100 dark:bg-gray-800 rounded">
 				<header class="flex justify-between">

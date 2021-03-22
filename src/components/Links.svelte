@@ -84,19 +84,19 @@
 	<div class="link-wrapper flex justify-center gap-6">
 		{#each links as group}
 			<ul class="link-group">
-				<header class="mb-1 p-1 group relative border-b dark:border-gray-100">
+				<header class="mb-2 p-1 group relative border-b dark:border-gray-100">
 					<span class="text-xl font-bold">{group.title}</span>
 					<button
-						class="absolute opacity-0 group-hover:opacity-100"
+						class="absolute top-1/4 pl-3 text-xs dark:text-gray-600 opacity-0 group-hover:opacity-100"
 						on:click={removeGroup(group)}>remove</button
 					>
 				</header>
-				<div class="px-1 dark:text-gray-300">
+				<div class="px-1 dark:text-gray-400">
 					{#each group.items as item}
 						<div class="group relative">
 							<a href={item.url} class="text-sm">{item.title}</a>
 							<button
-								class="absolute opacity-0 group-hover:opacity-100"
+								class="absolute top-1/4 pl-3 text-xs dark:text-gray-600 opacity-0 group-hover:opacity-100"
 								on:click={removeLink(group, item)}
 							>
 								remove
@@ -151,7 +151,7 @@
 				<input placeholder="Name" />
 			</label>
 
-			<label>
+			<label class="block">
 				<span class="block">Url</span>
 				<input type="url" placeholder="www.example.com" />
 			</label>
@@ -187,10 +187,10 @@
 
 <style>
 	.link-wrapper {
-		gap: 6%;
+		gap: 12%;
 	}
 
 	.link-group {
-		width: 20.5%;
+		width: 16%;
 	}
 </style>
