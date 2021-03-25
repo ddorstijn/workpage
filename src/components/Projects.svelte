@@ -102,31 +102,24 @@
 </script>
 
 <article>
-	<button
-		class="mb-6 px-3 py-2 bg-gray-200 flex items-center gap-2 dark:bg-gray-800 rounded shadow"
-		on:click={() => (open = true)}
-	>
-		<span class="material-icons md-18">inventory_2</span>
+	<button class="elevation-2" on:click={() => (open = true)}>
+		<i class="material-icons">inventory_2</i>
 		{getProjectFromId($activeId).title}
 	</button>
 
 	{#if open}
-		<div
-			class="absolute w-screen h-screen inset-0 flex justify-center items-center z-10"
-		>
-			<div class="w-1/2 p-8 bg-gray-100 dark:bg-gray-800 rounded">
-				<header class="mb-4 flex justify-between">
-					<h1 class="text-3xl">Projects</h1>
-					<button class="text-gray-400" on:click={() => (open = false)}>
-						<span class="material-icons">
-							close
-						</span>	
+		<div class="scrim">
+			<div class="modal [ surface elevation-16 ]">
+				<header>
+					<h6 class="hint">Projects</h6>
+					<button class="material-icons [ hint no-gutters ]" on:click={() => (open = false)}>
+						close
 					</button>
 				</header>
-				<div class="p-2 grid grid-cols-3 gap-12">
+				<div class="modal__body">
 					{#each $projects as group}
-						<ul>
-							<header class="mb-2 p-1 group relative border-b dark:border-gray-100">
+						<div class="list-wrapper">
+							<header>
 								{#if editing === group.id}
 									<form on:submit|preventDefault={stopEdit}>
 										<input
@@ -137,22 +130,16 @@
 										<input type="submit" hidden />
 									</form>
 								{:else}
-									<span class="text-xl font-bold">{group.title}</span>
+									<h5 class="emphasis">{group.title}</h5>
 								{/if}
-								<div class="inline text-sm">
-									<button class="opacity-0 group-hover:opacity-100" on:click={removeGroup(group)}>
-										<span class="material-icons">
-											delete
-										</span>
-									</button>
-									<button class="opacity-0 group-hover:opacity-100" on:click={editGroup(group)}>
-										<span class="material-icons">
-											edit
-										</span>
-									</button>
-								</div>
+								<!-- <button class="icon-options material-icons md-18" on:click={removeGroup(group)}>
+									delete
+								</button>
+								<button class="icon-options material-icons md-18" on:click={editGroup(group)}>
+									edit
+								</button> -->
 							</header>
-							<ul class="px-1">
+							<ul>
 								{#each group.items as item}
 									<li class="group" on:click={setActive(item)}>
 										{#if editing === item.id}
@@ -165,93 +152,132 @@
 												<input type="submit" hidden />
 											</form>
 										{:else}
-											<span class="text-gray-400">{item.title}</span>
+											<span>{item.title}</span>
 										{/if}
-										<button class="material-icons opacity-0 group-hover:opacity-100" on:click={removeItem(group, item)}>
+										<!-- <button class="icon-options material-icons md-18" on:click={removeItem(group, item)}>
 											delete
 										</button>
-										<button class="material-icons opacity-0 group-hover:opacity-100" on:click={editItem(item)}>
+										<button class="icon-options material-icons md-18" on:click={editItem(item)}>
 											edit
-										</button>
+										</button> -->
 									</li>
 								{/each}
 							</ul>
-						</ul>
+						</div>
 					{/each}
 				</div>
-				<div class="mt-12 flex justify-center divide-x">
-					<button
-						class="px-4"
-						on:click={() => (creatingProject = true)}
-						use:projectPopperRef
-					>
+				<div class="action-buttons">
+					<button on:click={() => (creatingProject = true)} use:projectPopperRef>
 						Add project
 					</button>
-					<button
-						class="px-4"
-						on:click={() => (creatingGroup = true)}
-						use:groupPopperRef
-					>
+					<div class="divider-y"></div>
+					<button on:click={() => (creatingGroup = true)} use:groupPopperRef>
 						Add group
 					</button>
 				</div>
 
 				{#if creatingProject}
-					<form
-						class="tooltip p-6"
-						use:projectPopperContent={popperOptions}
-						on:submit|preventDefault={addProject}
-					>
-						<button
-							class="float-right text-gray-400"
-							type="button"
-							on:click={() => (creatingProject = false)}
-						>
-							close
-						</button>
-
-						<label>
-							<span class="block">Group</span>
+					<div class="tooltip [ surface elevation-24 ]" use:projectPopperContent={popperOptions}>
+						<span class="caption hint">Create project item</span>
+						<form on:submit|preventDefault={addProject}>
 							<select required>
+								<option value="" disabled selected>Choose group</option>
 								{#each $projects as project}
 									<option value={project.id}>{project.title}</option>
 								{/each}
 							</select>
-						</label>
 
-						<label>
-							<span class="block">Title</span>
-							<input type="text" placeholder="Name" required />
-						</label>
+							<label>
+								<input type="text" placeholder="Name" required />
+								<span>Title</span>
+							</label>
 
-						<input type="submit" value="Add project" />
+							<div class="form-actions">
+								<button type="button" on:click={() => (creatingProject = false)} >
+									close
+								</button>
+								<input class="elevation-2" type="submit" value="Add project" />
+							</div>
+						</form>
 						<div class="arrow" data-popper-arrow />
-					</form>
+					</div>
 				{/if}
 				{#if creatingGroup}
-					<form
-						class="tooltip p-6"
-						use:groupPopperContent={popperOptions}
-						on:submit|preventDefault={addGroup}
-					>
-						<button
-							class="float-right text-gray-400"
-							type="button"
-							on:click={() => (creatingGroup = false)}
-						>
-							close
-						</button>
+					<div class="tooltip [ surface elevation-24 ]" use:groupPopperContent={popperOptions}>
+						<span class="caption hint">Create project group</span>
+						<form on:submit|preventDefault={addGroup}>
+							<label>
+								<input type="text" placeholder="Name" required />
+								<span>Title</span>
+							</label>
 
-						<label class="block mb-2">
-							<h3 class="block">Title</h3>
-							<input type="text" placeholder="Name" required />
-						</label>
-
-						<input type="submit" value="Add group" />
+							<div class="form-actions">
+								<button type="button" on:click={() => (creatingGroup = false)}>
+									close
+								</button>
+								<input class="elevation-2" type="submit" value="Add group" />
+							</div>
+						</form>
 						<div class="arrow" data-popper-arrow />
-					</form>
+					</div>
 				{/if}
 			</div>
 		</div>
 	{/if}
 </article>
+
+<style>
+	.scrim {
+		position: absolute;
+		width: 100vw;
+		height: 100vh;
+		left: 0;
+		top: 0;
+
+		display: flex; 
+		justify-content: center;
+		align-items: center; 
+		z-index: 10;
+
+		background-color: #212121;
+	}
+
+	.modal {
+		width: 50vw;
+		padding: 2rem; 
+		z-index: 20;
+	}
+
+	.modal > header {
+		margin-bottom: 1rem;
+
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.modal__body {
+		display: grid; 
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 4rem;
+	}
+
+	.list-wrapper > header {
+		margin-bottom: var(--space-1);
+		padding: 0 var(--space-1);
+		border-bottom: 1px solid #FFF;
+	}
+
+	.list-wrapper > header > * {
+		display: inline-block;
+	}
+
+	.list-wrapper > ul {
+		padding: 0 var(--space-1);
+	}
+
+	.action-buttons {
+		margin-top: var(--space-4);
+		display: flex; 
+		justify-content: center;
+	}
+</style>

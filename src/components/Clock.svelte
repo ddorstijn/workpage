@@ -1,9 +1,9 @@
-<script lang="ts">
+<script>
 	import { onMount } from "svelte";
 
 	// -- Members -- \\
-	let date: string;
-	let time: string;
+	let date;
+	let time;
 
 	// -- Initialization -- \\
 	onMount(async () => {
@@ -31,6 +31,16 @@
 </script>
 
 <article>
-	<h1 class="mb-2 text-5xl text-center text-intense">{time}</h1>
-	<p class="text-center text-hint">{date}</p>
+	<h2 class="emphasis">{time}</h2>
+	<p class="subtitle1 hint">{date}</p>
 </article>
+
+<style>
+	article {
+		text-align: center;
+	}
+
+	h2 {
+		margin-bottom: var(--space-2);
+	}
+</style>

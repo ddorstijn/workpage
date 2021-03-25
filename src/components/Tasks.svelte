@@ -57,7 +57,7 @@
 		todo.unshift({
 			id: $currentId++,
 			title: this.querySelector("input[type='text']").value,
-			due: this.querySelector("input[type='date']").value,
+			due: this.querySelector("input[type='date']")?.value,
 		});
 
 		this.reset();
@@ -97,106 +97,120 @@
 	}
 </script>
 
-<article class="h-full py-4 flex flex-col justify-between">
-	<header class="mb-4">
-		<form
-			class="flex items-center rounded-sm shadow bg-white dark:bg-gray-600"
-			on:submit|preventDefault={addTodo}
-		>
-			<input
-				class="p-2 flex-1 bg-transparent"
-				type="text"
-				placeholder="Write a new task..."
-				required
-			/>
-			<input type="submit" hidden />
-			<button
-				class="py-1 px-2 self-stretch"
-				type="button"
-				title="Add due date"
-				use:popperRef
-				on:click={() => (showTooltip = !showTooltip)}
-			>
-				<span class="material-icons">calendar</span>
+<article>
+	<header>
+		<form on:submit|preventDefault={addTodo}>
+			<label>
+				<input type="text" placeholder="Write a new task.." required />
+				<span>Write a new task...</span>
+			</label>
+			<button class="material-icons [ no-gutters ]" type="button" title="Add due date" use:popperRef on:click={() => (showTooltip = !showTooltip)}>
+				event
 			</button>
 		{#if showTooltip}
-			<div class="tooltip" use:popperContent={popperOptions}>
+			<div class="tooltip [ surface elevation-24 ]" use:popperContent={popperOptions}>
 				<input type="date" />
 				<div class="arrow" data-popper-arrow />
 			</div>
 		{/if}
+			<input type="submit" hidden />
 		</form>
 	</header>
-	<div class="min-h-0 flex-1 flex-grow overflow-auto">
-		<ul
-			use:dndzone={{
-				items: todo,
-				flipDurationMs,
-				dragDisabled,
-				dropTargetStyle: {},
-			}}
-			on:consider={handleDndConsider}
-			on:finalize={handleDndFinalize}
-		>
-			{#each todo as item (item.id)}
-				<li
-					class="pl-4 p-2 flex justify-between items-center"
-					animate:flip={{ duration: flipDurationMs }}
+	<ul
+		class="todo-wrapper"
+		use:dndzone={{
+			items: todo,
+			flipDurationMs,
+			dragDisabled,
+			dropTargetStyle: {},
+		}}
+		on:consider={handleDndConsider}
+		on:finalize={handleDndFinalize}
+	>
+		{#each todo as item (item.id)}
+			<li class="todo-item" animate:flip={{ duration: flipDurationMs }}>
+				<div class="todo-item__body">
+					<button class="todo-item__title [ no-gutters ]" on:click={markDone(item)}>
+						{item.title}
+					</button>
+					{#if item.due}
+						<span class="todo-item__due [ hint ]">
+							Due: {item.due}
+						</span>
+					{/if}
+				</div>
+				<button
+					aria-label="drag-handle"
+					class="material-icons md-18 [ hint no-gutters ]"
+					style={dragDisabled ? "cursor: grab" : "cursor: grabbing"}
+					on:mousedown={startDrag}
+					on:touchstart={startDrag}
 				>
-					<div>
-						<button on:click={markDone(item)}>
-							<h2 class="line-hover text-gray-300">{item.title}</h2>
-						</button>
-						{#if item.due}
-							<span class="flex items-center gap-1 text-xs text-gray-400">
-								<svg
-									class="text-gray-600 h-3"
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 20 20"
-									fill="currentColor"
-								>
-									<path
-										fill-rule="evenodd"
-										d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-										clip-rule="evenodd"
-									/>
-								</svg>
-								{item.due}
-							</span>
-						{/if}
-					</div>
-					<div
-						aria-label="drag-handle"
-						class="handle"
-						style={dragDisabled ? "cursor: grab" : "cursor: grabbing"}
-						on:mousedown={startDrag}
-						on:touchstart={startDrag}
-					>
-						<svg
-							class="h-6 text-gray-200 dark:text-gray-700"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-							/>
-						</svg>
-					</div>
-				</li>
-			{/each}
-		</ul>
-	</div>
-	<div class="flex justify-center gap-2">
-		<button class="flex items-center gap-2" on:click={() => (viewDone = !viewDone)}>
-			<svg height="1em" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-			</svg>
-			<span>History</span>
-		</button>
-	</div>
+					drag_indicator
+				</button>
+			</li>
+		{/each}
+	</ul>
+	<button class="task-actions" on:click={() => (viewDone = !viewDone)}>
+		<i class="material-icons md-18">checklist</i>
+		<span>History</span>
+	</button>
 </article>
+
+<style>
+article {
+	height: 100%;
+	padding: var(--space-4);
+	display: flex; 
+	flex-direction: column; 
+	justify-content: space-between;
+}
+
+header {
+	margin-bottom: var(--space-1);
+}
+
+form {
+	flex-direction: row;
+	align-items: flex-end;
+}
+
+label {
+	flex: 1;
+}
+
+form input[type="text"] {
+	width: 100%;
+}
+
+.todo-wrapper {
+	min-height: 0; 
+	flex: 1; 
+	overflow: auto;
+}
+
+.todo-item {
+	padding: var(--space-2);
+	padding-left: var(--space-4);
+	display: flex; 
+	justify-content: space-between;
+	align-items: center;
+}
+
+.todo-item__title {
+	display: block;
+	font-size: 1rem;
+	font-weight: 400;
+}
+
+.todo-item__due {
+	display: block;
+	font-size: 0.75rem;
+	line-height: 16px;
+}
+
+.task-actions {
+	align-self: center;
+}
+
+</style>

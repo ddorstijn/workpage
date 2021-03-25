@@ -1,22 +1,22 @@
-<script lang="ts">
+<script>
 	import { loaded } from "./store.js";
 </script>
 
 {#await loaded() }
 	Loading...
 {:then}
-	<main class="flex flex-col items-center justify-center gap-6">
+	<main>
 		{#await import("./components/Clock.svelte") then c}
 			<svelte:component this={c.default} />
 		{/await}
-		{#await import("./components/Projects.svelte") then c}
+		{#await import("./components/Projects.svelte") then c} 
 			<svelte:component this={c.default} />
 		{/await}
 		{#await import("./components/Links.svelte") then c}
 			<svelte:component this={c.default} />
 		{/await}
 	</main>
-	<aside class="pl-16 border-l border-gray-200 dark:border-gray-700">
+	<aside>
 		{#await import("./components/Tasks.svelte") then c}
 			<svelte:component this={c.default} />
 		{/await}
@@ -26,9 +26,19 @@
 <style>
 	main {
 		width: 72.5%;
+		height: 100%;
+
+		display: inline-flex; 
+		flex-direction:column; 
+		justify-content: center;
+		align-items: center; 
+		gap: var(--space-4);
 	}
 
 	aside {
 		width: 27.5%;
+		height: 100%;
+		padding-left: var(--space-16);
+		border-left: 1px solid rgba(255,255,255,0.1);
 	}
 </style>

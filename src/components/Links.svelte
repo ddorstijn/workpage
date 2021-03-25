@@ -32,7 +32,7 @@
 
 	// -- Functions -- \\
 	async function addGroup() {
-		let title = this.elements[1].value;
+		let title = this.querySelector('input').value;
 
 		if (links.length >= 4) return;
 		links.push({
@@ -55,9 +55,9 @@
 	}
 
 	async function addLink() {
-		const groupId = Number(this.elements[1].value);
-		const title = this.elements[2].value;
-		const url = this.elements[3].value;
+		const groupId = Number(this.querySelector('select').value);
+		const title = this.querySelector('input[type="text"]').value;
+		const url = this.querySelector('input[type="url"]').value;
 		const group = links.find((group) => group.id === groupId);
 
 		group.items.push({
@@ -80,117 +80,128 @@
 	}
 </script>
 
-<article class="relative w-full">
-	<div class="link-wrapper flex justify-center gap-6">
+<article>
+	<div class="link-wrapper ">
 		{#each links as group}
-			<ul class="link-group">
-				<header class="mb-2 p-1 group relative border-b dark:border-gray-100">
-					<span class="text-xl font-bold">{group.title}</span>
-					<button
-						class="absolute top-1/4 pl-3 text-xs dark:text-gray-600 opacity-0 group-hover:opacity-100"
-						on:click={removeGroup(group)}>remove</button
-					>
+			<div class="link-group">
+				<header>
+					<h5 class="emphasis">{group.title}</h5>
+					<!-- <button class="no-gutters hint" on:click={removeGroup(group)}>
+						remove
+					</button> -->
 				</header>
-				<div class="px-1 dark:text-gray-400">
+				<div>
 					{#each group.items as item}
-						<div class="group relative">
-							<a href={item.url} class="text-sm">{item.title}</a>
-							<button
-								class="absolute top-1/4 pl-3 text-xs dark:text-gray-600 opacity-0 group-hover:opacity-100"
-								on:click={removeLink(group, item)}
-							>
-								remove
+						<div class="link-item">
+							<a href={item.url}>{item.title}</a>
+							<button class="material-icons md-18 no-gutters hint" on:click={removeLink(group, item)}>
+								delete
 							</button>
 						</div>
 					{/each}
 				</div>
-			</ul>
+			</div>
 		{/each}
 	</div>
-	<div class="mt-12 flex justify-center divide-x">
-		<button
-			class="px-4"
-			on:click={() => (creatingLink = true)}
-			use:linkPopperRef
-		>
+	<div class="action-buttons">
+		<button on:click={() => (creatingLink = true)} use:linkPopperRef>
 			Add link
 		</button>
-		<button
-			class="px-4"
-			on:click={() => (creatingGroup = true)}
-			use:groupPopperRef
-		>
+		<div class="divider-y"></div>
+		<button on:click={() => (creatingGroup = true)} use:groupPopperRef>
 			Add group
 		</button>
 	</div>
 	{#if creatingLink}
-		<form
-			class="tooltip p-6"
-			use:linkPopperContent={popperOptions}
-			on:submit|preventDefault={addLink}
-		>
-			<button
-				class="float-right text-gray-400"
-				type="button"
-				on:click={() => (creatingLink = false)}
-			>
-				close
-			</button>
-
-			<label>
-				<span class="block">Group</span>
-				<select>
+		<div class="tooltip [ surface elevation-24 ]" use:linkPopperContent={popperOptions}>
+			<span class="caption hint">Create link item</span>
+			<form on:submit|preventDefault={addLink}>
+				<select required>
+					<option value="" disabled selected>Choose group</option>
 					{#each links as link}
 						<option value={link.id}>{link.title}</option>
 					{/each}
 				</select>
-			</label>
 
-			<label>
-				<span class="block">Title</span>
-				<input placeholder="Name" />
-			</label>
+				<label>
+					<input type="text" placeholder="Name" required />
+					<span>Title</span>
+				</label>
 
-			<label class="block">
-				<span class="block">Url</span>
-				<input type="url" placeholder="www.example.com" />
-			</label>
+				<label>
+					<input type="url" placeholder="www.example.com" required />
+					<span>Url</span>
+				</label>
 
-			<input type="submit" value="Add link" />
+				<div class="form-actions">
+					<button type="button" on:click={() => (creatingLink = false)}>
+						close
+					</button>
+					<input class="elevation-2" type="submit" value="Add link" />
+				</div>
+			</form>
 			<div class="arrow" data-popper-arrow />
-		</form>
+		</div>
 	{/if}
 	{#if creatingGroup}
-		<form
-			class="tooltip p-6"
-			use:groupPopperContent={popperOptions}
-			on:submit|preventDefault={addGroup}
-		>
-			<button
-				class="float-right text-gray-400"
-				type="button"
-				on:click={() => (creatingGroup = false)}
-			>
-				close
-			</button>
+		<div class="tooltip [ surface elevation-24 ]" use:groupPopperContent={popperOptions}>
+			<span class="caption hint">Create link group</span>
+			<form on:submit|preventDefault={addGroup}>
+				<label>
+					<input type="text" placeholder="Name" />
+					<span>Title</span>
+				</label>
 
-			<label class="block mb-2">
-				<h3 class="block">Title</h3>
-				<input placeholder="Name" />
-			</label>
-
-			<input type="submit" value="Add group" />
+				<div class="form-actions">
+					<button type="button" on:click={() => (creatingGroup = false)}>
+						close
+					</button>
+					<input class="elevation-2" type="submit" value="Add group" />
+				</div>
+			</form>
 			<div class="arrow" data-popper-arrow />
-		</form>
+		</div>
 	{/if}
 </article>
 
 <style>
+	article {
+		width: 100%;
+		margin-top: var(--space-8);
+	}
+
 	.link-wrapper {
+		display: flex;
+		justify-content: center;
 		gap: 12%;
 	}
 
 	.link-group {
 		width: 16%;
+	}
+
+	.link-group > header {
+		position: relative;
+		margin-bottom: var(--space-1);
+		padding: var(--space-1);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.87);
+	}
+
+	.action-buttons {
+		margin-top: var(--space-8);
+		display: flex; 
+		justify-content: center;
+	}
+
+	.link-item {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 var(--space-1)
+	}
+
+	.link-item > a {
+		text-decoration: none;
+		color: inherit;
 	}
 </style>
