@@ -81,7 +81,7 @@
 </script>
 
 <article>
-	<div class="link-wrapper ">
+	<div class="link-wrapper">
 		{#each links as group}
 			<div class="link-group">
 				<header>
@@ -92,11 +92,11 @@
 				</header>
 				<div>
 					{#each group.items as item}
-						<div class="link-item">
-							<a href={item.url}>{item.title}</a>
-							<button class="material-icons md-18 no-gutters hint" on:click={removeLink(group, item)}>
+						<div class="link-item [ hint ]">
+							<a class="subtitle2" href={item.url}>{item.title}</a>
+							<!-- <button class="material-icons md-18 no-gutters hint" on:click={removeLink(group, item)}>
 								delete
-							</button>
+							</button> -->
 						</div>
 					{/each}
 				</div>
@@ -104,11 +104,11 @@
 		{/each}
 	</div>
 	<div class="action-buttons">
-		<button on:click={() => (creatingLink = true)} use:linkPopperRef>
+		<button class="hint" on:click={() => (creatingLink = true)} use:linkPopperRef>
 			Add link
 		</button>
 		<div class="divider-y"></div>
-		<button on:click={() => (creatingGroup = true)} use:groupPopperRef>
+		<button class="hint" on:click={() => (creatingGroup = true)} use:groupPopperRef>
 			Add group
 		</button>
 	</div>
@@ -173,18 +173,16 @@
 	.link-wrapper {
 		display: flex;
 		justify-content: center;
-		gap: 12%;
+		gap: var(--space-8);
 	}
 
 	.link-group {
-		width: 16%;
+		padding: 0 var(--space-2);
+		width: 14%;
 	}
 
 	.link-group > header {
-		position: relative;
-		margin-bottom: var(--space-1);
-		padding: var(--space-1);
-		border-bottom: 1px solid rgba(255, 255, 255, 0.87);
+		padding: 2px var(--space-1);
 	}
 
 	.action-buttons {
@@ -197,7 +195,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 0 var(--space-1)
+		padding: 0 var(--space-1);
+		font-size: 0.75rem;
 	}
 
 	.link-item > a {

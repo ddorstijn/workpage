@@ -16,7 +16,7 @@ body {
 	display: flex;
 	gap: var(--space-16);
 
-	font-family: Roboto, sans-serif;
+	font-family: 'Roboto', sans-serif;
 	font-weight: 400;
   font-size: 16px;
 	line-height: 24px;
@@ -47,7 +47,8 @@ select {
   color: rgba(255, 255, 255, 0.87);
 }
 
-input {
+input[type="text"],
+input[type="url"] {
   padding-top: var(--space-4);
 }
 
@@ -128,7 +129,7 @@ h6 {
 }
 .subtitle2 {
   font-size: 0.875rem;
-	font-weight: 500;
+	font-weight: 400;
 	letter-spacing: 0.1px;
 }
 .overline {
@@ -254,7 +255,7 @@ li {
 	padding: 0;
 	align-self: stretch;
 	border-radius: 0;
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.38);
 }
 
 .no-gutters {

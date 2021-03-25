@@ -173,6 +173,7 @@ header {
 form {
 	flex-direction: row;
 	align-items: flex-end;
+	gap: var(--space-4);
 }
 
 label {
