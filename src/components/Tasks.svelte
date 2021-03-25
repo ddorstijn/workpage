@@ -117,20 +117,7 @@
 				use:popperRef
 				on:click={() => (showTooltip = !showTooltip)}
 			>
-				<svg
-					height="1em"
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-					/>
-				</svg>
+				<span class="material-icons">calendar</span>
 			</button>
 		{#if showTooltip}
 			<div class="tooltip" use:popperContent={popperOptions}>
@@ -186,7 +173,7 @@
 						on:touchstart={startDrag}
 					>
 						<svg
-							class="h-6 text-gray-200 dark:text-gray-800"
+							class="h-6 text-gray-200 dark:text-gray-700"
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
 							viewBox="0 0 24 24"
@@ -213,34 +200,3 @@
 		</button>
 	</div>
 </article>
-
-<style>
-	.line-hover {
-		position: relative;
-		overflow: hidden;
-		display: inline-block;
-		vertical-align: top;
-		padding-left: 4px;
-		padding-right: 4px;
-		transition: color 0.8s cubic-bezier(0.19, 1, 0.22, 1);
-	}
-
-	.line-hover::after {
-		content: "";
-		display: block;
-		position: absolute;
-		left: 0;
-		top: 50%;
-		width: 100%;
-		height: 2px;
-		margin-top: -1px;
-		background-color: #000;
-		transform: translateX(-100%);
-		transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
-		transition-delay: 0.1s;
-	}
-
-	.line-hover:hover::after {
-		transform: translateX(0%);
-	}
-</style>

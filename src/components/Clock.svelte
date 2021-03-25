@@ -14,10 +14,9 @@
 	async function update() {
 		const d = new Date();
 		date = new Intl.DateTimeFormat("en-GB", {
-			year: "numeric",
-			month: "short",
+			month: "long",
 			day: "numeric",
-			weekday: "short",
+			weekday: "long",
 		}).format(d);
 
 		time = new Intl.DateTimeFormat("en-GB", {
@@ -32,6 +31,6 @@
 </script>
 
 <article>
-	<h1 class="text-5xl text-center">{time}</h1>
-	<p class="text-center text-gray-400">{date}</p>
+	<h1 class="mb-2 text-5xl text-center text-intense">{time}</h1>
+	<p class="text-center text-hint">{date}</p>
 </article>
