@@ -87,6 +87,7 @@
 
 	function setActive(item) {
 		$activeId = item.id;
+		open = false;
 	}
 
 	// -- Human readability -- \\
@@ -184,17 +185,21 @@
 					<div class="tooltip [ surface elevation-24 ]" use:projectPopperContent={popperOptions}>
 						<span class="caption hint">Create project item</span>
 						<form on:submit|preventDefault={addProject}>
-							<select required>
-								<option value="" disabled selected>Choose group</option>
-								{#each $projects as project}
-									<option value={project.id}>{project.title}</option>
-								{/each}
-							</select>
-
-							<label>
-								<input type="text" placeholder="Name" required />
-								<span>Title</span>
-							</label>
+							<fieldset>
+								<label>
+									<input type="text" placeholder="Name" required />
+									<span>Title</span>
+								</label>
+								<label>
+									<select required>
+										<option value="" disabled selected></option>
+										{#each $projects as project}
+											<option value={project.id}>{project.title}</option>
+										{/each}
+									</select>
+									<span>Group</span>
+								</label>
+							</fieldset>
 
 							<div class="form-actions">
 								<button type="button" on:click={() => (creatingProject = false)} >
@@ -281,6 +286,7 @@
 
 		display: flex;
 		align-items: center;
+		cursor: pointer;
 	}
 
 	.action-buttons {

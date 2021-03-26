@@ -143,12 +143,15 @@
 						<span>Title</span>
 					</label>
 
-					<select required>
-						<option value="" disabled selected>Group</option>
-						{#each links as link}
-							<option value={link.id}>{link.title}</option>
-						{/each}
-					</select>
+					<label>
+						<select required>
+							<option value="" disabled selected></option>
+							{#each links as link}
+								<option value={link.id}>{link.title}</option>
+							{/each}
+						</select>
+						<span>Group</span>
+					</label>
 				</fieldset>
 
 				<label>
@@ -240,11 +243,5 @@
 	.link-item:hover > .item-actions,
 	.link-group > header:hover > .item-actions {
 		opacity: 1;
-	}
-
-	fieldset {
-		display: flex;
-		gap: var(--space-2);
-		border: none;
 	}
 </style>
