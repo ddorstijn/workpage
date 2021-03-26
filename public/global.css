@@ -5,6 +5,14 @@
 }
 
 :root {
+	--color-base: #121212;
+	--color-primary: ;
+	--color-alert:#cf6679;
+	--color-warning: #f4d374;
+	--color-emphasis: #dfdfdf;
+	--color-normal: #9d9d9d;
+	--color-hint: #9d9d9d;
+
 	--space-1: 0.25rem;
 	--space-2: 0.5rem;
 	--space-3: 0.75rem;
@@ -34,8 +42,8 @@ body {
   font-size: 16px;
 	line-height: 24px;
 
-	background-color: #212121;
-	color: rgba(255,255,255,0.6);
+	background-color: var(--color-base);
+	color: var(--color-normal);
 }
 
 [hidden] {
@@ -66,10 +74,10 @@ input {
   padding: var(--space-4) var(--space-1) var(--space-1);
 
   background: transparent;
-  color: rgba(255, 255, 255, 0.87);
+  color: var(--color-emphasis);
 
   border: none;
-  border-bottom: solid 1px rgba(255, 255, 255, 0.38);
+  border-bottom: solid 1px var(--color-hint);
 }
 select {
 	appearance: none;
@@ -80,7 +88,7 @@ input[type="date"] {
 }
 select:not(valid) ~ span,
 input:placeholder-shown + span {
-  color: rgba(255, 255, 255, 0.38);
+  color: var(--color-hint);
   font-size: 1rem;
   top: var(--space-4);
 }
@@ -88,7 +96,7 @@ input + span,
 input:focus + span,
 select + span,
 select:valid + span {
-  color: rgba(255, 255, 255, 0.36);
+  color: var(--color-hint);
   font-size: 0.75rem;
   pointer-events: none;
   position: absolute;
@@ -103,7 +111,7 @@ input::placeholder {
 select:focus,
 input:focus,
 input:not(:placeholder-shown) {
-  border-bottom: solid 1px rgba(255, 255, 255, 0.6);
+  border-bottom: solid 1px var(--color-normal);
   outline: none;
 }
 .form-actions {
@@ -176,60 +184,62 @@ button,input[type='submit'],input[type='button'] {
 }
 
 /* Coloring */
+.alert {
+	color: var(--color-alert);
+}
+.warning {
+	color: var(--color-warning);
+}
 .emphasis {
-	color: rgba(255,255,255,0.87);
+	color: var(--color-emphasis);
 }
 .normal {
-	color: rgba(255,255,255,0.6);
+	color: var(--color-normal);
 }
 .hint {
-	color: rgba(255,255,255,0.38);
+	color: var(--color-hint);
 }
 
 /* Elevation */
 .elevation-24 {
 	box-shadow: 0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12), 0 11px 15px -7px rgba(0,0,0,0.20);
-	background-color: rgba(255,255,255,0.16);
+	background-color: #3b3b3b;
 }
 .elevation-16 {
 	box-shadow: 0 16px 24px 2px rgba(0,0,0,0.14), 0 6px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.20);
-	background-color: rgba(255,255,255,0.15);
+	background-color: #373737;
 }
 .elevation-12 {
 	box-shadow: 0 12px 17px 2px rgba(0,0,0,0.14), 0 5px 22px 4px rgba(0,0,0,0.12), 0 7px 8px -4px rgba(0,0,0,0.20);
-	background-color: rgba(255,255,255,0.14);
-}
-.elevation-9 {
-	box-shadow: 0 9px 12px 1px rgba(0,0,0,0.14), 0 3px 16px 2px rgba(0,0,0,0.12), 0 5px 6px -3px rgba(0,0,0,0.20);
-	background-color: rgba(255,255,255,0.13);
+	background-color: #353535;
 }
 .elevation-8 {
 	box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.20);
-	background-color: rgba(255,255,255,0.12);
+	background-color: #313131;
 }
 .elevation-6 {
 	box-shadow: 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.20);
-	background-color: rgba(255,255,255,0.11);
+	background-color: #303030;
 }
 .elevation-4 {
 	box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.20);
-	background-color: rgba(255,255,255,0.09);
+	background-color: #2b2b2b;
 }
 .elevation-3 {
 	box-shadow: 0 3px 4px 0 rgba(0,0,0,0.14), 0 3px 3px -2px rgba(0,0,0,0.12), 0 1px 8px 0 rgba(0,0,0,0.20);
-	background-color: rgba(255,255,255,0.08);
+	background-color: #292929;
 }
 .elevation-2 {
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.20);
-	background-color: rgba(255,255,255,0.07);
+	background-color: #262626;
 }
 .elevation-1 {
 	box-shadow: 0 1px 1px 0 rgba(0,0,0,0.14), 0 2px 1px -1px rgba(0,0,0,0.12), 0 1px 3px 0 rgba(0,0,0,0.20);
-	background-color: rgba(255,255,255,0.05);
+	background-color: #232323;
 }
 .elevation-0 {
 	box-shadow: none;
-	background-color: rgba(255, 255, 255, 0);
+	background-color: #191919;
 }
 
 /* Icons */
@@ -280,7 +290,7 @@ li {
 	padding: 0;
 	align-self: stretch;
 	border-radius: 0;
-  background-color: rgba(255, 255, 255, 0.38);
+  background-color: var(--color-hint)
 }
 
 .item-actions {
@@ -288,6 +298,8 @@ li {
 	left: 100%;
 	height: 100%;
 	padding-left: var(--space-1);
+	display: flex;
+	gap: 2px;
 
 	display: flex;
 	align-items: center;
@@ -297,7 +309,8 @@ li {
 
 /* PopperJS */
 .tooltip {
-	background: #212121;
+	background: #191919;
+	z-index: 10;
 }
 
 .tooltip > .caption {
@@ -328,7 +341,7 @@ li {
   position: absolute;
   width: 8px;
   height: 8px;
-  background: #212121;
+  background: #191919;
 }
 
 .arrow {

@@ -88,7 +88,7 @@
 					<h5 class="emphasis">{group.title}</h5>
 					<div class="item-actions">
 						<button
-							class="material-icons [ md-18 no-gutters ] [ hint ]"
+							class="material-icons [ md-18 no-gutters ] [ alert ]"
 							on:click={removeGroup(group)}
 						>
 							delete
@@ -101,7 +101,7 @@
 							<a class="subtitle2" href={item.url}>{item.title}</a>
 							<div class="item-actions">
 								<button
-									class="material-icons [ md-14 no-gutters ] [ hint ]"
+									class="material-icons [ md-14 no-gutters ] [ alert ]"
 									on:click={removeLink(group, item)}
 								>
 									delete
@@ -200,9 +200,11 @@
 	}
 
 	.link-wrapper {
+		width: 100%;
 		display: grid;
 		grid-auto-flow: column;
-		grid-auto-columns: 1fr;
+		grid-auto-columns: 18rem;
+		justify-content: center;
 		justify-items: center;
 		gap: var(--space-8);
 	}

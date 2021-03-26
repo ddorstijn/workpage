@@ -110,7 +110,7 @@
 
 	{#if open}
 		<div class="scrim">
-			<div class="modal [ surface elevation-16 ]">
+			<div class="modal [ surface elevation-1 ]">
 				<header>
 					<h6 class="hint">Projects</h6>
 					<button class="material-icons [ hint no-gutters ]" on:click={() => (open = false)}>
@@ -134,17 +134,17 @@
 									<h5 class="emphasis">{group.title}</h5>
 								{/if}
 								<div class="item-actions">
-									<button class="material-icons [ md-18 no-gutters ] [ hint ]" on:click={removeGroup(group)}>
+									<button class="material-icons [ md-18 no-gutters ] [ alert ]" on:click={removeGroup(group)}>
 										delete
 									</button>
-									<button class="material-icons [ md-18 no-gutters ] [ hint ]" on:click={editGroup(group)}>
+									<button class="material-icons [ md-18 no-gutters ] [ warning ]" on:click={editGroup(group)}>
 										edit
 									</button>
 								</div>
 							</header>
 							<ul>
 								{#each group.items as item}
-									<li class="project-item" on:click={setActive(item)}>
+									<li class="project-item">
 										{#if editing === item.id}
 											<form on:submit|preventDefault={stopEdit}>
 												<input
@@ -155,13 +155,13 @@
 												<input type="submit" hidden />
 											</form>
 										{:else}
-											<span>{item.title}</span>
+											<span on:click={setActive(item)}>{item.title}</span>
 										{/if}
 										<div class="item-actions">
-											<button class="material-icons [ md-14 no-gutters ] [ hint ]" on:click={removeItem(group, item)}>
+											<button class="material-icons [ md-14 no-gutters ] [ alert ]" on:click={removeItem(group, item)}>
 												delete
 											</button>
-											<button class="material-icons [ md-14 no-gutters ] [ hint ]" on:click={editItem(item)}>
+											<button class="material-icons [ md-14 no-gutters ] [ warning ]" on:click={editItem(item)}>
 												edit
 											</button>
 										</div>
@@ -247,8 +247,7 @@
 		justify-content: center;
 		align-items: center; 
 		z-index: 10;
-
-		background-color: #212121;
+		background-color: rgba(0,0,0,0.25);
 	}
 
 	.modal {
@@ -286,6 +285,9 @@
 
 		display: flex;
 		align-items: center;
+	}
+
+	.project-item > span {
 		cursor: pointer;
 	}
 
