@@ -1,17 +1,20 @@
 {
-	"name": "Webextension test",
-	"description": "Test.",
+	"name": "My Workpage",
+	"description": "Start your browsing productive. Easy and functional new tab page. Use different workspaces for every project to are working on.",
 	"homepage_url": "https://github.com/ddorstijn/workpage-tailwind",
 	"manifest_version": 2,
 	"version": "0.1",
 	"browser_specific_settings": {
 		"gecko": {
-			"id": "dannydorstijn1997@gmail.com",
+			"id": "developer.workpage@gmail.com",
 			"strict_min_version": "42.0"
 		}
 	},
 	"chrome_url_overrides" : {
 		"newtab": "index.html"
+	},
+	"icons": {
+		"48": "logo.svg"
 	},
 	"permissions": ["storage"]
 }

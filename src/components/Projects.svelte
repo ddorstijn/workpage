@@ -118,7 +118,7 @@
 				</header>
 				<div class="modal__body">
 					{#each $projects as group}
-						<div class="list-wrapper">
+						<div class="project-group">
 							<header>
 								{#if editing === group.id}
 									<form on:submit|preventDefault={stopEdit}>
@@ -132,16 +132,18 @@
 								{:else}
 									<h5 class="emphasis">{group.title}</h5>
 								{/if}
-								<!-- <button class="icon-options material-icons md-18" on:click={removeGroup(group)}>
-									delete
-								</button>
-								<button class="icon-options material-icons md-18" on:click={editGroup(group)}>
-									edit
-								</button> -->
+								<div class="item-actions">
+									<button class="material-icons [ md-18 no-gutters ] [ hint ]" on:click={removeGroup(group)}>
+										delete
+									</button>
+									<button class="material-icons [ md-18 no-gutters ] [ hint ]" on:click={editGroup(group)}>
+										edit
+									</button>
+								</div>
 							</header>
 							<ul>
 								{#each group.items as item}
-									<li class="group" on:click={setActive(item)}>
+									<li class="project-item" on:click={setActive(item)}>
 										{#if editing === item.id}
 											<form on:submit|preventDefault={stopEdit}>
 												<input
@@ -154,12 +156,14 @@
 										{:else}
 											<span>{item.title}</span>
 										{/if}
-										<!-- <button class="icon-options material-icons md-18" on:click={removeItem(group, item)}>
-											delete
-										</button>
-										<button class="icon-options material-icons md-18" on:click={editItem(item)}>
-											edit
-										</button> -->
+										<div class="item-actions">
+											<button class="material-icons [ md-14 no-gutters ] [ hint ]" on:click={removeItem(group, item)}>
+												delete
+											</button>
+											<button class="material-icons [ md-14 no-gutters ] [ hint ]" on:click={editItem(item)}>
+												edit
+											</button>
+										</div>
 									</li>
 								{/each}
 							</ul>
@@ -252,6 +256,7 @@
 		margin-bottom: 1rem;
 
 		display: flex;
+		align-items: center;
 		justify-content: space-between;
 	}
 
@@ -261,23 +266,31 @@
 		gap: 4rem;
 	}
 
-	.list-wrapper > header {
+	.project-group > header {
+		position: relative;
 		margin-bottom: var(--space-1);
-		padding: 0 var(--space-1);
-		border-bottom: 1px solid #FFF;
+		width: max-content;
+
+		display: flex;
+		align-items: center;
 	}
 
-	.list-wrapper > header > * {
-		display: inline-block;
-	}
+	.project-item {
+		position: relative;
+		width: max-content;
 
-	.list-wrapper > ul {
-		padding: 0 var(--space-1);
+		display: flex;
+		align-items: center;
 	}
 
 	.action-buttons {
 		margin-top: var(--space-4);
 		display: flex; 
 		justify-content: center;
+	}
+
+	.project-item:hover > .item-actions,
+	.project-group > header:hover > .item-actions {
+		opacity: 1;
 	}
 </style>

@@ -32,7 +32,7 @@
 
 	// -- Functions -- \\
 	async function addGroup() {
-		let title = this.querySelector('input').value;
+		let title = this.querySelector("input").value;
 
 		if (links.length >= 4) return;
 		links.push({
@@ -55,7 +55,7 @@
 	}
 
 	async function addLink() {
-		const groupId = Number(this.querySelector('select').value);
+		const groupId = Number(this.querySelector("select").value);
 		const title = this.querySelector('input[type="text"]').value;
 		const url = this.querySelector('input[type="url"]').value;
 		const group = links.find((group) => group.id === groupId);
@@ -86,47 +86,70 @@
 			<div class="link-group">
 				<header>
 					<h5 class="emphasis">{group.title}</h5>
-					<!-- <button class="no-gutters hint" on:click={removeGroup(group)}>
-						remove
-					</button> -->
+					<div class="item-actions">
+						<button
+							class="material-icons [ md-18 no-gutters ] [ hint ]"
+							on:click={removeGroup(group)}
+						>
+							delete
+						</button>
+					</div>
 				</header>
-				<div>
+				<ul>
 					{#each group.items as item}
-						<div class="link-item [ hint ]">
+						<li class="link-item [ hint ]">
 							<a class="subtitle2" href={item.url}>{item.title}</a>
-							<!-- <button class="material-icons md-18 no-gutters hint" on:click={removeLink(group, item)}>
-								delete
-							</button> -->
-						</div>
+							<div class="item-actions">
+								<button
+									class="material-icons [ md-14 no-gutters ] [ hint ]"
+									on:click={removeLink(group, item)}
+								>
+									delete
+								</button>
+							</div>
+						</li>
 					{/each}
-				</div>
+				</ul>
 			</div>
 		{/each}
 	</div>
 	<div class="action-buttons">
-		<button class="hint" on:click={() => (creatingLink = true)} use:linkPopperRef>
+		<button
+			class="hint"
+			on:click={() => (creatingLink = true)}
+			use:linkPopperRef
+		>
 			Add link
 		</button>
-		<div class="divider-y"></div>
-		<button class="hint" on:click={() => (creatingGroup = true)} use:groupPopperRef>
+		<div class="divider-y" />
+		<button
+			class="hint"
+			on:click={() => (creatingGroup = true)}
+			use:groupPopperRef
+		>
 			Add group
 		</button>
 	</div>
 	{#if creatingLink}
-		<div class="tooltip [ surface elevation-24 ]" use:linkPopperContent={popperOptions}>
+		<div
+			class="tooltip [ surface elevation-24 ]"
+			use:linkPopperContent={popperOptions}
+		>
 			<span class="caption hint">Create link item</span>
 			<form on:submit|preventDefault={addLink}>
-				<select required>
-					<option value="" disabled selected>Choose group</option>
-					{#each links as link}
-						<option value={link.id}>{link.title}</option>
-					{/each}
-				</select>
+				<fieldset>
+					<label>
+						<input type="text" placeholder="Name" required />
+						<span>Title</span>
+					</label>
 
-				<label>
-					<input type="text" placeholder="Name" required />
-					<span>Title</span>
-				</label>
+					<select required>
+						<option value="" disabled selected>Group</option>
+						{#each links as link}
+							<option value={link.id}>{link.title}</option>
+						{/each}
+					</select>
+				</fieldset>
 
 				<label>
 					<input type="url" placeholder="www.example.com" required />
@@ -144,7 +167,10 @@
 		</div>
 	{/if}
 	{#if creatingGroup}
-		<div class="tooltip [ surface elevation-24 ]" use:groupPopperContent={popperOptions}>
+		<div
+			class="tooltip [ surface elevation-24 ]"
+			use:groupPopperContent={popperOptions}
+		>
 			<span class="caption hint">Create link group</span>
 			<form on:submit|preventDefault={addGroup}>
 				<label>
@@ -171,36 +197,54 @@
 	}
 
 	.link-wrapper {
-		display: flex;
-		justify-content: center;
+		display: grid;
+		grid-auto-flow: column;
+		grid-auto-columns: 1fr;
+		justify-items: center;
 		gap: var(--space-8);
 	}
 
 	.link-group {
 		padding: 0 var(--space-2);
-		width: 14%;
 	}
 
 	.link-group > header {
+		position: relative;
 		padding: 2px var(--space-1);
+
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
 	}
 
 	.action-buttons {
-		margin-top: var(--space-8);
-		display: flex; 
+		margin-top: var(--space-12);
+		display: flex;
 		justify-content: center;
 	}
 
 	.link-item {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
+		position: relative;
 		padding: 0 var(--space-1);
+		width: max-content;
+
+		display: flex;
 		font-size: 0.75rem;
 	}
 
 	.link-item > a {
 		text-decoration: none;
 		color: inherit;
+	}
+
+	.link-item:hover > .item-actions,
+	.link-group > header:hover > .item-actions {
+		opacity: 1;
+	}
+
+	fieldset {
+		display: flex;
+		gap: var(--space-2);
+		border: none;
 	}
 </style>
