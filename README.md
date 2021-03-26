@@ -1,6 +1,6 @@
 # Workpage
 
-Start browsing with an elegant startpage
+This is an older version made in Vue. Please leave it be.
 
 ## Getting Started
 
