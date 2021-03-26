@@ -140,7 +140,7 @@
 			<li class="todo-item" animate:flip={{ duration: flipDurationMs }}>
 				<div class="todo-item__body">
 					<button
-						class="todo-item__title [ emphasis no-gutters ]"
+						class="todo-item__title [ no-gutters ]"
 						on:click={markDone(item)}
 					>
 						<span class="line-hover">{item.title}</span>

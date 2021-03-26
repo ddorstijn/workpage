@@ -85,7 +85,7 @@
 		{#each links as group}
 			<div class="link-group">
 				<header>
-					<h5 class="emphasis">{group.title}</h5>
+					<h5>{group.title}</h5>
 					<div class="item-actions">
 						<button
 							class="material-icons [ md-18 no-gutters ] [ alert ]"
