@@ -203,14 +203,10 @@
 		width: 100%;
 		display: grid;
 		grid-auto-flow: column;
-		grid-auto-columns: 18rem;
+		grid-auto-columns: minmax(auto, 15rem);
 		justify-content: center;
 		justify-items: center;
 		gap: var(--space-8);
-	}
-
-	.link-group {
-		padding: 0 var(--space-2);
 	}
 
 	.link-group > header {

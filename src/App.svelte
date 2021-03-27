@@ -25,9 +25,7 @@
 
 <style>
 	main {
-		width: 72.5%;
-		height: 100%;
-
+		flex: 1;
 		display: inline-flex; 
 		flex-direction:column; 
 		justify-content: center;
@@ -36,8 +34,6 @@
 	}
 
 	aside {
-		width: 27.5%;
-		height: 100%;
 		padding-left: var(--space-16);
 		border-left: 1px solid rgba(255,255,255,0.1);
 	}

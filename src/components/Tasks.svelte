@@ -255,7 +255,7 @@
 		top: 50%;
 		width: 100%;
 		height: 2px;
-		transform: translateX(-100%);
+		transform: translateX(-105%);
 		transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
 		transition-delay: 0.1s;
 		background: rgba(255, 255, 255, 0.87);
