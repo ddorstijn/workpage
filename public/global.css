@@ -23,7 +23,7 @@
 body {
 	height: 100vh;
 	width: 100vw;
-	padding: var(--space-8) var(--space-16);
+	padding: var(--space-8);
 	overflow: hidden;
 
 	display: flex;
