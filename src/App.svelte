@@ -34,7 +34,8 @@
 	}
 
 	aside {
-		padding-left: var(--space-16);
+		width: 20vw;
+		padding-left: var(--space-8);
 		border-left: 1px solid rgba(255,255,255,0.1);
 	}
 </style>

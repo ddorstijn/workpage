@@ -79,6 +79,15 @@
 		}
 	}
 
+	async function removeDone(item) {
+		const index = done.indexOf(item);
+		if (index > -1) {
+			done.splice(index, 1);
+		}
+
+		syncDone();
+	}
+
 	function handleDndConsider(e) {
 		todo = e.detail.items;
 	}
@@ -136,37 +145,59 @@
 		on:consider={handleDndConsider}
 		on:finalize={handleDndFinalize}
 	>
-		{#each todo as item (item.id)}
-			<li class="todo-item" animate:flip={{ duration: flipDurationMs }}>
-				<div class="todo-item__body">
-					<button
-						class="todo-item__title [ no-gutters ]"
-						on:click={markDone(item)}
+		{#if !viewDone}
+			{#each todo as item (item.id)}
+				<li class="todo-item" animate:flip={{ duration: flipDurationMs }}>
+					<div class="todo-item__body">
+						<button
+							class="todo-item__title [ no-gutters ]"
+							on:click={markDone(item)}
+						>
+							<span class="line-hover">{item.title}</span>
+						</button>
+						{#if item.due}
+							<span class="todo-item__due [ hint ]">
+								<i class="material-icons md-12">event</i>
+								{item.due}
+							</span>
+						{/if}
+					</div>
+					<div
+						aria-label="drag-handle"
+						class="drag-handle material-icons md-18 [ hint no-gutters ]"
+						style={dragDisabled ? "cursor: grab" : "cursor: grabbing"}
+						on:mousedown={startDrag}
+						on:touchstart={startDrag}
 					>
-						<span class="line-hover">{item.title}</span>
-					</button>
-					{#if item.due}
+						drag_indicator
+					</div>
+				</li>
+			{/each}
+		{:else}
+			{#each done as item (item.id)}
+				<li class="todo-item" animate:flip={{ duration: flipDurationMs }}>
+					<div class="todo-item__body">
+						<span class="todo-item__title done">{item.title}</span>
 						<span class="todo-item__due [ hint ]">
-							<i class="material-icons md-12">event</i>
-							{item.due}
+							<i class="material-icons md-12">done</i>
+							{item.finished}
 						</span>
-					{/if}
-				</div>
-				<div
-					aria-label="drag-handle"
-					class="drag-handle material-icons md-18 [ hint no-gutters ]"
-					style={dragDisabled ? "cursor: grab" : "cursor: grabbing"}
-					on:mousedown={startDrag}
-					on:touchstart={startDrag}
-				>
-					drag_indicator
-				</div>
-			</li>
-		{/each}
+					</div>
+					<button class="material-icons md-18 [ hint no-gutters ]" on:click={removeDone(item)}>
+						close
+					</button>
+				</li>
+			{/each}
+		{/if}
 	</ul>
-	<button class="task-actions" on:click={() => (viewDone = !viewDone)} title="WIP">
-		<i class="material-icons md-18">checklist</i>
-		<span>History</span>
+	<button class="task-actions" on:click={() => (viewDone = !viewDone)}>
+		{#if !viewDone}
+			<i class="material-icons md-18">checklist</i>
+			<span>History</span>
+		{:else}
+			<i class="material-icons md-18">list</i>
+			<span>Tasks</span>
+		{/if}
 	</button>
 </article>
 
@@ -201,6 +232,10 @@
 		min-height: 0;
 		flex: 1;
 		overflow: auto;
+	}
+
+	.todo-wrapper:focus {
+		outline: none;
 	}
 
 	.todo-item {
@@ -263,5 +298,9 @@
 
 	.line-hover:hover::after {
 		transform: translateX(0%);
+	}
+
+	.done {
+		text-decoration: line-through;
 	}
 </style>
