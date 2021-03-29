@@ -6,8 +6,7 @@
 	"version": "0.1",
 	"browser_specific_settings": {
 		"gecko": {
-			"id": "developer.workpage@gmail.com",
-			"strict_min_version": "42.0"
+			"id": "developer.dorstijn@gmail.com"
 		}
 	},
 	"chrome_url_overrides" : {
