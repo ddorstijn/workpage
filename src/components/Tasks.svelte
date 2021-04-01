@@ -148,13 +148,13 @@
 		{#if !viewDone}
 			{#each todo as item (item.id)}
 				<li class="todo-item" animate:flip={{ duration: flipDurationMs }}>
-					<div class="todo-item__body">
-						<button
-							class="todo-item__title [ no-gutters ]"
+					<div>
+						<span
+							class="todo-item__title line-hover [ no-gutters ]"
 							on:click={markDone(item)}
 						>
-							<span class="line-hover">{item.title}</span>
-						</button>
+							{item.title}
+						</span>
 						{#if item.due}
 							<span class="todo-item__due [ hint ]">
 								<i class="material-icons md-12">event</i>
@@ -231,7 +231,7 @@
 	.todo-wrapper {
 		min-height: 0;
 		flex: 1;
-		overflow: auto;
+		overflow-y: auto;
 	}
 
 	.todo-wrapper:focus {
@@ -247,7 +247,6 @@
 	}
 
 	.todo-item__title {
-		display: block;
 		font-size: 1rem;
 		font-weight: 400;
 	}
@@ -275,29 +274,15 @@
 	}
 
 	.line-hover {
-		position: relative;
-		overflow: hidden;
-		display: inline-block;
-		vertical-align: top;
-		transition: color 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+		background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0% 50%;
+    background-repeat: no-repeat;
+    background-size: 0% 2px;
+    transition: background-size .3s
 	}
 
-	.line-hover::after {
-		content: "";
-		display: block;
-		position: absolute;
-		left: 0;
-		top: 50%;
-		width: 100%;
-		height: 2px;
-		transform: translateX(-105%);
-		transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
-		transition-delay: 0.1s;
-		background: rgba(255, 255, 255, 0.87);
-	}
-
-	.line-hover:hover::after {
-		transform: translateX(0%);
+	.line-hover:hover {
+		background-size: 100% 2px
 	}
 
 	.done {
