@@ -278,11 +278,12 @@
     background-position: 0% 50%;
     background-repeat: no-repeat;
     background-size: 0% 2px;
-    transition: background-size .3s
+    transition: background-size .3s;
+		cursor: pointer;
 	}
 
 	.line-hover:hover {
-		background-size: 100% 2px
+		background-size: 100% 2px;
 	}
 
 	.done {

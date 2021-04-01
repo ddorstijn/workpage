@@ -12,6 +12,7 @@
 	let open = false;
 	let creatingProject = false;
 	let creatingGroup = false;
+	let projectTitle = "";
 
 	// -- Initialization -- \\
 	projects.subscribe((val) => {
@@ -91,21 +92,19 @@
 	}
 
 	// -- Human readability -- \\
-	function getProjectFromId(id) {
-		let projectsLength = $projects.length;
-		for (let i = 0; i < projectsLength; i++) {
-			let project = $projects[i].items.find((p) => p.id == id);
-			if (project) {
-				return project;
-			}
+	$: $projects.forEach(projectGroup => {
+		let project = projectGroup.items.find(p => p.id == $activeId);
+		if (project) {
+			projectTitle = project.title;
 		}
-	}
+	});
+	
 </script>
 
 <article>
 	<button class="elevation-2" on:click={() => (open = true)}>
 		<i class="material-icons">inventory_2</i>
-		{getProjectFromId($activeId).title}
+		{projectTitle}
 	</button>
 
 	{#if open}
