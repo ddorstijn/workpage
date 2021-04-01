@@ -54,6 +54,11 @@
 		editing = group.id;
 	}
 
+	function stopEdit() {
+		editing = null;
+		$projects = $projects;
+	}
+
 	function addProject() {
 		let groupId = Number(this.querySelector("select").value);
 		let title = this.querySelector('input[type="text"]').value;
@@ -79,11 +84,6 @@
 
 	function editItem(item) {
 		editing = item.id;
-	}
-
-	function stopEdit() {
-		editing = null;
-		$projects = $projects;
 	}
 
 	function setActive(item) {

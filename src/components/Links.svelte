@@ -11,6 +11,7 @@
 	let creatingGroup = false;
 	let creatingLink = false;
 	let links = [];
+	let editing = null;
 
 	// -- Initialization -- \\
 	activeId.subscribe((val) => {
@@ -54,6 +55,15 @@
 		}
 	}
 
+	function editGroup(group) {
+		editing = group.id;
+	}
+
+	function stopEdit() {
+		editing = null;
+		syncLinks();
+	}
+
 	async function addLink() {
 		const groupId = Number(this.querySelector("select").value);
 		const title = this.querySelector('input[type="text"]').value;
@@ -85,13 +95,27 @@
 		{#each links as group}
 			<div class="link-group">
 				<header>
-					<h5>{group.title}</h5>
+					{#if editing === group.id}
+						<form on:submit|preventDefault={stopEdit}>
+							<input
+								placeholder="Item name"
+								bind:value={group.title}
+								on:blur={stopEdit}
+							/>
+							<input type="submit" hidden />
+						</form>
+					{:else}
+						<h5>{group.title}</h5>
+					{/if}
 					<div class="item-actions">
 						<button
 							class="material-icons [ md-18 no-gutters ] [ alert ]"
 							on:click={removeGroup(group)}
 						>
 							delete
+						</button>
+						<button class="material-icons [ md-18 no-gutters ] [ warning ]" on:click={editGroup(group)}>
+							edit
 						</button>
 					</div>
 				</header>
