@@ -12,9 +12,16 @@
 	"chrome_url_overrides" : {
 		"newtab": "index.html"
 	},
+  "browser_action": {
+    "browser_style": true,
+    "default_popup": "popup/index.html",
+    "default_icon": {
+      "32": "logo.svg"
+    }
+  },
 	"icons": {
 		"48": "logo.svg"
 	},
-	"permissions": ["storage"]
+	"permissions": ["storage", "contextMenus"]
 }
 

@@ -1,0 +1,10 @@
+.page-choice {
+  padding: 4px;
+  font-size: 1.5em;
+  text-align: center;
+  cursor: pointer;
+}
+
+.page-choice:hover {
+  background-color: #CFF2F2;
+}
