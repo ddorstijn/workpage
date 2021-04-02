@@ -13,7 +13,6 @@
 		"newtab": "newtab/index.html"
 	},
   "browser_action": {
-    "browser_style": true,
     "default_popup": "popup/index.html",
     "default_icon": {
 			"24": "logo.svg",
