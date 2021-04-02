@@ -1,5 +1,8 @@
 <script>
 	import { currentId, activeId, projects } from "../store.js";
+	import SortableGroup from "./SortableGroup.svelte";
+	import ProjectItem from "./ProjectItem.svelte";
+
 	import { createPopperActions } from "svelte-popperjs";
 	const [projectPopperRef, projectPopperContent] = createPopperActions();
 	const [groupPopperRef, groupPopperContent] = createPopperActions();
@@ -8,7 +11,6 @@
 	};
 
 	// -- Members -- \\
-	let editing = null;
 	let open = false;
 	let creatingProject = false;
 	let creatingGroup = false;
@@ -50,15 +52,6 @@
 		}
 	}
 
-	function editGroup(group) {
-		editing = group.id;
-	}
-
-	function stopEdit() {
-		editing = null;
-		$projects = $projects;
-	}
-
 	function addProject() {
 		let groupId = Number(this.querySelector("select").value);
 		let title = this.querySelector('input[type="text"]').value;
@@ -74,23 +67,6 @@
 		this.reset();
 	}
 
-	function removeItem(group, item) {
-		const index = group.items.indexOf(item);
-		if (index > -1) {
-			group.items.splice(index, 1);
-			$projects = $projects;
-		}
-	}
-
-	function editItem(item) {
-		editing = item.id;
-	}
-
-	function setActive(item) {
-		$activeId = item.id;
-		open = false;
-	}
-
 	// -- Human readability -- \\
 	$: $projects.forEach(projectGroup => {
 		let project = projectGroup.items.find(p => p.id == $activeId);
@@ -98,7 +74,6 @@
 			projectTitle = project.title;
 		}
 	});
-	
 </script>
 
 <article>
@@ -118,56 +93,7 @@
 				</header>
 				<div class="modal__body">
 					{#each $projects as group}
-						<div class="project-group">
-							<header>
-								{#if editing === group.id}
-									<form on:submit|preventDefault={stopEdit}>
-										<input
-											placeholder="Group name"
-											bind:value={group.title}
-											on:blur={stopEdit}
-										/>
-										<input type="submit" hidden />
-									</form>
-								{:else}
-									<h5 class="emphasis">{group.title}</h5>
-								{/if}
-								<div class="item-actions">
-									<button class="material-icons [ md-18 no-gutters ] [ alert ]" on:click={removeGroup(group)}>
-										delete
-									</button>
-									<button class="material-icons [ md-18 no-gutters ] [ warning ]" on:click={editGroup(group)}>
-										edit
-									</button>
-								</div>
-							</header>
-							<ul>
-								{#each group.items as item}
-									<li class="project-item">
-										{#if editing === item.id}
-											<form on:submit|preventDefault={stopEdit}>
-												<input
-													placeholder="Item name"
-													bind:value={item.title}
-													on:blur={stopEdit}
-												/>
-												<input type="submit" hidden />
-											</form>
-										{:else}
-											<span on:click={setActive(item)}>{item.title}</span>
-										{/if}
-										<div class="item-actions">
-											<button class="material-icons [ md-14 no-gutters ] [ alert ]" on:click={removeItem(group, item)}>
-												delete
-											</button>
-											<button class="material-icons [ md-14 no-gutters ] [ warning ]" on:click={editItem(item)}>
-												edit
-											</button>
-										</div>
-									</li>
-								{/each}
-							</ul>
-						</div>
+						<SortableGroup itemComponent={ProjectItem} {group} on:remove={removeGroup(group)} on:sync={() => $projects = $projects} />
 					{/each}
 				</div>
 				<div class="action-buttons">
@@ -269,35 +195,9 @@
 		gap: 4rem;
 	}
 
-	.project-group > header {
-		position: relative;
-		margin-bottom: var(--space-1);
-		width: max-content;
-
-		display: flex;
-		align-items: center;
-	}
-
-	.project-item {
-		position: relative;
-		width: max-content;
-
-		display: flex;
-		align-items: center;
-	}
-
-	.project-item > span {
-		cursor: pointer;
-	}
-
 	.action-buttons {
 		margin-top: var(--space-4);
 		display: flex; 
 		justify-content: center;
-	}
-
-	.project-item:hover > .item-actions,
-	.project-group > header:hover > .item-actions {
-		opacity: 1;
 	}
 </style>

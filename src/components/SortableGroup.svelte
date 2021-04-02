@@ -127,25 +127,49 @@
 
 	.menu {
 		opacity: 0;
+		pointer-events: none;
 		transition: opacity 0.25s ease-in-out;
 	}
 
 	header:hover .menu,
 	.menu:focus {
+		pointer-events: all;
 		opacity: 1;
 	}
 
 	.tooltip {
-		opacity: 0;
-		transition: opacity 0.25s ease-in-out;
+		visibility: hidden;
 	}
 
-	.menu:focus + .tooltip {
-		opacity: 1;
+	.menu:focus + .tooltip,
+	.tooltip:active {
+		visibility: visible;
 	}
 
 	.tooltip > ul {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
 		padding: var(--space-2);
+	}
+
+	.tooltip li {
+		display: flex;
+		align-items: center;
+	}
+
+	.tooltip li:hover {
+		filter: brightness(150%);
+	}
+
+	/* Hack for arrow visibility */
+	.tooltip > .arrow::before {
+		visibility: hidden;
+	}
+
+	.menu:focus + .tooltip > .arrow::before,
+	.tooltip:active > .arrow::before {
+		visibility: visible;
 	}
 
 	.drag-handle {
@@ -154,11 +178,13 @@
 		top: 50%;	
 		transform: translateY(-50%);
 		opacity: 0;
+		pointer-events: none;
 		transition: opacity 0.25s ease-in-out;
 	}
 
 	li:hover > .drag-handle,
 	.drag-handle:hover {
+		pointer-events: all;
 		opacity: 1;
 	}
 </style>
