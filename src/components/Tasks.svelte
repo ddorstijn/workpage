@@ -79,6 +79,15 @@
 		}
 	}
 
+	async function removeTodo(item) {
+		const index = todo.indexOf(item);
+		if (index > -1) {
+			todo.splice(index, 1);
+		}
+
+		syncTodo();
+	}
+
 	async function removeDone(item) {
 		const index = done.indexOf(item);
 		if (index > -1) {
@@ -148,9 +157,19 @@
 		{#if !viewDone}
 			{#each todo as item (item.id)}
 				<li class="todo-item" animate:flip={{ duration: flipDurationMs }}>
+					<div
+						aria-label="drag-handle"
+						class="drag-handle material-icons md-18 [ hint no-gutters ]"
+						style={dragDisabled ? "cursor: grab" : "cursor: grabbing"}
+						on:mousedown={startDrag}
+						on:touchstart={startDrag}
+					>
+						drag_indicator
+					</div>
 					<div>
 						<span
 							class="todo-item__title line-hover [ no-gutters ]"
+							title="Mark as done"
 							on:click={markDone(item)}
 						>
 							{item.title}
@@ -162,15 +181,9 @@
 							</span>
 						{/if}
 					</div>
-					<div
-						aria-label="drag-handle"
-						class="drag-handle material-icons md-18 [ hint no-gutters ]"
-						style={dragDisabled ? "cursor: grab" : "cursor: grabbing"}
-						on:mousedown={startDrag}
-						on:touchstart={startDrag}
-					>
-						drag_indicator
-					</div>
+					<button class="task-delete material-icons [ md-14 no-gutters ] [ alert ]" title="Delete task" on:click={removeTodo(item)}>
+						close
+					</button>
 				</li>
 			{/each}
 		{:else}
@@ -183,7 +196,7 @@
 							{item.finished}
 						</span>
 					</div>
-					<button class="material-icons md-18 [ hint no-gutters ]" on:click={removeDone(item)}>
+					<button class="task-delete material-icons [ md-14 no-gutters ] [ alert ]" title="Delete task" on:click={removeDone(item)}>
 						close
 					</button>
 				</li>
@@ -239,16 +252,19 @@
 	}
 
 	.todo-item {
-		padding: var(--space-2);
-		padding-left: var(--space-4);
+		position: relative;
+		padding: var(--space-2) 0;
 		display: flex;
-		justify-content: space-between;
 		align-items: center;
 	}
 
 	.todo-item__title {
 		font-size: 1rem;
 		font-weight: 400;
+	}
+
+	.todo-item__title:hover {
+		filter: brightness(125%);
 	}
 
 	.todo-item__due {
@@ -269,7 +285,8 @@
 		transition: opacity 0.25s ease-in-out;
 	}
 
-	.todo-item:hover > .drag-handle {
+	.todo-item:hover > .drag-handle,
+	.todo-item:hover > .task-delete {
 		opacity: 1;
 	}
 
@@ -288,5 +305,14 @@
 
 	.done {
 		text-decoration: line-through;
+	}
+
+	.task-delete {
+		position: absolute;
+		right: 0;
+		top: 50%;
+		transform: translateY(-50%);
+		opacity: 0;
+		transition: opacity 0.25s ease-in-out;
 	}
 </style>

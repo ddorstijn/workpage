@@ -36,11 +36,11 @@
     <span on:click={setActive(item)}>{item.title}</span>
   {/if}
   <div class="item-actions">
-    <button class="material-icons [ md-14 no-gutters ] [ alert ]" on:click={dispatch('remove', item)}>
-      delete
-    </button>
     <button class="material-icons [ md-14 no-gutters ] [ warning ]" on:click={startEdit}>
       edit
+    </button>
+    <button class="material-icons [ md-14 no-gutters ] [ alert ]" on:click={dispatch('remove', item)}>
+      close
     </button>
   </div>
 </div>
@@ -53,6 +53,10 @@
 		display: flex;
 		align-items: center;
 	}
+
+  .project-item:hover {
+		filter: brightness(125%);
+  }
 
 	.project-item > span {
 		cursor: pointer;

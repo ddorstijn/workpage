@@ -23,6 +23,10 @@
 		font-size: 0.75rem;
 	}
 
+	.item:hover {
+		filter: brightness(125%);
+	}
+
 	.item > a {
 		text-decoration: none;
 		color: inherit;

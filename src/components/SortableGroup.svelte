@@ -159,7 +159,7 @@
 	}
 
 	.tooltip li:hover {
-		filter: brightness(150%);
+		filter: brightness(125%);
 	}
 
 	/* Hack for arrow visibility */
