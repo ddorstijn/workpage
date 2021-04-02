@@ -1,11 +1,4 @@
-document.addEventListener("click", function(e) {
-  if (!e.target.classList.contains("page-choice")) {
-    return;
-  }
+// Remove as soon as PopperJS error is resolved
+var process = {env: {}};
 
-  var chosenPage = "https://" + e.target.textContent;
-  chrome.tabs.create({
-    url: chosenPage
-  });
-
-});
+import('./build/main.js');
