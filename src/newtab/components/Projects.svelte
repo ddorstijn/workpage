@@ -1,5 +1,5 @@
 <script>
-	import { currentId, activeId, projects } from "../store.js";
+	import { currentId, activeId, projects } from "../../store.js";
 	import SortableGroup from "./SortableGroup.svelte";
 	import ProjectItem from "./ProjectItem.svelte";
 

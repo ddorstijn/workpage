@@ -1,5 +1,5 @@
 <script>
-	import { currentId, activeId } from "../store.js";
+	import { currentId, activeId } from "../../store.js";
 
 	import { dndzone } from "svelte-dnd-action";
 	import { flip } from "svelte/animate";

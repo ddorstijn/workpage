@@ -1,5 +1,5 @@
 <script>
-	import { loaded } from "./store.js";
+	import { loaded } from "../store.js";
 
 	let theme = localStorage.getItem("theme") ?? "light";
 	document.querySelector('body').classList += theme;
@@ -26,22 +26,24 @@
 {#await loaded() }
 	Loading...
 {:then}
-	<main>
-		{#await import("./components/Clock.svelte") then c}
-			<svelte:component this={c.default} />
-		{/await}
-		{#await import("./components/Projects.svelte") then c} 
-			<svelte:component this={c.default} />
-		{/await}
-		{#await import("./components/Links.svelte") then c}
-			<svelte:component this={c.default} />
-		{/await}
-	</main>
-	<aside>
-		{#await import("./components/Tasks.svelte") then c}
-			<svelte:component this={c.default} />
-		{/await}
-	</aside>
+	<article class="newtab">
+		<main>
+			{#await import("./components/Clock.svelte") then c}
+				<svelte:component this={c.default} />
+			{/await}
+			{#await import("./components/Projects.svelte") then c} 
+				<svelte:component this={c.default} />
+			{/await}
+			{#await import("./components/Links.svelte") then c}
+				<svelte:component this={c.default} />
+			{/await}
+		</main>
+		<aside>
+			{#await import("./components/Tasks.svelte") then c}
+				<svelte:component this={c.default} />
+			{/await}
+		</aside>
+	</article>
 {/await}
 
 <style>

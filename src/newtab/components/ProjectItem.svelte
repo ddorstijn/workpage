@@ -1,5 +1,5 @@
 <script>
-	import { activeId } from "../store.js";
+	import { activeId } from "../../store.js";
   import { createEventDispatcher } from 'svelte';
 
   export let item;

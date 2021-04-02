@@ -1,5 +1,5 @@
 <script>
-	import { currentId, activeId } from "../store.js";
+	import { currentId, activeId } from "../../store.js";
 	import { createPopperActions } from "svelte-popperjs";
 	import SortableGroup from "./SortableGroup.svelte";
 	import LinkItem from "./LinkItem.svelte";
@@ -54,7 +54,6 @@
       group = group;
 		}
 	}
-
 
 	async function addLink() {
 		const groupId = Number(this.querySelector("select").value);
