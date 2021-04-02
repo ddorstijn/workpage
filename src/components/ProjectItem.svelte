@@ -58,14 +58,7 @@
 		cursor: pointer;
 	}
 
-	.action-buttons {
-		margin-top: var(--space-4);
-		display: flex; 
-		justify-content: center;
-	}
-
-	.project-item:hover > .item-actions,
-	.project-group > header:hover > .item-actions {
+	.project-item:hover > .item-actions {
 		opacity: 1;
 	}
 </style>
