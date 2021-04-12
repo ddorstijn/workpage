@@ -70,7 +70,7 @@ body.light {
 	--color-elevation-24: white;
 }
 
-article.newtab {
+body.newtab {
 	height: 100vh;
 	width: 100vw;
 	padding: var(--space-8);

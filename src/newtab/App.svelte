@@ -2,48 +2,50 @@
 	import { loaded } from "../store.js";
 
 	let theme = localStorage.getItem("theme") ?? "light";
-	document.querySelector('body').classList += theme;
+	document.querySelector('body').classList.add(theme);
 
 	function toggleTheme() {
-		if (theme == "dark") {
-			theme = "light";
-		} else {
-			theme = "dark";
+		switch (theme) {
+			case 'dark':
+				document.querySelector('body').classList.replace('dark', 'light');
+				theme = 'light';
+				break;
+		
+			case 'light':
+				document.querySelector('body').classList.replace('light', 'dark');
+				theme = 'dark';
+				break;
+				
+			default:
+				break;
 		}
 
-		document.querySelector('body').classList = theme;
 		localStorage.setItem("theme", theme);
 	}
 </script>
 
 <button class="theme-switch material-icons [ md-18 no-gutters hint ]" on:click={toggleTheme}>
-	{#if theme == "dark"}
-		light_mode
-	{:else}
-		dark_mode
-	{/if}
+	{#if theme == "dark"} light_mode {:else} dark_mode {/if}
 </button>
 {#await loaded() }
 	Loading...
 {:then}
-	<article class="newtab">
-		<main>
-			{#await import("./components/Clock.svelte") then c}
-				<svelte:component this={c.default} />
-			{/await}
-			{#await import("./components/Projects.svelte") then c} 
-				<svelte:component this={c.default} />
-			{/await}
-			{#await import("./components/Links.svelte") then c}
-				<svelte:component this={c.default} />
-			{/await}
-		</main>
-		<aside>
-			{#await import("./components/Tasks.svelte") then c}
-				<svelte:component this={c.default} />
-			{/await}
-		</aside>
-	</article>
+	<main>
+		{#await import("./components/Clock.svelte") then c}
+			<svelte:component this={c.default} />
+		{/await}
+		{#await import("./components/Projects.svelte") then c} 
+			<svelte:component this={c.default} />
+		{/await}
+		{#await import("./components/Links.svelte") then c}
+			<svelte:component this={c.default} />
+		{/await}
+	</main>
+	<aside>
+		{#await import("./components/Tasks.svelte") then c}
+			<svelte:component this={c.default} />
+		{/await}
+	</aside>
 {/await}
 
 <style>
