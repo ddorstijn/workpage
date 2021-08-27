@@ -1,9 +1,8 @@
 <script>
-  import { loaded, activeId, projects, currentId } from "../store";
+  import { loaded, activeProject } from "../store";
   import { onMount } from 'svelte';
 
 	let theme = localStorage.getItem("theme") ?? "light";
-  let activeProject;
   let links;
 
   let title = "";
@@ -27,40 +26,15 @@
 	});
 
 	async function addLink() {
-    const groupRef = links.find((group) => group.id === groupId);
-
-    groupRef.items.push({
-      id: $currentId++,
-      title,
-      url,
-    });
-    
-    syncLinks();
     this.reset();
 	}
-
-	async function syncLinks() {
-		try {
-			links = links;
-			chrome.storage.sync.set({ [`links-${$activeId}`]: links });
-		} catch (e) {
-			console.error(e);
-		}
-	}
-
-	$: $projects?.forEach(projectGroup => {
-		let project = projectGroup.items.find(p => p.id == $activeId);
-		if (project) {
-			activeProject = project;
-		}
-	});
 
 </script>
 
 {#await loaded() }
 	Loading...
 {:then}
-  <span class="project-title">Current project: { activeProject.title }</span>
+  <span class="project-title">Current project: { activeProject }</span>
   <form on:submit|preventDefault={addLink}>
     <fieldset>
       <label>

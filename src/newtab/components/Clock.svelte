@@ -30,17 +30,16 @@
 	}
 </script>
 
-<article>
-	<h2 class="emphasis">{time}</h2>
-	<p class="subtitle1 hint">{date}</p>
+<article class="text-center">
+	<h1 class="text-dark">{time}</h1>
+	<p class="text-grey">{date}</p>
 </article>
 
 <style>
-	article {
-		text-align: center;
-	}
-
-	h2 {
-		margin-bottom: var(--space-2);
+	h1 {
+		margin: 0;
+		line-height: 1em;
+		font-weight: bold;
+		font-size: 6.4rem;
 	}
 </style>
