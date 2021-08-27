@@ -1,5 +1,13 @@
 <script>
   import { projects, activeProject } from "../../../store.js";
+  import { createEventDispatcher } from 'svelte';
+  
+  const dispatch = createEventDispatcher();
+
+  function setActive(project) {
+    $activeProject = project.name;
+    dispatch('close');
+  }
 
   function daysDifference(date) {
     var diff = new Date().setHours(12) - new Date(+date).setHours(12);
@@ -18,15 +26,12 @@
   <ul id="projects__list">
     {#each $projects as project}
       <li class="project__item">
-        <span
-          class="project_name"
-          on:click={() => ($activeProject = project.name)}
-        >
+        <span class="project_name" on:click={setActive(project)}>
           {project.name}
         </span>
-        <small class="project_date text-grey"
-          >{daysDifference(project.last_used)} days ago</small
-        >
+        <small class="project_date text-grey">
+          {daysDifference(project.last_used)} days ago
+        </small>
       </li>
     {/each}
   </ul>
@@ -55,6 +60,7 @@
     display: block;
     line-height: 1.2;
     font-weight: 500;
+    cursor: pointer;
   }
 
   .project_date {

@@ -1,5 +1,6 @@
 <script>
   export let open = false;
+  export let modalComponent;
 </script>
 
 <div class="modal" class:open="{open}">
@@ -7,7 +8,7 @@
   <!-- svelte-ignore a11y-missing-content -->
   <div class="modal__close" on:click="{() => open = false}" />
   <div class="modal__content card">
-    <slot></slot>
+    <svelte:component this={modalComponent} on:close={() => open = false} />
   </div>
 </div>
 

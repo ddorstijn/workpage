@@ -10,9 +10,7 @@
   <button id="project__button" class="button primary" on:click="{() => openModal = true}">
     {$activeProject ?? "Open project"}
   </button>
-  <Modal bind:open="{openModal}">
-    <ProjectModal></ProjectModal>
-  </Modal>
+  <Modal bind:open="{openModal}" modalComponent={ProjectModal} />
 </article>
 
 <style>
