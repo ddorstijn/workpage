@@ -148,8 +148,6 @@ async function syncProject() {
 	
 	links.set(await db.select().from(t_linkGroups).leftOuterJoin(t_links, t_linkGroups.id.eq(t_links.groupId)).where(t_linkGroups.projectName.eq(get(activeProject))).exec());
 	tasks.set(await db.select().from(t_tasks).where(t_tasks.projectName.eq(get(activeProject))).exec());
-
-	console.log(get(links));
 }
 
 export const activeProject = writable();

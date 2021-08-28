@@ -1,6 +1,5 @@
 <script>
   import { activeProject } from "../../store.js";
-  import Modal from "./modals/Modal.svelte";
   import ProjectModal from "./modals/ProjectModal.svelte";
 
   let openModal = false;
@@ -8,9 +7,9 @@
 
 <article>
   <button id="project__button" class="button primary" on:click="{() => openModal = true}">
-    {$activeProject ?? "Open project"}
+    {$activeProject ?? "Click to open project"}
   </button>
-  <Modal bind:open="{openModal}" modalComponent={ProjectModal} />
+  <ProjectModal bind:open="{openModal}" />
 </article>
 
 <style>

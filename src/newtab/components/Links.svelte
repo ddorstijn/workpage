@@ -1,32 +1,23 @@
 <script>
-  import SortableGroup from "./SortableGroup.svelte";
-  import LinkItem from "./LinkItem.svelte";
-
   import { links } from "../../store.js";
-  import { children } from "svelte/internal";
 
-  // -- Functions -- \\
-  async function addGroup() {}
-
-  async function removeGroup(group) {}
-
-  function flatToTree() {
+  function flatToTree(array) {
     let tree = [];
-    for (let link of $links) {
-      if (tree.length == 0 || tree[tree.length - 1].id != link.LinkGroups.id) {
-        tree.push({ ...link.LinkGroups, ...{ children: [] } });
+    for (let item of array) {
+      // Only create root if it does not yet exist
+      if (tree.length == 0 || tree[tree.length - 1].id != item.LinkGroups.id) {
+        tree.push({ ...item.LinkGroups, ...{ children: [] } });
       }
 
-      tree[tree.length - 1].children.push(link.Links);
+      tree[tree.length - 1].children.push(item.Links);
     }
 
-    console.log(tree);
     return tree;
   }
 </script>
 
 <article>
-  {#each flatToTree() as linkGroup}
+  {#each flatToTree($links) as linkGroup}
     <div class="card linkGroup">
       <header>
         {linkGroup.name}

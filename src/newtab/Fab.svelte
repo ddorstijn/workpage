@@ -1,33 +1,38 @@
+<script>
+  import LinkGroupModal from "./components/modals/LinkGroupModal.svelte";
+</script>
+
 <input id="fabCheckbox" type="checkbox" class="is-hidden" />
-  <label
-    class="fab button icon-only material-icons [ bg-error text-white is-rounded ]"
-    for="fabCheckbox"
+<label
+  class="fab button icon-only material-icons [ bg-error text-white is-rounded ]"
+  for="fabCheckbox"
+>
+  add
+</label>
+<div class="fab-wheel">
+  <button
+    id="fab-action-1"
+    class="fab-action button icon-only material-icons [ is-rounded ]"
+    title="Add task"
   >
-    add
-  </label>
-  <div class="fab-wheel">
-    <button
-      id="fab-action-1"
-      class="fab-action button icon-only material-icons [ is-rounded ]"
-			title="Add task"
-    >
-      assignment
-    </button>
-    <button
-      id="fab-action-2"
-      class="fab-action button icon-only material-icons [ is-rounded ]"
-			title="Add link group"
-    >
-      folder
-    </button>
-    <button
-      id="fab-action-3"
-      class="fab-action button icon-only material-icons [ is-rounded ]"
-			title="Add link"
-    >
-      link
-    </button>
-  </div>
+    assignment
+  </button>
+  <button
+    id="fab-action-2"
+    class="fab-action button icon-only material-icons [ is-rounded ]"
+    title="Add link group"
+  >
+    folder
+  </button>
+  <button
+    id="fab-action-3"
+    class="fab-action button icon-only material-icons [ is-rounded ]"
+    title="Add link"
+  >
+    link
+  </button>
+</div>
+<LinkGroupModal></LinkGroupModal>
 
 <style>
   .fab {
@@ -54,7 +59,7 @@
 
   .fab-action {
     position: absolute;
-		margin: 0;
+    margin: 0;
     transition: all 0.25s ease;
 
     font-size: 1.6rem;

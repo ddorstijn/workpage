@@ -1,14 +1,11 @@
 <script>
   export let open = false;
-  export let modalComponent;
 </script>
 
 <div class="modal" class:open="{open}">
-  <!-- svelte-ignore a11y-invalid-attribute -->
-  <!-- svelte-ignore a11y-missing-content -->
   <div class="modal__close" on:click="{() => open = false}" />
   <div class="modal__content card">
-    <svelte:component this={modalComponent} on:close={() => open = false} />
+    <slot></slot>
   </div>
 </div>
 
