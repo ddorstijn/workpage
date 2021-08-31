@@ -23,7 +23,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10;
+    z-index: 1000;
     background-color: rgba(0, 0, 0, 0.25);
   }
 
@@ -33,7 +33,6 @@
   }
 
   .modal__content {
-    width: 30vw;
     padding: 2rem;
     z-index: 20;
   }

@@ -1,10 +1,18 @@
 <script>
-  import { tasks } from "../../store.js";
+  import { activeProject } from "../../store.js";
+  import Database from "../../database.js";
 
   const formatter = new Intl.DateTimeFormat('en', { day: "numeric", month: 'long' });
 
+  activeProject.subscribe(val => {
+    if (!val) return;
+    
+    Database.getTasks(val).then(res => tasks = res);
+  })
+
   // -- Members -- \\
   let viewDone = false;
+  let tasks = [];
 
   // -- Functions -- \\
   async function addTodo() {}
@@ -34,7 +42,7 @@
   </div>
 
   <ul id="task__list">
-    {#each $tasks as task}
+    {#each tasks as task}
       <li>
         <input type="checkbox" />
         <div class="text">

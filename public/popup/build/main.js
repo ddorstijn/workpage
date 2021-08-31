@@ -27,18 +27,6 @@ function safe_not_equal(a, b) {
 function is_empty(obj) {
     return Object.keys(obj).length === 0;
 }
-function subscribe(store, ...callbacks) {
-    if (store == null) {
-        return noop;
-    }
-    const unsub = store.subscribe(...callbacks);
-    return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
-}
-function get_store_value(store) {
-    let value;
-    subscribe(store, _ => value = _)();
-    return value;
-}
 function append(target, node) {
     target.appendChild(node);
 }
@@ -827,180 +815,272 @@ try{if(module){module.exports=lf;}}catch(e){}}.bind(window))();
 
 var lf$1 = lovefield_min.exports;
 
-// Database initialisation
-var db;
-const schemaBuilder = lf$1.schema.create('workpage', 1);
+var DatabaseModule = (function() {
 
+  var _schemaBuilder;
+  var _db;
+  var _projects;
+  var _linkGroups;
+  var _links;
+  var _tasks;
 
-schemaBuilder
-	.createTable('Projects')
-	.addColumn('name', lf$1.Type.STRING)
-	.addColumn('last_used', lf$1.Type.DATE_TIME)
-	.addPrimaryKey(['name']);
+  return {
+    async init() {
+      _schemaBuilder = lf$1.schema.create("workpage", 1);
+  
+      _schemaBuilder
+        .createTable("Projects")
+        .addColumn("name", lf$1.Type.STRING)
+        .addColumn("last_used", lf$1.Type.DATE_TIME)
+        .addPrimaryKey(["name"]);
+  
+      _schemaBuilder
+        .createTable("LinkGroups")
+        .addColumn("id", lf$1.Type.INTEGER)
+        .addColumn("name", lf$1.Type.STRING)
+        .addColumn("projectName", lf$1.Type.STRING)
+        .addPrimaryKey(["id"], true)
+        .addForeignKey("fk_Project", {
+          local: "projectName",
+          ref: "Projects.name",
+          action: lf$1.ConstraintAction.CASCADE,
+        });
+  
+      _schemaBuilder
+        .createTable("Links")
+        .addColumn("id", lf$1.Type.INTEGER)
+        .addColumn("name", lf$1.Type.STRING)
+        .addColumn("url", lf$1.Type.STRING)
+        .addColumn("groupId", lf$1.Type.INTEGER)
+        .addPrimaryKey(["id"], true)
+        .addForeignKey("fk_LinkId", {
+          local: "groupId",
+          ref: "LinkGroups.id",
+          action: lf$1.ConstraintAction.CASCADE,
+        });
+  
+      _schemaBuilder
+        .createTable("Tasks")
+        .addColumn("id", lf$1.Type.INTEGER)
+        .addColumn("title", lf$1.Type.STRING)
+        .addColumn("done", lf$1.Type.BOOLEAN)
+        .addColumn("due", lf$1.Type.DATE_TIME)
+        .addColumn("projectName", lf$1.Type.STRING)
+        .addPrimaryKey(["id"], true)
+        .addForeignKey("fk_Project", {
+          local: "projectName",
+          ref: "Projects.name",
+          action: lf$1.ConstraintAction.CASCADE,
+        });
 
-schemaBuilder
-	.createTable('LinkGroups')
-	.addColumn('id', lf$1.Type.INTEGER)
-	.addColumn('name', lf$1.Type.STRING)
-	.addColumn('projectName', lf$1.Type.STRING)
-	.addPrimaryKey(['id'], true)
-	.addForeignKey('fk_Project', {
-		local: 'projectName',
-		ref: 'Projects.name',
-		action: lf$1.ConstraintAction.CASCADE
-	});
+      _db = await _schemaBuilder.connect();
+      _projects = _db.getSchema().table("Projects");
+      _linkGroups = _db.getSchema().table("LinkGroups");
+      _links = _db.getSchema().table("Links");
+      _tasks = _db.getSchema().table("Tasks");
+    },
 
-schemaBuilder
-	.createTable('Links')
-	.addColumn('id', lf$1.Type.INTEGER)
-	.addColumn('name', lf$1.Type.STRING)
-	.addColumn('url', lf$1.Type.STRING)
-	.addColumn('groupId', lf$1.Type.INTEGER)
-	.addPrimaryKey(['id'], true)
-	.addForeignKey('fk_LinkId', {
-		local: 'groupId',
-		ref: 'LinkGroups.id',
-		action: lf$1.ConstraintAction.CASCADE
-	});
+    async getProjects() {
+      return await _db.select().from(_projects).exec();
+    } ,
+  
+    async addProject(name) {
+      _db
+        .insertOrReplace()
+        .into(_projects)
+        .values([
+          _projects.createRow({
+            name,
+            last_used: new Date(),
+          }),
+        ])
+        .exec();
+    },
+  
+    async updateProject(title, oldTitle) {
+      _db.update(_projects).set(_projects.name, title).where(_projects.name.eq(oldTitle));
+    },
+  
+    async getLinks(activeProject) {
+      return await _db.select().from(_linkGroups).leftOuterJoin(_links, _linkGroups.id.eq(_links.groupId)).where(_linkGroups.projectName.eq(activeProject)).exec();
+    },
+  
+    async addLinkGroup(name, projectName) {
+      _db
+        .insertOrReplace()
+        .into(_linkGroups)
+        .values([_linkGroups.createRow({ name, projectName })])
+        .exec();
+    },
+  
+    async addLink(name, url, groupId) {
+      _db
+        .insertOrReplace()
+        .into(_links)
+        .values([
+          _links.createRow({
+            name,
+            url,
+            groupId,
+        })
+      ]).exec();
+    },
+  
+    async updateLink(id, name = null, url = null, groupId = null) {
+      _db.update(_links)
+        .set(_links.name, name ?? _links.name)
+        .set(_links.url, url ?? _links.url)
+        .set(_links.groupId, groupId ?? _links.groupId)
+        .where(_links.id.eq(id));
+    },
+  
+    async getTasks(activeProject) {
+      return await _db.select().from(_tasks).where(_tasks.projectName.eq(activeProject)).exec();
+    },
+  
+    async addTask(title, due, projectName) {
+      _db
+      .insertOrReplace()
+      .into(_tasks)
+      .values([
+        _tasks.createRow({
+          title,
+          due,
+          projectName,
+        })
+      ])
+      .exec();
+    },
+  
+    async updateTask(id, title = null, due = null, done = null) {
+      _db.update(_tasks)
+        .set(_tasks.title, title ?? _tasks.title)
+        .set(_tasks.due, due ?? _tasks.due)
+        .set(_tasks.done, done ?? _tasks.done)
+        .where(_tasks.id.eq(id));
+    },
+  
 
-schemaBuilder
-	.createTable('Tasks')
-	.addColumn('id', lf$1.Type.INTEGER)
-	.addColumn('title', lf$1.Type.STRING)
-	.addColumn('done', lf$1.Type.BOOLEAN)
-	.addColumn('due', lf$1.Type.DATE_TIME)
-	.addColumn('projectName', lf$1.Type.STRING)
-	.addPrimaryKey(['id'], true)
-	.addForeignKey('fk_Project', {
-		local: 'projectName',
-		ref: 'Projects.name',
-		action: lf$1.ConstraintAction.CASCADE
-	});
-
-async function gen_test(db, t_projects, t_linkGroups, t_links, t_tasks) {
-	db.insertOrReplace().into(t_projects).values([
-		t_projects.createRow({
-			'name': "Test project",
-			'last_used': new Date(),
-		})
-	]).exec();
-
-	db.insertOrReplace().into(t_linkGroups).values([
-		t_linkGroups.createRow({
-			'id': 1,
-			'name': "Test group",
-			'projectName': "Test project"
-		}),
-		t_linkGroups.createRow({
-			'id': 2,
-			'name': "Link group",
-			'projectName': "Test project"
-		}),
-		t_linkGroups.createRow({
-			'id': 3,
-			'name': "Item list",
-			'projectName': "Test project"
-		})
-	]).exec();
-
-	db.insertOrReplace().into(t_links).values([
-		t_links.createRow({
-			'id': 1,
-			'name': "Test link",
-			'url': "https://www.example.com",
-			'groupId': 1
-		}),
-		t_links.createRow({
-			'id': 2,
-			'name': "Second link",
-			'url': "https://www.google.com",
-			'groupId': 1
-		}),
-		t_links.createRow({
-			'id': 3,
-			'name': "First link",
-			'url': "https://www.google.com",
-			'groupId': 2
-		}),
-		t_links.createRow({
-			'id': 4,
-			'name': "Another link",
-			'url': "https://www.google.com",
-			'groupId': 2
-		}),
-		t_links.createRow({
-			'id': 5,
-			'name': "Third one",
-			'url': "https://www.google.com",
-			'groupId': 2
-		}),
-		t_links.createRow({
-			'id': 6,
-			'name': "Soloing",
-			'url': "https://www.google.com",
-			'groupId': 3
-		})
-	]).exec();
-
-	db.insertOrReplace().into(t_tasks).values([
-		t_tasks.createRow({
-			'id': 1,
-			'title': "Test task",
-			'done': false,
-			'due': new Date(),
-			'projectName': "Test project"
-		}),
-		t_tasks.createRow({
-			'id': 2,
-			'title': "Another task",
-			'done': false,
-			'due': new Date(),
-			'projectName': "Test project"
-		}),
-		t_tasks.createRow({
-			'id': 3,
-			'title': "Third one for good measure",
-			'done': false,
-			'due': new Date(),
-			'projectName': "Test project"
-		})
-	]).exec();	
-}
-
-async function syncProject() {
-	const t_linkGroups = db.getSchema().table('LinkGroups');
-	const t_links = db.getSchema().table('Links');
-	const t_tasks = db.getSchema().table('Tasks');
-	
-	links.set(await db.select().from(t_linkGroups).leftOuterJoin(t_links, t_linkGroups.id.eq(t_links.groupId)).where(t_linkGroups.projectName.eq(get_store_value(activeProject))).exec());
-	tasks.set(await db.select().from(t_tasks).where(t_tasks.projectName.eq(get_store_value(activeProject))).exec());
-}
+    async generate_testdata() {
+      _db
+        .insertOrReplace()
+        .into(_projects)
+        .values([
+          _projects.createRow({
+            name: "Test project",
+            last_used: new Date(),
+          }),
+        ])
+        .exec();
+  
+      _db
+        .insertOrReplace()
+        .into(_linkGroups)
+        .values([
+          _linkGroups.createRow({
+            id: 1,
+            name: "Test group",
+            projectName: "Test project",
+          }),
+          _linkGroups.createRow({
+            id: 2,
+            name: "Link group",
+            projectName: "Test project",
+          }),
+          _linkGroups.createRow({
+            id: 3,
+            name: "Item list",
+            projectName: "Test project",
+          }),
+        ])
+        .exec();
+  
+      _db
+        .insertOrReplace()
+        .into(_links)
+        .values([
+          _links.createRow({
+            id: 1,
+            name: "Test link",
+            url: "https://www.example.com",
+            groupId: 1,
+          }),
+          _links.createRow({
+            id: 2,
+            name: "Second link",
+            url: "https://www.google.com",
+            groupId: 1,
+          }),
+          _links.createRow({
+            id: 3,
+            name: "First link",
+            url: "https://www.google.com",
+            groupId: 2,
+          }),
+          _links.createRow({
+            id: 4,
+            name: "Another link",
+            url: "https://www.google.com",
+            groupId: 2,
+          }),
+          _links.createRow({
+            id: 5,
+            name: "Third one",
+            url: "https://www.google.com",
+            groupId: 2,
+          }),
+          _links.createRow({
+            id: 6,
+            name: "Soloing",
+            url: "https://www.google.com",
+            groupId: 3,
+          }),
+        ])
+        .exec();
+  
+      _db
+        .insertOrReplace()
+        .into(_tasks)
+        .values([
+          _tasks.createRow({
+            id: 1,
+            title: "Test task",
+            done: false,
+            due: new Date(),
+            projectName: "Test project",
+          }),
+          _tasks.createRow({
+            id: 2,
+            title: "Another task",
+            done: false,
+            due: new Date(),
+            projectName: "Test project",
+          }),
+          _tasks.createRow({
+            id: 3,
+            title: "Third one for good measure",
+            done: false,
+            due: new Date(),
+            projectName: "Test project",
+          }),
+        ])
+        .exec();
+    }
+  }
+})();
 
 const activeProject = writable();
 activeProject.subscribe(val => {
 	if (!val) return;
 	localStorage.setItem("active", val);
-	syncProject();
 });
-
-const projects = writable();
-const links = writable([]);
-const tasks = writable([]);
 
 const loaded = async () => {
 	try {
-		db = await schemaBuilder.connect();
-		
-		const t_projects = db.getSchema().table('Projects');
-		const t_linkGroups = db.getSchema().table('LinkGroups');
-		const t_links = db.getSchema().table('Links');
-		const t_tasks = db.getSchema().table('Tasks');
-
-		await gen_test(db, t_projects, t_linkGroups, t_links, t_tasks);
-		projects.set(await db.select().from(t_projects).exec());
-
+		await DatabaseModule.init();
+		await DatabaseModule.generate_testdata();
+	
 		const active = localStorage.getItem("active");
-		// Only set links and tasks if there is an active group
 		active && activeProject.set(active);
 
 		return true;

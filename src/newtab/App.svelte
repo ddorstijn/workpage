@@ -1,6 +1,6 @@
 <script>
   import { loaded } from "../store.js";
-	import Fab from "./Fab.svelte";
+	import Fab from "./components/Fab.svelte";
 
   let theme = localStorage.getItem("theme") ?? "light";
   document.querySelector("body").classList += theme;
@@ -27,9 +27,6 @@
   </li>
 </ul>
 
-<div class="fab-wrapper">
-  <Fab></Fab>
-</div>
 {#await loaded()}
   Loading...
 {:then}
@@ -53,14 +50,18 @@
   </article>
 {/await}
 
+<div class="fab-wrapper">
+  <Fab></Fab>
+</div>
+
 <style>
   #settings {
     position: absolute;
+    padding: 0;
     left: 0;
     top: 0;
 
     list-style: none;
-    padding: 0;
   }
 
   #settings button {

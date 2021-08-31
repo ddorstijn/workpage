@@ -7,7 +7,7 @@ import css from 'rollup-plugin-css-only';
 
 const production = !process.env.ROLLUP_WATCH;
 
-function serve() {
+function serve(port) {
 	let server;
 
 	function toExit() {
@@ -15,6 +15,7 @@ function serve() {
 	}
 
 	return {
+		port,
 		writeBundle() {
 			if (server) return;
 			server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
@@ -61,7 +62,7 @@ export default [
 
 			// In dev mode, call `npm run start` once
 			// the bundle has been generated
-			!production && serve(),
+			!production && serve(5555),
 
 			// Watch the `public` directory and refresh the
 			// browser on changes when not in production
@@ -107,7 +108,7 @@ export default [
 
 			// In dev mode, call `npm run start` once
 			// the bundle has been generated
-			!production && serve(),
+			!production && serve(5556),
 
 			// Watch the `public` directory and refresh the
 			// browser on changes when not in production

@@ -1,6 +1,13 @@
 <script>
-  import { links } from "../../store.js";
+  import { activeProject } from "../../store.js";
+  import Database from "../../database";
 
+  let links = [];
+  activeProject.subscribe(val => {
+    if (!val) return;
+
+    Database.getLinks(val).then(res => links = res);
+  });
   function flatToTree(array) {
     let tree = [];
     for (let item of array) {
@@ -17,7 +24,7 @@
 </script>
 
 <article>
-  {#each flatToTree($links) as linkGroup}
+  {#each flatToTree(links) as linkGroup}
     <div class="card linkGroup">
       <header>
         {linkGroup.name}

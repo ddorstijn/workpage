@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "build": "npx rimraf public/newtab/build public/popup/build workpage.zip && rollup -c && cd public && find . -exec zip ../workpage.zip {} +",
-    "dev": "rollup -c -w",
-    "start": "sirv public"
+    "dev": "rollup -c -w ",
+    "start": "sirv public --port 5555"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",
