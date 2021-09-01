@@ -1,11 +1,8 @@
 <script>
-  import { activeProject } from "../../../store.js";
+  import { activeModal, activeProject } from "../../../store.js";
   import Database from "../../../database.js";
-  import Modal from "./Modal.svelte";
   import { onMount } from 'svelte';
   
-  export let open;
-
   let projects = [];
   let filter_input = "";
 
@@ -19,7 +16,7 @@
 
   function setActive(project) {
     $activeProject = project.name;
-    open = false;
+    $activeModal = null;
   }
 
   function daysDifference(date) {
@@ -28,34 +25,32 @@
   }
 </script>
 
-<Modal bind:open={open}>
-  <header>
-    <h2>Projects</h2>
-    <div class="modal__actions">
-      <!-- Filter -->
-      <div id="search__wrapper">
-        <label for="search__input" class="material-icons">search</label>
-        <input id="search__input" type="search" placeholder="Search project..." bind:value={filter_input} />
-      </div>
-
-      <a id="settings_btn" class="button icon-only material-icons">settings</a>
+<header>
+  <h2>Projects</h2>
+  <div class="modal__actions">
+    <!-- Filter -->
+    <div id="search__wrapper">
+      <label for="search__input" class="material-icons">search</label>
+      <input id="search__input" type="search" placeholder="Search project..." bind:value={filter_input} />
     </div>
-  </header>
-  <div id="projects">
-    <ul id="projects__list">
-      {#each filtered_list(projects, filter_input) as project}
-        <li class="project__item">
-          <span class="project_name" on:click={setActive(project)}>
-            {project.name}
-          </span>
-          <small class="project_date text-grey">
-            {daysDifference(project.last_used)} days ago
-          </small>
-        </li>
-      {/each}
-    </ul>
+
+    <a id="settings_btn" class="button icon-only material-icons">settings</a>
   </div>
-</Modal>
+</header>
+<div id="projects">
+  <ul id="projects__list">
+    {#each filtered_list(projects, filter_input) as project}
+      <li class="project__item">
+        <span class="project_name" on:click={setActive(project)}>
+          {project.name}
+        </span>
+        <small class="project_date text-grey">
+          {daysDifference(project.last_used)} days ago
+        </small>
+      </li>
+    {/each}
+  </ul>
+</div>
 
 <style>
   header {

@@ -7,6 +7,8 @@ activeProject.subscribe(val => {
 	localStorage.setItem("active", val);
 })
 
+export const activeModal = writable();
+
 export const loaded = async () => {
 	try {
 		await Database.init();

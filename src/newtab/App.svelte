@@ -1,6 +1,7 @@
 <script>
   import { loaded } from "../store.js";
 	import Fab from "./components/Fab.svelte";
+  import Modal from "./components/modals/Modal.svelte";
 
   let theme = localStorage.getItem("theme") ?? "light";
   document.querySelector("body").classList += theme;
@@ -51,8 +52,9 @@
 {/await}
 
 <div class="fab-wrapper">
-  <Fab></Fab>
+  <Fab />
 </div>
+<Modal />
 
 <style>
   #settings {

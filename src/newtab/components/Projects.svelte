@@ -1,15 +1,16 @@
 <script>
-  import { activeProject } from "../../store.js";
+  import { activeModal, activeProject } from "../../store.js";
   import ProjectModal from "./modals/ProjectModal.svelte";
 
-  let openModal = false;
+  function openModal() {
+    activeModal.set(ProjectModal);
+  }
 </script>
 
 <article>
-  <button id="project__button" class="button primary" on:click="{() => openModal = true}">
+  <button id="project__button" class="button primary" on:click="{openModal}">
     {$activeProject ?? "Click to open project"}
   </button>
-  <ProjectModal bind:open="{openModal}" />
 </article>
 
 <style>

@@ -1,13 +1,16 @@
 <script>
-  export let open = false;
+  import { activeModal } from "../../../store.js";
+  import { fade } from 'svelte/transition';
 </script>
 
-<div class="modal" class:open="{open}">
-  <div class="modal__close" on:click="{() => open = false}" />
-  <div class="modal__content card">
-    <slot></slot>
+{#if $activeModal}
+  <div class="modal" transition:fade="{{duration: 200}}">
+    <div class="modal__close" on:click={() => $activeModal = null} />
+    <div class="modal__content card">
+      <svelte:component this={$activeModal} />
+    </div>
   </div>
-</div>
+{/if}
 
 <style>
   .modal {
@@ -16,20 +19,12 @@
     right: 0;
     bottom: 0;
     left: 0;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 200ms;
 
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
     background-color: rgba(0, 0, 0, 0.25);
-  }
-
-  .modal.open {
-    pointer-events: all;
-    opacity: 1;
   }
 
   .modal__content {

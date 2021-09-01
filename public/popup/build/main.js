@@ -901,10 +901,14 @@ var DatabaseModule = (function() {
       _db.update(_projects).set(_projects.name, title).where(_projects.name.eq(oldTitle));
     },
   
-    async getLinks(activeProject) {
-      return await _db.select().from(_linkGroups).leftOuterJoin(_links, _linkGroups.id.eq(_links.groupId)).where(_linkGroups.projectName.eq(activeProject)).exec();
+    async getLinks(projectName) {
+      return await _db.select().from(_linkGroups).leftOuterJoin(_links, _linkGroups.id.eq(_links.groupId)).where(_linkGroups.projectName.eq(projectName)).exec();
     },
   
+    async getLinkGroups(projectName) {
+      return await _db.select().from(_linkGroups).where(_linkGroups.projectName.eq(projectName)).exec();
+    },
+
     async addLinkGroup(name, projectName) {
       _db
         .insertOrReplace()
@@ -946,6 +950,7 @@ var DatabaseModule = (function() {
         _tasks.createRow({
           title,
           due,
+          done: false,
           projectName,
         })
       ])

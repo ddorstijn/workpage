@@ -1,5 +1,6 @@
 <script>
   import { activeProject } from "../../store.js";
+  import LinkItem from "./LinkItem.svelte";
   import Database from "../../database";
 
   let links = [];
@@ -16,7 +17,8 @@
         tree.push({ ...item.LinkGroups, ...{ children: [] } });
       }
 
-      tree[tree.length - 1].children.push(item.Links);
+      if (item.Links.id != null)
+        tree[tree.length - 1].children.push(item.Links);
     }
 
     return tree;
@@ -36,7 +38,7 @@
       </header>
       <ul class="linkGroup__itemlist">
         {#each linkGroup.children as link}
-          <li>{link.name}</li>
+          <LinkItem item={link} />
         {/each}
       </ul>
     </div>
@@ -53,7 +55,7 @@
   .card.linkGroup {
     width: 15vw;
     height: max-content;
-    border-radius: 8px;
+    border-radius: 4px;
     border-left: solid 6px var(--color-primary);
   }
 
@@ -61,10 +63,6 @@
     list-style: none;
     padding: 0;
     margin: 0;
-  }
-
-  .linkGroup__itemlist li {
-    font-size: smaller;
   }
 
   .card header {

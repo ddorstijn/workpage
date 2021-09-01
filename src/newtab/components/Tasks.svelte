@@ -57,6 +57,7 @@
 <style>
   article {
     margin: 4rem;
+    box-shadow: none;
   }
 
   header {

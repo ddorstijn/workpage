@@ -71,7 +71,7 @@ article.newtab {
 	width: 100vw;
 
 	display: flex;
-	background-image: url(./newtab/background.jpg);
+	/* background-image: url(./newtab/background.jpg); */
 	background-size: cover;
 	background-repeat: no-repeat;
   background-position: center;
