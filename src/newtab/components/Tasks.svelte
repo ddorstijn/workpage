@@ -1,6 +1,7 @@
 <script>
   import { activeProject } from "../../store.js";
   import Database from "../../database.js";
+  import Checkbox from "./Checkbox.svelte";
 
   const formatter = new Intl.DateTimeFormat('en', { day: "numeric", month: 'long' });
 
@@ -11,26 +12,17 @@
   })
 
   // -- Members -- \\
-  let viewDone = false;
   let tasks = [];
 
   // -- Functions -- \\
-  async function addTodo() {}
-
-  async function markDone(item) {}
-
-  async function removeTodo(item) {}
-
-  async function removeDone(item) {}
-
   function pretty_date(date) {
     return formatter.format(date);
   }
 </script>
 
-<article class="card">
+<article>
   <header>
-    <h2>Tasks</h2>
+    <h1>Tasks</h1>
     <button class="button clear icon-only material-icons">event</button>
   </header>
   <div id="task__stats" class="card" style="display: none;">
@@ -44,7 +36,7 @@
   <ul id="task__list">
     {#each tasks as task}
       <li>
-        <input type="checkbox" />
+        <Checkbox bind:checked={task.done} />
         <div class="text">
           <div class="title">{task.title}</div>
           <small class="text-grey">{pretty_date(task.due)}</small>
@@ -56,7 +48,8 @@
 
 <style>
   article {
-    margin: 4rem;
+    margin: 2rem;
+    padding: 2rem;
     box-shadow: none;
   }
 
@@ -64,6 +57,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--color-lightGrey);
   }
 
   header * {
@@ -83,7 +80,7 @@
   }
 
   #task__list {
-    padding: 0;
+    padding: 0 1.5rem;
     margin: 0;
     list-style: none;
     
@@ -92,7 +89,7 @@
   }
 
   #task__list li {
-    margin-top: 1.5rem;
+    margin-top: 2rem;
 
     display: flex;
     align-items: center;
@@ -106,7 +103,7 @@
   }
 
   small {
-    font-size: 12;
+    font-size: 1.2rem;
     font-weight: 300;
   }
 </style>
