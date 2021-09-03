@@ -128,7 +128,7 @@
 
   .date-tag {
     padding: 0;
-    margin-bottom: 1rem;
+    margin-left: 1rem;
     font-size: 1.4rem;
     font-weight: 500;
     white-space: nowrap;

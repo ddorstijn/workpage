@@ -10,11 +10,12 @@
   label {
     position: relative;
     background-color: transparent;
-    border: 2px solid var(--color-lightGrey);
+    border: 1px solid var(--color-grey);
     border-radius: 50%;
     cursor: pointer;
     height: 24px;
     width: 24px;
+    aspect-ratio: 1;
   }
 
   label:after {
