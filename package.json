@@ -24,6 +24,7 @@
   "dependencies": {
     "@popperjs/core": "^2.9.3",
     "lovefield": "^2.1.12",
-    "sirv-cli": "^1.0.12"
+    "sirv-cli": "^1.0.12",
+    "tippy.js": "^6.3.1"
   }
 }
