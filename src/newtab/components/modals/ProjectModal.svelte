@@ -1,85 +1,105 @@
 <script>
-  import { activeModal, activeProject } from "../../../store.js";
   import Database from "../../../database.js";
+  import ProjectItem from "../list-items/ProjectItem.svelte";
   import { onMount } from 'svelte';
   
   let projects = [];
-  let filter_input = "";
+  let projectPopup = false;
+  let filterInput = "";
+  let projectInput = "";
 
   onMount(async () => {
 		projects = await Database.getProjects();
 	});
 
+  function addProject(e) {
+    e.preventDefault();
+    Database.addProject(projectInput);
+
+    e.target.reset();
+  }
+
   function filtered_list(list, filter) {
     return list.filter(item => item.name.includes(filter));
-  }
-
-  function setActive(project) {
-    $activeProject = project.name;
-    $activeModal = null;
-  }
-
-  function daysDifference(date) {
-    var diff = new Date().setHours(12) - new Date(+date).setHours(12);
-    return Math.round(diff / 8.64e7);
   }
 </script>
 
 <header>
-  <h2>Projects</h2>
-  <div class="modal__actions">
-    <!-- Filter -->
-    <div id="search__wrapper">
-      <label for="search__input" class="material-icons">search</label>
-      <input id="search__input" type="search" placeholder="Search project..." bind:value={filter_input} />
-    </div>
+  <div class="title-bar">
+    <h1 class="is-marginless">Projects</h1>
+    <div class="action-menu">
+      <!-- Filter -->
+      <label id="search__wrapper">
+        <input id="search__input" type="search" placeholder="Search project..." bind:value={filterInput} />
+        <i class="button material-icons">search</i>
+      </label>
 
-    <a id="settings_btn" class="button icon-only material-icons">settings</a>
+      <button id="add-project-btn" class="button icon primary" on:click={() => projectPopup = !projectPopup}>
+        New
+        <i class="material-icons">add</i>
+      </button>
+    </div>
   </div>
+
+  {#if projectPopup}
+    <form class="popup card" on:submit={addProject}>        
+        <input id="add-project" type="text" placeholder="Project name.." bind:value={projectInput} />
+        <button class="button icon-only primary material-icons" type="submit">add</button>
+    </form>
+  {/if}
 </header>
+
 <div id="projects">
   <ul id="projects__list">
-    {#each filtered_list(projects, filter_input) as project}
-      <li class="project__item">
-        <span class="project_name" on:click={setActive(project)}>
-          {project.name}
-        </span>
-        <small class="project_date text-grey">
-          {daysDifference(project.last_used)} days ago
-        </small>
-      </li>
+    {#each filtered_list(projects, filterInput) as project}
+      <ProjectItem {project} />
     {/each}
   </ul>
 </div>
 
 <style>
-  header {
+  .title-bar {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
+
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-lightGrey);
   }
 
-  .modal__actions {
-    margin-left: 4rem;
-
+  .action-menu {
     display: flex;
     align-items: center;
-    gap: .25rem;
   }
 
-  .modal__actions .material-icons {
-    font-size: 1.8rem;
-    color: var(--color-darkGrey);
-  }
-
-  #search__wrapper {
+  #add-project-btn {
     padding: 0.5rem 1rem;
-    max-width: 20rem;
+    border-radius: 999px;
+    font-size: 1.4rem;
+    gap: .5rem;
+  }
+
+  #add-project-btn .material-icons {
+    font-size: 1.8rem;
+  }
+
+  .popup {
+    display: flex;
+  }
+
+  #projects__list {
+    list-style: none;
+    padding: 0;
+  }
+
+  /* Searching */
+  #search__wrapper {
+    padding: 0.5rem 0.75rem;
+    margin: 0 1rem 0 2rem;
     
     display: flex;
     align-items: center;
     gap: .25rem;
-
     border-radius: 999px;
     border: 1px solid var(--bg-color);
     transition: border-color 0.5s ease-in;
@@ -88,40 +108,26 @@
   #search__wrapper:focus-within {
     border: 1px solid var(--color-lightGrey);
   }
+
+  #search__wrapper .material-icons {
+    font-size: 1.8rem;
+    background-color: transparent;
+    padding: 0;
+  }
   
   #search__input {
-    width: 0;
+    width: 15ch;
     border: none;
     font-size: 1.4rem;
     background-color: transparent;
     padding: 0;
-
     transition: width 0.5s ease-in;
+    opacity: 0;
   }
 
   #search__input:focus {
-    width: 20rem;
+    opacity: 1;
     box-shadow: none;
-  }
-
-  #settings_btn {
-    background-color: transparent;
-    padding: 0;
-  }
-
-  #projects__list {
-    list-style: none;
-    padding: 0;
-  }
-
-  .project_name {
-    display: block;
-    line-height: 1.2;
-    font-weight: 500;
-    cursor: pointer;
-  }
-
-  .project_date {
-    font-weight: 200;
+    outline: none;
   }
 </style>

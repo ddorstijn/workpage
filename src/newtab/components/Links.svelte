@@ -1,6 +1,6 @@
 <script>
   import { activeProject } from "../../store.js";
-  import LinkItem from "./LinkItem.svelte";
+  import LinkItem from "./list-items/LinkItem.svelte";
   import Database from "../../database";
 
   let links = [];
@@ -30,9 +30,7 @@
     <div class="card linkGroup">
       <header>
         {linkGroup.name}
-        <button
-          class="button clear icon-only material-icons"
-        >
+        <button class="button clear icon-only material-icons">
           more_vert
         </button>
       </header>
@@ -66,12 +64,16 @@
   }
 
   .card header {
+    margin-bottom: 1rem;
+    
     display: flex;
-    gap: 2rem;
     align-items: center;
     justify-content: space-between;
-    font-size: 1.8rem;
+    gap: 2rem;
+
+    font-size: 2.4rem;
     font-weight: bold;
+    line-height: 1.2em;
   }
 
 	.card header button {
@@ -79,7 +81,7 @@
 		padding: 0;
 
 		opacity: 0;
-		font-size: 16px;
+		font-size: 1.6rem;
 	}
 
 	.card:hover header button {

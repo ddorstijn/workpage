@@ -14,7 +14,7 @@
 	async function update() {
 		const d = new Date();
 		date = new Intl.DateTimeFormat("en-GB", {
-			month: "long",
+			month: "short",
 			day: "numeric",
 			weekday: "long",
 		}).format(d);

@@ -12,10 +12,13 @@
 		width: max-content;
 
 		display: flex;
-		font-size: smaller;
 	}
 
 	.item > a {
-		color: inherit;
+		font-size: 1.6rem;
+		font-weight: 300;
+		line-height: 1.2em;
+
+		color: var(--color-grey);
 	}
 </style>

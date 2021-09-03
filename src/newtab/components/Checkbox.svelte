@@ -1,50 +1,44 @@
 <script>
-  export let id;
   export let checked;
 </script>
 
-<label>
-  <input {id} class="is-hidden" type="checkbox" bind:value={checked} />
+<label class:check={checked}>
+  <input class="is-hidden" type="checkbox" bind:checked />
 </label>
 
-
 <style>
-  .round {
-  position: relative;
-}
+  label {
+    position: relative;
+    background-color: transparent;
+    border: 2px solid var(--color-lightGrey);
+    border-radius: 50%;
+    cursor: pointer;
+    height: 24px;
+    width: 24px;
+  }
 
-.round label {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  cursor: pointer;
-  height: 28px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 28px;
-}
+  label:after {
+    content: "";
+    position: absolute;
+    width: 50%;
+    height: 25%;
+    left: 50%;
+    top: 50%;
 
-.round label:after {
-  border: 2px solid #fff;
-  border-top: none;
-  border-right: none;
-  content: "";
-  height: 6px;
-  left: 7px;
-  opacity: 0;
-  position: absolute;
-  top: 8px;
-  transform: rotate(-45deg);
-  width: 12px;
-}
+    transform: translate(-50%, -50%) rotate(-45deg);
+    opacity: 0;
 
-.round input[type="checkbox"]:checked + label {
-  background-color: #66bb6a;
-  border-color: #66bb6a;
-}
+    border: 2px solid white;
+    border-top: none;
+    border-right: none;
+  }
 
-.round input[type="checkbox"]:checked + label:after {
-  opacity: 1;
-}
+  label.check {
+    background-color: #66bb6a;
+    border-color: #66bb6a;
+  }
+
+  label.check:after {
+    opacity: 1;
+  }
 </style>

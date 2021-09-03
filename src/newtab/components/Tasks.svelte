@@ -1,22 +1,58 @@
 <script>
   import { activeProject } from "../../store.js";
   import Database from "../../database.js";
-  import Checkbox from "./Checkbox.svelte";
+  import TaskItem from "./list-items/TaskItem.svelte";
 
-  const formatter = new Intl.DateTimeFormat('en', { day: "numeric", month: 'long' });
+  const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
   activeProject.subscribe(val => {
     if (!val) return;
     
-    Database.getTasks(val).then(res => tasks = res);
+    Database.getTasks(val).then(newTasks => {
+      tasks = sortTasks(newTasks)
+    });
   })
-
+  
   // -- Members -- \\
-  let tasks = [];
+  let tasks = {};
 
   // -- Functions -- \\
-  function pretty_date(date) {
-    return formatter.format(date);
+  function dateDiffInDays(a, b) {
+    // Discard the time and time-zone information.
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+  }
+
+  function sortTasks(tasks) {
+    let sorted = {
+      "Overdue": [],
+      "Today": [],
+      "This week": [],
+      "Long term": [],
+      "Someday": []
+    };
+
+    for (const task of tasks) {
+      if (!task.due) {
+        sorted["Someday"].push(task);  
+      }
+
+      const dateDiff = dateDiffInDays(new Date(), task.due);
+      console.log(dateDiff);
+      if (dateDiff < 0) {
+        sorted["Overdue"].push(task);
+      } else if (dateDiff == 0) {
+        sorted["Today"].push(task);
+      } else if (dateDiff > 7) {
+        sorted["Long term"].push(task);
+      } else if (dateDiff > 0) {
+        sorted["This week"].push(task);
+      }
+    }
+
+    return sorted;
   }
 </script>
 
@@ -25,25 +61,22 @@
     <h1>Tasks</h1>
     <button class="button clear icon-only material-icons">event</button>
   </header>
-  <div id="task__stats" class="card" style="display: none;">
-    <i class="material-icons">thumb_up</i>
-    <div class="text">
-      <div class="title">Stats</div>
-      <small>You've completed 6 tasks in the past week!</small>
-    </div>
-  </div>
 
-  <ul id="task__list">
-    {#each tasks as task}
-      <li>
-        <Checkbox bind:checked={task.done} />
-        <div class="text">
-          <div class="title">{task.title}</div>
-          <small class="text-grey">{pretty_date(task.due)}</small>
-        </div>
-      </li>
-    {/each}
-  </ul>
+  {#each Object.entries(tasks) as [name, items]}
+    {#if items.length}
+      <details open>
+        <summary class="date-tag button icon">
+          {name}
+          <i class="material-icons details-icon">expand_less</i>
+        </summary>
+        <ul id="task__list">
+          {#each items as task}
+            <TaskItem {task} />
+          {/each}
+        </ul>
+      </details>
+    {/if}
+  {/each}
 </article>
 
 <style>
@@ -68,17 +101,6 @@
     padding: 0;
   }
 
-  #task__stats {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    line-height: 1.2;
-  }
-
-  #task__stats .text .title {
-    font-weight: bold;
-  }
-
   #task__list {
     padding: 0 1.5rem;
     margin: 0;
@@ -88,22 +110,29 @@
     overflow-y: auto;
   }
 
-  #task__list li {
-    margin-top: 2rem;
-
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    line-height: 1.2;
+  details {
+    margin-top: 1rem;
   }
 
-  #task__list li .title {
+  details + details {
+    margin-top: 1rem;
+  }
+
+  .details-icon {
+    transition: transform 0.25s ease-out;
+  }
+
+  details[open] .details-icon {
+    transform: rotateX(180deg);
+  }
+
+  .date-tag {
+    padding: 0;
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
     font-weight: 500;
-  }
-
-  small {
-    font-size: 1.2rem;
-    font-weight: 300;
+    white-space: nowrap;
+    background-color: transparent;
+    color: var(--color-grey);
   }
 </style>
