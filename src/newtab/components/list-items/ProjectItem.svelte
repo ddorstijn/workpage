@@ -25,6 +25,7 @@
     <div class="title">{project.name}</div>
     <small class="text-grey"><span class="material-icons">history</span>{daysDifference(project.last_used)}</small>
   </div>
+  <button class="delete-task button material-icons">delete</button>
 </li>
 
 <style>
@@ -58,5 +59,17 @@
 
   small .material-icons {
     font-size: 1.2rem;
+  }
+
+  .delete-task {
+    margin-left: auto;
+    background-color: transparent;
+    font-size: 1.6rem;
+    color: var(--color-error);
+    opacity: 0;
+  }
+
+  li:hover .delete-task {
+    opacity: 1;
   }
 </style>
