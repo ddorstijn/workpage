@@ -102,6 +102,10 @@ var DatabaseModule = (function() {
         .values([_linkGroups.createRow({ name, projectName })])
         .exec();
     },
+
+    async removeLinkGroup(id) {
+      _db.delete().from(_linkGroups).where(_linkGroups.id.eq(id)).exec();
+    },
   
     async addLink(name, url, groupId) {
       _db

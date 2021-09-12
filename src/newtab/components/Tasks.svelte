@@ -40,7 +40,6 @@
       }
 
       const dateDiff = dateDiffInDays(new Date(), task.due);
-      console.log(dateDiff);
       if (dateDiff < 0) {
         sorted["Overdue"].push(task);
       } else if (dateDiff == 0) {

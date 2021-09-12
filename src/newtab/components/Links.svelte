@@ -1,14 +1,16 @@
 <script>
   import { activeProject } from "../../store.js";
-  import LinkItem from "./list-items/LinkItem.svelte";
   import Database from "../../database";
+  import LinkCard from "./LinkCard.svelte";
 
   let links = [];
-  activeProject.subscribe(val => {
+
+  activeProject.subscribe((val) => {
     if (!val) return;
 
-    Database.getLinks(val).then(res => links = res);
+    Database.getLinks(val).then((res) => (links = res));
   });
+
   function flatToTree(array) {
     let tree = [];
     for (let item of array) {
@@ -27,19 +29,7 @@
 
 <article>
   {#each flatToTree(links) as linkGroup}
-    <div class="card linkGroup">
-      <header>
-        {linkGroup.name}
-        <button class="button clear icon-only material-icons">
-          more_vert
-        </button>
-      </header>
-      <ul class="linkGroup__itemlist">
-        {#each linkGroup.children as link}
-          <LinkItem item={link} />
-        {/each}
-      </ul>
-    </div>
+    <LinkCard {linkGroup} />
   {/each}
 </article>
 
@@ -49,42 +39,4 @@
     display: flex;
     gap: 2rem;
   }
-
-  .card.linkGroup {
-    width: 15vw;
-    height: max-content;
-    border-radius: 4px;
-    border-left: solid 6px var(--color-primary);
-  }
-
-  .linkGroup__itemlist {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .card header {
-    margin-bottom: 1rem;
-    
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-
-    font-size: 2.4rem;
-    font-weight: bold;
-    line-height: 1.2em;
-  }
-
-	.card header button {
-		margin: 0;
-		padding: 0;
-
-		opacity: 0;
-		font-size: 1.8rem;
-	}
-
-	.card:hover header button {
-		opacity: 1;
-	}
 </style>

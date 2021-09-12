@@ -1,9 +1,12 @@
 <script>
   import { activeModal, activeProject } from "../../../store.js";
   import Database from "../../../database.js";
+import { onMount } from "svelte";
 
   let title;
   let due;
+
+  onMount();
 
   function addGroup(e) {
     e.preventDefault();

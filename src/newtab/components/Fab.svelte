@@ -1,20 +1,20 @@
 <script>
   import { activeModal } from "../../store.js";
 
-  import CreateLinkGroupModal from "./modals/CreateLinkGroupModal.svelte";
-  import CreateLinkModal from "./modals/CreateLinkModal.svelte";
-  import CreateTaskModal from "./modals/CreateTaskModal.svelte";
+  import LinkGroupModal from "./modals/LinkGroupModal.svelte";
+  import LinkModal from "./modals/LinkModal.svelte";
+  import TaskModal from "./modals/TaskModal.svelte";
 
   function openCreateTask() {
-    activeModal.set(CreateTaskModal);
+    activeModal.set(TaskModal);
   }
 
   function openCreateLinkGroup() {
-    activeModal.set(CreateLinkGroupModal);
+    activeModal.set(LinkGroupModal);
   }
 
   function openCreateLink() {
-    activeModal.set(CreateLinkModal);
+    activeModal.set(LinkModal);
   }
 </script>
 

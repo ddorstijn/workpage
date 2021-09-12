@@ -1,20 +1,35 @@
 <script>
   import Checkbox from "../Checkbox.svelte";
+  import Menu from "../menu/Menu.svelte";
 
   export let task;
 
+  let item;
+  let hovering = false;
+
   function pretty_date(date) {
-    return new Intl.DateTimeFormat('en', { day: "numeric", month: 'long' }).format(date);
+    return new Intl.DateTimeFormat("en", {
+      day: "numeric",
+      month: "long",
+    }).format(date);
   }
 </script>
 
-<li>
+<li
+  bind:this={item}
+  on:mouseover={() => (hovering = true)}
+  on:mouseout={() => (hovering = false)}
+  on:focus={() => hovering = true}
+  on:blur={() => hovering = false}
+>
   <Checkbox bind:checked={task.done} />
   <div class="text">
     <div class="title">{task.title}</div>
-    <small class="text-grey"><span class="material-icons">event</span>{pretty_date(task.due)}</small>
+    <small class="text-grey"
+      ><span class="material-icons">event</span>{pretty_date(task.due)}</small
+    >
   </div>
-  <button class="menu-btn button material-icons">more_vert</button>
+  <Menu {hovering} />
 </li>
 
 <style>
@@ -50,17 +65,4 @@
   small .material-icons {
     font-size: 1.2rem;
   }
-
-  .menu-btn {
-		margin-left: auto;
-		padding: 0;
-
-		background-color: transparent;
-		font-size: 16px;
-		opacity: 0;
-	}
-
-	li:hover .menu-btn {
-		opacity: 1;
-	}
 </style>

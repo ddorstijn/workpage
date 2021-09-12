@@ -8,6 +8,7 @@ activeProject.subscribe(val => {
 })
 
 export const activeModal = writable();
+export const editRef = writable();
 
 export const loaded = async () => {
 	try {

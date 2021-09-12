@@ -1,9 +1,11 @@
 <script>
   import { activeModal, activeProject } from "../../../store.js";
-  	
-	export let project;
-  	
-	function setActive(project) {
+  import Menu from "../menu/Menu.svelte";
+
+  export let project;
+  let hovering = false;
+
+  function setActive(project) {
     $activeProject = project.name;
     $activeModal = null;
   }
@@ -19,17 +21,27 @@
   }
 </script>
 
-<li on:click={setActive(project)}>
+<li
+  on:click={setActive(project)}
+  on:mouseover={() => (hovering = true)}
+  on:mouseout={() => (hovering = false)}
+  on:focus={() => (hovering = true)}
+  on:blur={() => (hovering = false)}
+>
   <span>w</span>
   <div class="text">
     <div class="title">{project.name}</div>
-    <small class="text-grey"><span class="material-icons">history</span>{daysDifference(project.last_used)}</small>
+    <small class="text-grey"
+      ><span class="material-icons">history</span>{daysDifference(
+        project.last_used
+      )}</small
+    >
   </div>
-  <button class="delete-task button material-icons">more_vert</button>
+  <Menu {hovering} />
 </li>
 
 <style>
-	li {
+  li {
     display: flex;
     align-items: center;
     gap: 1.5rem;
@@ -59,16 +71,5 @@
 
   small .material-icons {
     font-size: 1.2rem;
-  }
-
-  .delete-task {
-    margin-left: auto;
-    background-color: transparent;
-    font-size: 1.6rem;
-    opacity: 0;
-  }
-
-  li:hover .delete-task {
-    opacity: 1;
   }
 </style>
