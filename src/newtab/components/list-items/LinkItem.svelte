@@ -1,6 +1,6 @@
 <script>
   import Menu from "../menu/Menu.svelte";
-  import { activeModal, editRef } from "../../../store.js";
+  import { activeModal, editRef, dirty } from "../../../store.js";
   import LinkModal from "../modals/LinkModal.svelte";
   import Database from "../../../database.js";
 
