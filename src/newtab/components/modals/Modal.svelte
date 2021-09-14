@@ -1,11 +1,16 @@
 <script>
-  import { activeModal } from "../../../store.js";
+  import { activeModal, editRef } from "../../../store.js";
   import { fade } from 'svelte/transition';
+
+  function close() {
+    $editRef = null;
+    $activeModal = null;
+  }
 </script>
 
 {#if $activeModal}
   <div class="modal" transition:fade="{{duration: 200}}">
-    <div class="modal__close" on:click={() => $activeModal = null} />
+    <div class="modal__close" on:click={close} />
     <div class="modal__content card">
       <svelte:component this={$activeModal} />
     </div>

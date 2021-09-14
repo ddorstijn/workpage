@@ -1,11 +1,21 @@
 <script>
   import Checkbox from "../Checkbox.svelte";
   import Menu from "../menu/Menu.svelte";
+  import { activeModal, editRef } from "../../../store.js";
+  import Database from "../../../database.js";
+  import TaskModal from "../modals/TaskModal.svelte";
 
   export let task;
-
-  let item;
   let hovering = false;
+
+  function edit() {
+    $editRef = task.id;
+    $activeModal = TaskModal;
+  }
+
+  function remove() {
+    Database.removeTask(task.id);
+  }
 
   function pretty_date(date) {
     return new Intl.DateTimeFormat("en", {
@@ -16,7 +26,6 @@
 </script>
 
 <li
-  bind:this={item}
   on:mouseover={() => (hovering = true)}
   on:mouseout={() => (hovering = false)}
   on:focus={() => hovering = true}
@@ -29,7 +38,7 @@
       ><span class="material-icons">event</span>{pretty_date(task.due)}</small
     >
   </div>
-  <Menu {hovering} />
+  <Menu {hovering} on:edit={edit} on:remove={remove} />
 </li>
 
 <style>

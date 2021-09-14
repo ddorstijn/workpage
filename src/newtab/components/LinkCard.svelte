@@ -1,18 +1,25 @@
 <script>
-  import { activeModal } from "../../store.js";
+  import { activeModal, editRef } from "../../store.js";
   import Datebase from "../../database.js";
   import LinkGroupModal from "./modals/LinkGroupModal.svelte";
   import LinkItem from "./list-items/LinkItem.svelte";
   import Menu from "./menu/Menu.svelte";
+  import { onMount } from "svelte";
 
   export let linkGroup;
+  let links = [];
   let hovering = false;
+
+  onMount(async () => {
+    links = await Datebase.getLinks(linkGroup.id);
+  });
 
   function remove() {
     Datebase.removeLinkGroup(linkGroup.id);
   }
 
   function edit() {
+    $editRef = linkGroup.id;
     $activeModal = LinkGroupModal;
   }
 </script>
@@ -28,8 +35,8 @@
     <Menu {hovering} on:edit={edit} on:remove={remove} />
   </header>
   <ul class="linkGroup__itemlist">
-    {#each linkGroup.children as link}
-      <LinkItem item={link} />
+    {#each links as link}
+      <LinkItem {link} />
     {/each}
   </ul>
 </div>

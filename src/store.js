@@ -9,19 +9,20 @@ activeProject.subscribe(val => {
 
 export const activeModal = writable();
 export const editRef = writable();
+export const dirty = writable();
 
 export const loaded = async () => {
-	try {
-		await Database.init();
-		await Database.generate_testdata();
-	
-		const active = localStorage.getItem("active");
-		active && activeProject.set(active);
+  try {
+    await Database.init();
+    // await Database.generate_testdata();
 
-		return true;
-	} catch (error) {
-		console.log(error);
-		return error;
-	}
+    const active = localStorage.getItem("active");
+    active && activeProject.set(active);
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
 };
 

@@ -1,7 +1,7 @@
 import lf from "lovefield";
 
-var DatabaseModule = (function() {
-  'use strict';
+var DatabaseModule = (function () {
+  "use strict";
 
   var _schemaBuilder;
   var _db;
@@ -13,13 +13,13 @@ var DatabaseModule = (function() {
   return {
     async init() {
       _schemaBuilder = lf.schema.create("workpage", 1);
-  
+
       _schemaBuilder
         .createTable("Projects")
         .addColumn("name", lf.Type.STRING)
         .addColumn("last_used", lf.Type.DATE_TIME)
         .addPrimaryKey(["name"]);
-  
+
       _schemaBuilder
         .createTable("LinkGroups")
         .addColumn("id", lf.Type.INTEGER)
@@ -31,7 +31,7 @@ var DatabaseModule = (function() {
           ref: "Projects.name",
           action: lf.ConstraintAction.CASCADE,
         });
-  
+
       _schemaBuilder
         .createTable("Links")
         .addColumn("id", lf.Type.INTEGER)
@@ -44,7 +44,7 @@ var DatabaseModule = (function() {
           ref: "LinkGroups.id",
           action: lf.ConstraintAction.CASCADE,
         });
-  
+
       _schemaBuilder
         .createTable("Tasks")
         .addColumn("id", lf.Type.INTEGER)
@@ -68,8 +68,48 @@ var DatabaseModule = (function() {
 
     async getProjects() {
       return await _db.select().from(_projects).exec();
-    } ,
-  
+    },
+
+    async getLinkGroups(projectName) {
+      return await _db
+        .select()
+        .from(_linkGroups)
+        .where(_linkGroups.projectName.eq(projectName))
+        .exec();
+    },
+
+    async getLinkGroup(id) {
+      return await _db
+        .select()
+        .from(_linkGroups)
+        .where(_linkGroups.id.eq(id))
+        .exec();
+    },
+
+    async getLinks(groupId) {
+      return await _db
+        .select()
+        .from(_links)
+        .where(_links.groupId.eq(groupId))
+        .exec();
+    },
+
+    async getLink(id) {
+      return await _db.select().from(_links).where(_links.id.eq(id)).exec();
+    },
+
+    async getTasks(activeProject) {
+      return await _db
+        .select()
+        .from(_tasks)
+        .where(_tasks.projectName.eq(activeProject))
+        .exec();
+    },
+
+    async getTask(id) {
+      return await _db.select().from(_tasks).where(_tasks.id.eq(id)).exec();
+    },
+
     async addProject(name) {
       _db
         .insertOrReplace()
@@ -82,18 +122,6 @@ var DatabaseModule = (function() {
         ])
         .exec();
     },
-  
-    async updateProject(title, oldTitle) {
-      _db.update(_projects).set(_projects.name, title).where(_projects.name.eq(oldTitle));
-    },
-  
-    async getLinks(projectName) {
-      return await _db.select().from(_linkGroups).leftOuterJoin(_links, _linkGroups.id.eq(_links.groupId)).where(_linkGroups.projectName.eq(projectName)).exec();
-    },
-  
-    async getLinkGroups(projectName) {
-      return await _db.select().from(_linkGroups).where(_linkGroups.projectName.eq(projectName)).exec();
-    },
 
     async addLinkGroup(name, projectName) {
       _db
@@ -103,10 +131,6 @@ var DatabaseModule = (function() {
         .exec();
     },
 
-    async removeLinkGroup(id) {
-      _db.delete().from(_linkGroups).where(_linkGroups.id.eq(id)).exec();
-    },
-  
     async addLink(name, url, groupId) {
       _db
         .insertOrReplace()
@@ -116,45 +140,77 @@ var DatabaseModule = (function() {
             name,
             url,
             groupId,
-        })
-      ]).exec();
+          }),
+        ])
+        .exec();
     },
-  
-    async updateLink(id, name = null, url = null, groupId = null) {
-      _db.update(_links)
-        .set(_links.name, name ?? _links.name)
-        .set(_links.url, url ?? _links.url)
-        .set(_links.groupId, groupId ?? _links.groupId)
-        .where(_links.id.eq(id));
-    },
-  
-    async getTasks(activeProject) {
-      return await _db.select().from(_tasks).where(_tasks.projectName.eq(activeProject)).exec();
-    },
-  
+
     async addTask(title, due, projectName) {
       _db
-      .insertOrReplace()
-      .into(_tasks)
-      .values([
-        _tasks.createRow({
-          title,
-          due,
-          done: false,
-          projectName,
-        })
-      ])
-      .exec();
+        .insertOrReplace()
+        .into(_tasks)
+        .values([
+          _tasks.createRow({
+            title,
+            due,
+            done: false,
+            projectName,
+          }),
+        ])
+        .exec();
     },
-  
-    async updateTask(id, title = null, due = null, done = null) {
-      _db.update(_tasks)
-        .set(_tasks.title, title ?? _tasks.title)
-        .set(_tasks.due, due ?? _tasks.due)
-        .set(_tasks.done, done ?? _tasks.done)
-        .where(_tasks.id.eq(id));
+
+    async updateProject(name, oldname) {
+      _db
+        .update(_projects)
+        .set(_projects.name, name)
+        .where(_projects.name.eq(oldname))
+        .exec();
     },
-  
+
+    async updateLinkGroup(id, name) {
+      _db
+        .update(_linkGroups)
+        .set(_linkGroups.name, name)
+        .where(_linkGroups.id.eq(id))
+        .exec();
+    },
+
+    async updateLink(id, name, url, groupId) {
+      _db
+        .update(_links)
+        .set(_links.name, name)
+        .set(_links.url, url)
+        .set(_links.groupId, groupId)
+        .where(_links.id.eq(id))
+        .exec();
+    },
+
+    async updateTask(id, title, due, done) {
+      _db
+        .update(_tasks)
+        .set(_tasks.title, title)
+        .set(_tasks.due, due)
+        .set(_tasks.done, done)
+        .where(_tasks.id.eq(id))
+        .exec();
+    },
+
+    async removeProject(name) {
+      _db.delete().from(_projects).where(_projects.name.eq(name)).exec();
+    },
+
+    async removeLinkGroup(id) {
+      _db.delete().from(_linkGroups).where(_linkGroups.id.eq(id)).exec();
+    },
+
+    async removeLink(id) {
+      _db.delete().from(_links).where(_links.id.eq(id)).exec();
+    },
+
+    async removeTask(id) {
+      _db.delete().from(_tasks).where(_tasks.id.eq(id)).exec();
+    },
 
     async generate_testdata() {
       _db
@@ -167,7 +223,7 @@ var DatabaseModule = (function() {
           }),
         ])
         .exec();
-  
+
       _db
         .insertOrReplace()
         .into(_linkGroups)
@@ -189,7 +245,7 @@ var DatabaseModule = (function() {
           }),
         ])
         .exec();
-  
+
       _db
         .insertOrReplace()
         .into(_links)
@@ -232,7 +288,7 @@ var DatabaseModule = (function() {
           }),
         ])
         .exec();
-  
+
       _db
         .insertOrReplace()
         .into(_tasks)
@@ -260,8 +316,8 @@ var DatabaseModule = (function() {
           }),
         ])
         .exec();
-    }
-  }
+    },
+  };
 })();
 
 // Database initialisation

@@ -1,13 +1,30 @@
 <script>
+  import Database from "../../../database.js";
   import { activeModal, activeProject } from "../../../store.js";
   import Menu from "../menu/Menu.svelte";
 
   export let project;
   let hovering = false;
+  let editing = false;
+  let editTitle = "";
 
   function setActive(project) {
     $activeProject = project.name;
     $activeModal = null;
+  }
+
+  function edit() {
+    editTitle = project.name;
+    editing = true;
+  }
+
+  function remove() {
+    Database.removeProject(project.name);
+  }
+
+  function saveEdit() {
+    Database.updateProject(editTitle, project.name);
+    editing = false;
   }
 
   function daysDifference(date) {
@@ -22,7 +39,7 @@
 </script>
 
 <li
-  on:click={setActive(project)}
+  on:click|self={setActive(project)}
   on:mouseover={() => (hovering = true)}
   on:mouseout={() => (hovering = false)}
   on:focus={() => (hovering = true)}
@@ -30,14 +47,20 @@
 >
   <span>w</span>
   <div class="text">
-    <div class="title">{project.name}</div>
-    <small class="text-grey"
-      ><span class="material-icons">history</span>{daysDifference(
-        project.last_used
-      )}</small
-    >
+    {#if !editing}
+      <div class="title">{project.name}</div>
+    {:else}
+      <form class="edit-form" on:submit|preventDefault={saveEdit}>
+        <input type="text" bind:value={editTitle}>
+        <button type="submit">Save</button>
+      </form>
+    {/if}
+    <small class="text-grey">
+      <span class="material-icons">history</span>
+      {daysDifference(project.last_used)}
+    </small>
   </div>
-  <Menu {hovering} />
+  <Menu {hovering} on:edit={edit} on:remove={remove} />
 </li>
 
 <style>
@@ -71,5 +94,9 @@
 
   small .material-icons {
     font-size: 1.2rem;
+  }
+
+  .edit-form {
+    display: flex;
   }
 </style>

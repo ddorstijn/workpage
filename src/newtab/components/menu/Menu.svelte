@@ -36,7 +36,7 @@
   }
 </script>
 
-<details class="dropdown" bind:open>
+<details class="dropdown" bind:open={open}>
   <summary class="menu-btn material-icons" class:hovering>more_vert</summary>
   <ul class="card menu-item-list" bind:this={menuRef}>
     <li on:click={editItem}>Edit</li>
