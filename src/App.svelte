@@ -3,12 +3,21 @@
   import Modal from "./lib/modals/Modal.svelte";
   
   import { onMount } from "svelte";
+  import Database from "./database/LoveField";
 
   let darkmode: boolean;
 
-  onMount(() => {
+  onMount(async () => {
     darkmode = JSON.parse(localStorage.getItem("darkmode")) ?? false;
     document.querySelector("body").classList.toggle('dark', darkmode);
+    
+    const db = await Database.init();
+    console.log(await db.projects.get());
+    let project = await db.projects.add({name: "new Project"}); 
+    console.log(await db.projects.get());
+    project.name = "Updated project";
+    await db.projects.update(project);
+    console.log(await db.projects.get());
   })
 
   function toggleTheme() {
