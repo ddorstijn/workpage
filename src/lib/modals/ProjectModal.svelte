@@ -1,13 +1,18 @@
-<script>
+<script lang="ts">
   import ProjectItem from "../list-items/ProjectItem.svelte";
+  import type { Project } from "../../database/database";
+  import Database from "../../database/LoveField";
   import { onMount } from 'svelte';
   
-  let projects = [];
+  let db: Database;
+  let projects: Project[] = [];
   let projectPopup = false;
   let filterInput = "";
   let projectInput = "";
 
   onMount(async () => {
+    db = await Database.getInstance();
+    projects = await db.projects.get();
 	});
 
   function addProject(e) {
@@ -16,7 +21,7 @@
     e.target.reset();
   }
 
-  function filtered_list(list, filter) {
+  function filtered_list(list: Project[], filter: string) {
     return list.filter(item => item.name.includes(filter));
   }
 </script>

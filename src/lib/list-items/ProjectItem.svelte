@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { modal } from "../../store";
   import Menu from "../menu/Menu.svelte";
 
