@@ -1,17 +1,25 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { project } from "../store";
-
   import LinkCard from "./LinkCard.svelte";
 
+  import Database from "../database/LoveField";
+  import type { LinkGroup } from "src/database/database";
+
+  import { onDestroy, onMount } from "svelte";
+  import { activeProject } from "../store";
+
+
+  let db: Database;
   let linkGroups = [];
 
-  onMount(() => {
-    getLinkGroups();
+  onMount(async () => {
+    db = await Database.getInstance();
+    db.linkgroups.subscribe(callback);
   });
-  
-  function getLinkGroups() {
-    
+
+  onDestroy(() => db.linkgroups.unsubscribe(callback));
+
+  function callback(data: LinkGroup[]) {
+    linkGroups = data;
   }
 </script>
 

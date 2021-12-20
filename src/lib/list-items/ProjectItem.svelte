@@ -12,7 +12,6 @@
   let db: Database;
   let hovering = false;
   let editing = false;
-  let editTitle = "";
 
   onMount(async () => {
     db = await Database.getInstance();
@@ -24,7 +23,6 @@
   }
 
   function edit(): void {
-    editTitle = project.name;
     editing = true;
   }
 
@@ -61,7 +59,7 @@
       <div class="title">{project.name}</div>
     {:else}
       <form class="edit-form" on:submit|preventDefault={saveEdit}>
-        <input type="text" bind:value={editTitle}>
+        <input type="text" bind:value={project.name}>
         <button type="submit">Save</button>
       </form>
     {/if}

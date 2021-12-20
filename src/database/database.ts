@@ -26,7 +26,7 @@ export type Task = {
 }
 
 export interface IDataGroup<T> {
-    get(): Promise<T[]>;
+    get(parent: any): Promise<T[]>;
     add(obj: T): Promise<T>;
     update(obj: T): Promise<T>;
     remove(id: string | number): Promise<void>;

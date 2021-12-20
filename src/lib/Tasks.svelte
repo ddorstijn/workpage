@@ -2,23 +2,49 @@
   import TaskItem from "./list-items/TaskItem.svelte";
   import CalendarModal from "./modals/CalendarModal.svelte";
 
+  import Database from "../database/LoveField";
+  import type { Task } from "src/database/database";
+  
   import { modal } from "../store";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
   const _MS_PER_DAY = 1000 * 60 * 60 * 24;
   
-  // -- Members -- \\
-  let tasks = [];
+  interface ISortedTasks {
+    "Overdue": Task[],
+    "Today": Task[],
+    "This week": Task[],
+    "Long term": Task[],
+    "Someday": Task[]
+  }
 
-  onMount(() => {
+  // -- Members -- \\
+  let db: Database;
+  let tasks: ISortedTasks = {
+    "Overdue": [],
+    "Today": [],
+    "This week": [],
+    "Long term": [],
+    "Someday": []
+  };
+
+  onMount(async () => {
+    db = await Database.getInstance();
+    db.tasks.subscribe(callback);
   });
 
+  onDestroy(() => db.tasks.unsubscribe(callback));
+
+  function callback(data: Task[]): void {
+      tasks = sortTasks(data);
+  }
+
   // -- Functions -- \\
-  function openCalendar() {
+  function openCalendar(): void {
     modal.set(CalendarModal);
   }
 
-  function dateDiffInDays(a, b) {
+  function dateDiffInDays(a: Date, b: Date): number {
     // Discard the time and time-zone information.
     const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
     const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
@@ -26,8 +52,8 @@
     return Math.floor((utc2 - utc1) / _MS_PER_DAY);
   }
 
-  function sortTasks(tasks) {
-    let sorted = {
+  function sortTasks(tasks: Task[]) {
+    let sorted: ISortedTasks = {
       "Overdue": [],
       "Today": [],
       "This week": [],

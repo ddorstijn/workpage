@@ -34,7 +34,7 @@ class ProjectAdapter implements IDataGroup<Project> {
         return rows[0];
     };
 
-    async update({ id, name }: Project) {
+    async update({ id, name }: Project): Promise<Project> {
         const rows = await this.db
             .update(this.schema)
             .set(this.schema.name, name)
@@ -63,18 +63,18 @@ class ProjectAdapter implements IDataGroup<Project> {
         })
     }
 
-    private notifyOne(callback: Function) {
+    private notifyOne(callback: Function): void {
         this.get().then((data: Project[]): void => {
             callback.call(this, data);
         })
     };
 
-    subscribe(callback: Function) {
+    subscribe(callback: Function): void {
         this.handlers.push(callback);
         this.notifyOne(callback);
     };
 
-    unsubscribe(callback: Function) {
+    unsubscribe(callback: Function): void {
         this.handlers = this.handlers.filter(
             (item: Function): Function => {
                 if (item !== callback) {
@@ -96,10 +96,11 @@ class LinkGroupAdapter implements IDataGroup<LinkGroup> {
         this.handlers = [];
     }
 
-    async get(): Promise<LinkGroup[]> {
+    async get(project: Project): Promise<LinkGroup[]> {
         return await this.db
             .select()
             .from(this.schema)
+            .where(this.schema.projectId.eq(project.id))
             .exec() as LinkGroup[];
     };
 
@@ -115,7 +116,7 @@ class LinkGroupAdapter implements IDataGroup<LinkGroup> {
             ])
             .exec() as LinkGroup[];
 
-        this.notifyAll();
+        this.notifyAll(rows[0]);
         return rows[0];
     };
 
@@ -126,21 +127,22 @@ class LinkGroupAdapter implements IDataGroup<LinkGroup> {
             .where(this.schema.id.eq(id))
             .exec() as LinkGroup[];
 
-        this.notifyAll();
+        this.notifyAll(rows[0]);
         return rows[0];
     };
 
     async remove(id: number): Promise<void> {
-        this.db
+       const rows = await this.db
             .delete()
             .from(this.schema)
-            .where(this.schema.id.eq(id)).exec();
+            .where(this.schema.id.eq(id))
+            .exec() as LinkGroup[];
 
-        this.notifyAll();
+        this.notifyAll(rows[0]);
     }
 
-    private notifyAll(): void {
-        this.get().then(data => {
+    private notifyAll(project: Project): void {
+        this.get(project).then(data => {
             this.handlers.forEach((item: Function) =>
                 item.call(this, data)
             );
@@ -180,10 +182,11 @@ class LinkAdapter implements IDataGroup<Link> {
         this.handlers = [];
     }
 
-    async get(): Promise<Link[]> {
+    async get(linkGroup: LinkGroup): Promise<Link[]> {
         return await this.db
             .select()
             .from(this.schema)
+            .where(this.schema.groupId.eq(linkGroup.id))
             .exec() as Link[];
     };
 
@@ -227,16 +230,16 @@ class LinkAdapter implements IDataGroup<Link> {
         this.notifyAll();
     }
 
-    private notifyAll(): void {
-        this.get().then(data => {
+    private notifyAll(linkGroup: LinkGroup): void {
+        this.get(linkGroup).then(data => {
             this.handlers.forEach((item: Function) =>
                 item.call(this, data)
             );
         })
     }
 
-    private notifyOne(callback: Function): void {
-        this.get().then(data => {
+    private notifyOne(callback: Function, linkGroup: LinkGroup): void {
+        this.get(linkGroup).then(data => {
             callback.call(this, data)
         })
     };
@@ -268,10 +271,11 @@ class TaskAdapter implements IDataGroup<Task> {
         this.handlers = [];
     }
 
-    async get(): Promise<Task[]> {
+    async get(project: Project): Promise<Task[]> {
         return await this.db
             .select()
             .from(this.schema)
+            .where(this.schema.projectId.eq(project.id))
             .exec() as Task[];
     };
 
