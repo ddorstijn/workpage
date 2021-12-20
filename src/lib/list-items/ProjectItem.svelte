@@ -1,29 +1,43 @@
 <script lang="ts">
-  import { modal } from "../../store";
+  import { onMount } from "svelte";
+  import { modal, activeProject } from "../../store";
+
   import Menu from "../menu/Menu.svelte";
 
-  export let project;
+  import type { Project } from "src/database/database";
+  import Database from "../../database/LoveField";
+
+  export let project: Project;
+
+  let db: Database;
   let hovering = false;
   let editing = false;
   let editTitle = "";
 
-  function setActive(project) {
+  onMount(async () => {
+    db = await Database.getInstance();
+  })
+
+  function setActive(): void {
+    $activeProject = project;
     $modal = null;
   }
 
-  function edit() {
+  function edit(): void {
     editTitle = project.name;
     editing = true;
   }
 
-  function remove() {
+  function remove(): void {
+    db.projects.remove(project.id as number);
   }
 
-  function saveEdit() {
+  function saveEdit(): void {
     editing = false;
+    db.projects.update(project);
   }
 
-  function daysDifference(date) {
+  function daysDifference(date: Date): string {
     const diff = new Date().setHours(12) - new Date(+date).setHours(12);
     const diffDays = Math.round(diff / 8.64e7);
     if (diffDays == 0) {
@@ -35,7 +49,7 @@
 </script>
 
 <li
-  on:click|self={() => setActive(project)}
+  on:click|self={setActive}
   on:mouseover={() => (hovering = true)}
   on:mouseout={() => (hovering = false)}
   on:focus={() => (hovering = true)}
@@ -53,7 +67,7 @@
     {/if}
     <small class="text-grey">
       <span class="material-icons">history</span>
-      {daysDifference(project.last_used)}
+      {daysDifference(project.used)}
     </small>
   </div>
   <Menu {hovering} on:edit={edit} on:remove={remove} />
