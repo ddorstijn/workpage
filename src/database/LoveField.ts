@@ -30,7 +30,7 @@ class ProjectAdapter implements IDataGroup<Project> {
                 })
             ]).exec() as Project[];
 
-        this.notifyAll();
+        this.notify();
         return rows[0];
     };
 
@@ -41,21 +41,21 @@ class ProjectAdapter implements IDataGroup<Project> {
             .where(this.schema.id.eq(id))
             .exec() as Project[];
 
-        this.notifyAll();
+        this.notify();
         return rows[0];
     };
 
-    async remove(id: number) {
+    async remove({id}: Project) {
         this.db
             .delete()
             .from(this.schema)
             .where(this.schema.id.eq(id))
             .exec();
 
-        this.notifyAll();
+        this.notify();
     }
 
-    private notifyAll() {
+    private notify() {
         this.get().then(data => {
             this.handlers.forEach((item: Function) =>
                 item.call(this, data)
@@ -63,15 +63,8 @@ class ProjectAdapter implements IDataGroup<Project> {
         })
     }
 
-    private notifyOne(callback: Function) {
-        this.get().then((data: Project[]): void => {
-            callback.call(this, data);
-        })
-    };
-
     subscribe(callback: Function) {
         this.handlers.push(callback);
-        this.notifyOne(callback);
     };
 
     unsubscribe(callback: Function) {
@@ -96,10 +89,11 @@ class LinkGroupAdapter implements IDataGroup<LinkGroup> {
         this.handlers = [];
     }
 
-    async get(): Promise<LinkGroup[]> {
+    async get(projectId: number): Promise<LinkGroup[]> {
         return await this.db
             .select()
             .from(this.schema)
+            .where(this.schema.projectId.eq(projectId))
             .exec() as LinkGroup[];
     };
 
@@ -115,47 +109,40 @@ class LinkGroupAdapter implements IDataGroup<LinkGroup> {
             ])
             .exec() as LinkGroup[];
 
-        this.notifyAll();
+        this.notify(projectId as number);
         return rows[0];
     };
 
-    async update({ id, name }: LinkGroup): Promise<LinkGroup> {
+    async update({ id, name, projectId }: LinkGroup): Promise<LinkGroup> {
         const rows = await this.db
             .update(this.schema)
             .set(this.schema.name, name)
             .where(this.schema.id.eq(id))
             .exec() as LinkGroup[];
 
-        this.notifyAll();
+        this.notify(projectId as number);
         return rows[0];
     };
 
-    async remove(id: number): Promise<void> {
+    async remove({ id, projectId }: LinkGroup): Promise<void> {
         this.db
             .delete()
             .from(this.schema)
             .where(this.schema.id.eq(id)).exec();
 
-        this.notifyAll();
+        this.notify(projectId as number);
     }
 
-    private notifyAll(): void {
-        this.get().then(data => {
+    private notify(projectId: number): void {
+        this.get(projectId).then(data => {
             this.handlers.forEach((item: Function) =>
                 item.call(this, data)
             );
         })
     }
 
-    private notifyOne(callback: Function): void {
-        this.get().then(data => {
-            callback.call(this, data)
-        })
-    };
-
     subscribe(callback: Function): void {
         this.handlers.push(callback);
-        this.notifyOne(callback);
     };
 
     unsubscribe(callback: Function): void {
@@ -180,10 +167,11 @@ class LinkAdapter implements IDataGroup<Link> {
         this.handlers = [];
     }
 
-    async get(): Promise<Link[]> {
+    async get(groupId: number): Promise<Link[]> {
         return await this.db
             .select()
             .from(this.schema)
+            .where(this.schema.groupId.eq(groupId))
             .exec() as Link[];
     };
 
@@ -200,7 +188,7 @@ class LinkAdapter implements IDataGroup<Link> {
             ])
             .exec() as Link[];
 
-        this.notifyAll();
+        this.notify(groupId as number);
         return rows[0];
     };
 
@@ -213,37 +201,30 @@ class LinkAdapter implements IDataGroup<Link> {
             .where(this.schema.id.eq(id))
             .exec() as Link[];
 
-        this.notifyAll();
+        this.notify(groupId as number);
         return rows[0];
     };
 
-    async remove(id: number): Promise<void> {
+    async remove({id, groupId}: Link): Promise<void> {
         this.db
             .delete()
             .from(this.schema)
             .where(this.schema.id.eq(id))
             .exec();
 
-        this.notifyAll();
+        this.notify(groupId as number);
     }
 
-    private notifyAll(): void {
-        this.get().then(data => {
+    private notify(groupId: number): void {
+        this.get(groupId).then(data => {
             this.handlers.forEach((item: Function) =>
                 item.call(this, data)
             );
         })
     }
 
-    private notifyOne(callback: Function): void {
-        this.get().then(data => {
-            callback.call(this, data)
-        })
-    };
-
     subscribe(callback: Function): void {
         this.handlers.push(callback);
-        this.notifyOne(callback);
     };
 
     unsubscribe(callback: Function): void {
@@ -268,14 +249,15 @@ class TaskAdapter implements IDataGroup<Task> {
         this.handlers = [];
     }
 
-    async get(): Promise<Task[]> {
+    async get(projectId: number): Promise<Task[]> {
         return await this.db
             .select()
             .from(this.schema)
+            .where(this.schema.projectId.eq(projectId))
             .exec() as Task[];
     };
 
-    async add({ name, done, due, projectId }: Task): Promise<Task> {
+    async add({ name, due, done = false, projectId }: Task): Promise<Task> {
         const rows = await this.db
             .insertOrReplace()
             .into(this.schema)
@@ -289,50 +271,43 @@ class TaskAdapter implements IDataGroup<Task> {
             ])
             .exec() as Task[];
 
-        this.notifyAll();
+        this.notify(projectId as number);
         return rows[0];
     };
 
-    async update({ id, name, due, done }: Task): Promise<Task> {
+    async update({ id, name, due, done, projectId }: Task): Promise<Task> {
         const rows = await this.db
             .update(this.schema)
-            .set(this.schema.title, name)
+            .set(this.schema.name, name)
             .set(this.schema.due, due)
             .set(this.schema.done, done)
             .where(this.schema.id.eq(id))
             .exec() as Task[];
 
-        this.notifyAll();
+        this.notify(projectId as number);
         return rows[0];
     };
 
-    async remove(id: number): Promise<void> {
+    async remove({id, projectId}: Task): Promise<void> {
         this.db
             .delete()
             .from(this.schema)
             .where(this.schema.id.eq(id))
             .exec();
 
-        this.notifyAll();
+        this.notify(projectId as number);
     }
 
-    private notifyAll(): void {
-        this.get().then(data => {
+    private notify(projectId: number): void {
+        this.get(projectId).then(data => {
             this.handlers.forEach((item: Function) =>
                 item.call(this, data)
             );
         })
     }
 
-    private notifyOne(callback: Function): void {
-        this.get().then(data => {
-            callback.call(this, data)
-        })
-    };
-
     subscribe(callback: Function): void {
         this.handlers.push(callback);
-        this.notifyOne(callback);
     };
 
     unsubscribe(callback: Function): void {
@@ -404,7 +379,7 @@ class LovefieldAdapter implements IDatabase {
         schemabuilder
             .createTable("Tasks")
             .addColumn("id", lf.Type.INTEGER)
-            .addColumn("title", lf.Type.STRING)
+            .addColumn("name", lf.Type.STRING)
             .addColumn("done", lf.Type.BOOLEAN)
             .addColumn("due", lf.Type.DATE_TIME)
             .addColumn("projectId", lf.Type.INTEGER)
@@ -422,6 +397,7 @@ class LovefieldAdapter implements IDatabase {
     public static async getInstance() {
         if (!LovefieldAdapter.instance) {
             LovefieldAdapter.instance = await LovefieldAdapter.init();
+            console.log(LovefieldAdapter.instance);
         }
 
         return LovefieldAdapter.instance;

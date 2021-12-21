@@ -26,10 +26,10 @@ export type Task = {
 }
 
 export interface IDataGroup<T> {
-    get(): Promise<T[]>;
+    get(parentId: string | number): Promise<T[]>;
     add(obj: T): Promise<T>;
     update(obj: T): Promise<T>;
-    remove(id: string | number): Promise<void>;
+    remove(obj: T): Promise<void>;
 
     subscribe(callback: Function): void;
     unsubscribe(callback: Function): void;
@@ -54,7 +54,7 @@ class GenericAdapter implements IDatabase {
             return newproject; 
         },
         async update(project: Project) { return project },
-        async remove(id: string) { },
+        async remove({id}: Project) { },
         
         subscribe(callback: Function): void {
             this._handlers.push(callback);
@@ -80,7 +80,7 @@ class GenericAdapter implements IDatabase {
             return newLinkGroup;
         },
         async update(linkGroup: LinkGroup) { return linkGroup },
-        async remove(id: string) { },
+        async remove({id}: LinkGroup) { },
         
         subscribe(callback: Function) {
             this._handlers.push(callback);
@@ -106,7 +106,7 @@ class GenericAdapter implements IDatabase {
             return newLink;
         },
         async update(link: Link) { return link },
-        async remove(id: string) { },
+        async remove({id}: Link) { },
 
         subscribe(callback: Function) {
             this._handlers.push(callback);
@@ -132,7 +132,7 @@ class GenericAdapter implements IDatabase {
             return newTask;
         },
         async update(task: Task) { return task },
-        async remove(id: string) { },
+        async remove({id}: Task) { },
         
         subscribe(callback: Function) {
             this._handlers.push(callback);

@@ -12,6 +12,7 @@
   onMount(async () => {
     db = await Database.getInstance();
     db.projects.subscribe(callback);
+    projects = await db.projects.get();
   });
 
   onDestroy(() => {
@@ -62,8 +63,8 @@
 
 <div id="projects">
   <ul id="projects__list">
-    {#each filtered_list(projects, filterInput) as project}
-      <ProjectItem {project} />
+    {#each filtered_list(projects, filterInput) as projectItem}
+      <ProjectItem {projectItem} />
     {/each}
   </ul>
 </div>

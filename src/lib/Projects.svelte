@@ -1,5 +1,5 @@
 <script>
-  import { modal } from "../store";
+  import { modal, project } from "../store";
   import ProjectModal from "./modals/ProjectModal.svelte";
 
   function openModal() {
@@ -9,7 +9,11 @@
 
 <article>
   <button id="project__button" class="button primary" on:click="{openModal}">
-    Click to open project
+    {#if $project == null}
+        Click to open project
+    {:else}
+        {$project.name}
+    {/if}
   </button>
 </article>
 

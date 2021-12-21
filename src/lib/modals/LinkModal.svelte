@@ -1,28 +1,35 @@
-<script>
-  import { modal } from "../../store";
+<script lang="ts">
+  import { modal, project } from "../../store";
   import { onMount } from "svelte";
 
-  let id = null;
-  let name = "";
-  let url = "";
-  let groupId = null;
-
+  import Database from "../../database/LoveField";
+  
+  let db: Database;
   let linkGroups = [];
   function addLink(e) {
-    e.target.reset();
-    $modal = null;
+    const form = e.target as HTMLFormElement;
+    const name = (form.querySelector('input[type="text"]') as HTMLInputElement).value;
+    const url = (form.querySelector('input[type="url"]') as HTMLInputElement).value;
+    const groupId = (form.querySelector('select') as HTMLSelectElement).value;
+    
+    db.links.add({name, url, groupId}).then(() => {
+      form.reset();
+      $modal = null;
+    })
   }
 
   onMount(async () => {
+    db = await Database.getInstance();
+    linkGroups = await db.linkgroups.get($project.id as number);
   });
 </script>
 
 <header>Link</header>
 <div>
   <form on:submit|preventDefault={addLink}>
-    <input type="text" placeholder="Name" bind:value={name} required>
-    <input type="url" placeholder="url" bind:value={url} required>
-    <select bind:value={groupId}>
+    <input type="text" placeholder="Name" required>
+    <input type="url" placeholder="Url" required>
+    <select>
       {#each linkGroups as linkGroup}
         <option value={linkGroup.id}>{linkGroup.name}</option>
       {/each}

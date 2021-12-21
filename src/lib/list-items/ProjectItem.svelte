@@ -1,40 +1,38 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { modal, activeProject } from "../../store";
+  import { modal, project } from "../../store";
 
   import Menu from "../menu/Menu.svelte";
 
   import type { Project } from "src/database/database";
   import Database from "../../database/LoveField";
 
-  export let project: Project;
+  export let projectItem: Project;
 
   let db: Database;
   let hovering = false;
   let editing = false;
-  let editTitle = "";
 
   onMount(async () => {
     db = await Database.getInstance();
   })
 
   function setActive(): void {
-    $activeProject = project;
+    project.set(projectItem);
     $modal = null;
   }
 
   function edit(): void {
-    editTitle = project.name;
     editing = true;
   }
 
   function remove(): void {
-    db.projects.remove(project.id as number);
+    db.projects.remove(projectItem);
   }
 
   function saveEdit(): void {
     editing = false;
-    db.projects.update(project);
+    db.projects.update(projectItem);
   }
 
   function daysDifference(date: Date): string {
@@ -58,16 +56,16 @@
   <span>w</span>
   <div class="text">
     {#if !editing}
-      <div class="title">{project.name}</div>
+      <div class="title">{projectItem.name}</div>
     {:else}
       <form class="edit-form" on:submit|preventDefault={saveEdit}>
-        <input type="text" bind:value={editTitle}>
+        <input type="text" bind:value={projectItem.name}>
         <button type="submit">Save</button>
       </form>
     {/if}
     <small class="text-grey">
       <span class="material-icons">history</span>
-      {daysDifference(project.used)}
+      {daysDifference(projectItem.used)}
     </small>
   </div>
   <Menu {hovering} on:edit={edit} on:remove={remove} />

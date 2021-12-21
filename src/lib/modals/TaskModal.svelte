@@ -1,26 +1,33 @@
-<script>
-  import { modal } from "../../store";
+<script lang="ts">
+  import { modal, project } from "../../store";
   import { onMount } from "svelte";
+  import Database from "../../database/LoveField";
 
-  let id = null;
-  let title = "";
-  let due = "";
-  let done = false;
+  let db: Database;
 
   onMount(async () => {
+    db = await Database.getInstance();
   });
 
   function addTask(e) {
-    e.target.reset();
-    $modal = null;
+    const form = e.target as HTMLFormElement;
+    const name = (form.querySelector('input[type="text"]') as HTMLInputElement).value;
+    const due = new Date((form.querySelector('input[type="date"]') as HTMLInputElement).value);
+    const done = false;
+    const projectId = $project.id as number;
+
+    db.tasks.add({ name, due, done, projectId}).then(() => {
+      form.reset();
+      $modal = null;
+    })
   }
 </script>
 
 <header>Task</header>
 <div>
   <form on:submit|preventDefault={addTask}>
-    <input type="text" bind:value={title} required />
-    <input type="date" bind:value={due} />
+    <input type="text" required />
+    <input type="date" />
     <button type="submit">Save task</button>
   </form>
 </div>

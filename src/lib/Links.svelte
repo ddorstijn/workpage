@@ -1,18 +1,36 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { project } from "../store";
 
+  import Database from "../database/LoveField";
   import LinkCard from "./LinkCard.svelte";
+  import type { LinkGroup, Project } from "src/database/database";
 
-  let linkGroups = [];
+  let db: Database;
+  let linkGroups = [] as LinkGroup[];
 
-  onMount(() => {
-    getLinkGroups();
+  onMount(async () => {
+    db = await Database.getInstance();
+    db.linkgroups.subscribe(callback);
+    linkGroups = await db.linkgroups.get($project.id as number);
+    console.log(linkGroups);
   });
-  
-  function getLinkGroups() {
-    
+
+  onDestroy(() => db.linkgroups.unsubscribe(callback));
+
+  function callback(data: LinkGroup[]) {
+    console.log("Updating linkGroups");
+    linkGroups = data;
   }
+
+  project.subscribe(async (newProject: Project) => {
+    if (!newProject || !db) {
+      linkGroups = [];
+      return;
+    }
+    
+    linkGroups = await db.linkgroups.get(newProject.id as number);
+  })
 </script>
 
 <article>
