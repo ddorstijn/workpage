@@ -5,15 +5,16 @@
   import Menu from "./menu/Menu.svelte";
   import { onDestroy, onMount } from "svelte";
   import Database from "../database/LoveField";
-  import type { Link } from "src/database/database";
+  import type { Link, LinkGroup } from "src/database/database";
 
-  export let linkGroup;
+  export let linkGroup: LinkGroup;
   let db: Database;
   let links = [];
   let hovering = false;
 
   onMount(async () => {
     db = await Database.getInstance();
+    links = await db.links.get(linkGroup.id as number);
     db.links.subscribe(callback);
   });
 

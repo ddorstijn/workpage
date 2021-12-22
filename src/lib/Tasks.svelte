@@ -30,6 +30,7 @@
 
   onMount(async () => {
       db = await Database.getInstance();
+      tasks = sortTasks(await db.tasks.get($project.id as number));
       db.tasks.subscribe(callback);
   });
 
@@ -61,7 +62,7 @@
     return Math.floor((utc2 - utc1) / _MS_PER_DAY);
   }
 
-  function sortTasks(tasks: Task[]) {
+  function sortTasks(unsortedTasks: Task[]) {
     let sorted = {
       "Overdue": [],
       "Today": [],
@@ -69,10 +70,11 @@
       "Long term": [],
       "Someday": []
     };
-
-    for (const task of tasks) {
+    
+    for (const task of unsortedTasks) {
       if (!task.due) {
         sorted["Someday"].push(task);  
+        continue;
       }
 
       const dateDiff = dateDiffInDays(new Date(), task.due);

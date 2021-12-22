@@ -1,10 +1,12 @@
 import type { IDatabase, IDataGroup, Link, LinkGroup, Project, Task } from "./database";
 import lf from "lovefield";
 
+type Callback<T> = (data: T[]) => any;
+
 class ProjectAdapter implements IDataGroup<Project> {
     private db: lf.Database;
     private schema: lf.schema.Table;
-    private handlers: Function[];
+    private handlers: Callback<Project>[];
 
     constructor(db: lf.Database, schema: lf.schema.Table) {
         this.db = db;
@@ -55,21 +57,18 @@ class ProjectAdapter implements IDataGroup<Project> {
         this.notify();
     }
 
-    private notify() {
-        this.get().then(data => {
-            this.handlers.forEach((item: Function) =>
-                item.call(this, data)
-            );
-        })
+    private async notify(): Promise<void> {
+        const projects = await this.get();
+        this.handlers.forEach((item: Function) => item.call(this, projects));
     }
 
-    subscribe(callback: Function) {
+    subscribe(callback: Callback<Project>): void {
         this.handlers.push(callback);
     };
 
-    unsubscribe(callback: Function) {
+    unsubscribe(callback: Callback<Project>): void {
         this.handlers = this.handlers.filter(
-            (item: Function): Function => {
+            (item: Callback<Project>): Callback<Project> => {
                 if (item !== callback) {
                     return item;
                 }
@@ -81,7 +80,7 @@ class ProjectAdapter implements IDataGroup<Project> {
 class LinkGroupAdapter implements IDataGroup<LinkGroup> {
     private db: lf.Database;
     private schema: lf.schema.Table;
-    private handlers: Function[];
+    private handlers: Callback<LinkGroup>[];
 
     constructor(db: lf.Database, schema: lf.schema.Table) {
         this.db = db;
@@ -133,21 +132,18 @@ class LinkGroupAdapter implements IDataGroup<LinkGroup> {
         this.notify(projectId as number);
     }
 
-    private notify(projectId: number): void {
-        this.get(projectId).then(data => {
-            this.handlers.forEach((item: Function) =>
-                item.call(this, data)
-            );
-        })
+    private async notify(projectId: number): Promise<void> {
+        const linkgroups = await this.get(projectId);
+        this.handlers.forEach((item: Callback<LinkGroup>) => item.call(this, linkgroups));
     }
 
-    subscribe(callback: Function): void {
+    subscribe(callback: Callback<LinkGroup>): void {
         this.handlers.push(callback);
     };
 
-    unsubscribe(callback: Function): void {
+    unsubscribe(callback: Callback<LinkGroup>): void {
         this.handlers = this.handlers.filter(
-            (item: Function): Function => {
+            (item: Callback<LinkGroup>): Callback<LinkGroup> => {
                 if (item !== callback) {
                     return item;
                 }
@@ -159,7 +155,7 @@ class LinkGroupAdapter implements IDataGroup<LinkGroup> {
 class LinkAdapter implements IDataGroup<Link> {
     private db: lf.Database;
     private schema: lf.schema.Table;
-    private handlers: Function[];
+    private handlers: Callback<Link>[];
 
     constructor(db: lf.Database, linkSchema: lf.schema.Table) {
         this.db = db;
@@ -215,21 +211,18 @@ class LinkAdapter implements IDataGroup<Link> {
         this.notify(groupId as number);
     }
 
-    private notify(groupId: number): void {
-        this.get(groupId).then(data => {
-            this.handlers.forEach((item: Function) =>
-                item.call(this, data)
-            );
-        })
+    private async notify(groupId: number): Promise<void> {
+        const links = await this.get(groupId);
+        this.handlers.forEach((item: Callback<Link>) => item.call(this, links));
     }
 
-    subscribe(callback: Function): void {
+    subscribe(callback: Callback<Link>): void {
         this.handlers.push(callback);
     };
 
-    unsubscribe(callback: Function): void {
+    unsubscribe(callback: Callback<Link>): void {
         this.handlers = this.handlers.filter(
-            (item: Function): Function => {
+            (item: Callback<Link>): Callback<Link> => {
                 if (item !== callback) {
                     return item;
                 }
@@ -241,7 +234,7 @@ class LinkAdapter implements IDataGroup<Link> {
 class TaskAdapter implements IDataGroup<Task> {
     private db: lf.Database;
     private schema: lf.schema.Table;
-    private handlers: Function[];
+    private handlers: Callback<Task>[];
 
     constructor(db: lf.Database, schema: lf.schema.Table) {
         this.db = db;
@@ -298,21 +291,18 @@ class TaskAdapter implements IDataGroup<Task> {
         this.notify(projectId as number);
     }
 
-    private notify(projectId: number): void {
-        this.get(projectId).then(data => {
-            this.handlers.forEach((item: Function) =>
-                item.call(this, data)
-            );
-        })
+    private async notify(projectId: number): Promise<void> {
+        const tasks = await this.get(projectId);
+        this.handlers.forEach((item: Callback<Task>) => item.call(this, tasks));
     }
 
-    subscribe(callback: Function): void {
+    subscribe(callback: Callback<Task>): void {
         this.handlers.push(callback);
     };
 
-    unsubscribe(callback: Function): void {
+    unsubscribe(callback: Callback<Task>): void {
         this.handlers = this.handlers.filter(
-            (item: Function): Function => {
+            (item: Callback<Task>): Callback<Task> => {
                 if (item !== callback) {
                     return item;
                 }
@@ -383,6 +373,7 @@ class LovefieldAdapter implements IDatabase {
             .addColumn("done", lf.Type.BOOLEAN)
             .addColumn("due", lf.Type.DATE_TIME)
             .addColumn("projectId", lf.Type.INTEGER)
+            .addNullable(["due"])
             .addPrimaryKey(["id"], true)
             .addForeignKey("fk_Project", {
                 local: "projectId",
@@ -397,7 +388,6 @@ class LovefieldAdapter implements IDatabase {
     public static async getInstance() {
         if (!LovefieldAdapter.instance) {
             LovefieldAdapter.instance = await LovefieldAdapter.init();
-            console.log(LovefieldAdapter.instance);
         }
 
         return LovefieldAdapter.instance;

@@ -11,8 +11,8 @@
 
   onMount(async () => {
     db = await Database.getInstance();
-    db.projects.subscribe(callback);
     projects = await db.projects.get();
+    db.projects.subscribe(callback);
   });
 
   onDestroy(() => {

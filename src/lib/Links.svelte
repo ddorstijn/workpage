@@ -13,13 +13,11 @@
     db = await Database.getInstance();
     db.linkgroups.subscribe(callback);
     linkGroups = await db.linkgroups.get($project.id as number);
-    console.log(linkGroups);
   });
 
   onDestroy(() => db.linkgroups.unsubscribe(callback));
 
   function callback(data: LinkGroup[]) {
-    console.log("Updating linkGroups");
     linkGroups = data;
   }
 
