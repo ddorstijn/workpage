@@ -1,23 +1,15 @@
 <script lang="ts">
   import { modal, project } from "../../store";
-  import { onMount } from "svelte";
-  import Database from "../../database/LoveField";
+  import * as db from "../../database/LoveFieldModule";
+  import { db as dbRef } from "../../store";
 
-  let db: Database;
-
-  function addGroup(e) {
+  function addGroup(e: any): void {
     const form = e.target as HTMLFormElement;
     const name = form.querySelector('input').value;
 
-    db.linkgroups.add({ name, projectId: $project.id as number }).then(() => {
-      form.reset();
-      $modal = null;
-    })
+    db.linkgroups.add($dbRef, { name, projectId: $project.id as number })
+    $modal = null;
   }
-
-  onMount(async () => {
-    db = await Database.getInstance();
-  });
 </script>
 
 <header>Link group</header>

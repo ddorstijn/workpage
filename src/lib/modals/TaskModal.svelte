@@ -1,13 +1,6 @@
 <script lang="ts">
-  import { modal, project } from "../../store";
-  import { onMount } from "svelte";
-  import Database from "../../database/LoveField";
-  
-  let db: Database;
-
-  onMount(async () => {
-    db = await Database.getInstance();
-  });
+  import { modal, project, db as dbRef } from "../../store";
+  import * as db from "../../database/LoveFieldModule";
 
   function addTask(e) {
     const form = e.target as HTMLFormElement;
@@ -16,10 +9,8 @@
     const done = false;
     const projectId = $project.id as number;
 
-    db.tasks.add({ name, due, done, projectId}).then(() => {
-      form.reset();
-      $modal = null;
-    })
+    db.tasks.add($dbRef, { name, due, done, projectId });
+    $modal = null;
   }
 </script>
 
@@ -33,5 +24,4 @@
 </div>
 
 <style>
-  
 </style>

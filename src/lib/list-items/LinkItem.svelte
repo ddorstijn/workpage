@@ -2,26 +2,21 @@
   import Menu from "../menu/Menu.svelte";
   import { modal } from "../../store";
   import LinkModal from "../modals/LinkModal.svelte";
-  import { onMount } from "svelte";
-  import Database from "../../database/LoveField";
+  import * as db from "../../database/LoveFieldModule";
+  import { db as dbRef } from "../../store";
    
   import type { Link } from "src/database/database";
 
   export let link: Link;
   
-  let db: Database;
   let hovering = false;
 
-  onMount(async () => {
-    db = await Database.getInstance();
-  })
-
-  function edit() {
+  function edit(): void {
     $modal = LinkModal;
   }
 
-  function remove() {
-    db.links.remove(link);
+  function remove(): void {
+    db.links.remove($dbRef, link);
   }
 </script>
 

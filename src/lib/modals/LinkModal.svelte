@@ -2,26 +2,24 @@
   import { modal, project } from "../../store";
   import { onMount } from "svelte";
 
-  import Database from "../../database/LoveField";
+  import * as db from "../../database/LoveFieldModule";
+  import { db as dbRef } from "../../store";
 
-  let db: Database;
   let linkGroups = [];
-  function addLink(e) {
+
+  onMount(async () => {
+    linkGroups = await db.linkgroups.get($dbRef, $project.id as number);
+  });
+
+  function addLink(e: any): void {
     const form = e.target as HTMLFormElement;
     const name = (form.querySelector('input[type="text"]') as HTMLInputElement).value;
     const url = (form.querySelector('input[type="url"]') as HTMLInputElement).value;
     const groupId = (form.querySelector('select') as HTMLSelectElement).value;
     
-    db.links.add({name, url, groupId}).then(() => {
-      form.reset();
-      $modal = null;
-    })
+    db.links.add($dbRef,{name, url, groupId});
+    $modal = null;
   }
-
-  onMount(async () => {
-    db = await Database.getInstance();
-    linkGroups = await db.linkgroups.get($project.id as number);
-  });
 </script>
 
 <header>Link</header>

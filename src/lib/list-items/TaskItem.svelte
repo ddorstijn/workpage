@@ -3,25 +3,22 @@
   import { modal } from "../../store";
   import TaskModal from "../modals/TaskModal.svelte";
   import type { Task } from "src/database/database";
-  import Database from "../../database/LoveField"; 
-  import { onMount } from "svelte";
+  import * as db from "../../database/LoveFieldModule";
+  import { db as dbRef } from "../../store";
 
   export let task: Task;
-  let db: Database;
+
   let hovering = false;
 
-  onMount(async() => {
-    db = await Database.getInstance();
-  })
   function edit() {
     $modal = TaskModal;
   }
 
   function remove() {
-    db.tasks.remove(task);
+    db.tasks.remove($dbRef, task);
   }
 
-  function pretty_date(date) {
+  function pretty_date(date: Date): string {
     return new Intl.DateTimeFormat("en", {
       day: "numeric",
       month: "long",

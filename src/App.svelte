@@ -2,11 +2,9 @@
   import Fab from "./lib/Fab.svelte";
   import Modal from "./lib/modals/Modal.svelte";
   
+  import { load } from "./store";
+
   import { onMount } from "svelte";
-import Clock from "./lib/Clock.svelte";
-import Projects from "./lib/Projects.svelte";
-import Links from "./lib/Links.svelte";
-import Tasks from "./lib/Tasks.svelte";
 
   let darkmode: boolean;
 
@@ -32,15 +30,28 @@ import Tasks from "./lib/Tasks.svelte";
   </li>
 </ul>
 
+
 <article class="newtab">
-  <main>
-    <Clock />
-    <Projects />
-    <Links />
-  </main>
-  <aside>
-    <Tasks />
-  </aside>
+  {#await load() }
+	Loading...
+{:then}
+	<main>
+		{#await import("./lib/Clock.svelte") then c}
+			<svelte:component this={c.default} />
+		{/await}
+		{#await import("./lib/Projects.svelte") then c} 
+			<svelte:component this={c.default} />
+		{/await}
+		{#await import("./lib/Links.svelte") then c}
+			<svelte:component this={c.default} />
+		{/await}
+	</main>
+	<aside>
+		{#await import("./lib/Tasks.svelte") then c}
+			<svelte:component this={c.default} />
+		{/await}
+	</aside>
+{/await}
 </article>
 
 <Fab />

@@ -1,18 +1,17 @@
 <script lang="ts">
   import ProjectItem from "../list-items/ProjectItem.svelte";
   import type { Project } from "../../database/database";
-  import Database from "../../database/LoveField";
+  import * as db from "../../database/LoveFieldModule";
+  import { db as dbRef } from "../../store";
   
   import {onDestroy, onMount } from 'svelte';
   
-  let db: Database;
   let projects: Project[] = [];
   let projectPopup = false;
   let filterInput = "";
 
   onMount(async () => {
-    db = await Database.getInstance();
-    projects = await db.projects.get();
+    projects = await db.projects.get($dbRef);
     db.projects.subscribe(callback);
   });
 
@@ -25,10 +24,10 @@
   }
 
   function addProject(e: any): void {
-    const input = e.target.querySelector("#add-project") as HTMLInputElement; 
-    db.projects.add({name: input.value});
+    const form = e.target as HTMLFormElement;
+    const name = form.querySelector("input").value;
+    db.projects.add($dbRef, {name});
 
-    e.target.reset();
     projectPopup = false;
   }
 
@@ -56,7 +55,7 @@
 
   {#if projectPopup}
     <form class="popup card" on:submit|preventDefault={addProject}>        
-        <input id="add-project" type="text" placeholder="Project name.." />
+        <input type="text" placeholder="Project name.." />
         <button class="button icon-only primary material-icons" type="submit">add</button>
     </form>
   {/if}

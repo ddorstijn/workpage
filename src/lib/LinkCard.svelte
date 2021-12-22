@@ -4,18 +4,18 @@
   import LinkItem from "./list-items/LinkItem.svelte";
   import Menu from "./menu/Menu.svelte";
   import { onDestroy, onMount } from "svelte";
-  import Database from "../database/LoveField";
+  import * as db from "../database/LoveFieldModule";
+  import { db as dbRef } from "../store";
   
   import type { Link, LinkGroup } from "src/database/database";
 
   export let linkGroup: LinkGroup;
-  let db: Database;
+
   let links = [];
   let hovering = false;
 
   onMount(async () => {
-    db = await Database.getInstance();
-    links = await db.links.get(linkGroup.id as number);
+    links = await db.links.get($dbRef, linkGroup.id as number);
     db.links.subscribe(callback);
   });
 
@@ -26,7 +26,7 @@
   }
 
   function remove() {
-    db.linkgroups.remove(linkGroup);
+    db.linkgroups.remove($dbRef, linkGroup);
   }
 
   function edit() {

@@ -1,21 +1,16 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { modal, project } from "../../store";
 
   import Menu from "../menu/Menu.svelte";
 
   import type { Project } from "src/database/database";
-  import Database from "../../database/LoveField";
+  import * as db from "../../database/LoveFieldModule";
+  import { db as dbRef } from "../../store";
   
   export let projectItem: Project;
 
-  let db: Database;
   let hovering = false;
   let editing = false;
-
-  onMount(async () => {
-    db = await Database.getInstance();
-  })
 
   function setActive(): void {
     project.set(projectItem);
@@ -27,12 +22,12 @@
   }
 
   function remove(): void {
-    db.projects.remove(projectItem);
+    db.projects.remove($dbRef, projectItem);
   }
 
   function saveEdit(): void {
     editing = false;
-    db.projects.update(projectItem);
+    db.projects.update($dbRef, projectItem);
   }
 
   function daysDifference(date: Date): string {
