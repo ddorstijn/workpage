@@ -2,15 +2,23 @@
   import Menu from "../menu/Menu.svelte";
   import { modal } from "../../store";
   import TaskModal from "../modals/TaskModal.svelte";
+  import type { Task } from "src/database/database";
+  import Database from "../../database/LoveField"; 
+  import { onMount } from "svelte";
 
-  export let task;
+  export let task: Task;
+  let db: Database;
   let hovering = false;
 
+  onMount(async() => {
+    db = await Database.getInstance();
+  })
   function edit() {
     $modal = TaskModal;
   }
 
   function remove() {
+    db.tasks.remove(task);
   }
 
   function pretty_date(date) {
@@ -32,7 +40,7 @@
   </label>
   
   <div class="text">
-    <div class="title">{task.title}</div>
+    <div class="title">{task.name}</div>
     <small class="text-grey">
       <span class="material-icons">event</span>
       {pretty_date(task.due)}

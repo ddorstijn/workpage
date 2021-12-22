@@ -1,19 +1,18 @@
 <script lang="ts">
-  import LinkCard from "./LinkCard.svelte";
+  import { onDestroy, onMount } from "svelte";
+  import { project } from "../store";
 
   import Database from "../database/LoveField";
-  import type { LinkGroup } from "src/database/database";
-
-  import { onDestroy, onMount } from "svelte";
-  import { activeProject } from "../store";
-
+  import LinkCard from "./LinkCard.svelte";
+  import type { LinkGroup, Project } from "src/database/database";
 
   let db: Database;
-  let linkGroups = [];
+  let linkGroups = [] as LinkGroup[];
 
   onMount(async () => {
     db = await Database.getInstance();
     db.linkgroups.subscribe(callback);
+    linkGroups = await db.linkgroups.get($project.id as number);
   });
 
   onDestroy(() => db.linkgroups.unsubscribe(callback));
@@ -21,6 +20,15 @@
   function callback(data: LinkGroup[]) {
     linkGroups = data;
   }
+
+  project.subscribe(async (newProject: Project) => {
+    if (!newProject || !db) {
+      linkGroups = [];
+      return;
+    }
+    
+    linkGroups = await db.linkgroups.get(newProject.id as number);
+  })
 </script>
 
 <article>

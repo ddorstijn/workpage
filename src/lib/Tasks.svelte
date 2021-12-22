@@ -2,14 +2,13 @@
   import TaskItem from "./list-items/TaskItem.svelte";
   import CalendarModal from "./modals/CalendarModal.svelte";
 
-  import Database from "../database/LoveField";
-  import type { Task } from "src/database/database";
-  
-  import { modal } from "../store";
+  import { modal, project } from "../store";
   import { onDestroy, onMount } from "svelte";
+  import type { Project, Task } from "src/database/database";
+  import Database from "../database/LoveField";
 
   const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-  
+
   interface ISortedTasks {
     "Overdue": Task[],
     "Today": Task[],
@@ -17,7 +16,7 @@
     "Long term": Task[],
     "Someday": Task[]
   }
-
+  
   // -- Members -- \\
   let db: Database;
   let tasks: ISortedTasks = {
@@ -29,22 +28,32 @@
   };
 
   onMount(async () => {
-    db = await Database.getInstance();
-    db.tasks.subscribe(callback);
+      db = await Database.getInstance();
+      tasks = sortTasks(await db.tasks.get($project.id as number));
+      db.tasks.subscribe(callback);
   });
 
   onDestroy(() => db.tasks.unsubscribe(callback));
 
   function callback(data: Task[]): void {
-      tasks = sortTasks(data);
+    tasks = sortTasks(data);
   }
+
+  project.subscribe(async (newProject: Project) => {
+    if (!newProject || !db) {
+      tasks = sortTasks([]);
+      return;
+    }
+
+    tasks = sortTasks(await db.tasks.get(newProject.id as number));
+  })
 
   // -- Functions -- \\
   function openCalendar(): void {
     modal.set(CalendarModal);
   }
 
-  function dateDiffInDays(a: Date, b: Date): number {
+  function dateDiffInDays(a: Date, b: Date) {
     // Discard the time and time-zone information.
     const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
     const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
@@ -52,18 +61,19 @@
     return Math.floor((utc2 - utc1) / _MS_PER_DAY);
   }
 
-  function sortTasks(tasks: Task[]) {
-    let sorted: ISortedTasks = {
+  function sortTasks(unsortedTasks: Task[]) {
+    let sorted = {
       "Overdue": [],
       "Today": [],
       "This week": [],
       "Long term": [],
       "Someday": []
     };
-
-    for (const task of tasks) {
+    
+    for (const task of unsortedTasks) {
       if (!task.due) {
         sorted["Someday"].push(task);  
+        continue;
       }
 
       const dateDiff = dateDiffInDays(new Date(), task.due);

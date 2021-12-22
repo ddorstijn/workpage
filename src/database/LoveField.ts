@@ -1,10 +1,12 @@
 import type { IDatabase, IDataGroup, Link, LinkGroup, Project, Task } from "./database";
 import lf from "lovefield";
 
+type Callback<T> = (data: T[]) => any;
+
 class ProjectAdapter implements IDataGroup<Project> {
     private db: lf.Database;
     private schema: lf.schema.Table;
-    private handlers: Function[];
+    private handlers: Callback<Project>[];
 
     constructor(db: lf.Database, schema: lf.schema.Table) {
         this.db = db;
@@ -30,53 +32,43 @@ class ProjectAdapter implements IDataGroup<Project> {
                 })
             ]).exec() as Project[];
 
-        this.notifyAll();
+        this.notify();
         return rows[0];
     };
 
-    async update({ id, name }: Project): Promise<Project> {
+    async update({ id, name }: Project) {
         const rows = await this.db
             .update(this.schema)
             .set(this.schema.name, name)
             .where(this.schema.id.eq(id))
             .exec() as Project[];
 
-        this.notifyAll();
+        this.notify();
         return rows[0];
     };
 
-    async remove(id: number) {
+    async remove({id}: Project) {
         this.db
             .delete()
             .from(this.schema)
             .where(this.schema.id.eq(id))
             .exec();
 
-        this.notifyAll();
+        this.notify();
     }
 
-    private notifyAll() {
-        this.get().then(data => {
-            this.handlers.forEach((item: Function) =>
-                item.call(this, data)
-            );
-        })
+    private async notify(): Promise<void> {
+        const projects = await this.get();
+        this.handlers.forEach((item: Function) => item.call(this, projects));
     }
 
-    private notifyOne(callback: Function): void {
-        this.get().then((data: Project[]): void => {
-            callback.call(this, data);
-        })
-    };
-
-    subscribe(callback: Function): void {
+    subscribe(callback: Callback<Project>): void {
         this.handlers.push(callback);
-        this.notifyOne(callback);
     };
 
-    unsubscribe(callback: Function): void {
+    unsubscribe(callback: Callback<Project>): void {
         this.handlers = this.handlers.filter(
-            (item: Function): Function => {
+            (item: Callback<Project>): Callback<Project> => {
                 if (item !== callback) {
                     return item;
                 }
@@ -88,7 +80,7 @@ class ProjectAdapter implements IDataGroup<Project> {
 class LinkGroupAdapter implements IDataGroup<LinkGroup> {
     private db: lf.Database;
     private schema: lf.schema.Table;
-    private handlers: Function[];
+    private handlers: Callback<LinkGroup>[];
 
     constructor(db: lf.Database, schema: lf.schema.Table) {
         this.db = db;
@@ -96,11 +88,11 @@ class LinkGroupAdapter implements IDataGroup<LinkGroup> {
         this.handlers = [];
     }
 
-    async get(project: Project): Promise<LinkGroup[]> {
+    async get(projectId: number): Promise<LinkGroup[]> {
         return await this.db
             .select()
             .from(this.schema)
-            .where(this.schema.projectId.eq(project.id))
+            .where(this.schema.projectId.eq(projectId))
             .exec() as LinkGroup[];
     };
 
@@ -116,53 +108,42 @@ class LinkGroupAdapter implements IDataGroup<LinkGroup> {
             ])
             .exec() as LinkGroup[];
 
-        this.notifyAll(rows[0]);
+        this.notify(projectId as number);
         return rows[0];
     };
 
-    async update({ id, name }: LinkGroup): Promise<LinkGroup> {
+    async update({ id, name, projectId }: LinkGroup): Promise<LinkGroup> {
         const rows = await this.db
             .update(this.schema)
             .set(this.schema.name, name)
             .where(this.schema.id.eq(id))
             .exec() as LinkGroup[];
 
-        this.notifyAll(rows[0]);
+        this.notify(projectId as number);
         return rows[0];
     };
 
-    async remove(id: number): Promise<void> {
-       const rows = await this.db
+    async remove({ id, projectId }: LinkGroup): Promise<void> {
+        this.db
             .delete()
             .from(this.schema)
-            .where(this.schema.id.eq(id))
-            .exec() as LinkGroup[];
+            .where(this.schema.id.eq(id)).exec();
 
-        this.notifyAll(rows[0]);
+        this.notify(projectId as number);
     }
 
-    private notifyAll(project: Project): void {
-        this.get(project).then(data => {
-            this.handlers.forEach((item: Function) =>
-                item.call(this, data)
-            );
-        })
+    private async notify(projectId: number): Promise<void> {
+        const linkgroups = await this.get(projectId);
+        this.handlers.forEach((item: Callback<LinkGroup>) => item.call(this, linkgroups));
     }
 
-    private notifyOne(callback: Function): void {
-        this.get().then(data => {
-            callback.call(this, data)
-        })
-    };
-
-    subscribe(callback: Function): void {
+    subscribe(callback: Callback<LinkGroup>): void {
         this.handlers.push(callback);
-        this.notifyOne(callback);
     };
 
-    unsubscribe(callback: Function): void {
+    unsubscribe(callback: Callback<LinkGroup>): void {
         this.handlers = this.handlers.filter(
-            (item: Function): Function => {
+            (item: Callback<LinkGroup>): Callback<LinkGroup> => {
                 if (item !== callback) {
                     return item;
                 }
@@ -174,7 +155,7 @@ class LinkGroupAdapter implements IDataGroup<LinkGroup> {
 class LinkAdapter implements IDataGroup<Link> {
     private db: lf.Database;
     private schema: lf.schema.Table;
-    private handlers: Function[];
+    private handlers: Callback<Link>[];
 
     constructor(db: lf.Database, linkSchema: lf.schema.Table) {
         this.db = db;
@@ -182,11 +163,11 @@ class LinkAdapter implements IDataGroup<Link> {
         this.handlers = [];
     }
 
-    async get(linkGroup: LinkGroup): Promise<Link[]> {
+    async get(groupId: number): Promise<Link[]> {
         return await this.db
             .select()
             .from(this.schema)
-            .where(this.schema.groupId.eq(linkGroup.id))
+            .where(this.schema.groupId.eq(groupId))
             .exec() as Link[];
     };
 
@@ -203,7 +184,7 @@ class LinkAdapter implements IDataGroup<Link> {
             ])
             .exec() as Link[];
 
-        this.notifyAll();
+        this.notify(groupId as number);
         return rows[0];
     };
 
@@ -216,42 +197,32 @@ class LinkAdapter implements IDataGroup<Link> {
             .where(this.schema.id.eq(id))
             .exec() as Link[];
 
-        this.notifyAll();
+        this.notify(groupId as number);
         return rows[0];
     };
 
-    async remove(id: number): Promise<void> {
+    async remove({id, groupId}: Link): Promise<void> {
         this.db
             .delete()
             .from(this.schema)
             .where(this.schema.id.eq(id))
             .exec();
 
-        this.notifyAll();
+        this.notify(groupId as number);
     }
 
-    private notifyAll(linkGroup: LinkGroup): void {
-        this.get(linkGroup).then(data => {
-            this.handlers.forEach((item: Function) =>
-                item.call(this, data)
-            );
-        })
+    private async notify(groupId: number): Promise<void> {
+        const links = await this.get(groupId);
+        this.handlers.forEach((item: Callback<Link>) => item.call(this, links));
     }
 
-    private notifyOne(callback: Function, linkGroup: LinkGroup): void {
-        this.get(linkGroup).then(data => {
-            callback.call(this, data)
-        })
-    };
-
-    subscribe(callback: Function): void {
+    subscribe(callback: Callback<Link>): void {
         this.handlers.push(callback);
-        this.notifyOne(callback);
     };
 
-    unsubscribe(callback: Function): void {
+    unsubscribe(callback: Callback<Link>): void {
         this.handlers = this.handlers.filter(
-            (item: Function): Function => {
+            (item: Callback<Link>): Callback<Link> => {
                 if (item !== callback) {
                     return item;
                 }
@@ -263,7 +234,7 @@ class LinkAdapter implements IDataGroup<Link> {
 class TaskAdapter implements IDataGroup<Task> {
     private db: lf.Database;
     private schema: lf.schema.Table;
-    private handlers: Function[];
+    private handlers: Callback<Task>[];
 
     constructor(db: lf.Database, schema: lf.schema.Table) {
         this.db = db;
@@ -271,15 +242,15 @@ class TaskAdapter implements IDataGroup<Task> {
         this.handlers = [];
     }
 
-    async get(project: Project): Promise<Task[]> {
+    async get(projectId: number): Promise<Task[]> {
         return await this.db
             .select()
             .from(this.schema)
-            .where(this.schema.projectId.eq(project.id))
+            .where(this.schema.projectId.eq(projectId))
             .exec() as Task[];
     };
 
-    async add({ name, done, due, projectId }: Task): Promise<Task> {
+    async add({ name, due, done = false, projectId }: Task): Promise<Task> {
         const rows = await this.db
             .insertOrReplace()
             .into(this.schema)
@@ -293,55 +264,45 @@ class TaskAdapter implements IDataGroup<Task> {
             ])
             .exec() as Task[];
 
-        this.notifyAll();
+        this.notify(projectId as number);
         return rows[0];
     };
 
-    async update({ id, name, due, done }: Task): Promise<Task> {
+    async update({ id, name, due, done, projectId }: Task): Promise<Task> {
         const rows = await this.db
             .update(this.schema)
-            .set(this.schema.title, name)
+            .set(this.schema.name, name)
             .set(this.schema.due, due)
             .set(this.schema.done, done)
             .where(this.schema.id.eq(id))
             .exec() as Task[];
 
-        this.notifyAll();
+        this.notify(projectId as number);
         return rows[0];
     };
 
-    async remove(id: number): Promise<void> {
+    async remove({id, projectId}: Task): Promise<void> {
         this.db
             .delete()
             .from(this.schema)
             .where(this.schema.id.eq(id))
             .exec();
 
-        this.notifyAll();
+        this.notify(projectId as number);
     }
 
-    private notifyAll(): void {
-        this.get().then(data => {
-            this.handlers.forEach((item: Function) =>
-                item.call(this, data)
-            );
-        })
+    private async notify(projectId: number): Promise<void> {
+        const tasks = await this.get(projectId);
+        this.handlers.forEach((item: Callback<Task>) => item.call(this, tasks));
     }
 
-    private notifyOne(callback: Function): void {
-        this.get().then(data => {
-            callback.call(this, data)
-        })
-    };
-
-    subscribe(callback: Function): void {
+    subscribe(callback: Callback<Task>): void {
         this.handlers.push(callback);
-        this.notifyOne(callback);
     };
 
-    unsubscribe(callback: Function): void {
+    unsubscribe(callback: Callback<Task>): void {
         this.handlers = this.handlers.filter(
-            (item: Function): Function => {
+            (item: Callback<Task>): Callback<Task> => {
                 if (item !== callback) {
                     return item;
                 }
@@ -408,10 +369,11 @@ class LovefieldAdapter implements IDatabase {
         schemabuilder
             .createTable("Tasks")
             .addColumn("id", lf.Type.INTEGER)
-            .addColumn("title", lf.Type.STRING)
+            .addColumn("name", lf.Type.STRING)
             .addColumn("done", lf.Type.BOOLEAN)
             .addColumn("due", lf.Type.DATE_TIME)
             .addColumn("projectId", lf.Type.INTEGER)
+            .addNullable(["due"])
             .addPrimaryKey(["id"], true)
             .addForeignKey("fk_Project", {
                 local: "projectId",

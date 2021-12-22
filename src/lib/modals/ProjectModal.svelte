@@ -2,7 +2,8 @@
   import ProjectItem from "../list-items/ProjectItem.svelte";
   import type { Project } from "../../database/database";
   import Database from "../../database/LoveField";
-  import { onDestroy, onMount } from 'svelte';
+  
+  import {onDestroy, onMount } from 'svelte';
   
   let db: Database;
   let projects: Project[] = [];
@@ -11,6 +12,7 @@
 
   onMount(async () => {
     db = await Database.getInstance();
+    projects = await db.projects.get();
     db.projects.subscribe(callback);
   });
 
@@ -62,8 +64,8 @@
 
 <div id="projects">
   <ul id="projects__list">
-    {#each filtered_list(projects, filterInput) as project}
-      <ProjectItem {project} />
+    {#each filtered_list(projects, filterInput) as projectItem}
+      <ProjectItem {projectItem} />
     {/each}
   </ul>
 </div>
