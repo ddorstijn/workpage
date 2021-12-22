@@ -5,7 +5,6 @@
   import Menu from "./menu/Menu.svelte";
   import { onDestroy, onMount } from "svelte";
   import * as db from "../database/LoveFieldModule";
-  import { db as dbRef } from "../store";
   
   import type { Link, LinkGroup } from "src/database/database";
 
@@ -15,7 +14,7 @@
   let hovering = false;
 
   onMount(async () => {
-    links = await db.links.get($dbRef, linkGroup.id as number);
+    links = await db.links.get(linkGroup.id as number);
     db.links.subscribe(callback);
   });
 
@@ -26,7 +25,7 @@
   }
 
   function remove() {
-    db.linkgroups.remove($dbRef, linkGroup);
+    db.linkgroups.remove(linkGroup);
   }
 
   function edit() {

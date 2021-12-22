@@ -4,7 +4,6 @@
   import TaskModal from "../modals/TaskModal.svelte";
   import type { Task } from "src/database/database";
   import * as db from "../../database/LoveFieldModule";
-  import { db as dbRef } from "../../store";
 
   export let task: Task;
 
@@ -15,7 +14,7 @@
   }
 
   function remove() {
-    db.tasks.remove($dbRef, task);
+    db.tasks.remove(task);
   }
 
   function pretty_date(date: Date): string {

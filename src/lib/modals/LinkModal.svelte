@@ -3,12 +3,11 @@
   import { onMount } from "svelte";
 
   import * as db from "../../database/LoveFieldModule";
-  import { db as dbRef } from "../../store";
 
   let linkGroups = [];
 
   onMount(async () => {
-    linkGroups = await db.linkgroups.get($dbRef, $project.id as number);
+    linkGroups = await db.linkgroups.get($project.id as number);
   });
 
   function addLink(e: any): void {
@@ -17,7 +16,7 @@
     const url = (form.querySelector('input[type="url"]') as HTMLInputElement).value;
     const groupId = (form.querySelector('select') as HTMLSelectElement).value;
     
-    db.links.add($dbRef,{name, url, groupId});
+    db.links.add({name, url, groupId});
     $modal = null;
   }
 </script>

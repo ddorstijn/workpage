@@ -3,7 +3,6 @@
   import { modal } from "../../store";
   import LinkModal from "../modals/LinkModal.svelte";
   import * as db from "../../database/LoveFieldModule";
-  import { db as dbRef } from "../../store";
    
   import type { Link } from "src/database/database";
 
@@ -16,7 +15,7 @@
   }
 
   function remove(): void {
-    db.links.remove($dbRef, link);
+    db.links.remove(link);
   }
 </script>
 

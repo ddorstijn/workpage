@@ -1,8 +1,10 @@
 <script lang="ts">
   import Fab from "./lib/Fab.svelte";
+  import Clock from "./lib/Clock.svelte";
+  import Links from "./lib/Links.svelte";
   import Modal from "./lib/modals/Modal.svelte";
-  
-  import { load } from "./store";
+  import Projects from "./lib/Projects.svelte";
+  import Tasks from "./lib/Tasks.svelte";
 
   import { onMount } from "svelte";
 
@@ -30,28 +32,15 @@
   </li>
 </ul>
 
-
 <article class="newtab">
-  {#await load() }
-	Loading...
-{:then}
-	<main>
-		{#await import("./lib/Clock.svelte") then c}
-			<svelte:component this={c.default} />
-		{/await}
-		{#await import("./lib/Projects.svelte") then c} 
-			<svelte:component this={c.default} />
-		{/await}
-		{#await import("./lib/Links.svelte") then c}
-			<svelte:component this={c.default} />
-		{/await}
-	</main>
-	<aside>
-		{#await import("./lib/Tasks.svelte") then c}
-			<svelte:component this={c.default} />
-		{/await}
-	</aside>
-{/await}
+  <main>
+    <Clock />
+    <Projects />
+    <Links />
+  </main>
+  <aside>
+    <Tasks />
+  </aside>
 </article>
 
 <Fab />

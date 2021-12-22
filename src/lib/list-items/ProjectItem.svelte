@@ -5,7 +5,6 @@
 
   import type { Project } from "src/database/database";
   import * as db from "../../database/LoveFieldModule";
-  import { db as dbRef } from "../../store";
   
   export let projectItem: Project;
 
@@ -22,12 +21,12 @@
   }
 
   function remove(): void {
-    db.projects.remove($dbRef, projectItem);
+    db.projects.remove(projectItem);
   }
 
   function saveEdit(): void {
     editing = false;
-    db.projects.update($dbRef, projectItem);
+    db.projects.update(projectItem);
   }
 
   function daysDifference(date: Date): string {

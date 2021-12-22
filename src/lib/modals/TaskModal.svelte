@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { modal, project, db as dbRef } from "../../store";
+  import { modal, project } from "../../store";
   import * as db from "../../database/LoveFieldModule";
 
   function addTask(e) {
@@ -9,7 +9,7 @@
     const done = false;
     const projectId = $project.id as number;
 
-    db.tasks.add($dbRef, { name, due, done, projectId });
+    db.tasks.add({ name, due, done, projectId });
     $modal = null;
   }
 </script>

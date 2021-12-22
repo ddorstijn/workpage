@@ -6,7 +6,6 @@
   import { onDestroy, onMount } from "svelte";
   import type { Project, Task } from "src/database/database";
   import * as db from "../database/LoveFieldModule";
-  import { db as dbRef } from "../store";
 
   const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -28,7 +27,7 @@
   };
 
   onMount(async () => {
-      tasks = sortTasks(await db.tasks.get($dbRef, $project.id as number));
+      tasks = sortTasks(await db.tasks.get($project.id as number));
       db.tasks.subscribe(callback);
   });
 
@@ -44,7 +43,7 @@
       return;
     }
 
-    tasks = sortTasks(await db.tasks.get($dbRef, newProject.id as number));
+    tasks = sortTasks(await db.tasks.get(newProject.id as number));
   })
 
   // -- Functions -- \\

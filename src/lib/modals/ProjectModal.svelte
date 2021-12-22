@@ -2,8 +2,7 @@
   import ProjectItem from "../list-items/ProjectItem.svelte";
   import type { Project } from "../../database/database";
   import * as db from "../../database/LoveFieldModule";
-  import { db as dbRef } from "../../store";
-  
+
   import {onDestroy, onMount } from 'svelte';
   
   let projects: Project[] = [];
@@ -11,7 +10,7 @@
   let filterInput = "";
 
   onMount(async () => {
-    projects = await db.projects.get($dbRef);
+    projects = await db.projects.get();
     db.projects.subscribe(callback);
   });
 
@@ -26,7 +25,7 @@
   function addProject(e: any): void {
     const form = e.target as HTMLFormElement;
     const name = form.querySelector("input").value;
-    db.projects.add($dbRef, {name});
+    db.projects.add({name});
 
     projectPopup = false;
   }
