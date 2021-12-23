@@ -27,7 +27,7 @@
   };
 
   onMount(async () => {
-      tasks = sortTasks(await db.tasks.get($project.id as number));
+      tasks = sortTasks(await db.tasks.get($project?.id as number));
       db.tasks.subscribe(callback);
   });
 

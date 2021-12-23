@@ -1,22 +1,25 @@
 <script lang="ts">
-  import { modal, project } from "../../store";
+  import { editRef, modal } from "../../store";
   import * as db from "../../database/LoveFieldModule";
+  import type { Task } from "src/database/database";
 
-  function addTask(e) {
-    const form = e.target as HTMLFormElement;
-    const name = (form.querySelector('input[type="text"]') as HTMLInputElement).value;
-    const due = (form.querySelector('input[type="date"]') as HTMLInputElement).valueAsDate;
-    const done = false;
-    const projectId = $project.id as number;
+  const { id, name, due, projectId } = $editRef as Task || {};
 
-    db.tasks.add({ name, due, done, projectId });
+  function setTask() {
+    if (id) {
+      db.tasks.update({ id, name, due, done: false, projectId });
+    } else {
+      db.tasks.add({ name, due, done: false, projectId });
+    }
+
+    $editRef = null;
     $modal = null;
   }
 </script>
 
 <header>Task</header>
 <div>
-  <form on:submit|preventDefault={addTask}>
+  <form on:submit|preventDefault={setTask}>
     <input type="text" required />
     <input type="date" />
     <button type="submit">Save task</button>

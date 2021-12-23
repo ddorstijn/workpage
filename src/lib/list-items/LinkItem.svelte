@@ -1,6 +1,6 @@
 <script lang="ts">
   import Menu from "../menu/Menu.svelte";
-  import { modal } from "../../store";
+  import { editRef, modal } from "../../store";
   import LinkModal from "../modals/LinkModal.svelte";
   import * as db from "../../database/LoveFieldModule";
    
@@ -11,6 +11,7 @@
   let hovering = false;
 
   function edit(): void {
+    $editRef = link;
     $modal = LinkModal;
   }
 

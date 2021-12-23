@@ -1,6 +1,6 @@
 <script lang="ts">
   import Menu from "../menu/Menu.svelte";
-  import { modal } from "../../store";
+  import { editRef, modal } from "../../store";
   import TaskModal from "../modals/TaskModal.svelte";
   import type { Task } from "src/database/database";
   import * as db from "../../database/LoveFieldModule";
@@ -10,6 +10,7 @@
   let hovering = false;
 
   function edit() {
+    $editRef = task;
     $modal = TaskModal;
   }
 

@@ -1,8 +1,9 @@
 <script>
-  import { modal } from "../../store";
+  import { editRef, modal } from "../../store";
   import { fade } from 'svelte/transition';
 
   function close() {
+    $editRef = null;
     $modal = null;
   }
 </script>

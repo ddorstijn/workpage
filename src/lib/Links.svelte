@@ -11,7 +11,7 @@
 
   onMount(async () => {
     db.linkgroups.subscribe(callback);
-    linkGroups = await db.linkgroups.get($project.id as number);
+    linkGroups = await db.linkgroups.get($project?.id as number);
   });
 
   onDestroy(() => db.linkgroups.unsubscribe(callback));

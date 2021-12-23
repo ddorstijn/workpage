@@ -14,7 +14,7 @@
   let hovering = false;
 
   onMount(async () => {
-    links = await db.links.get(linkGroup.id as number);
+    links = await db.links.get(linkGroup?.id as number);
     db.links.subscribe(callback);
   });
 
