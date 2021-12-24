@@ -276,6 +276,7 @@ export module tasks {
             .select()
             .from(taskschema)
             .where(taskschema.projectId.eq(projectId))
+            .orderBy(taskschema.due,lf.Order.DESC)
             .exec() as Task[];
     }
 

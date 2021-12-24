@@ -7,7 +7,7 @@
 
   onMount(async () => {
     const projects = await db.projects.get(); 
-    if (projects.findIndex(p => p == $project) == -1) {
+    if (projects.findIndex(p => p.id == $project.id) == -1) {
       $project = null;
     }
   })

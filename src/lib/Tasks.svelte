@@ -69,6 +69,10 @@
     };
     
     for (const task of unsortedTasks) {
+      if (task.done) {
+        continue;
+      }
+
       if (!task.due) {
         sorted["Someday"].push(task);  
         continue;

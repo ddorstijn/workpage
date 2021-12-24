@@ -18,6 +18,10 @@
     db.tasks.remove(task);
   }
 
+  function mark() {
+    db.tasks.update(task);
+  }
+
   function pretty_date(date: Date): string {
     if (!date) return "-";
     return new Intl.DateTimeFormat("en", {
@@ -34,7 +38,7 @@
   on:blur={() => hovering = false}
 >
   <label class:check={task.done}>
-    <input class="is-hidden" type="checkbox" bind:checked={task.done} />
+    <input class="is-hidden" type="checkbox" bind:checked={task.done} on:change={mark} />
   </label>
   
   <div class="text">
