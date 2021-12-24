@@ -81,6 +81,11 @@
     background-color: var(--color-lightGrey);
   }
 
+  .text {
+    user-select: none;
+    pointer-events: none;
+  }
+
   .title {
     font-weight: 500;
   }
