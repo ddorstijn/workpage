@@ -98,6 +98,14 @@
     display: flex;
   }
 
+  .popup input {
+    border-radius: 2px 0px 0px 2px;
+  }
+
+  .popup button {
+    border-radius: 0px 2px 2px 0px;
+  }
+
   #projects__list {
     list-style: none;
     padding: 0;
