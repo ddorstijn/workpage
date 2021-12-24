@@ -1,12 +1,23 @@
 <script lang="ts">
-  import { modal, project } from "../../store";
+  import { editRef, modal, project } from "../../store";
   import * as db from "../../database/LoveFieldModule";
+  import type { LinkGroup } from "src/database/database";
+  import { onMount } from "svelte";
 
-  function addGroup(e: any): void {
-    const form = e.target as HTMLFormElement;
-    const name = form.querySelector('input').value;
+  let linkgroup: LinkGroup = { name: '', projectId: $project?.id }
 
-    db.linkgroups.add({ name, projectId: $project.id as number })
+  onMount(() => {
+    linkgroup = $editRef as LinkGroup ?? linkgroup;
+  })
+
+  function addGroup(): void {
+    if (linkgroup.id) {
+      db.linkgroups.update(linkgroup);
+    } else {
+      db.linkgroups.add(linkgroup);
+    }
+    
+    $editRef = null;
     $modal = null;
   }
 </script>
@@ -14,7 +25,7 @@
 <header>Link group</header>
 <div>
   <form on:submit|preventDefault={addGroup}>
-    <input type="text" required>
+    <input type="text" bind:value={linkgroup.name} required placeholder="Group name">
     <button type="submit">Save group</button>
   </form>
 </div>

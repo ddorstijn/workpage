@@ -1,6 +1,16 @@
 <script>
+  import { onMount } from "svelte";
+  import * as db from "../database/LoveFieldModule";
+
   import { modal, project } from "../store";
   import ProjectModal from "./modals/ProjectModal.svelte";
+
+  onMount(async () => {
+    const projects = await db.projects.get(); 
+    if (projects.findIndex(p => p == $project) == -1) {
+      $project = null;
+    }
+  })
 
   function openModal() {
     modal.set(ProjectModal);

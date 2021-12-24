@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { modal } from "../store";
+  import { editRef, modal } from "../store";
   import LinkGroupModal from "./modals/LinkGroupModal.svelte";
   import LinkItem from "./list-items/LinkItem.svelte";
   import Menu from "./menu/Menu.svelte";
@@ -29,6 +29,7 @@
   }
 
   function edit() {
+    $editRef = linkGroup;
     $modal = LinkGroupModal;
   }
 </script>

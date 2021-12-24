@@ -19,6 +19,7 @@
   }
 
   function pretty_date(date: Date): string {
+    if (!date) return "-";
     return new Intl.DateTimeFormat("en", {
       day: "numeric",
       month: "long",

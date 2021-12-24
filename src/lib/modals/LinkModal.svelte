@@ -1,22 +1,26 @@
 <script lang="ts">
-  import { modal, project } from "../../store";
+  import { editRef, modal, project } from "../../store";
   import { onMount } from "svelte";
 
   import * as db from "../../database/LoveFieldModule";
+  import type { Link } from "src/database/database";
 
   let linkGroups = [];
+  let link: Link = { name: '', url: '', groupId: linkGroups[0]?.id }
 
   onMount(async () => {
     linkGroups = await db.linkgroups.get($project.id as number);
+    link = $editRef as Link ?? link;
   });
 
-  function addLink(e: any): void {
-    const form = e.target as HTMLFormElement;
-    const name = (form.querySelector('input[type="text"]') as HTMLInputElement).value;
-    const url = (form.querySelector('input[type="url"]') as HTMLInputElement).value;
-    const groupId = (form.querySelector('select') as HTMLSelectElement).value;
-    
-    db.links.add({name, url, groupId});
+  function addLink(): void {   
+    if (link.id) {
+      db.links.update(link);
+    } else {
+      db.links.add(link);
+    }
+
+    $editRef = null;
     $modal = null;
   }
 </script>
@@ -24,9 +28,9 @@
 <header>Link</header>
 <div>
   <form on:submit|preventDefault={addLink}>
-    <input type="text" placeholder="Name" required>
-    <input type="url" placeholder="Url" required>
-    <select>
+    <input type="text" placeholder="Name" bind:value={link.name} required>
+    <input type="url" placeholder="Url" bind:value={link.url} required>
+    <select bind:value={link.groupId}>
       {#each linkGroups as linkGroup}
         <option value={linkGroup.id}>{linkGroup.name}</option>
       {/each}
