@@ -25,7 +25,7 @@
 <header>Link group</header>
 <div>
   <form on:submit|preventDefault={addGroup}>
-    <input type="text" bind:value={linkgroup.name} required placeholder="Group name">
+    <input placeholder="Group name" bind:value={linkgroup.name} required>
     <button type="submit">Save group</button>
   </form>
 </div>

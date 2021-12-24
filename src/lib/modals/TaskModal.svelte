@@ -30,7 +30,7 @@
 <header>Task</header>
 <div>
   <form on:submit|preventDefault={setTask}>
-    <input type="text" bind:value={task.name} required />
+    <input type="text" placeholder="Task name" bind:value={task.name} required />
     <input type="date" bind:value={dueStr} />
     <button type="submit">Save task</button>
   </form>

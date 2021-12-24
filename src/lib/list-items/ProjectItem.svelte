@@ -53,7 +53,7 @@
       <div class="title">{projectItem.name}</div>
     {:else}
       <form class="edit-form" on:submit|preventDefault={saveEdit}>
-        <input type="text" bind:value={projectItem.name}>
+        <input type="text" bind:value={projectItem.name} placeholder="Project name">
         <button type="submit">Save</button>
       </form>
     {/if}
