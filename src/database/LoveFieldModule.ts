@@ -1,7 +1,5 @@
 import lf from "lovefield";
-import type { Link, LinkGroup, Project, Task } from "./database";
-
-type fnCallback = (data: Project[] | LinkGroup[] | Link[] | Task[]) => void;
+import type { fnCallback, Link, LinkGroup, Project, Task } from "./database";
 
 const schemabuilder = lf.schema.create("workpage", 1);
 schemabuilder
@@ -62,7 +60,15 @@ schemabuilder
 export module projects {
     let handlers: fnCallback[] = [];
 
-    export async function get(): Promise<Project[]> {
+    export async function get(project?: Project): Promise<Project[]> {
+        if (project) {
+            return await db
+            .select()
+            .from(projectschema)
+            .where(projectschema.id.eq(project.id))
+            .exec() as Project[];
+        }
+
         return await db
             .select()
             .from(projectschema)
@@ -82,7 +88,7 @@ export module projects {
                 })
             ]).exec() as Project[];
 
-        notify();
+        notify(project);
         return rows[0];
     }
 
@@ -93,7 +99,7 @@ export module projects {
             .where(projectschema.id.eq(project.id))
             .exec() as Project[];
 
-        notify();
+        notify(project);
         return rows[0];
     }
 
@@ -104,7 +110,7 @@ export module projects {
             .where(projectschema.id.eq(project.id))
             .exec();
 
-        notify();
+        notify(project);
     }
 
     export function subscribe(callback: fnCallback): number {
@@ -121,21 +127,19 @@ export module projects {
         );
     }
 
-    async function notify(): Promise<void> {
-        const rows = await get();
-        handlers.forEach(async (item: Function) => item.call(projects, rows));
+    function notify(project: Project): void {
+        handlers.forEach(async (item: Function) => item.call(projects, project));
     }
 }
 
 export module linkgroups {
     let handlers: fnCallback[] = [];
 
-    export async function get(projectId: number): Promise<LinkGroup[]> {
-        if (!projectId) return [];
+    export async function get(project: Project): Promise<LinkGroup[]> {
         return await db
             .select()
             .from(linkgroupschema)
-            .where(linkgroupschema.projectId.eq(projectId))
+            .where(linkgroupschema.projectId.eq(project.id))
             .exec() as LinkGroup[];
     }
 
@@ -151,7 +155,7 @@ export module linkgroups {
             ])
             .exec() as LinkGroup[];
 
-        notify(linkgroup.projectId as number);
+        notify(linkgroup);
         return rows[0];
     }
 
@@ -162,7 +166,7 @@ export module linkgroups {
             .where(linkgroupschema.id.eq(linkgroup.id))
             .exec() as LinkGroup[];
 
-        notify(linkgroup.projectId as number);
+        notify(linkgroup);
         return rows[0];
     }
 
@@ -172,7 +176,7 @@ export module linkgroups {
             .from(linkgroupschema)
             .where(linkgroupschema.id.eq(linkgroup.id)).exec();
 
-        notify(linkgroup.projectId as number);
+        notify(linkgroup);
     }
 
     export function subscribe(callback: fnCallback): number {
@@ -189,21 +193,19 @@ export module linkgroups {
         );
     }
 
-    async function notify(projectId: number): Promise<void> {
-        const rows = await get(projectId);
-        handlers.forEach((item: fnCallback): void => item.call(links, rows));
+    function notify(linkgroup: LinkGroup): void {
+        handlers.forEach((item: fnCallback): void => item.call(links, linkgroup));
     }
 }
 
 export module links {
     let handlers: fnCallback[] = [];
 
-    export async function get(groupId: number): Promise<Link[]> {
-        if (!groupId) return [];
+    export async function get(group: LinkGroup): Promise<Link[]> {
         return await db
             .select()
             .from(linkschema)
-            .where(linkschema.groupId.eq(groupId))
+            .where(linkschema.groupId.eq(group.id))
             .exec() as Link[];
     }
 
@@ -220,7 +222,7 @@ export module links {
             ])
             .exec() as Link[];
 
-        notify(link.groupId as number);
+        notify(link);
         return rows[0];
     }
 
@@ -233,7 +235,7 @@ export module links {
             .where(linkschema.id.eq(link.id))
             .exec() as Link[];
 
-        notify(link.groupId as number);
+        notify(link);
         return rows[0];
     }
 
@@ -244,7 +246,7 @@ export module links {
             .where(linkschema.id.eq(link.id))
             .exec();
 
-        notify(link.groupId as number);
+        notify(link);
     }
 
     export function subscribe(callback: fnCallback): void {
@@ -261,21 +263,19 @@ export module links {
         );
     }
 
-    async function notify(groupId: number): Promise<void> {
-        const links = await get(groupId);
-        handlers.forEach((item: fnCallback) => item.call(links, links));
+    function notify(link: Link): void {
+        handlers.forEach((item: fnCallback) => item.call(links, link));
     }
 }
 
 export module tasks {
     let handlers: fnCallback[] = [];
 
-    export async function get(projectId: number): Promise<Task[]> {
-        if (!projectId) return [];
+    export async function get(project: Project): Promise<Task[]> {
         return await db
             .select()
             .from(taskschema)
-            .where(taskschema.projectId.eq(projectId))
+            .where(taskschema.projectId.eq(project.id))
             .orderBy(taskschema.due,lf.Order.DESC)
             .exec() as Task[];
     }
@@ -294,7 +294,7 @@ export module tasks {
             ])
             .exec() as Task[];
 
-        notify(task.projectId as number);
+        notify(task);
         return rows[0];
     }
 
@@ -307,7 +307,7 @@ export module tasks {
             .where(taskschema.id.eq(task.id))
             .exec() as Task[];
 
-        notify(task.projectId as number);
+        notify(task);
         return rows[0];
     }
 
@@ -318,7 +318,7 @@ export module tasks {
             .where(taskschema.id.eq(task.id))
             .exec();
 
-        notify(task.projectId as number);
+        notify(task);
     }
 
     export function subscribe(callback: fnCallback): void {
@@ -335,8 +335,7 @@ export module tasks {
         );
     }
 
-    async function notify(projectId: number): Promise<void> {
-        const tasks = await get(projectId);
-        handlers.forEach((item: fnCallback) => item.call(tasks, tasks));
+    function notify(task: Task): void {
+        handlers.forEach((item: fnCallback) => item.call(tasks, task));
     }
 }

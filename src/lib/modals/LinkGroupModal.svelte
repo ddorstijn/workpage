@@ -4,7 +4,7 @@
   import type { LinkGroup } from "src/database/database";
   import { onMount } from "svelte";
 
-  let linkgroup: LinkGroup = { name: '', projectId: $project?.id }
+  let linkgroup: LinkGroup = { name: '', projectId: $project.id };
 
   onMount(() => {
     linkgroup = $editRef as LinkGroup ?? linkgroup;

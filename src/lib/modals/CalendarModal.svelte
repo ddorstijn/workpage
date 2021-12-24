@@ -11,14 +11,14 @@
   let tasks: Task[] = [];
 
   onMount(async () => {
-      tasks = await db.tasks.get($project?.id as number);
+      tasks = await db.tasks.get($project);
       db.tasks.subscribe(callback);
   });
 
   onDestroy(() => db.tasks.unsubscribe(callback));
 
-  function callback(data: Task[]): void {
-    tasks = data;
+  async function callback(task: Task): Promise<void> {
+    tasks = await db.tasks.get($project);
   }
 
   project.subscribe(async (newProject: Project) => {
@@ -27,7 +27,7 @@
       return;
     }
 
-    tasks = await db.tasks.get(newProject.id as number);
+    tasks = await db.tasks.get(newProject);
   })
 </script>
 

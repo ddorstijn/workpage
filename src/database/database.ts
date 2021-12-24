@@ -7,14 +7,14 @@ export type Project = {
 export type LinkGroup = {
     id?: string | number;
     name: string;
-    projectId: string | number;
+    projectId?: string | number;
 }
 
 export type Link = {
     id?: string | number;
     name: string;
     url: string;
-    groupId: string | number;
+    groupId?: string | number;
 }
 
 export type Task = {
@@ -22,17 +22,19 @@ export type Task = {
     name: string;
     due?: Date;
     done: boolean;
-    projectId: string | number;
+    projectId?: string | number;
 }
 
+export type fnCallback = (obj: Project | LinkGroup | Link | Task) => Promise<any>;
+
 export interface IDataGroup<T> {
-    get(parentId: string | number): Promise<T[]>;
+    get(parent?: Project | LinkGroup): Promise<T[]>;
     add(obj: T): Promise<T>;
     update(obj: T): Promise<T>;
     remove(obj: T): Promise<void>;
 
-    subscribe(callback: Function): void;
-    unsubscribe(callback: Function): void;
+    subscribe(callback: fnCallback): void;
+    unsubscribe(callback: fnCallback): void;
 }
 
 export interface IDatabase {

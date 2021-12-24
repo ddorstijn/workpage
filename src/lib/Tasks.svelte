@@ -27,14 +27,14 @@
   };
 
   onMount(async () => {
-      tasks = sortTasks(await db.tasks.get($project?.id as number));
+      tasks = sortTasks(await db.tasks.get($project));
       db.tasks.subscribe(callback);
   });
 
   onDestroy(() => db.tasks.unsubscribe(callback));
 
-  function callback(data: Task[]): void {
-    tasks = sortTasks(data);
+  async function callback(task: Task): Promise<void> {
+    tasks = sortTasks(await db.tasks.get($project));
   }
 
   project.subscribe(async (newProject: Project) => {
@@ -43,7 +43,7 @@
       return;
     }
 
-    tasks = sortTasks(await db.tasks.get(newProject.id as number));
+    tasks = sortTasks(await db.tasks.get(newProject));
   })
 
   // -- Functions -- \\

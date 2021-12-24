@@ -9,7 +9,7 @@
   let link: Link = { name: '', url: '', groupId: linkGroups[0]?.id }
 
   onMount(async () => {
-    linkGroups = await db.linkgroups.get($project.id as number);
+    linkGroups = await db.linkgroups.get($project);
     link = $editRef as Link ?? link;
   });
 
@@ -30,7 +30,7 @@
   <form on:submit|preventDefault={addLink}>
     <input type="text" placeholder="Name" bind:value={link.name} required>
     <input type="url" placeholder="Url" bind:value={link.url} required>
-    <select bind:value={link.groupId}>
+    <select bind:value={link.groupId} required>
       {#each linkGroups as linkGroup}
         <option value={linkGroup.id}>{linkGroup.name}</option>
       {/each}

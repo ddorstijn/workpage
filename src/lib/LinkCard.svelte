@@ -8,28 +8,30 @@
   
   import type { Link, LinkGroup } from "src/database/database";
 
-  export let linkGroup: LinkGroup;
+  export let linkgroup: LinkGroup;
 
   let links = [];
   let hovering = false;
 
   onMount(async () => {
-    links = await db.links.get(linkGroup?.id as number);
+    links = await db.links.get(linkgroup);
     db.links.subscribe(callback);
   });
 
   onDestroy(() => db.links.unsubscribe(callback));
 
-  function callback(data: Link[]) {
-    links = data;
+  async function callback(link: Link) {
+    if (linkgroup.id == link.groupId) {
+      links = await db.links.get(linkgroup);
+    }
   }
 
   function remove() {
-    db.linkgroups.remove(linkGroup);
+    db.linkgroups.remove(linkgroup);
   }
 
   function edit() {
-    $editRef = linkGroup;
+    $editRef = linkgroup;
     $modal = LinkGroupModal;
   }
 </script>
@@ -41,7 +43,7 @@
     on:focus={() => (hovering = true)}
     on:blur={() => (hovering = false)}
   >
-    {linkGroup.name}
+    {linkgroup.name}
     <Menu {hovering} on:edit={edit} on:remove={remove} />
   </header>
   <ul class="linkGroup__itemlist">

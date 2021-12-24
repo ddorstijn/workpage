@@ -18,8 +18,8 @@
     db.projects.unsubscribe(callback);
   });
 
-  function callback(data: Project[]): void {
-    projects = data;
+  async function callback(project: Project): Promise<void> {
+    projects = await db.projects.get();
   }
 
   function addProject(e: any): void {

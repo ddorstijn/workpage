@@ -7,32 +7,32 @@
   import LinkCard from "./LinkCard.svelte";
   import type { LinkGroup, Project } from "src/database/database";
 
-  let linkGroups = [] as LinkGroup[];
+  let linkgroups = [] as LinkGroup[];
 
   onMount(async () => {
     db.linkgroups.subscribe(callback);
-    linkGroups = await db.linkgroups.get($project?.id as number);
+    linkgroups = await db.linkgroups.get($project);
   });
 
   onDestroy(() => db.linkgroups.unsubscribe(callback));
 
-  function callback(data: LinkGroup[]) {
-    linkGroups = data;
+  async function callback(linkgroup: LinkGroup) {
+    linkgroups = await db.linkgroups.get($project);
   }
 
   project.subscribe(async (newProject: Project) => {
     if (!newProject || !db) {
-      linkGroups = [];
+      linkgroups = [];
       return;
     }
     
-    linkGroups = await db.linkgroups.get(newProject.id as number);
+    linkgroups = await db.linkgroups.get(newProject);
   })
 </script>
 
 <article>
-  {#each linkGroups as linkGroup}
-    <LinkCard {linkGroup} />
+  {#each linkgroups as linkgroup}
+    <LinkCard {linkgroup} />
   {/each}
 </article>
 
