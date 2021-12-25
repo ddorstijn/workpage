@@ -71,7 +71,7 @@
     margin-bottom: 1rem;
 
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
     gap: 2rem;
 

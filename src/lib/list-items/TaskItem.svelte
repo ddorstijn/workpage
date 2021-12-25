@@ -58,7 +58,6 @@
 
     display: flex;
     align-items: center;
-    gap: 1.5rem;
 
     line-height: 1.3;
     cursor: pointer;
@@ -87,6 +86,7 @@
   
   label {
     position: relative;
+    margin-right: 1.5rem;
     background-color: transparent;
     border: 1px solid var(--color-grey);
     border-radius: 50%;

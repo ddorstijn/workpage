@@ -3,87 +3,53 @@
   import { createEventDispatcher } from "svelte";
 
   export let hovering;
-  let open = false;
 
   const dispatch = createEventDispatcher();
 
-  let menuRef;
-  function checkInside(e) {
-    let targetElement = e.target;
-    do {
-      if (targetElement == menuRef) {
-        return;
-      }
-
-      targetElement = targetElement.parentNode;
-    } while (targetElement);
-
-    open = false;
-  }
-
-  onMount(() => {
-    window.addEventListener("click", checkInside);
-  });
-
   function editItem() {
     dispatch("edit");
-    open = false;
   }
 
   function removeItem() {
     dispatch("remove");
-    open = false;
   }
 </script>
 
-<details class="dropdown" bind:open={open}>
-  <summary class="menu-btn material-icons" class:hovering>more_vert</summary>
-  <ul class="card menu-item-list" bind:this={menuRef}>
-    <li on:click={editItem}>Edit</li>
-    <li on:click={removeItem}>Remove</li>
-  </ul>
-</details>
+<ul class="menu" class:hovering>
+  <li class="edit material-icons" title="Edit" on:click={editItem}>
+    edit
+  </li>
+  <li class="delete material-icons" title="Delete" on:click={removeItem}>
+    close
+  </li>
+</ul>
 
 <style>
-  .dropdown {
-    margin-left: auto;
-  }
-
-  .menu-btn {
-    padding: 0;
-
-    font-size: 16px;
+  .menu {
+    margin: 0 0 0 auto;
+    padding: 0 0 0 0.35rem;
     opacity: 0;
-    cursor: pointer;
+    
+    display: flex;
+    gap: 0.4rem;
+    list-style: none;
+  }
+  
+  .menu li {
+    padding: 0rem;
+    font-size: 14px;
+    color: var(--color-darkGrey);
   }
 
-  .menu-btn:focus {
-    opacity: 1;
+  .edit:hover {
+    color: var(--color-primary);
+  }
+
+  .delete:hover {
+    color: var(--color-error)
   }
 
   .hovering {
     opacity: 1;
-  }
-
-  .menu-item-list {
-    margin: 0;
-    padding: 0;
-
-    left: unset;
-    right: 0;
-    z-index: 10;
-
-    list-style: none;
-    font-size: 1.6rem;
-    font-weight: normal;
-  }
-
-  .menu-item-list li {
-    cursor: pointer;
-    padding: 0.25rem 1rem;
-  }
-
-  .menu-item-list li:hover {
-    background-color: var(--color-lightGrey);
   }
 </style>
