@@ -56,7 +56,7 @@
       <div class="title">{projectItem.name}</div>
     {:else}
       <form class="edit-form" on:submit|preventDefault={saveEdit}>
-        <input type="text" bind:this={editInput} bind:value={projectItem.name} on:blur={saveEdit} placeholder="Project name">
+        <input type="text" bind:this={editInput} bind:value={projectItem.name} on:blur={saveEdit} placeholder="Project name" required>
         <input type="submit" class="is-hidden">
       </form>
     {/if}

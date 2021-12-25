@@ -58,7 +58,7 @@
   </div>
   {#if expanded}
       <form class="add-project" on:submit|preventDefault={addProject}>        
-          <input type="text" placeholder="Project name.." />
+          <input type="text" placeholder="Project name.." required />
           <button class="button clear" type="submit">Add</button>
       </form>
     {/if}

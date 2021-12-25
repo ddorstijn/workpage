@@ -116,7 +116,7 @@
     {#if expanded}
       <form class="task-form row">
         <div class="col">
-          <input placeholder="Task name" />
+          <input placeholder="Task name" required />
           <input type="date" />
         </div>
         <button class="button clear" type="submit">Add</button>
