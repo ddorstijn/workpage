@@ -6,7 +6,7 @@
   import {onDestroy, onMount } from 'svelte';
   
   let projects: Project[] = [];
-  let projectPopup = false;
+  let expanded = false;
   let filterInput = "";
 
   onMount(async () => {
@@ -27,7 +27,7 @@
     const name = form.querySelector("input").value;
     db.projects.add({name});
 
-    projectPopup = false;
+    expanded = false;
   }
 
   function filtered_list(list: Project[], filter: string): Project[] {
@@ -45,19 +45,23 @@
         <i class="button material-icons">search</i>
       </label>
 
-      <button id="add-project-btn" class="button icon primary" on:click={() => projectPopup = !projectPopup}>
-        New
-        <i class="material-icons">add</i>
+      <button id="add-project-btn" class="button icon primary" on:click={() => expanded = !expanded}>
+        {#if expanded}
+          Close
+          <i class="material-icons">remove</i>        
+        {:else}
+          New
+          <i class="material-icons">add</i>
+        {/if}
       </button>
     </div>
   </div>
-
-  {#if projectPopup}
-    <form class="popup card" on:submit|preventDefault={addProject}>        
-        <input type="text" placeholder="Project name.." />
-        <button class="button icon-only primary material-icons" type="submit">add</button>
-    </form>
-  {/if}
+  {#if expanded}
+      <form class="add-project" on:submit|preventDefault={addProject}>        
+          <input type="text" placeholder="Project name.." />
+          <button class="button clear" type="submit">Add</button>
+      </form>
+    {/if}
 </header>
 
 <div id="projects">
@@ -69,13 +73,15 @@
 </div>
 
 <style>
+  header {
+    border-bottom: 1px solid var(--color-lightGrey);
+    width: 25vw;
+  }
+
   .title-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--color-lightGrey);
   }
 
   .action-menu {
@@ -94,16 +100,9 @@
     font-size: 1.8rem;
   }
 
-  .popup {
+  .add-project {
     display: flex;
-  }
-
-  .popup input {
-    border-radius: 2px 0px 0px 2px;
-  }
-
-  .popup button {
-    border-radius: 0px 2px 2px 0px;
+    align-items: center;
   }
 
   #projects__list {
@@ -138,7 +137,7 @@
     border: none;
     font-size: 1.4rem;
     background-color: transparent;
-    padding: 0;
+    padding: 0 0 0 0.5rem;
     opacity: 0;
   }
 

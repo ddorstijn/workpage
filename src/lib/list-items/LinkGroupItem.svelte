@@ -1,13 +1,14 @@
 <script lang="ts">
-  import { editRef, modal } from "../store";
-  import LinkGroupModal from "./modals/LinkGroupModal.svelte";
-  import LinkItem from "./list-items/LinkItem.svelte";
-  import Menu from "./menu/Menu.svelte";
+  import { editRef, modal } from "../../store";
   import { onDestroy, onMount } from "svelte";
-  import * as db from "../database/LoveFieldModule";
   
   import type { Link, LinkGroup } from "src/database/database";
+  import * as db from "../../database/LoveFieldModule";
 
+  import LinkGroupModal from "../modals/LinkGroupModal.svelte";
+  import LinkItem from "./LinkItem.svelte";
+  import Menu from "../menu/Menu.svelte";
+  
   export let linkgroup: LinkGroup;
 
   let links = [];
@@ -36,7 +37,7 @@
   }
 </script>
 
-<div class="card linkGroup">
+<li class="card linkGroup">
   <header
     on:mouseover={() => (hovering = true)}
     on:mouseout={() => (hovering = false)}
@@ -51,7 +52,7 @@
       <LinkItem {link} />
     {/each}
   </ul>
-</div>
+</li>
 
 <style>
   .card.linkGroup {

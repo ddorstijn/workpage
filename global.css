@@ -32,13 +32,21 @@
 
 body {
 	--bg-color: #ffffff;
+	--bg-secondary-color: #f3f3f6;
+	--color-primary: #14854F;
+	--color-lightGrey: #d2d6dd;
+	--color-grey: #747681;
+	--color-darkGrey: #3f4144;
+	--color-error: #d43939;
+	--color-success: #28bd14;
+	/* --bg-color: #ffffff;
 	--bg-secondary-color: #fafafc;
 	--color-primary: #0099FF;
 	--color-lightGrey: #EEEEEE;
 	--color-grey: #999999;
 	--color-darkGrey: #555555;
 	--color-error: #EE4444;
-	--color-success: #66BB66;
+	--color-success: #66BB66; */
 	--grid-maxWidth: 120rem;
 	--grid-gutter: 2rem;
 	--font-size: 1.6rem;

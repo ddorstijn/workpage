@@ -5,11 +5,13 @@
 
   import type { Project } from "src/database/database";
   import * as db from "../../database/LoveFieldModule";
+  import { tick } from "svelte";
   
   export let projectItem: Project;
 
   let hovering = false;
   let editing = false;
+  let editInput: HTMLInputElement;
 
   function setActive(): void {
     project.set(projectItem);
@@ -18,6 +20,7 @@
 
   function edit(): void {
     editing = true;
+    tick().then(() => editInput.focus());
   }
 
   function remove(): void {
@@ -53,8 +56,8 @@
       <div class="title">{projectItem.name}</div>
     {:else}
       <form class="edit-form" on:submit|preventDefault={saveEdit}>
-        <input type="text" bind:value={projectItem.name} placeholder="Project name">
-        <button type="submit">Save</button>
+        <input type="text" bind:this={editInput} bind:value={projectItem.name} on:blur={saveEdit} placeholder="Project name">
+        <input type="submit" class="is-hidden">
       </form>
     {/if}
     <small class="text-grey">
@@ -105,5 +108,6 @@
 
   .edit-form {
     display: flex;
+    pointer-events: all;
   }
 </style>

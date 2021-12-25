@@ -1,6 +1,6 @@
 <script lang="ts">
-  import TaskItem from "./list-items/TaskItem.svelte";
   import CalendarModal from "./modals/CalendarModal.svelte";
+  import TaskItem from "./list-items/TaskItem.svelte";
 
   import { modal, project } from "../store";
   import { onDestroy, onMount } from "svelte";
@@ -18,6 +18,7 @@
   }
   
   // -- Members -- \\
+  let expanded = false;
   let tasks: ISortedTasks = {
     "Overdue": [],
     "Today": [],
@@ -95,9 +96,31 @@
 </script>
 
 <article>
-  <header>
-    <h1>Tasks</h1>
-    <button class="btn-calendar [ button clear icon-only ] material-icons" on:click={openCalendar}>event</button>
+  <header class="task-header">
+    <div class="task-title">
+      <h1 class="is-marginless">Tasks</h1>
+      <div class="task-title-actions">
+        <button class="btn-calendar [ button ] material-icons" on:click={openCalendar}>event</button>
+        <button id="add-task-btn" class="button icon primary" on:click={() => expanded = !expanded}>
+          {#if expanded}
+            Close
+            <i class="material-icons">remove</i>        
+          {:else}
+            New
+            <i class="material-icons">add</i>
+          {/if}
+        </button>
+      </div>
+    </div>
+    {#if expanded}
+      <form class="task-form row">
+        <div class="col">
+          <input placeholder="Task name" />
+          <input type="date" />
+        </div>
+        <button class="button clear" type="submit">Add</button>
+      </form>
+    {/if}
   </header>
 
   {#each Object.entries(tasks) as [name, items]}
@@ -124,23 +147,40 @@
     box-shadow: none;
   }
 
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 1rem;
-    margin-bottom: 1rem;
+  .task-header {
     border-bottom: 1px solid var(--color-lightGrey);
   }
 
-  header * {
-    margin: 0;
-    padding: 0;
+  .task-header .task-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .task-title-actions {
+    display: flex;
+    align-items: center;
   }
   
-  header .btn-calendar {
-    font-size: 2rem;
+  .btn-calendar {
+    background-color: transparent;
+    padding: 0;
+    font-size: 1.8rem;
+  }
+
+  #add-task-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 1.4rem;
+    gap: .5rem;
+  }
+
+  #add-task-btn .material-icons {
+    font-size: 1.8rem;
+  }
+
+  .task-form input {
+    margin-top: 1rem;
   }
 
   #task__list {

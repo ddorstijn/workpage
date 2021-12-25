@@ -2,11 +2,11 @@
   import { onDestroy, onMount } from "svelte";
   import { project } from "../store";
 
+  import type { LinkGroup, Project } from "src/database/database";
   import * as db from "../database/LoveFieldModule";
 
-  import LinkCard from "./LinkCard.svelte";
-  import type { LinkGroup, Project } from "src/database/database";
-
+  import LinkGroupItem from "./list-items/LinkGroupItem.svelte";
+  
   let linkgroups = [] as LinkGroup[];
 
   onMount(async () => {
@@ -30,16 +30,20 @@
   })
 </script>
 
-<article>
+<ul class="linkgroups">
   {#each linkgroups as linkgroup}
-    <LinkCard {linkgroup} />
+    <LinkGroupItem {linkgroup} />
   {/each}
-</article>
+</ul>
 
 <style>
-  article {
-    margin-top: 4rem;
+  .linkgroups {
+    margin: 3rem 0 0;
+    padding: 0;
+
     display: flex;
-    gap: 2rem;
+    gap: 3rem;
+    
+    list-style: none;
   }
 </style>
