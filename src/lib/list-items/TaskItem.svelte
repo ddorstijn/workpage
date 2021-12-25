@@ -19,6 +19,7 @@
   }
 
   function mark() {
+    task.done = task.done ? null : new Date();
     db.tasks.update(task);
   }
 
@@ -38,7 +39,7 @@
   on:blur={() => hovering = false}
 >
   <label class:check={task.done}>
-    <input class="is-hidden" type="checkbox" bind:checked={task.done} on:change={mark} />
+    <input class="is-hidden" type="checkbox" checked={task.done != null} on:change={mark} />
   </label>
   
   <div class="text">

@@ -21,7 +21,7 @@ export type Task = {
     id?: string | number;
     name: string;
     due?: Date;
-    done: boolean;
+    done?: Date;
     projectId?: string | number;
 }
 

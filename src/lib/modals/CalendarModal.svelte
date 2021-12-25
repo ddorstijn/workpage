@@ -6,7 +6,6 @@
   import type { Project, Task } from "src/database/database";
   import * as db from "../../database/LoveFieldModule";
 
-
   // -- Members -- \\
   let tasks: Task[] = [];
 

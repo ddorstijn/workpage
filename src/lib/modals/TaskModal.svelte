@@ -5,7 +5,7 @@
   import { onMount } from "svelte";
 
   let dueStr = '';
-  let task: Task = { name: '', done: false, projectId: $project.id };
+  let task: Task = { name: '', projectId: $project.id };
 
   onMount(() => {
     task = $editRef as Task ?? task;

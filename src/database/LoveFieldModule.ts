@@ -38,10 +38,10 @@ schemabuilder
     .createTable("Tasks")
     .addColumn("id", lf.Type.INTEGER)
     .addColumn("name", lf.Type.STRING)
-    .addColumn("done", lf.Type.BOOLEAN)
     .addColumn("due", lf.Type.DATE_TIME)
+    .addColumn("done", lf.Type.DATE_TIME)
     .addColumn("projectId", lf.Type.INTEGER)
-    .addNullable(["due"])
+    .addNullable(["due", "done"])
     .addPrimaryKey(["id"], true)
     .addForeignKey("fk_Project", {
         local: "projectId",

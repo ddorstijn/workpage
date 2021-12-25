@@ -70,7 +70,8 @@
     };
     
     for (const task of unsortedTasks) {
-      if (task.done) {
+      console.log(task.done);
+      if (task.done != null) {
         continue;
       }
 
