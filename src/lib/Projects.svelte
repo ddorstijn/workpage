@@ -3,7 +3,7 @@
   import * as db from "../database/LoveFieldModule";
 
   import { modal, project } from "../store";
-  import ProjectModal from "./modals/ProjectModal.svelte";
+  import DrawerModal from "./modals/DrawerModal.svelte";
 
   onMount(async () => {
     const projects = await db.projects.get(); 
@@ -13,7 +13,7 @@
   })
 
   function openModal() {
-    modal.set(ProjectModal);
+    modal.set(DrawerModal);
   }
 </script>
 
