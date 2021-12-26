@@ -140,7 +140,7 @@
   <li>
     <button class="button icon" on:click={newLink}>
       <i class="material-icons">
-        bookmark_add
+        add_link
       </i>
     </button>
   </li>
@@ -148,7 +148,7 @@
   <li>
     <button class="button icon" on:click={newTask}>
       <i class="material-icons">
-        post_add
+        note_add
       </i>
     </button>
   </li>
