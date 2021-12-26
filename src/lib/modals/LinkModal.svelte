@@ -11,6 +11,9 @@
   onMount(async () => {
     linkGroups = await db.linkgroups.get($project);
     link = $editRef as Link ?? link;
+    if (!link.groupId) {
+      link.groupId = linkGroups[0]?.id;
+    }
   });
 
   function addLink(): void {   

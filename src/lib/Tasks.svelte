@@ -18,6 +18,7 @@
   }
   
   // -- Members -- \\
+  let expanded = false;
   let tasks: ISortedTasks = {
     "Overdue": [],
     "Today": [],
@@ -92,6 +93,13 @@
 
     return sorted;
   }
+
+  function addTask() {
+    const name = this.querySelector('input[type="text"]').value;
+    const due = this.querySelector('input[type="date"]').value;
+
+    console.log(name, due);
+  }
 </script>
 
 <article>
@@ -100,8 +108,26 @@
       <h1 class="is-marginless">Tasks</h1>
       <div class="task-title-actions">
         <button class="btn-calendar [ button ] material-icons" on:click={openCalendar}>event</button>
+        <button id="add-task-btn" class="button icon primary" on:click={() => expanded = !expanded}>
+          {#if expanded}
+            Close
+            <i class="material-icons">remove</i>        
+          {:else}
+            New
+            <i class="material-icons">add</i>
+          {/if}
+        </button>
       </div>
     </div>
+    {#if expanded}
+      <form class="task-form row" on:submit|preventDefault={addTask}>
+        <div class="col">
+          <input type="text" placeholder="Task name" required />
+          <input type="date" />
+        </div>
+        <button class="button clear" type="submit">Add</button>
+      </form>
+    {/if}
   </header>
 
   {#each Object.entries(tasks) as [name, items]}
@@ -141,13 +167,27 @@
   .task-title-actions {
     display: flex;
     align-items: center;
-    padding: 0 1rem;
   }
   
   .btn-calendar {
     background-color: transparent;
     padding: 0;
     font-size: 1.8rem;
+  }
+
+  #add-task-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 1.4rem;
+    gap: .5rem;
+  }
+
+  #add-task-btn .material-icons {
+    font-size: 1.8rem;
+  }
+
+  .task-form input {
+    margin-top: 1rem;
   }
 
   #task__list {

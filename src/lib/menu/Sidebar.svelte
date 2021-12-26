@@ -79,6 +79,8 @@
         task.projectId = proj.id;
         await db.tasks.add(task);
       }
+
+      $project = proj;
     }
   }
   

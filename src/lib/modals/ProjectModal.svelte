@@ -1,12 +1,13 @@
 <script lang="ts">
-  import { editRef, modal, project } from "../../store";
+  import { editRef, modal, project as projectStore } from "../../store";
   import * as db from "../../database/LoveFieldModule";
   import type { Project } from "src/database/database";
 
   let project: Project = { name: '' };
 
-  function addProject(): void {
-    db.projects.add(project);
+  async function addProject(): Promise<void> {
+    const newProject = await db.projects.add(project);
+    $projectStore = newProject;
     
     $editRef = null;
     $modal = null;
