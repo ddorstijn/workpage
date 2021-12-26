@@ -11,6 +11,7 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
     "@tsconfig/svelte": "^2.0.1",
+    "@types/file-saver": "^2.0.4",
     "@types/lovefield": "^2.1.4",
     "svelte": "^3.44.0",
     "svelte-check": "^2.2.7",
@@ -20,6 +21,7 @@
     "vite": "^2.7.2"
   },
   "dependencies": {
+    "file-saver": "^2.0.5",
     "lovefield": "^2.1.12"
   }
 }
