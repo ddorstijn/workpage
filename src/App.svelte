@@ -60,40 +60,31 @@
   }
 
   function importProject() {
-    var input = document.createElement('input');
-    input.type = 'file';
-    input.classList.add("is-hidden");
+    var file = this.files[0];
+    var reader = new FileReader();
+    reader.readAsText(file, 'UTF-8');
 
-    input.onchange = e => { 
-      var file = (e.target as HTMLFormElement).files[0]; 
-      var reader = new FileReader();
-      reader.readAsText(file, 'UTF-8');
+    reader.onload = async readerEvent => {
+      var res = JSON.parse(readerEvent.target.result as string);
+      if (!res || !res.hasOwnProperty('name') || !res.hasOwnProperty('linkgroups') || !res.hasOwnProperty('tasks')) {
+        console.error("Not a valid file");
+        return;
+      }
 
-      reader.onload = async readerEvent => {
-        var res = JSON.parse(readerEvent.target.result as string);
-        console.log(res);
-        if (!res || !res.hasOwnProperty('name') || !res.hasOwnProperty('linkgroups') || !res.hasOwnProperty('tasks')) {
-          console.error("Not a valid file");
-          return;
-        }
-
-        const proj = await db.projects.add({name: res.name});
-        for (const {name, projectId, links} of res.linkgroups) {
-          const group = await db.linkgroups.add({name, projectId});
-          
-          for (const {name, url} of links as Link[]) {
-            await db.links.add({name, url, groupId: group.id});
-          }
-        }
-
-        for (const task of res.tasks as Task[]) {
-          task.projectId = proj.id;
-          await db.tasks.add(task);
+      const proj = await db.projects.add({name: res.name});
+      for (const {name, links} of res.linkgroups) {
+        const group = await db.linkgroups.add({name, projectId: proj.id});
+        
+        for (const link of links as Link[]) {
+          await db.links.add({name: link.name, url: link.url, groupId: group.id});
         }
       }
-    }
 
-    input.click();
+      for (const task of res.tasks as Task[]) {
+        task.projectId = proj.id;
+        await db.tasks.add(task);
+      }
+    }
   }
 </script>
 
@@ -114,12 +105,12 @@
     <a bind:this={fileOutput} class="is-hidden" href="not-valid">
   </li>
   <li>
-    <button on:click={importProject} class="button icon">
+    <button on:click={() => fileInput.click()} class="button icon">
       <i class="material-icons">
         file_upload
       </i>
     </button>
-    <input bind:this={fileInput} class="is-hidden">
+    <input bind:this={fileInput} class="is-hidden" on:change={importProject}>
   </li>
 </ul>
 
