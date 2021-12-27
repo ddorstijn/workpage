@@ -141,7 +141,7 @@
     <div class="task-title">
       <h1 class="is-marginless">Tasks</h1>
       <div class="task-title-actions">
-        <button class="btn-calendar [ button ] material-icons" on:click={openCalendar}>event</button>
+        <button class="btn-calendar [ button ] material-icons" on:click={openCalendar}>history</button>
         <button id="add-task-btn" class="button primary" on:click={() => expanded = !expanded}>
           {#if expanded}
             Close

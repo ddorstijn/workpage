@@ -6,7 +6,7 @@
   import type { Link } from "src/database/database";
 
   let linkGroups = [];
-  let link: Link = { name: '', url: '', groupId: linkGroups[0]?.id }
+  let link: Link = { name: '', url: '', groupId: linkGroups[0]?.id };
 
   onMount(async () => {
     linkGroups = await db.linkgroups.get($project);
@@ -17,6 +17,13 @@
   });
 
   function addLink(): void {   
+    const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+    const regex = new RegExp(expression);
+  
+    if (!link.url.match(regex)) {
+      return alert("The url is not valid. Please check it again.");
+    } 
+
     if (link.id) {
       db.links.update(link);
     } else {
@@ -31,8 +38,8 @@
 <header>Link</header>
 <div>
   <form on:submit|preventDefault={addLink}>
-    <input type="text" placeholder="Name" bind:value={link.name} required>
-    <input type="url" placeholder="Url" bind:value={link.url} required>
+    <input placeholder="Name" bind:value={link.name} required />
+    <input placeholder="Url" bind:value={link.url} required />
     <select bind:value={link.groupId} required>
       {#each linkGroups as linkGroup}
         <option value={linkGroup.id}>{linkGroup.name}</option>

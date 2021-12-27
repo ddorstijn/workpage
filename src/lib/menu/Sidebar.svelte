@@ -209,7 +209,7 @@
   left: 100%;
   padding: 4px 7px;
   margin: 0px 12px;
-  transform: translateY(-50%);
+  transform: translateY(-55%);
 
   font-weight: 600;
   white-space: nowrap;
@@ -222,6 +222,7 @@
   transition: opacity 0.25s ease-in;
 }
 
+.fab-button.open:hover + .fab-buttons .fab-buttons__link[data-tooltip]::before,
 .fab-buttons__link:hover[data-tooltip]::before {
   opacity: 1;
 }
