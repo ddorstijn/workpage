@@ -1,18 +1,23 @@
 <script lang="ts">
-  import { darkmode, modal, project } from "../../store";
-
   import type { Link, LinkGroup, Task } from "src/database/database";
   import * as db from "../../database/LoveFieldModule";
+  import { darkmode, modal, project } from "../../store";
+
   import LinkGroupModal from "../modals/LinkGroupModal.svelte";
   import LinkModal from "../modals/LinkModal.svelte";
   import TaskModal from "../modals/TaskModal.svelte";
   import ProjectModal from "../modals/ProjectModal.svelte";
 
+  let open = false;
   let setURL = false;
 
-  function toggleTheme() {
+  function toggleDarkMode() {
     $darkmode = !$darkmode;
     localStorage.setItem("darkmode", $darkmode.toString());
+  }
+
+  function switchLanguage() {
+    alert("This is still in todo");
   }
 
   async function exportProject(e: MouseEvent) {
@@ -101,72 +106,123 @@
   }
 </script>
 
-<ul class="settings">
-  <li>
-    <button class="button icon" on:click={toggleTheme}>
-      <i class="material-icons">
-        {#if $darkmode} light_mode {:else} dark_mode {/if}
-      </i>
-    </button>
-  </li>
+<div class="fab">
+  <button class="fab-button" class:open={open} on:click={() => open = !open}>
+    <i class="material-icons">settings</i>
+  </button>
+  <ul class="fab-buttons" class:open={open}>
+    <li class="fab-buttons__item">
+      <button class="fab-buttons__link" data-tooltip="Create Linkgroup" on:click={newLinkGroup}>
+        <i class="material-icons">post_add</i>
+      </button>
+    </li>
+    <li class="fab-buttons__item">
+      <button class="fab-buttons__link" data-tooltip="Create Link" on:click={newLink}>
+        <i class="material-icons">bookmark_add</i>
+      </button>
+    </li>
+    <li class="fab-buttons__item">
+      <button class="fab-buttons__link" data-tooltip="Create Task" on:click={newTask}>
+        <i class="material-icons">add_task</i>
+      </button>
+    </li>
+    
+    <li class="seperator"></li>
 
-  <li>
-    <!-- svelte-ignore a11y-missing-attribute -->
-    <a class="button icon" on:click={exportProject}>
-      <i class="material-icons"> file_download </i>
-    </a>
-  </li>
-  <li>
-    <label class="button icon">
-      <input type="file" class="is-hidden" on:change={importProject} />
-      <i class="material-icons"> file_upload </i>
-    </label>
-  </li>
+    <li class="fab-buttons__item">
+      <button class="fab-buttons__link" data-tooltip="New Project" on:click={newProject}>
+        <i class="material-icons">library_add</i>
+      </button>
+    </li>
+    <li class="fab-buttons__item">
+      <button class="fab-buttons__link" data-tooltip="Import Project" on:click={importProject}>
+        <i class="material-icons">file_upload</i>
+      </button>
+    </li>
+    <li class="fab-buttons__item">
+      <button class="fab-buttons__link" data-tooltip="Export Project" on:click={exportProject}>
+        <i class="material-icons">file_download</i>
+      </button>
+    </li>
 
-  <li>
-    <button class="button icon" on:click={newProject}>
-      <i class="material-icons">
-        library_add
-      </i>
-    </button>
-  </li>
+    <li class="seperator"></li>
 
-  <li>
-    <button class="button icon" on:click={newLinkGroup}>
-      <i class="material-icons">
-        create_new_folder
-      </i>
-    </button>
-  </li>
-
-  <li>
-    <button class="button icon" on:click={newLink}>
-      <i class="material-icons">
-        add_link
-      </i>
-    </button>
-  </li>
-
-  <li>
-    <button class="button icon" on:click={newTask}>
-      <i class="material-icons">
-        note_add
-      </i>
-    </button>
-  </li>
-</ul>
+    <li class="fab-buttons__item">
+      <button class="fab-buttons__link" data-tooltip="Toggle darkmode" on:click={toggleDarkMode}>
+        <i class="material-icons">{#if $darkmode} light_mode {:else} dark_mode {/if}</i>
+      </button>
+    </li>
+    <li class="fab-buttons__item">
+      <button class="fab-buttons__link" data-tooltip="Switch language" on:click={switchLanguage}>
+        <i class="material-icons">translate</i>
+      </button>
+    </li>
+  </ul>
+</div>
 
 <style>
-  .settings {
-    position: absolute;
-    padding: 0;
-    left: 0;
-    top: 0;
+.fab {
+  position: fixed;
+  top: 1.6rem;
+  left: 1.6rem;
+}
 
-    list-style: none;
-  }
+.fab-button {
+  padding: 0 0 1.5rem 0;
+  background: transparent;
+}
 
-  .settings .button {
-    background-color: transparent;
-  }
+.fab-button.open {
+  color: var(--color-primary);
+}
+
+.fab-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  visibility: hidden;
+  transition: 0.2s;
+}
+
+.fab-buttons.open {
+  visibility: visible;
+}
+
+.fab-buttons__link {
+  background-color: transparent;
+  padding: 0;
+}
+
+[data-tooltip]::before {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  padding: 4px 7px;
+  margin: 0px 12px;
+  transform: translateY(-50%);
+
+  font-weight: 600;
+  white-space: nowrap;
+  border-radius: 2px;
+  color: var(--font-color);
+  content: attr(data-tooltip);
+  font-size: small;
+  opacity: 0;
+
+  transition: opacity 0.25s ease-in;
+}
+
+.fab-buttons__link:hover[data-tooltip]::before {
+  opacity: 1;
+}
+
+.seperator {
+  display: block;
+  height: .25rem;
+}
 </style>

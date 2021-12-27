@@ -21,6 +21,7 @@
     "vite": "^2.7.2"
   },
   "dependencies": {
-    "lovefield": "^2.1.12"
+    "lovefield": "^2.1.12",
+    "pikaday": "^1.8.2"
   }
 }
