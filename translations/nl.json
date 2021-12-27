@@ -1,3 +1,72 @@
 {
-    
+    "projects": {
+        "name": "Projecten",
+        "non-selected": "Klik om een project te openen",
+        "search": "Zoek...",
+        "form": {
+            "name": "Project naam",
+            "save": "Project opslaan"
+        }
+    },
+    "linkgroups": {
+        "name": "Link groep",
+        "form": {
+            "name": "Groep naam",
+            "save": "Link groep opslaan"
+        }
+    },
+    "links": {
+        "name": "Links",
+        "form": {
+            "name": "Link naam",
+            "url": "Url",
+            "save": "Link opslaan"
+        }
+    },
+    "tasks": {
+        "name": "Taken",
+        "priority": {
+            "no": "Geen prioriteit",
+            "low": "Lage prioriteit",
+            "medium": "Gemiddelde prioriteit",
+            "high": "Hoge prioriteit"
+        },
+        "form": {
+            "close": "Sluiten",
+            "new": "Nieuw",
+            "add": "Voeg toe",
+            "save": "Taak opslaan",
+            "placeholders": {
+                "name": "Taak naam",
+                "due": "Deadline"
+            }
+        },
+        "list": {
+            "sort-by": "Sorteer op",
+            "date": "Datum",
+            "priority": "Prioriteit",
+            "empty": "Helemaal klaar!"
+        },
+        "history": {
+            "name": "Taak geschiedenis"
+        }
+    },
+    "menu": {
+        "edit": "Aanpassen",
+        "delete": "Verwijderen"
+    },
+    "sidebar": {
+        "create": {
+            "linkgroup": "Creëer link groep",
+            "link": "Creëer link",
+            "task": "Creëer taak"
+        },
+        "project": {
+            "new": "Nieuw project",
+            "import": "Importeer project",
+            "export": "Exporteer project"
+        },
+        "darkmode": "Darkmodus aan/uit",
+        "Language": "Taal: Nederlands"
+    }
 }
