@@ -31,28 +31,21 @@
     <h1 class="is-marginless">Projects</h1>
     <div class="action-menu">
       <!-- Filter -->
-      <label id="search__wrapper">
-        <input
-          id="search__input"
-          type="search"
-          placeholder="Search project..."
-          bind:value={filterInput}
-        />
+      <label class="search">
+        <input type="search" placeholder="Search project..." bind:value={filterInput} />
         <i class="button material-icons">search</i>
       </label>
     </div>
   </div>
 </header>
 
-<div id="projects">
-  <ul id="projects__list">
-    {#each filtered_list(projects, filterInput) as projectItem}
-      <ProjectItem {projectItem} />
-    {/each}
-  </ul>
-</div>
+<ul class="item-list">
+  {#each filtered_list(projects, filterInput) as projectItem}
+    <ProjectItem {projectItem} />
+  {/each}
+</ul>
 
-<style>
+<style lang="scss">
   header {
     border-bottom: 1px solid var(--color-lightGrey);
     width: 20vw;
@@ -70,13 +63,12 @@
     align-items: center;
   }
 
-  #projects__list {
+  .item-list {
     list-style: none;
     padding: 0;
   }
 
-  /* Searching */
-  #search__wrapper {
+  .search {
     padding: 0.5rem 0.75rem;
     margin: 0 1rem 0 2rem;
 
@@ -85,24 +77,30 @@
     gap: 0.25rem;
     border-radius: 999px;
     border: 1px solid var(--color-lightGrey);
+
+    &:focus-within {
+      border-color: var(--color-grey);
+    }
+
+    .material-icons {
+      font-size: 1.8rem;
+      background-color: transparent;
+      padding: 0;
+    }
+
+    input {
+      width: 15ch !important;
+      border: none  !important;
+      font-size: 1.4rem !important;
+      background-color: transparent;
+      padding: 0 0 0 0.5rem !important;
+  
+      &:focus {
+        box-shadow: none !important;
+        outline: none !important;
+      }
+    }
   }
 
-  #search__wrapper .material-icons {
-    font-size: 1.8rem;
-    background-color: transparent;
-    padding: 0;
-  }
 
-  #search__input {
-    width: 15ch;
-    border: none;
-    font-size: 1.4rem;
-    background-color: transparent;
-    padding: 0 0 0 0.5rem;
-  }
-
-  #search__input:focus {
-    box-shadow: none;
-    outline: none;
-  }
 </style>

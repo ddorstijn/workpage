@@ -23,7 +23,7 @@
   </li>
 </ul>
 
-<style>
+<style lang="scss">
   .menu {
     margin: 0 0 0 auto;
     padding: 0 0 0 0.35rem;
@@ -32,12 +32,12 @@
     display: flex;
     gap: 0.4rem;
     list-style: none;
-  }
-  
-  .menu li {
-    padding: 0rem;
-    font-size: 14px;
-    color: var(--color-darkGrey);
+
+    li {
+      padding: 0rem;
+      font-size: 14px;
+      color: var(--color-darkGrey);
+    }
   }
 
   .edit:hover {

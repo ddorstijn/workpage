@@ -136,13 +136,13 @@
   }
 </script>
 
-<article>
-  <header class="task-header">
-    <div class="task-title">
+<article class="task">
+  <header>
+    <div class="title-bar">
       <h1 class="is-marginless">Tasks</h1>
-      <div class="task-title-actions">
-        <button class="btn-calendar [ button ] material-icons" on:click={openCalendar}>history</button>
-        <button id="add-task-btn" class="button primary" on:click={() => expanded = !expanded}>
+      <div class="title-bar__actions">
+        <button class="btn--icon [ is-paddingless ] [ material-icons ]" on:click={openCalendar}>history</button>
+        <button class="btn--accent [ button primary ]" on:click={() => expanded = !expanded}>
           {#if expanded}
             Close
             <i class="material-icons">remove</i>        
@@ -183,14 +183,15 @@
   {#if !unsortedTasks.length}
     <span class="no-tasks">All done here!</span>
   {/if}
+
   {#each Object.entries(tasks) as [name, items]}
     {#if items.length}
-      <details open>
-        <summary class="date-tag button icon">
+      <details class="item-list-container" open>
+        <summary class="button icon">
           {name}
           <i class="material-icons details-icon">expand_less</i>
         </summary>
-        <ul id="task__list">
+        <ul class="item-list">
           {#each items as task}
             <TaskItem {task} />
           {/each}
@@ -200,52 +201,54 @@
   {/each}
 </article>
 
-<style>
-  article {
+<style lang="scss">
+  .task {
     margin: 2rem;
     padding: 2rem;
     box-shadow: none;
+
+    & > header {
+      border-bottom: 1px solid var(--color-lightGrey);
+    
+      .title-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
   }
 
-  .task-header {
-    border-bottom: 1px solid var(--color-lightGrey);
-  }
-
-  .task-header .task-title {
+  .title-bar__actions {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-  }
 
-  .task-title-actions {
-    display: flex;
-    align-items: center;
+    .btn--icon {
+      background-color: transparent;
+      font-size: 1.8rem;
+    }
   }
   
-  .btn-calendar {
-    background-color: transparent;
-    padding: 0;
-    font-size: 1.8rem;
-  }
-
-  #add-task-btn {
+  .btn--accent {
     padding: 0.5rem 1rem;
+    margin-left: 0.5rem;
     border-radius: 999px;
     font-size: 1.4rem;
     display: flex;
     gap: .25rem;
+
+    .material-icons {
+      font-size: 1.8rem;
+    }
   }
 
-  #add-task-btn .material-icons {
-    font-size: 1.8rem;
-  }
-
-  .task-form input, .task-form select, .task-form :global(.picker) {
+  .task-form input,
+  .task-form select,
+  .task-form :global(.picker) {
     background-color: white;
     margin-top: 1rem;
   }
 
-  #task__list {
+  .item-list {
     padding: 0 1.5rem;
     margin: 0;
     list-style: none;
@@ -254,55 +257,51 @@
     overflow-y: auto;
   }
 
-  details {
+  .item-list-container {
     margin-top: 1rem;
-  }
 
-  details + details {
-    margin-top: 1rem;
-  }
+    summary {
+      padding: 0;
+      margin-left: 1rem;
+      font-size: 1.4rem;
+      font-weight: 500;
+      white-space: nowrap;
+      background-color: transparent;
+      color: var(--color-grey);
+    }
 
-  .details-icon {
-    transition: transform 0.25s ease-out;
-  }
+    .details-icon {
+      transition: transform 0.25s ease-out;
+    }
 
-  details[open] .details-icon {
-    transform: rotateX(180deg);
-  }
-
-  .date-tag {
-    padding: 0;
-    margin-left: 1rem;
-    font-size: 1.4rem;
-    font-weight: 500;
-    white-space: nowrap;
-    background-color: transparent;
-    color: var(--color-grey);
+    &[open] .details-icon {
+      transform: rotateX(180deg);
+    }
   }
 
   .filter {
     display: flex;
     align-items: center;
     white-space: nowrap;
+
+    select {
+      padding: 0;
+      margin: 0;
+      border: none;
+  
+      font-size: 1.4rem;
+      appearance: none;
+      background-image: none;
+      cursor: pointer;
+
+      &:focus {
+        border: none;
+        outline: none;
+        box-shadow: none;
+      }
+    }
   }
-
-  .filter select {
-    padding: 0;
-    margin: 0;
-    border: none;
-
-    font-size: 1.4rem;
-    appearance: none;
-    background-image: none;
-    cursor: pointer;
-  }
-
-  .filter select:focus {
-    border: none;
-    outline: none;
-    box-shadow: none;
-  }
-
+  
   .no-tasks {
     width: 100%;
     margin-top: 2rem;

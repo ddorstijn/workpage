@@ -24,15 +24,7 @@
   <Modal />
 </article>
 
-<style>
-article.newtab {
-	height: 100vh;
-	width: 100vw;
-
-	display: flex;
-	background-color: var(--bg-secondary-color);
-}
-
+<style lang="scss">
 article.newtab {
 	--bg-color: #ffffff;
 	--bg-secondary-color: #f3f3f6;
@@ -42,24 +34,22 @@ article.newtab {
 	--color-darkGrey: #3f4144;
 	--color-error: #d43939;
 	--color-success: #28bd14;
-	/* --bg-color: #ffffff;
-	--bg-secondary-color: #fafafc;
-	--color-primary: #0099FF;
-	--color-lightGrey: #EEEEEE;
-	--color-grey: #999999;
-	--color-darkGrey: #555555;
-	--color-error: #EE4444;
-	--color-success: #66BB66; */
 	--grid-maxWidth: 120rem;
 	--grid-gutter: 2rem;
 	--font-size: 1.6rem;
 	--font-color: #333333;
 	--font-family-sans: "Inter", sans-serif;
 	--font-family-mono: monaco, "Consolas", "Lucida Console", monospace;
-}
 
-article.darkmode {
-	filter: invert(100%);
+	height: 100vh;
+	width: 100vw;
+
+	display: flex;
+	background-color: var(--bg-secondary-color);
+
+	&.darkmode {
+		filter: invert(100%);
+	}
 }
 
 main {

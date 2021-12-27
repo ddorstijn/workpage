@@ -18,7 +18,7 @@
 </script>
 
 <article>
-  <button id="project__button" class="button primary" on:click="{openModal}">
+  <button class="[ button primary ]" on:click="{openModal}">
     {#if $project == null}
         Click to open project
     {:else}
@@ -28,7 +28,7 @@
 </article>
 
 <style>
-  #project__button {
+  button {
     padding: 12px 24px;
     
     border-radius: 999px;

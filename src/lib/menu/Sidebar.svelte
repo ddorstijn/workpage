@@ -165,7 +165,7 @@
   </ul>
 </div>
 
-<style>
+<style lang="scss">
 .fab {
   position: fixed;
   top: 1.6rem;
@@ -175,10 +175,10 @@
 .fab-button {
   padding: 0 0 1.5rem 0;
   background: transparent;
-}
 
-.fab-button.open {
-  color: var(--color-primary);
+  &.open {
+    color: var(--color-primary);
+  }
 }
 
 .fab-buttons {
@@ -192,10 +192,10 @@
   padding: 0;
   visibility: hidden;
   transition: 0.2s;
-}
 
-.fab-buttons.open {
-  visibility: visible;
+  &.open {
+    visibility: visible;
+  }
 }
 
 .fab-buttons__link {
