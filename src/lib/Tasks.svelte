@@ -2,34 +2,36 @@
   import CalendarModal from "./modals/CalendarModal.svelte";
   import TaskItem from "./list-items/TaskItem.svelte";
 
-  import Flatpickr from 'svelte-flatpickr';
-	import 'flatpickr/dist/flatpickr.css';
+  import Flatpickr from "svelte-flatpickr";
+  import "flatpickr/dist/flatpickr.css";
+
+  import { onDestroy, onMount } from "svelte";
+  import { _ } from "svelte-i18n";
 
   import { modal, project } from "../store";
-  import { onDestroy, onMount } from "svelte";
   import type { Project, Task } from "src/database/database";
   import * as db from "../database/LoveFieldModule";
 
   const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-  
+
   // -- Members -- \\
   let expanded = false;
   let sortMethod = "d";
 
   let unsortedTasks: Task[] = [];
-  let tasks: {[items: string]: Task[]} = {};
-  let newTask: Task = { name: '', priority: 0, projectId: $project.id };
+  let tasks: { [items: string]: Task[] } = {};
+  let newTask: Task = { name: "", priority: 0, projectId: $project?.id };
 
   onMount(async () => {
-      unsortedTasks = (await db.tasks.get($project)).filter(task => !task.done);
-      sortTasks();
-      db.tasks.subscribe(callback);
+    unsortedTasks = (await db.tasks.get($project)).filter((task) => !task.done);
+    sortTasks();
+    db.tasks.subscribe(callback);
   });
 
   onDestroy(() => db.tasks.unsubscribe(callback));
 
   async function callback(task: Task): Promise<void> {
-    unsortedTasks = (await db.tasks.get($project)).filter(task => !task.done);
+    unsortedTasks = (await db.tasks.get($project)).filter((task) => !task.done);
     sortTasks();
   }
 
@@ -42,7 +44,7 @@
 
     unsortedTasks = await db.tasks.get(newProject);
     sortTasks();
-  })
+  });
 
   // -- Functions -- \\
   function openCalendar(): void {
@@ -70,8 +72,8 @@
       "High priority": [],
       "Medium priority": [],
       "Low priority": [],
-      "No priority": []
-    }
+      "No priority": [],
+    };
 
     for (const task of unsortedTasks) {
       if (task.done != null) {
@@ -94,20 +96,20 @@
 
   function sortTasksDate() {
     let sorted = {
-      "Overdue": [],
-      "Today": [],
+      Overdue: [],
+      Today: [],
       "This week": [],
       "Long term": [],
-      "Someday": []
+      Someday: [],
     };
-    
+
     for (const task of unsortedTasks) {
       if (task.done != null) {
         continue;
       }
 
       if (!task.due) {
-        sorted["Someday"].push(task);  
+        sorted["Someday"].push(task);
         continue;
       }
 
@@ -130,58 +132,101 @@
     if (!newTask.due) {
       newTask.due = null;
     }
-    
+
     db.tasks.add(newTask);
-    newTask = { name: '', priority: 0, projectId: $project.id };
+    newTask = { name: "", priority: 0, projectId: $project.id };
   }
 </script>
 
 <article class="task">
   <header>
     <div class="title-bar">
-      <h1 class="is-marginless">Tasks</h1>
+      <h1 class="is-marginless">{$_("tasks.name", {default: "Tasks"})}</h1>
       <div class="title-bar__actions">
-        <button class="btn--icon [ is-paddingless ] [ material-icons ]" on:click={openCalendar}>history</button>
-        <button class="btn--accent [ button primary ]" on:click={() => expanded = !expanded}>
+        <button
+          class="btn--icon [ is-paddingless ] [ material-icons ]"
+          on:click={openCalendar}>history</button
+        >
+        <button
+          class="btn--accent [ button primary ]"
+          on:click={() => (expanded = !expanded)}
+        >
           {#if expanded}
-            Close
-            <i class="material-icons">remove</i>        
+            {$_("tasks.form.close", { default: "Close" })}
+            <i class="material-icons">remove</i>
           {:else}
-            New
+            {$_("tasks.form.new", { default: "New" })}
             <i class="material-icons">add</i>
           {/if}
         </button>
       </div>
     </div>
     {#if expanded}
-      <form class="task-form row" class:expanded={expanded} on:submit|preventDefault={addTask}>
+      <form
+        class="task-form row"
+        class:expanded
+        on:submit|preventDefault={addTask}
+      >
         <div class="col">
-          <input name="name" placeholder="Task name" required bind:value={newTask.name} />
+          <input
+            name="name"
+            placeholder={$_("tasks.form.placeholders.name", {
+              default: "Task name",
+            })}
+            required
+            bind:value={newTask.name}
+          />
           <div class="row">
-            <Flatpickr name="due" class="picker col-7" placeholder="Due date" title="Due date" bind:value={newTask.due} />
+            <Flatpickr
+              name="due"
+              class="picker col-7"
+              placeholder={$_("tasks.form.placeholders.due", {
+                default: "Due date",
+              })}
+              title="Due date"
+              bind:value={newTask.due}
+            />
             <select name="priorty" class="col" bind:value={newTask.priority}>
-              <option value={0} class="text-grey" selected>No priority</option>
-              <option value={1}>Low priority</option>
-              <option value={2}>Medium priority</option>
-              <option value={3}>High priority</option>
+              <option value={0} class="text-grey" selected>
+                {$_("tasks.priority.no", { default: "No priority" })}
+              </option>
+              <option value={1}>
+                {$_("tasks.priority.low", { default: "Low priority" })}
+              </option>
+              <option value={2}>
+                {$_("tasks.priority.medium", { default: "Medium priority" })}
+              </option>
+              <option value={3}>
+                {$_("tasks.priority.high", { default: "High priority" })}
+              </option>
             </select>
           </div>
         </div>
-        <button class="button clear" type="submit">Add</button>
+        <button class="button clear" type="submit">
+          {$_("tasks.form.add", { default: "Add" })}
+        </button>
       </form>
     {/if}
   </header>
 
   <label class="filter [ pull-right ]">
-    <small>Sort by:</small>
+    <small>
+      {$_("tasks.list.sort-by", { default: "Sort by" })}
+    </small>
     <select bind:value={sortMethod} on:change={sortTasks}>
-      <option value="d">Date</option>
-      <option value="p">Priority</option>
+      <option value="d">
+        {$_("tasks.list.date", { default: "Date" })}
+      </option>
+      <option value="p">
+        {$_("tasks.list.priority", { default: "Priority" })}
+      </option>
     </select>
   </label>
 
   {#if !unsortedTasks.length}
-    <span class="no-tasks">All done here!</span>
+    <span class="no-tasks">
+      {$_("tasks.list.empty", { default: "All done here!" })}
+    </span>
   {/if}
 
   {#each Object.entries(tasks) as [name, items]}
@@ -209,7 +254,7 @@
 
     & > header {
       border-bottom: 1px solid var(--color-lightGrey);
-    
+
       .title-bar {
         display: flex;
         justify-content: space-between;
@@ -227,14 +272,14 @@
       font-size: 1.8rem;
     }
   }
-  
+
   .btn--accent {
     padding: 0.5rem 1rem;
     margin-left: 0.5rem;
     border-radius: 999px;
     font-size: 1.4rem;
     display: flex;
-    gap: .25rem;
+    gap: 0.25rem;
 
     .material-icons {
       font-size: 1.8rem;
@@ -252,7 +297,7 @@
     padding: 0 1.5rem;
     margin: 0;
     list-style: none;
-    
+
     max-height: 50vh;
     overflow-y: auto;
   }
@@ -288,7 +333,7 @@
       padding: 0;
       margin: 0;
       border: none;
-  
+
       font-size: 1.4rem;
       appearance: none;
       background-image: none;
@@ -301,7 +346,7 @@
       }
     }
   }
-  
+
   .no-tasks {
     width: 100%;
     margin-top: 2rem;

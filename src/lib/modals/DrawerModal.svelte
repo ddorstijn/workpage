@@ -2,6 +2,7 @@
   import ProjectItem from "../list-items/ProjectItem.svelte";
   import type { Project } from "../../database/database";
   import * as db from "../../database/LoveFieldModule";
+  import { _ } from "svelte-i18n";
 
   import { onDestroy, onMount } from "svelte";
 
@@ -28,11 +29,11 @@
 
 <header>
   <div class="title-bar">
-    <h1 class="is-marginless">Projects</h1>
+    <h1 class="is-marginless">{$_("projects.name", {default: "Projects"})}</h1>
     <div class="action-menu">
       <!-- Filter -->
       <label class="search">
-        <input type="search" placeholder="Search project..." bind:value={filterInput} />
+        <input type="search" placeholder={$_("projects.search", {default: "Search..."})} bind:value={filterInput} />
         <i class="button material-icons">search</i>
       </label>
     </div>

@@ -1,5 +1,7 @@
 <script>
   import { onMount } from "svelte";
+  import { _ } from "svelte-i18n";
+  
   import * as db from "../database/LoveFieldModule";
 
   import { modal, project } from "../store";
@@ -20,7 +22,7 @@
 <article>
   <button class="[ button primary ]" on:click="{openModal}">
     {#if $project == null}
-        Click to open project
+      {$_('projects.non-selected', { default: "Click to open project" })}
     {:else}
         {$project.name}
     {/if}

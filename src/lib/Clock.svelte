@@ -1,9 +1,12 @@
 <script>
 	import { onMount } from "svelte";
-
+	import { locale } from "svelte-i18n";
+	
 	// -- Members -- \\
 	let date;
 	let time;
+
+	let format = `${$locale}-GB`;
 
 	// -- Initialization -- \\
 	onMount(async () => {
@@ -13,13 +16,14 @@
 	// -- Functions -- \\
 	async function update() {
 		const d = new Date();
-		date = new Intl.DateTimeFormat("en-GB", {
+		let temp = new Intl.DateTimeFormat(format, {
 			month: "short",
 			day: "numeric",
 			weekday: "long",
 		}).format(d);
+		date = temp[0].toUpperCase() + temp.slice(1)
 
-		time = new Intl.DateTimeFormat("en-GB", {
+		time = new Intl.DateTimeFormat(format, {
 			hour: "numeric",
 			minute: "numeric",
 		}).format(d);

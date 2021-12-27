@@ -2,6 +2,7 @@
   import { editRef, modal, project as projectStore } from "../../store";
   import * as db from "../../database/LoveFieldModule";
   import type { Project } from "src/database/database";
+  import { _ } from "svelte-i18n";
 
   let project: Project = { name: '' };
 
@@ -14,11 +15,11 @@
   }
 </script>
 
-<header>Project</header>
+<header>{$_("projects.name", {default: "Projects"})}</header>
 <div>
   <form on:submit|preventDefault={addProject}>
-    <input placeholder="Project name" bind:value={project.name} required>
-    <button type="submit">Save project</button>
+    <input placeholder={$_("projects.form.name", {default: "Project name"})} bind:value={project.name} required>
+    <button type="submit">{$_("projects.form.save", {default: "Save project"})}</button>
   </form>
 </div>
 

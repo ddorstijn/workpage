@@ -2,6 +2,7 @@
   import type { Link, LinkGroup, Task } from "src/database/database";
   import * as db from "../../database/LoveFieldModule";
   import { darkmode, modal, project } from "../../store";
+  import { _, locale, locales } from "svelte-i18n";
 
   import LinkGroupModal from "../modals/LinkGroupModal.svelte";
   import LinkModal from "../modals/LinkModal.svelte";
@@ -22,7 +23,13 @@
   }
 
   function switchLanguage() {
-    alert("This is still in todo");
+    if ($locale == "en") {
+      $locale = "nl";
+    } else if ($locale == "nl") {
+      $locale = "de";
+    } else {
+      $locale = "en";
+    }
   }
 
   async function exportProject(e: MouseEvent) {
@@ -117,17 +124,17 @@
   </button>
   <ul class="fab-buttons" class:open={open}>
     <li class="fab-buttons__item">
-      <button class="fab-buttons__link" data-tooltip="Create Linkgroup" on:click={newLinkGroup}>
+      <button class="fab-buttons__link" data-tooltip={$_("sidebar.create.linkgroup", {default: "Create Linkgroup"})} on:click={newLinkGroup}>
         <i class="material-icons">post_add</i>
       </button>
     </li>
     <li class="fab-buttons__item">
-      <button class="fab-buttons__link" data-tooltip="Create Link" on:click={newLink}>
+      <button class="fab-buttons__link" data-tooltip={$_("sidebar.create.link", {default: "Create Link"})} on:click={newLink}>
         <i class="material-icons">bookmark_add</i>
       </button>
     </li>
     <li class="fab-buttons__item">
-      <button class="fab-buttons__link" data-tooltip="Create Task" on:click={newTask}>
+      <button class="fab-buttons__link" data-tooltip={$_("sidebar.create.task", {default: "Create Task"})} on:click={newTask}>
         <i class="material-icons">add_task</i>
       </button>
     </li>
@@ -135,17 +142,17 @@
     <li class="seperator"></li>
 
     <li class="fab-buttons__item">
-      <button class="fab-buttons__link" data-tooltip="New Project" on:click={newProject}>
+      <button class="fab-buttons__link" data-tooltip={$_("sidebar.project.new", {default: "New Project"})} on:click={newProject}>
         <i class="material-icons">library_add</i>
       </button>
     </li>
     <li class="fab-buttons__item">
-      <button class="fab-buttons__link" data-tooltip="Import Project" on:click={importProject}>
+      <button class="fab-buttons__link" data-tooltip={$_("sidebar.project.import", {default: "Import Project"})} on:click={importProject}>
         <i class="material-icons">file_upload</i>
       </button>
     </li>
     <li class="fab-buttons__item">
-      <button class="fab-buttons__link" data-tooltip="Export Project" on:click={exportProject}>
+      <button class="fab-buttons__link" data-tooltip={$_("sidebar.project.export", {default: "Export Project"})} on:click={exportProject}>
         <i class="material-icons">file_download</i>
       </button>
     </li>
@@ -153,12 +160,12 @@
     <li class="seperator"></li>
 
     <li class="fab-buttons__item">
-      <button class="fab-buttons__link" data-tooltip="Toggle darkmode" on:click={toggleDarkMode}>
+      <button class="fab-buttons__link" data-tooltip={$_("sidebar.darkmode", {default: "Toggle darkmode"})} on:click={toggleDarkMode}>
         <i class="material-icons">{#if $darkmode} light_mode {:else} dark_mode {/if}</i>
       </button>
     </li>
     <li class="fab-buttons__item">
-      <button class="fab-buttons__link" data-tooltip="Switch language" on:click={switchLanguage}>
+      <button class="fab-buttons__link" data-tooltip={$_("sidebar.language", {default: "Switch language"})} on:click={switchLanguage}>
         <i class="material-icons">translate</i>
       </button>
     </li>

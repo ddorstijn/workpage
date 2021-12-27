@@ -1,0 +1,72 @@
+{
+    "projects": {
+        "name": "Projects",
+        "non-selected": "Click to open project",
+        "search": "Search...",
+        "form": {
+            "name": "Project name",
+            "save": "Save project"
+        }
+    },
+    "linkgroups": {
+        "name": "Linkgroups",
+        "form": {
+            "name": "Group name",
+            "save": "Save linkgroup"
+        }
+    },
+    "links": {
+        "name": "Links",
+        "form": {
+            "name": "Link name",
+            "url": "Url",
+            "save": "Save link"
+        }
+    },
+    "tasks": {
+        "name": "Tasks",
+        "priority": {
+            "no": "No priority",
+            "low": "Low priority",
+            "medium": "Medium priority",
+            "high": "High priority"
+        },
+        "form": {
+            "close": "Close",
+            "new": "New",
+            "add": "Add",
+            "save": "Save task",
+            "placeholders": {
+                "name": "Task name",
+                "due": "Due date"
+            }
+        },
+        "list": {
+            "sort-by": "Sort by",
+            "date": "Date",
+            "priority": "Priority",
+            "empty": "All done here!"
+        },
+        "history": {
+            "name": "Task history"
+        }
+    },
+    "menu": {
+        "edit": "Edit",
+        "delete": "Delete"
+    },
+    "sidebar": {
+        "create": {
+            "linkgroup": "Create linkgroup",
+            "link": "Create link",
+            "task": "Create task"
+        },
+        "project": {
+            "new": "New project",
+            "import": "Import project",
+            "export": "Export project"
+        },
+        "darkmode": "Toggle darkmode",
+        "Language": "Set language"
+    }
+}

@@ -1,10 +1,11 @@
 <script lang="ts">
   import TaskItem from "../list-items/TaskItem.svelte";
 
-  import { modal, project } from "../../store";
+  import { project } from "../../store";
   import { onDestroy, onMount } from "svelte";
   import type { Project, Task } from "src/database/database";
   import * as db from "../../database/LoveFieldModule";
+  import { _ } from "svelte-i18n";
 
   // -- Members -- \\
   let tasks: Task[] = [];
@@ -31,7 +32,7 @@
 </script>
 
 <header>
-  <h1 class="is-marginless">Task history</h1>
+  <h1 class="is-marginless">{$_("tasks.history.name", {default: "Task history"})}</h1>
 </header>
 <ul class="task-list">
   {#each tasks as task}

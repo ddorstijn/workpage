@@ -5,6 +5,8 @@
   import * as db from "../../database/LoveFieldModule";
   import type { Link } from "src/database/database";
 
+  import { _ } from "svelte-i18n";
+
   let linkGroups = [];
   let link: Link = { name: '', url: '', groupId: linkGroups[0]?.id };
 
@@ -35,17 +37,17 @@
   }
 </script>
 
-<header>Link</header>
+<header>{$_("links.name", {default: "Links"})}</header>
 <div>
   <form on:submit|preventDefault={addLink}>
-    <input placeholder="Name" bind:value={link.name} required />
-    <input placeholder="Url" bind:value={link.url} required />
+    <input placeholder={$_("links.form.name", {default: "Name"})} bind:value={link.name} required />
+    <input placeholder={$_("links.form.url", {default: "Url"})} bind:value={link.url} required />
     <select bind:value={link.groupId} required>
       {#each linkGroups as linkGroup}
         <option value={linkGroup.id}>{linkGroup.name}</option>
       {/each}
     </select>
-    <button type="submit">Save link</button>
+    <button type="submit">{$_("links.form.save", {default: "Save link"})}</button>
   </form>
 </div>
 

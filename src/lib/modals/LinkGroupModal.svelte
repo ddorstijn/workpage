@@ -3,6 +3,7 @@
   import * as db from "../../database/LoveFieldModule";
   import type { LinkGroup } from "src/database/database";
   import { onMount } from "svelte";
+  import { _ } from "svelte-i18n";
 
   let linkgroup: LinkGroup = { name: '', projectId: $project.id };
 
@@ -22,11 +23,11 @@
   }
 </script>
 
-<header>Link group</header>
+<header>{$_("linkgroups.name", {default: "Linkgroups"})}</header>
 <div>
   <form on:submit|preventDefault={addGroup}>
-    <input placeholder="Group name" bind:value={linkgroup.name} required>
-    <button type="submit">Save group</button>
+    <input placeholder={$_("linkgroups.form.name", {default: "Group name"})} bind:value={linkgroup.name} required>
+    <button type="submit">{$_("linkgroups.form.save", {default: "Save group"})}</button>
   </form>
 </div>
 

@@ -1,5 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
+  import { _ } from "svelte-i18n";
 
   export let hovering;
 
@@ -15,10 +16,10 @@
 </script>
 
 <ul class="menu" class:hovering>
-  <li class="edit material-icons" title="Edit" on:click={editItem}>
+  <li class="edit material-icons" title={$_("menu.edit", {default: "Edit"})} on:click={editItem}>
     edit
   </li>
-  <li class="delete material-icons" title="Delete" on:click={removeItem}>
+  <li class="delete material-icons" title={$_("menu.delete", {default: "Delete"})} on:click={removeItem}>
     close
   </li>
 </ul>
