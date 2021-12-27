@@ -2,19 +2,16 @@
   import { editRef, modal, project } from "../../store";
   import * as db from "../../database/LoveFieldModule";
   import type { Task } from "src/database/database";
-  import { onMount } from "svelte";
+  
+  import Flatpickr from 'svelte-flatpickr';
+	import 'flatpickr/dist/flatpickr.css';
 
-  let dueStr = '';
-  let task: Task = { name: '', projectId: $project.id };
-
-  onMount(() => {
-    task = $editRef as Task ?? task;
-    // YYYY-MM-DD (Svelte currently does not support binding date input to date)
-    dueStr = task.due?.toLocaleString('zu-ZA', {year: "numeric", month:"numeric", day: "numeric"}) ?? dueStr;
-  });
+  let task: Task = $editRef as Task ?? { name: '', projectId: $project.id };
 
   function setTask(): void {
-    task.due = dueStr.length ? new Date(dueStr) : null;
+    if (!task.due) {
+      task.due = null;
+    }
 
     if (task.id) {
       db.tasks.update(task);
@@ -30,8 +27,16 @@
 <header>Task</header>
 <div>
   <form on:submit|preventDefault={setTask}>
-    <input type="text" placeholder="Task name" bind:value={task.name} required />
-    <input type="date" bind:value={dueStr} />
+    <input placeholder="Task name" bind:value={task.name} required />
+    <div class="row">
+      <Flatpickr class="picker col" placeholder="Due date" title="Due date" bind:value={task.due} />
+      <select bind:value={task.priority} class="col">
+        <option value={0}>No priority</option>
+        <option value={1}>Low priority</option>
+        <option value={2}>Medium priority</option>
+        <option value={3}>High priority</option>
+      </select>
+    </div>
     <button type="submit">Save task</button>
   </form>
 </div>
@@ -43,12 +48,16 @@
     margin-bottom: 2rem;
   }
 
+  form {
+    width: 15vw;
+  }
+
   input {
     margin-bottom: 1rem;
   }
 
   button {
     display: block;
-    margin: 2rem auto 0;
+    margin: 1rem auto 0;
   }
 </style>

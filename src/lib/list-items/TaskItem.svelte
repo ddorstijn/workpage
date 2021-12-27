@@ -30,6 +30,11 @@
       month: "long",
     }).format(date);
   }
+
+  function pretty_priority(priority: number): string {
+    const priorities = ["", "Low", "Medium", "High"];
+    return priorities[priority];
+  }
 </script>
 
 <li
@@ -45,8 +50,16 @@
   <div class="text">
     <div class="title">{task.name}</div>
     <small class="text-grey">
-      <span class="material-icons">event</span>
-      {pretty_date(task.due)}
+      <div class="is-vertical-align">
+        <span class="due-icon material-icons">event</span>
+        {pretty_date(task.due)}
+      </div>
+      {#if task.priority > 0}
+        <div class="is-vertical-align" class:text-light={task.priority == 1} class:text-error={task.priority == 3}>
+          <span class="priority-icon material-icons">priority_high</span>
+          {pretty_priority(task.priority)}
+        </div>
+      {/if}
     </small>
   </div>
   <Menu {hovering} on:edit={edit} on:remove={remove} />
@@ -77,12 +90,15 @@
     font-weight: 300;
 
     display: flex;
-    align-items: center;
-    gap: 0.25rem;
+    gap: 0.5rem;
   }
 
   small .material-icons {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+  }
+
+  small .due-icon {
+    margin-right: 0.25rem;
   }
   
   label {

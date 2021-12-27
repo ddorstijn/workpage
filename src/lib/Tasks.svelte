@@ -2,49 +2,46 @@
   import CalendarModal from "./modals/CalendarModal.svelte";
   import TaskItem from "./list-items/TaskItem.svelte";
 
+  import Flatpickr from 'svelte-flatpickr';
+	import 'flatpickr/dist/flatpickr.css';
+
   import { modal, project } from "../store";
   import { onDestroy, onMount } from "svelte";
   import type { Project, Task } from "src/database/database";
   import * as db from "../database/LoveFieldModule";
 
   const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-
-  interface ISortedTasks {
-    "Overdue": Task[],
-    "Today": Task[],
-    "This week": Task[],
-    "Long term": Task[],
-    "Someday": Task[]
-  }
   
   // -- Members -- \\
   let expanded = false;
-  let tasks: ISortedTasks = {
-    "Overdue": [],
-    "Today": [],
-    "This week": [],
-    "Long term": [],
-    "Someday": []
-  };
+  let sortMethod = "d";
+
+  let unsortedTasks: Task[] = [];
+  let tasks: {[items: string]: Task[]} = {};
+  let newTask: Task = { name: '', priority: 0, projectId: $project.id };
 
   onMount(async () => {
-      tasks = sortTasks(await db.tasks.get($project));
+      unsortedTasks = await db.tasks.get($project);
+      sortTasks();
       db.tasks.subscribe(callback);
   });
 
   onDestroy(() => db.tasks.unsubscribe(callback));
 
   async function callback(task: Task): Promise<void> {
-    tasks = sortTasks(await db.tasks.get($project));
+    unsortedTasks = await db.tasks.get($project);
+    sortTasks();
   }
 
   project.subscribe(async (newProject: Project) => {
     if (!newProject) {
-      tasks = sortTasks([]);
+      unsortedTasks = [];
+      sortTasks();
       return;
     }
 
-    tasks = sortTasks(await db.tasks.get(newProject));
+    unsortedTasks = await db.tasks.get(newProject);
+    sortTasks();
   })
 
   // -- Functions -- \\
@@ -60,7 +57,42 @@
     return Math.floor((utc2 - utc1) / _MS_PER_DAY);
   }
 
-  function sortTasks(unsortedTasks: Task[]) {
+  function sortTasks() {
+    if (sortMethod == "d") {
+      sortTasksDate();
+    } else {
+      sortTasksPriority();
+    }
+  }
+
+  function sortTasksPriority() {
+    let sorted = {
+      "High priority": [],
+      "Medium priority": [],
+      "Low priority": [],
+      "No priority": []
+    }
+
+    for (const task of unsortedTasks) {
+      if (task.done != null) {
+        continue;
+      }
+
+      if (task.priority == 3) {
+        sorted["High priority"].push(task);
+      } else if (task.priority == 2) {
+        sorted["Medium priority"].push(task);
+      } else if (task.priority == 1) {
+        sorted["Low priority"].push(task);
+      } else {
+        sorted["No priority"].push(task);
+      }
+    }
+
+    tasks = sorted;
+  }
+
+  function sortTasksDate() {
     let sorted = {
       "Overdue": [],
       "Today": [],
@@ -91,17 +123,16 @@
       }
     }
 
-    return sorted;
+    tasks = sorted;
   }
 
   function addTask() {
-    const form = this as HTMLFormElement;
-    const name = (form.querySelector('input[type="text"]') as HTMLInputElement).value;
-    const dueStr = (form.querySelector('input[type="date"]') as HTMLInputElement).value;
-    const due = dueStr.length ? new Date(dueStr) : null;
-
-    db.tasks.add({name, due, projectId: $project.id});
-    form.reset();
+    if (!newTask.due) {
+      newTask.due = null;
+    }
+    
+    db.tasks.add(newTask);
+    newTask = { name: '', priority: 0, projectId: $project.id };
   }
 </script>
 
@@ -111,7 +142,7 @@
       <h1 class="is-marginless">Tasks</h1>
       <div class="task-title-actions">
         <button class="btn-calendar [ button ] material-icons" on:click={openCalendar}>event</button>
-        <button id="add-task-btn" class="button icon primary" on:click={() => expanded = !expanded}>
+        <button id="add-task-btn" class="button primary" on:click={() => expanded = !expanded}>
           {#if expanded}
             Close
             <i class="material-icons">remove</i>        
@@ -123,15 +154,31 @@
       </div>
     </div>
     {#if expanded}
-      <form class="task-form row" on:submit|preventDefault={addTask}>
+      <form class="task-form row" class:expanded={expanded} on:submit|preventDefault={addTask}>
         <div class="col">
-          <input type="text" placeholder="Task name" required />
-          <input type="date" />
+          <input name="name" placeholder="Task name" required bind:value={newTask.name} />
+          <div class="row">
+            <Flatpickr name="due" class="picker col-7" placeholder="Due date" title="Due date" bind:value={newTask.due} />
+            <select name="priorty" class="col" bind:value={newTask.priority}>
+              <option value={0} class="text-grey" selected>No priority</option>
+              <option value={1}>Low priority</option>
+              <option value={2}>Medium priority</option>
+              <option value={3}>High priority</option>
+            </select>
+          </div>
         </div>
         <button class="button clear" type="submit">Add</button>
       </form>
     {/if}
   </header>
+
+  <label class="filter [ pull-right ]">
+    Sort by:
+    <select bind:value={sortMethod} on:change={sortTasks}>
+      <option value="d">Date</option>
+      <option value="p">Priority</option>
+    </select>
+  </label>
 
   {#each Object.entries(tasks) as [name, items]}
     {#if items.length}
@@ -182,14 +229,16 @@
     padding: 0.5rem 1rem;
     border-radius: 999px;
     font-size: 1.4rem;
-    gap: .5rem;
+    display: flex;
+    gap: .25rem;
   }
 
   #add-task-btn .material-icons {
     font-size: 1.8rem;
   }
 
-  .task-form input {
+  .task-form input, .task-form select, .task-form :global(.picker) {
+    background-color: white;
     margin-top: 1rem;
   }
 
@@ -226,5 +275,27 @@
     white-space: nowrap;
     background-color: transparent;
     color: var(--color-grey);
+  }
+
+  .filter {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .filter select {
+    padding: 0 1rem;
+    margin: 0;
+    border: none;
+
+    appearance: none;
+    background-image: none;
+    cursor: pointer;
+  }
+
+  .filter select:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
   }
 </style>

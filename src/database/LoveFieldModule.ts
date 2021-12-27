@@ -40,6 +40,7 @@ schemabuilder
     .addColumn("name", lf.Type.STRING)
     .addColumn("due", lf.Type.DATE_TIME)
     .addColumn("done", lf.Type.DATE_TIME)
+    .addColumn("priority", lf.Type.INTEGER)
     .addColumn("projectId", lf.Type.INTEGER)
     .addNullable(["due", "done"])
     .addPrimaryKey(["id"], true)
@@ -289,6 +290,7 @@ export module tasks {
                     name: task.name,
                     done: task.done,
                     due: task.due,
+                    priority: task.priority,
                     projectId: task.projectId
                 }),
             ])
@@ -304,6 +306,7 @@ export module tasks {
             .set(taskschema.name, task.name)
             .set(taskschema.due, task.due)
             .set(taskschema.done, task.done)
+            .set(taskschema.priority, task.priority)
             .where(taskschema.id.eq(task.id))
             .exec() as Task[];
 

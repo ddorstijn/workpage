@@ -20,9 +20,9 @@
   <aside>
     <Tasks />
   </aside>
-</article>
 
-<Modal />
+  <Modal />
+</article>
 
 <style>
 article.newtab {

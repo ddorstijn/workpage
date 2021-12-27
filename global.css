@@ -5,7 +5,6 @@
 	font-stretch: 25% 150%;
 }
 
-
 /* Material icons */
 @font-face {
   font-family: 'Material Icons';
@@ -32,4 +31,14 @@
 
 .material-icons {
 	user-select: none;
+}
+
+.flatpickr-current-month {
+  display: flex !important;
+  align-items: flex-end;
+}
+
+.flatpickr-current-month input.cur-year {
+  padding: 0 !important;
+  border: none !important;
 }
