@@ -22,7 +22,7 @@
   }
 
   function filtered_list(list: Project[], filter: string): Project[] {
-    return list.filter((item) => item.name.includes(filter));
+    return list.filter((item) => item.name.toLowerCase().includes(filter.toLowerCase()));
   }
 </script>
 
@@ -55,7 +55,8 @@
 <style>
   header {
     border-bottom: 1px solid var(--color-lightGrey);
-    width: 25vw;
+    width: 20vw;
+    min-width: 300px;
   }
 
   .title-bar {

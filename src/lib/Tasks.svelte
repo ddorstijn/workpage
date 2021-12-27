@@ -21,7 +21,7 @@
   let newTask: Task = { name: '', priority: 0, projectId: $project.id };
 
   onMount(async () => {
-      unsortedTasks = await db.tasks.get($project);
+      unsortedTasks = (await db.tasks.get($project)).filter(task => !task.done);
       sortTasks();
       db.tasks.subscribe(callback);
   });
@@ -29,7 +29,7 @@
   onDestroy(() => db.tasks.unsubscribe(callback));
 
   async function callback(task: Task): Promise<void> {
-    unsortedTasks = await db.tasks.get($project);
+    unsortedTasks = (await db.tasks.get($project)).filter(task => !task.done);
     sortTasks();
   }
 
@@ -173,13 +173,16 @@
   </header>
 
   <label class="filter [ pull-right ]">
-    Sort by:
+    <small>Sort by:</small>
     <select bind:value={sortMethod} on:change={sortTasks}>
       <option value="d">Date</option>
       <option value="p">Priority</option>
     </select>
   </label>
 
+  {#if !unsortedTasks.length}
+    <span class="no-tasks">All done here!</span>
+  {/if}
   {#each Object.entries(tasks) as [name, items]}
     {#if items.length}
       <details open>
@@ -284,10 +287,11 @@
   }
 
   .filter select {
-    padding: 0 1rem;
+    padding: 0;
     margin: 0;
     border: none;
 
+    font-size: 1.4rem;
     appearance: none;
     background-image: none;
     cursor: pointer;
@@ -297,5 +301,14 @@
     border: none;
     outline: none;
     box-shadow: none;
+  }
+
+  .no-tasks {
+    width: 100%;
+    margin-top: 2rem;
+    color: var(--color-grey);
+
+    display: flex;
+    justify-content: center;
   }
 </style>

@@ -33,14 +33,21 @@
 <header>
   <h1 class="is-marginless">Task history</h1>
 </header>
-<div>
+<ul class="task-list">
   {#each tasks as task}
     {#if task.done}
       <TaskItem {task} />
     {/if}
   {/each}
-</div>
+</ul>
 
 <style>
-  
+  .task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    width: 20vw;
+    min-width: 300px;
+  }
 </style>

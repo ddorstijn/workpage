@@ -8,12 +8,17 @@
   import TaskModal from "../modals/TaskModal.svelte";
   import ProjectModal from "../modals/ProjectModal.svelte";
 
-  let open = false;
+  let open = JSON.parse(localStorage.getItem("sidebar-open")) ?? false;
   let setURL = false;
 
   function toggleDarkMode() {
     $darkmode = !$darkmode;
     localStorage.setItem("darkmode", $darkmode.toString());
+  }
+
+  function toggleSideBar() {
+    open = !open;
+    localStorage.setItem("sidebar-open", open);
   }
 
   function switchLanguage() {
@@ -107,7 +112,7 @@
 </script>
 
 <div class="fab">
-  <button class="fab-button" class:open={open} on:click={() => open = !open}>
+  <button class="fab-button" class:open={open} on:click={toggleSideBar}>
     <i class="material-icons">settings</i>
   </button>
   <ul class="fab-buttons" class:open={open}>
