@@ -95,10 +95,13 @@
   }
 
   function addTask() {
-    const name = this.querySelector('input[type="text"]').value;
-    const due = this.querySelector('input[type="date"]').value;
+    const form = this as HTMLFormElement;
+    const name = (form.querySelector('input[type="text"]') as HTMLInputElement).value;
+    const dueStr = (form.querySelector('input[type="date"]') as HTMLInputElement).value;
+    const due = dueStr.length ? new Date(dueStr) : null;
 
-    console.log(name, due);
+    db.tasks.add({name, due, projectId: $project.id});
+    form.reset();
   }
 </script>
 
