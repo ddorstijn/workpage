@@ -10,24 +10,24 @@
 		}
 	},
 	"chrome_url_overrides" : {
-		"newtab": "dist/newtab/index.html"
+		"newtab": "newtab/index.html"
 	},
   "browser_action": {
-    "default_popup": "dist/popup/index.html",
+    "default_popup": "popup/index.html",
     "default_icon": {
-			"24": "public/favicon.ico",
-			"32": "public/favicon.ico",
-			"48": "public/favicon.ico",
-			"64": "public/favicon.ico",
-			"96": "public/favicon.ico"
+			"24": "favicon.ico",
+			"32": "favicon.ico",
+			"48": "favicon.ico",
+			"64": "favicon.ico",
+			"96": "favicon.ico"
     }
   },
 	"icons": {
-		"24": "public/favicon.ico",
-		"32": "public/favicon.ico",
-		"48": "public/favicon.ico",
-		"64": "public/favicon.ico",
-		"96": "public/favicon.ico"
+		"24": "favicon.ico",
+		"32": "favicon.ico",
+		"48": "favicon.ico",
+		"64": "favicon.ico",
+		"96": "favicon.ico"
 	},
 	"permissions": ["storage", "tabs"]
 }

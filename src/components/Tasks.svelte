@@ -319,13 +319,14 @@
   }
 
   .filter {
+    padding-top: 0.25rem;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     white-space: nowrap;
 
     select {
-      padding: 0;
-      margin: 0;
+      padding: 0.25rem !important;
+      margin: 0 !important;
       border: none;
 
       font-size: 1.4rem;

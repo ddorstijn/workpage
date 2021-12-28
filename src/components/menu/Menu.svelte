@@ -46,6 +46,7 @@
       padding: 0rem;
       font-size: 14px;
       color: var(--color-darkGrey);
+      cursor: pointer;
     }
   }
 

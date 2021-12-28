@@ -1,6 +1,6 @@
 <script lang="ts">
   import { editRef, modal, project } from "@/lib/store";
-  import { onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
 
   import * as db from "@/lib/database/LoveFieldModule";
   import type { Link } from "@/lib/database/types";
@@ -11,6 +11,8 @@
   let link: Link = $editRef as Link ?? { name: "", url: "" };
 
   const urlRegex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi);
+  // For the popup
+  const dispatch = createEventDispatcher();
 
   onMount(async () => {
     linkGroups = await db.linkgroups.get($project);
@@ -32,6 +34,7 @@
 
     $editRef = null;
     $modal = null;
+    dispatch("close");
   }
 </script>
 

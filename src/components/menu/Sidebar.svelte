@@ -230,7 +230,8 @@
   }
 
   .fab-button {
-    padding: 0 0 1.5rem 0;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
     background: transparent;
 
     &.open {
