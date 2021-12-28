@@ -3,7 +3,7 @@
 
   import { project } from "../../store";
   import { onDestroy, onMount } from "svelte";
-  import type { Project, Task } from "src/database/database";
+  import type { Task } from "src/database/database";
   import * as db from "../../database/LoveFieldModule";
   import { _ } from "svelte-i18n";
 
@@ -11,34 +11,30 @@
   let tasks: Task[] = [];
 
   onMount(async () => {
-    tasks = await db.tasks.get($project);
-    db.tasks.subscribe(callback);
+    fetchTasks();
+    db.tasks.subscribe(fetchTasks);
   });
+  
+  project.subscribe(fetchTasks);
 
-  onDestroy(() => db.tasks.unsubscribe(callback));
-
-  async function callback(task: Task): Promise<void> {
-    tasks = await db.tasks.get($project);
+  async function fetchTasks(): Promise<void> {
+    tasks = (await db.tasks.get($project)).filter(t => t.done);
   }
-
-  project.subscribe(async (newProject: Project) => {
-    if (!newProject) {
-      tasks = [];
-      return;
-    }
-
-    tasks = await db.tasks.get(newProject);
-  });
+  
+  onDestroy(() => db.tasks.unsubscribe(fetchTasks));
 </script>
 
 <header>
-  <h1 class="is-marginless">{$_("tasks.history.name")}</h1>
+  <h1 class="text-center">{$_("tasks.history.name")}</h1>
 </header>
+
+{#if !tasks.length}
+  <span class="empty text-grey">{$_("tasks.history.empty")}</span>
+{/if}
+
 <ul class="task-list">
   {#each tasks as task}
-    {#if task.done}
-      <TaskItem {task} />
-    {/if}
+    <TaskItem {task} />
   {/each}
 </ul>
 
@@ -50,5 +46,13 @@
 
     width: 20vw;
     min-width: 300px;
+  }
+
+  .empty {
+    font-size: small;
+    width: 100%;
+    text-align: center;
+    display: block;
+    margin-top: 2rem;
   }
 </style>

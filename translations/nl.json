@@ -34,7 +34,7 @@
         "form": {
             "close": "Sluiten",
             "new": "Nieuw",
-            "add": "Voeg toe",
+            "add": "Toevoegen",
             "save": "Taak opslaan",
             "name": "Taak naam",
             "due": "Deadline"
@@ -46,7 +46,8 @@
             "empty": "Helemaal klaar!"
         },
         "history": {
-            "name": "Taak geschiedenis"
+            "name": "Taak geschiedenis",
+            "empty": "Voltooide taken worden hier weergegeven"
         }
     },
     "menu": {

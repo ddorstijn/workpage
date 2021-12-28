@@ -46,7 +46,8 @@
             "empty": "Alles erledigt!"
         },
         "history": {
-            "name": "Aufgabenverlauf"
+            "name": "Aufgabenverlauf",
+            "empty": "Erledigte Aufgaben werden hier angezeigt"
         }
     },
     "menu": {

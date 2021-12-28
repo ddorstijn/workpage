@@ -8,22 +8,19 @@
   import { _ } from "svelte-i18n";
 
   let linkGroups = [];
-  let link: Link = { name: "", url: "", groupId: linkGroups[0]?.id };
+  let link: Link = $editRef as Link ?? { name: "", url: "" };
+
+  const urlRegex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi);
 
   onMount(async () => {
     linkGroups = await db.linkgroups.get($project);
-    link = ($editRef as Link) ?? link;
     if (!link.groupId) {
       link.groupId = linkGroups[0]?.id;
     }
   });
 
   function addLink(): void {
-    const expression =
-      /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
-    const regex = new RegExp(expression);
-
-    if (!link.url.match(regex)) {
+    if (!link.url.match(urlRegex)) {
       return alert("The url is not valid. Please check it again.");
     }
 

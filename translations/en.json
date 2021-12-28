@@ -46,7 +46,8 @@
             "empty": "All done here!"
         },
         "history": {
-            "name": "Task history"
+            "name": "Task history",
+            "empty": "Done tasks will be displayed here"
         }
     },
     "menu": {

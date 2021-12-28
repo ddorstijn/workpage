@@ -9,16 +9,16 @@
   let projects: Project[] = [];
   let filterInput = "";
 
-  onMount(async () => {
-    projects = await db.projects.get();
-    db.projects.subscribe(callback);
+  onMount(() => {
+    fetchProjects();
+    db.projects.subscribe(fetchProjects);
   });
 
   onDestroy(() => {
-    db.projects.unsubscribe(callback);
+    db.projects.unsubscribe(fetchProjects);
   });
 
-  async function callback(project: Project): Promise<void> {
+  async function fetchProjects(): Promise<void> {
     projects = await db.projects.get();
   }
 

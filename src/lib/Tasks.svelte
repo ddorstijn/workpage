@@ -22,29 +22,19 @@
   let tasks: { [items: string]: Task[] } = {};
   let newTask: Task = { name: "", priority: 0, projectId: $project?.id };
 
-  onMount(async () => {
-    unsortedTasks = (await db.tasks.get($project)).filter((task) => !task.done);
-    sortTasks();
-    db.tasks.subscribe(callback);
+  onMount(() => {
+    fetchTasks();
+    db.tasks.subscribe(fetchTasks);
   });
 
-  onDestroy(() => db.tasks.unsubscribe(callback));
-
-  async function callback(task: Task): Promise<void> {
+  project.subscribe(fetchTasks);
+  
+  async function fetchTasks(): Promise<void> {
     unsortedTasks = (await db.tasks.get($project)).filter((task) => !task.done);
     sortTasks();
   }
-
-  project.subscribe(async (newProject: Project) => {
-    if (!newProject) {
-      unsortedTasks = [];
-      sortTasks();
-      return;
-    }
-
-    unsortedTasks = await db.tasks.get(newProject);
-    sortTasks();
-  });
+  
+  onDestroy(() => db.tasks.unsubscribe(fetchTasks));
 
   // -- Functions -- \\
   function openCalendar(): void {
@@ -141,7 +131,7 @@
 <article class="task">
   <header>
     <div class="title-bar">
-      <h1 class="is-marginless">{$_("tasks.name", { default: "Tasks" })}</h1>
+      <h1 class="is-marginless">{$_("tasks.name")}</h1>
       <div class="title-bar__actions">
         <button
           class="btn--icon [ is-paddingless ] [ material-icons ]"
@@ -152,10 +142,10 @@
           on:click={() => (expanded = !expanded)}
         >
           {#if expanded}
-            {$_("tasks.form.close", { default: "Close" })}
+            {$_("tasks.form.close")}
             <i class="material-icons">remove</i>
           {:else}
-            {$_("tasks.form.new", { default: "New" })}
+            {$_("tasks.form.new")}
             <i class="material-icons">add</i>
           {/if}
         </button>
@@ -163,11 +153,11 @@
     </div>
     {#if expanded}
       <form
-        class="task-form row"
+        class="task-form"
         class:expanded
         on:submit|preventDefault={addTask}
       >
-        <div class="col">
+        <div>
           <input
             name="name"
             placeholder={$_("tasks.form.name")}
@@ -198,7 +188,7 @@
             </select>
           </div>
         </div>
-        <button class="button clear" type="submit">
+        <button type="submit">
           {$_("tasks.form.add")}
         </button>
       </form>
@@ -283,11 +273,18 @@
     }
   }
 
-  .task-form input,
-  .task-form select,
-  .task-form :global(.picker) {
-    background-color: white;
-    margin-top: 1rem;
+  .task-form {
+    button[type="submit"] {
+      display: block;
+      margin: 1rem auto;
+    }
+
+    input:not([type="submit"]),
+    select,
+    :global(.picker) {
+      background-color: white;
+      margin-top: 1rem;
+    }
   }
 
   .item-list {

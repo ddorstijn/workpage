@@ -2,32 +2,25 @@
   import { onDestroy, onMount } from "svelte";
   import { project } from "../store";
 
-  import type { LinkGroup, Project } from "src/database/database";
+  import type { LinkGroup } from "src/database/database";
   import * as db from "../database/LoveFieldModule";
 
   import LinkGroupItem from "./list-items/LinkGroupItem.svelte";
 
   let linkgroups = [] as LinkGroup[];
 
-  onMount(async () => {
-    db.linkgroups.subscribe(callback);
-    linkgroups = await db.linkgroups.get($project);
+  onMount(() => {
+    fetchLinks();
+    db.linkgroups.subscribe(fetchLinks);
   });
 
-  onDestroy(() => db.linkgroups.unsubscribe(callback));
-
-  async function callback(linkgroup: LinkGroup) {
+  project.subscribe(fetchLinks);
+  
+  async function fetchLinks() {
     linkgroups = await db.linkgroups.get($project);
   }
-
-  project.subscribe(async (newProject: Project) => {
-    if (!newProject || !db) {
-      linkgroups = [];
-      return;
-    }
-
-    linkgroups = await db.linkgroups.get(newProject);
-  });
+  
+  onDestroy(() => db.linkgroups.unsubscribe(fetchLinks));
 </script>
 
 <ul class="linkgroups">

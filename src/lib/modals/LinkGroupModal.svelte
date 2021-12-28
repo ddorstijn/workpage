@@ -2,14 +2,9 @@
   import { editRef, modal, project } from "../../store";
   import * as db from "../../database/LoveFieldModule";
   import type { LinkGroup } from "src/database/database";
-  import { onMount } from "svelte";
   import { _ } from "svelte-i18n";
 
-  let linkgroup: LinkGroup = { name: "", projectId: $project.id };
-
-  onMount(() => {
-    linkgroup = ($editRef as LinkGroup) ?? linkgroup;
-  });
+  let linkgroup: LinkGroup = ($editRef as LinkGroup) ?? { name: "", projectId: $project.id };
 
   function addGroup(): void {
     if (linkgroup.id) {
