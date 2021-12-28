@@ -77,13 +77,11 @@ export module projects {
     }
 
     export async function add(project: Project): Promise<Project> {
-        const schema = db.getSchema().table("Projects");
-
         const rows = await db
             .insertOrReplace()
-            .into(schema)
+            .into(projectschema)
             .values([
-                schema.createRow({
+                projectschema.createRow({
                     name: project.name,
                     used: new Date()
                 })

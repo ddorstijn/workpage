@@ -1,10 +1,10 @@
 <script lang="ts">
   import ProjectItem from "../list-items/ProjectItem.svelte";
   import type { Project } from "@/lib/database/types";
-  import * as db from "@/lib/database/LoveFieldModule";
   import { _ } from "svelte-i18n";
 
   import { onDestroy, onMount } from "svelte";
+  import { db } from "@/lib/store";
 
   let projects: Project[] = [];
   let filterInput = "";

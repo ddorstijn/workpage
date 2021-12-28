@@ -1,10 +1,9 @@
 <script lang="ts">
   import TaskItem from "../list-items/TaskItem.svelte";
 
-  import { project } from "@/lib/store";
+  import { db, project } from "@/lib/store";
   import { onDestroy, onMount } from "svelte";
   import type { Task } from "@/lib/database/types";
-  import * as db from "@/lib/database/LoveFieldModule";
   import { _ } from "svelte-i18n";
 
   // -- Members -- \\

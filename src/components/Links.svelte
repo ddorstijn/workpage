@@ -1,10 +1,8 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
-  import { project } from "@/lib/store";
+  import { db, project } from "@/lib/store";
 
   import type { LinkGroup } from "@/lib/database/types";
-  import * as db from "@/lib/database/LoveFieldModule";
-
   import LinkGroupItem from "./list-items/LinkGroupItem.svelte";
 
   let linkgroups = [] as LinkGroup[];

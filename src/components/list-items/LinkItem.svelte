@@ -1,8 +1,7 @@
 <script lang="ts">
   import Menu from "../menu/Menu.svelte";
-  import { editRef, modal } from "@/lib/store";
+  import { db, editRef, modal } from "@/lib/store";
   import LinkModal from "../modals/LinkModal.svelte";
-  import * as db from "@/lib/database/LoveFieldModule";
    
   import type { Link } from "@/lib/database/types";
 

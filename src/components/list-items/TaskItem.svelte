@@ -1,9 +1,8 @@
 <script lang="ts">
   import Menu from "../menu/Menu.svelte";
-  import { editRef, modal } from "@/lib/store";
+  import { db, editRef, modal } from "@/lib/store";
   import TaskModal from "../modals/TaskModal.svelte";
   import type { Task } from "@/lib/database/types";
-  import * as db from "@/lib/database/LoveFieldModule";
 
   export let task: Task;
 

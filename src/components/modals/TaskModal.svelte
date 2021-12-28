@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { editRef, modal, project } from "@/lib/store";
-  import * as db from "@/lib/database/LoveFieldModule";
+  import { db, editRef, modal, project } from "@/lib/store";
   import type { Task } from "@/lib/database/types";
 
   import Flatpickr from "svelte-flatpickr";

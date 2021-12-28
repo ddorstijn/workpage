@@ -2,9 +2,7 @@
   import { onMount } from "svelte";
   import { _ } from "svelte-i18n";
 
-  import * as db from "@/lib/database/LoveFieldModule";
-
-  import { modal, project } from "@/lib/store";
+  import { db, modal, project } from "@/lib/store";
   import DrawerModal from "./modals/DrawerModal.svelte";
 
   onMount(async () => {

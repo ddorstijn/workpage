@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { editRef, modal, project } from "@/lib/store";
-  import * as db from "@/lib/database/LoveFieldModule";
+  import { db, editRef, modal, project } from "@/lib/store";
   import type { LinkGroup } from "@/lib/database/types";
   import { _ } from "svelte-i18n";
 

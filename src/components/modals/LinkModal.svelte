@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { editRef, modal, project } from "@/lib/store";
+  import { db, editRef, modal, project } from "@/lib/store";
   import { createEventDispatcher, onMount } from "svelte";
 
-  import * as db from "@/lib/database/LoveFieldModule";
   import type { Link } from "@/lib/database/types";
 
   import { _ } from "svelte-i18n";

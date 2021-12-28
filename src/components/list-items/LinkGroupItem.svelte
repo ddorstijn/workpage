@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { editRef, modal } from "@/lib/store";
+  import { db, editRef, modal } from "@/lib/store";
   import { onDestroy, onMount } from "svelte";
   
   import type { Link, LinkGroup } from "@/lib/database/types";
-  import * as db from "@/lib/database/LoveFieldModule";
 
   import LinkGroupModal from "../modals/LinkGroupModal.svelte";
   import LinkItem from "./LinkItem.svelte";

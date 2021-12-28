@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { Link, LinkGroup, Task } from "@/lib/database/types";
-  import * as db from "@/lib/database/LoveFieldModule";
-  import { darkmode, modal, project } from "@/lib/store";
+  import { darkmode, db, modal, project } from "@/lib/store";
   import { _, locale, locales } from "svelte-i18n";
 
   import LinkGroupModal from "../modals/LinkGroupModal.svelte";

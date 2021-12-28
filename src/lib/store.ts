@@ -2,6 +2,9 @@ import type { SvelteComponent } from "svelte";
 import type { Project } from "./database/types";
 import { writable } from "svelte/store";
 
+import * as database from "./database/WebExtModule";
+
+export const db = database;
 export const modal = writable<typeof SvelteComponent>();
 export const editRef = writable();
 

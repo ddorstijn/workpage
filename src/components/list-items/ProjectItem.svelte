@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { modal, project } from "@/lib/store";
+  import { db, modal, project } from "@/lib/store";
 
   import Menu from "../menu/Menu.svelte";
 
   import type { Project } from "@/lib/database/types";
-  import * as db from "@/lib/database/LoveFieldModule";
   import { tick } from "svelte";
   
   export let projectItem: Project;

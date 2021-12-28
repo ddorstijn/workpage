@@ -8,9 +8,8 @@
   import { onDestroy, onMount } from "svelte";
   import { _ } from "svelte-i18n";
 
-  import { modal, project } from "@/lib/store";
-  import type { Project, Task } from "@/lib/database/types";
-  import * as db from "@/lib/database/LoveFieldModule";
+  import { db, modal, project } from "@/lib/store";
+  import type { Task } from "@/lib/database/types";
 
   const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
