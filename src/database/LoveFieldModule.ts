@@ -137,6 +137,7 @@ export module linkgroups {
     let handlers: fnCallback[] = [];
 
     export async function get(project: Project): Promise<LinkGroup[]> {
+        if (!project) return [];
         return await db
             .select()
             .from(linkgroupschema)
@@ -273,6 +274,7 @@ export module tasks {
     let handlers: fnCallback[] = [];
 
     export async function get(project: Project): Promise<Task[]> {
+        if (!project) return [];
         return await db
             .select()
             .from(taskschema)

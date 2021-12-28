@@ -16,10 +16,18 @@
 </script>
 
 <ul class="menu" class:hovering>
-  <li class="edit material-icons" title={$_("menu.edit", {default: "Edit"})} on:click={editItem}>
+  <li
+    class="edit material-icons"
+    title={$_("menu.edit", { default: "Edit" })}
+    on:click={editItem}
+  >
     edit
   </li>
-  <li class="delete material-icons" title={$_("menu.delete", {default: "Delete"})} on:click={removeItem}>
+  <li
+    class="delete material-icons"
+    title={$_("menu.delete", { default: "Delete" })}
+    on:click={removeItem}
+  >
     close
   </li>
 </ul>
@@ -29,7 +37,7 @@
     margin: 0 0 0 auto;
     padding: 0 0 0 0.35rem;
     opacity: 0;
-    
+
     display: flex;
     gap: 0.4rem;
     list-style: none;
@@ -46,7 +54,7 @@
   }
 
   .delete:hover {
-    color: var(--color-error)
+    color: var(--color-error);
   }
 
   .hovering {

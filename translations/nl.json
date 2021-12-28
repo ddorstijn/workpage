@@ -11,7 +11,7 @@
     "linkgroups": {
         "name": "Link groep",
         "form": {
-            "name": "Groep naam",
+            "name": "Groepsnaam",
             "save": "Link groep opslaan"
         }
     },
@@ -36,10 +36,8 @@
             "new": "Nieuw",
             "add": "Voeg toe",
             "save": "Taak opslaan",
-            "placeholders": {
-                "name": "Taak naam",
-                "due": "Deadline"
-            }
+            "name": "Taak naam",
+            "due": "Deadline"
         },
         "list": {
             "sort-by": "Sorteer op",
@@ -67,6 +65,6 @@
             "export": "Exporteer project"
         },
         "darkmode": "Darkmodus aan/uit",
-        "Language": "Taal: Nederlands"
+        "language": "Taal: Nederlands"
     }
 }

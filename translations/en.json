@@ -36,10 +36,8 @@
             "new": "New",
             "add": "Add",
             "save": "Save task",
-            "placeholders": {
-                "name": "Task name",
-                "due": "Due date"
-            }
+            "name": "Task name",
+            "due": "Due date"
         },
         "list": {
             "sort-by": "Sort by",
@@ -67,6 +65,6 @@
             "export": "Export project"
         },
         "darkmode": "Toggle darkmode",
-        "Language": "Set language"
+        "language": "Language: English"
     }
 }

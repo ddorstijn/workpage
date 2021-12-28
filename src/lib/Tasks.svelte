@@ -141,7 +141,7 @@
 <article class="task">
   <header>
     <div class="title-bar">
-      <h1 class="is-marginless">{$_("tasks.name", {default: "Tasks"})}</h1>
+      <h1 class="is-marginless">{$_("tasks.name", { default: "Tasks" })}</h1>
       <div class="title-bar__actions">
         <button
           class="btn--icon [ is-paddingless ] [ material-icons ]"
@@ -170,9 +170,7 @@
         <div class="col">
           <input
             name="name"
-            placeholder={$_("tasks.form.placeholders.name", {
-              default: "Task name",
-            })}
+            placeholder={$_("tasks.form.name")}
             required
             bind:value={newTask.name}
           />
@@ -180,30 +178,28 @@
             <Flatpickr
               name="due"
               class="picker col-7"
-              placeholder={$_("tasks.form.placeholders.due", {
-                default: "Due date",
-              })}
+              placeholder={$_("tasks.form.due")}
               title="Due date"
               bind:value={newTask.due}
             />
             <select name="priorty" class="col" bind:value={newTask.priority}>
               <option value={0} class="text-grey" selected>
-                {$_("tasks.priority.no", { default: "No priority" })}
+                {$_("tasks.priority.no")}
               </option>
               <option value={1}>
-                {$_("tasks.priority.low", { default: "Low priority" })}
+                {$_("tasks.priority.low")}
               </option>
               <option value={2}>
-                {$_("tasks.priority.medium", { default: "Medium priority" })}
+                {$_("tasks.priority.medium")}
               </option>
               <option value={3}>
-                {$_("tasks.priority.high", { default: "High priority" })}
+                {$_("tasks.priority.high")}
               </option>
             </select>
           </div>
         </div>
         <button class="button clear" type="submit">
-          {$_("tasks.form.add", { default: "Add" })}
+          {$_("tasks.form.add")}
         </button>
       </form>
     {/if}
@@ -211,21 +207,21 @@
 
   <label class="filter [ pull-right ]">
     <small>
-      {$_("tasks.list.sort-by", { default: "Sort by" })}
+      {$_("tasks.list.sort-by")}
     </small>
     <select bind:value={sortMethod} on:change={sortTasks}>
       <option value="d">
-        {$_("tasks.list.date", { default: "Date" })}
+        {$_("tasks.list.date")}
       </option>
       <option value="p">
-        {$_("tasks.list.priority", { default: "Priority" })}
+        {$_("tasks.list.priority")}
       </option>
     </select>
   </label>
 
   {#if !unsortedTasks.length}
     <span class="no-tasks">
-      {$_("tasks.list.empty", { default: "All done here!" })}
+      {$_("tasks.list.empty")}
     </span>
   {/if}
 
@@ -275,10 +271,11 @@
 
   .btn--accent {
     padding: 0.5rem 1rem;
-    margin-left: 0.5rem;
+    margin-left: 1rem;
     border-radius: 999px;
     font-size: 1.4rem;
     display: flex;
+    align-items: center;
     gap: 0.25rem;
 
     .material-icons {

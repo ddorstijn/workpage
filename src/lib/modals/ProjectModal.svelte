@@ -4,22 +4,26 @@
   import type { Project } from "src/database/database";
   import { _ } from "svelte-i18n";
 
-  let project: Project = { name: '' };
+  let project: Project = { name: "" };
 
   async function addProject(): Promise<void> {
     const newProject = await db.projects.add(project);
     $projectStore = newProject;
-    
+
     $editRef = null;
     $modal = null;
   }
 </script>
 
-<header>{$_("projects.name", {default: "Projects"})}</header>
+<header>{$_("projects.name")}</header>
 <div>
   <form on:submit|preventDefault={addProject}>
-    <input placeholder={$_("projects.form.name", {default: "Project name"})} bind:value={project.name} required>
-    <button type="submit">{$_("projects.form.save", {default: "Save project"})}</button>
+    <input
+      placeholder={$_("projects.form.name")}
+      bind:value={project.name}
+      required
+    />
+    <button type="submit">{$_("projects.form.save")}</button>
   </form>
 </div>
 

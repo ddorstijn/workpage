@@ -1,3 +1,70 @@
 {
-    
+    "projects": {
+        "name": "Projekte",
+        "non-selected": "Klicken Sie hier, um das Projekt zu öffnen",
+        "search": "Suchen...",
+        "form": {
+            "name": "Projektname",
+            "save": "Projekt speichern"
+        }
+    },
+    "linkgroups": {
+        "name": "Linkgruppe",
+        "form": {
+            "name": "Gruppenname",
+            "save": "Linkgruppe speichern"
+        }
+    },
+    "links": {
+        "name": "Links",
+        "form": {
+            "name": "Linkname",
+            "url": "Url",
+            "save": "Link speichern"
+        }
+    },
+    "tasks": {
+        "name": "Aufgaben",
+        "priority": {
+            "no": "Keine Priorität",
+            "low": "Niedrige Priorität",
+            "medium": "Mittlere Priorität",
+            "high": "Hohe Priorität"
+        },
+        "form": {
+            "close": "Schließen",
+            "new": "Neu",
+            "add": "Add",
+            "save": "Aufgabe speichern",
+            "name": "Name der Aufgabe",
+            "due": "Frist"
+        },
+        "list": {
+            "sort-by": "Sortieren nach",
+            "date": "Datum",
+            "priority": "Priorität",
+            "empty": "Alles erledigt!"
+        },
+        "history": {
+            "name": "Aufgabenverlauf"
+        }
+    },
+    "menu": {
+        "edit": "Ändern",
+        "delete": "Löschen"
+    },
+    "sidebar": {
+        "create": {
+            "linkgroup": "Linkgruppe erstellen",
+            "link": "Link erstellen",
+            "task": "Aufgabe erstellen"
+        },
+        "project": {
+            "new": "Neues Projekt",
+            "import": "Projekt importieren",
+            "export": "Projekt exportieren"
+        },
+        "darkmode": "darkmode ein/aus",
+        "language": "Sprache: Deutsch"
+    }
 }

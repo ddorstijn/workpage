@@ -5,11 +5,11 @@
   import { onMount } from "svelte";
   import { _ } from "svelte-i18n";
 
-  let linkgroup: LinkGroup = { name: '', projectId: $project.id };
+  let linkgroup: LinkGroup = { name: "", projectId: $project.id };
 
   onMount(() => {
-    linkgroup = $editRef as LinkGroup ?? linkgroup;
-  })
+    linkgroup = ($editRef as LinkGroup) ?? linkgroup;
+  });
 
   function addGroup(): void {
     if (linkgroup.id) {
@@ -17,17 +17,21 @@
     } else {
       db.linkgroups.add(linkgroup);
     }
-    
+
     $editRef = null;
     $modal = null;
   }
 </script>
 
-<header>{$_("linkgroups.name", {default: "Linkgroups"})}</header>
+<header>{$_("linkgroups.name")}</header>
 <div>
   <form on:submit|preventDefault={addGroup}>
-    <input placeholder={$_("linkgroups.form.name", {default: "Group name"})} bind:value={linkgroup.name} required>
-    <button type="submit">{$_("linkgroups.form.save", {default: "Save group"})}</button>
+    <input
+      placeholder={$_("linkgroups.form.name")}
+      bind:value={linkgroup.name}
+      required
+    />
+    <button type="submit">{$_("linkgroups.form.save")}</button>
   </form>
 </div>
 

@@ -1,6 +1,6 @@
 <script>
   import { editRef, modal } from "../../store";
-  import { fade } from 'svelte/transition';
+  import { fade } from "svelte/transition";
 
   function close() {
     $editRef = null;
@@ -9,7 +9,7 @@
 </script>
 
 {#if $modal}
-  <div class="modal" transition:fade="{{duration: 200}}">
+  <div class="modal" transition:fade={{ duration: 200 }}>
     <div class="modal__close" on:click={close} />
     <div class="modal__content [ card ]">
       <svelte:component this={$modal} />
@@ -35,7 +35,7 @@
       padding: 2rem;
       z-index: 20;
     }
-    
+
     .modal__close {
       content: "";
       position: absolute;

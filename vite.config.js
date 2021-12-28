@@ -11,5 +11,8 @@ export default defineConfig({
         autoprefixer()
       ]
     }
+  },
+  build:{
+    target:['edge90','chrome90','firefox90','safari15']
   }
 })

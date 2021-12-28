@@ -23,17 +23,23 @@
   }
 
   function filtered_list(list: Project[], filter: string): Project[] {
-    return list.filter((item) => item.name.toLowerCase().includes(filter.toLowerCase()));
+    return list.filter((item) =>
+      item.name.toLowerCase().includes(filter.toLowerCase())
+    );
   }
 </script>
 
 <header>
   <div class="title-bar">
-    <h1 class="is-marginless">{$_("projects.name", {default: "Projects"})}</h1>
+    <h1 class="is-marginless">{$_("projects.name")}</h1>
     <div class="action-menu">
       <!-- Filter -->
       <label class="search">
-        <input type="search" placeholder={$_("projects.search", {default: "Search..."})} bind:value={filterInput} />
+        <input
+          type="search"
+          placeholder={$_("projects.search")}
+          bind:value={filterInput}
+        />
         <i class="button material-icons">search</i>
       </label>
     </div>
@@ -91,17 +97,15 @@
 
     input {
       width: 15ch !important;
-      border: none  !important;
+      border: none !important;
       font-size: 1.4rem !important;
       background-color: transparent;
       padding: 0 0 0 0.5rem !important;
-  
+
       &:focus {
         box-shadow: none !important;
         outline: none !important;
       }
     }
   }
-
-
 </style>

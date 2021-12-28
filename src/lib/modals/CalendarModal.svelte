@@ -11,8 +11,8 @@
   let tasks: Task[] = [];
 
   onMount(async () => {
-      tasks = await db.tasks.get($project);
-      db.tasks.subscribe(callback);
+    tasks = await db.tasks.get($project);
+    db.tasks.subscribe(callback);
   });
 
   onDestroy(() => db.tasks.unsubscribe(callback));
@@ -28,11 +28,11 @@
     }
 
     tasks = await db.tasks.get(newProject);
-  })
+  });
 </script>
 
 <header>
-  <h1 class="is-marginless">{$_("tasks.history.name", {default: "Task history"})}</h1>
+  <h1 class="is-marginless">{$_("tasks.history.name")}</h1>
 </header>
 <ul class="task-list">
   {#each tasks as task}

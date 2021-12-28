@@ -1,4 +1,4 @@
-import { addMessages, register, init, getLocaleFromNavigator } from 'svelte-i18n';
+import { addMessages, init, getLocaleFromNavigator } from 'svelte-i18n';
 
 import en from '../translations/en.json';
 import nl from '../translations/nl.json';
@@ -10,5 +10,5 @@ addMessages('de', de);
 
 init({
     fallbackLocale: 'en',
-    initialLocale: getLocaleFromNavigator(),
+    initialLocale: localStorage.getItem("locale") ?? getLocaleFromNavigator().substring(0, 2),
 });

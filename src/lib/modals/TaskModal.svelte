@@ -2,13 +2,13 @@
   import { editRef, modal, project } from "../../store";
   import * as db from "../../database/LoveFieldModule";
   import type { Task } from "src/database/database";
-  
-  import Flatpickr from 'svelte-flatpickr';
-	import 'flatpickr/dist/flatpickr.css';
+
+  import Flatpickr from "svelte-flatpickr";
+  import "flatpickr/dist/flatpickr.css";
 
   import { _ } from "svelte-i18n";
 
-  let task: Task = $editRef as Task ?? { name: '', projectId: $project.id };
+  let task: Task = ($editRef as Task) ?? { name: "", projectId: $project.id };
 
   function setTask(): void {
     if (!task.due) {
@@ -26,32 +26,39 @@
   }
 </script>
 
-<header>{$_("tasks.name", {default: "Tasks"})}</header>
+<header>{$_("tasks.name")}</header>
 <div>
   <form on:submit|preventDefault={setTask}>
-    <input placeholder={$_("tasks.form.placeholders.name", {
-      default: "Task name",
-    })} bind:value={task.name} required />
+    <input
+      placeholder={$_("tasks.form.placeholders.name")}
+      bind:value={task.name}
+      required
+    />
+
     <div class="row">
-      <Flatpickr class="picker col" placeholder={$_("tasks.form.placeholders.due", {
-        default: "Due date",
-      })} title="Due date" bind:value={task.due} />
+      <Flatpickr
+        class="picker col"
+        placeholder={$_("tasks.form.placeholders.due")}
+        title="Due date"
+        bind:value={task.due}
+      />
       <select bind:value={task.priority} class="col">
-        <option value={0} class="text-grey" selected>
-          {$_("tasks.priority.no", { default: "No priority" })}
+        <option value={0} class="text-grey">
+          {$_("tasks.priority.no")}
         </option>
         <option value={1}>
-          {$_("tasks.priority.low", { default: "Low priority" })}
+          {$_("tasks.priority.low")}
         </option>
         <option value={2}>
-          {$_("tasks.priority.medium", { default: "Medium priority" })}
+          {$_("tasks.priority.medium")}
         </option>
         <option value={3}>
-          {$_("tasks.priority.high", { default: "High priority" })}
+          {$_("tasks.priority.high")}
         </option>
       </select>
     </div>
-    <button type="submit">{$_("tasks.form.save", { default: "Save task" })}</button>
+
+    <button type="submit">{$_("tasks.form.save")}</button>
   </form>
 </div>
 

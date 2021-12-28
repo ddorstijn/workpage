@@ -6,7 +6,7 @@
   import * as db from "../database/LoveFieldModule";
 
   import LinkGroupItem from "./list-items/LinkGroupItem.svelte";
-  
+
   let linkgroups = [] as LinkGroup[];
 
   onMount(async () => {
@@ -25,9 +25,9 @@
       linkgroups = [];
       return;
     }
-    
+
     linkgroups = await db.linkgroups.get(newProject);
-  })
+  });
 </script>
 
 <ul class="linkgroups">
@@ -43,7 +43,7 @@
 
     display: flex;
     gap: 3rem;
-    
+
     list-style: none;
   }
 </style>
