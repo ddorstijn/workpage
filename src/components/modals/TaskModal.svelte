@@ -9,15 +9,15 @@
 
   let task: Task = ($editRef as Task) ?? { name: "", projectId: $project.id };
 
-  function setTask(): void {
+  async function setTask(): Promise<void> {
     if (!task.due) {
       task.due = null;
     }
 
     if (task.id) {
-      db.tasks.update(task);
+      await db.tasks.update(task);
     } else {
-      db.tasks.add(task);
+      await db.tasks.add(task);
     }
 
     $editRef = null;

@@ -6,7 +6,7 @@
   import DrawerModal from "./modals/DrawerModal.svelte";
 
   onMount(async () => {
-    if (!(await db.projects.get($project)).length) {
+    if (!(await db.projects.get($project))?.length) {
       $project = null;
     }
   });

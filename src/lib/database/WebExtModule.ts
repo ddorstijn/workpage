@@ -1,44 +1,54 @@
-import browser from "webextension-polyfill";
+import { storage } from "webextension-polyfill";
 import type { fnCallback, Link, LinkGroup, Project, Task } from "./types";
 
-const p = (await browser.storage.sync.get("projects"))[0] ?? [];
-const lg = (await browser.storage.sync.get("linkgroups"))[0] ?? [];
-const l = (await browser.storage.sync.get("links"))[0];
-const t = (await browser.storage.sync.get("tasks"))[0] ?? [];
+async function getItems(table: string): Promise<any> {
+    const record = await storage.sync.get(table);
+    if (!record[table]) {
+        await storage.sync.set({ [table]: [] });
+        return [];
+    }
+
+    return record[table];
+}
 
 export module projects {
     let handlers: fnCallback[] = [];
-    var _projects: Project[] = new Proxy(p , {
-        set: (target: Project[], property: string, value: Project | number) => {
-            target[property] = value;
-            if (typeof value == "object") {
-                browser.storage.sync.set({projects: target});
-            }
-    
-            return true;
-        }
-    });
-    
 
     export async function get(project?: Project): Promise<Project[]> {
-        if (project) {
-            return [_projects.find(p => p.id == project.id)];
-        }
+        const projects: Project[] = await getItems("projects");
 
-        return _projects;
+        if (project) return [projects.find(p => p.id = project.id)] ?? [];
+        return projects;
     }
 
     export async function add(project: Project): Promise<void> {
-        project.id = _projects.length;
-        _projects.push(project);
+        project = { id: Date.now(), name: project.name, used: new Date() };
+        let projects = [...await getItems("projects"), project];
+        storage.sync.set({ projects });
+
+        notify(project);
     }
 
     export async function update(project: Project): Promise<void> {
-        _projects[project.id] = project;
+        if (!project?.id) return;
+
+        const projects: Project[] = await getItems("projects");
+        const idx = projects.findIndex(p => p.id == project.id);
+        projects[idx] = project;
+        await storage.sync.set({ projects })
+
+        notify(project);
     }
 
     export async function remove(project: Project): Promise<void> {
-        _projects.splice(Number(project.id), 1);
+        if (!project?.id) return;
+
+        const projects: Project[] = await getItems("projects");
+        const idx = projects.findIndex(p => p.id == project.id);
+        projects.splice(idx, 1);
+        await storage.sync.set({ projects });
+
+        notify(project);
     }
 
     export function subscribe(callback: fnCallback): void {
@@ -62,38 +72,38 @@ export module projects {
 
 export module linkgroups {
     let handlers: fnCallback[] = [];
-    var _linkgroups: LinkGroup[] = new Proxy(lg, {
-        set: (target: LinkGroup[], property: string, value: LinkGroup | number) => {
-            target[property] = value;
-            if (typeof value == "object") {
-                browser.storage.sync.set({linkgroups: target});
-            }
-    
-            return true;
-        }
-    });
 
     export async function get(project: Project): Promise<LinkGroup[]> {
-        if (!project) return [];
-        return await [];
+        return (await getItems("linkgroups")).filter((group: LinkGroup) => group.projectId = project.id);
     }
 
-    export async function add(linkgroup: LinkGroup): Promise<LinkGroup> {
-        const rows = [];
+    export async function add(linkgroup: LinkGroup): Promise<void> {
+        linkgroup.id = Date.now();
+        const linkgroups = [...await getItems("linkgroups"), linkgroup];
+        storage.sync.set({ linkgroups });
 
         notify(linkgroup);
-        return rows[0];
     }
 
-    export async function update(linkgroup: LinkGroup): Promise<LinkGroup> {
-        const rows = await [];
+    export async function update(linkgroup: LinkGroup): Promise<void> {
+        if (!linkgroup?.id) return;
+
+        const linkgroups: LinkGroup[] = await getItems("linkgroups");
+        const idx = linkgroups.findIndex(group => group.id == linkgroup.id);
+        linkgroups[idx] = linkgroup;
+        await storage.sync.set({ linkgroups });
 
         notify(linkgroup);
-        return rows[0];
     }
 
     export async function remove(linkgroup: LinkGroup): Promise<void> {
-        await [];
+        if (!linkgroup?.id) return;
+
+        const linkgroups: LinkGroup[] = await getItems("linkgroups");
+        const idx = linkgroups.findIndex(group => group.id == linkgroup.id);
+        linkgroups.splice(idx, 1);
+        await storage.sync.set({ linkgroups });
+
         notify(linkgroup);
     }
 
@@ -118,37 +128,49 @@ export module linkgroups {
 
 export module links {
     let handlers: fnCallback[] = [];
-    var _links: Link[] = new Proxy(l ?? [], {
-        set: (target: Link[], property: string, value: Link | number) => {
-            target[property] = value;
-            if (typeof value == "object") {
-                browser.storage.sync.set({links: target});
+
+    storage.onChanged.addListener((changes) => {
+        let changedItems = Object.keys(changes);
+
+        for (const item of changedItems) {
+            if (item == "links") {
+                changes[item].newValue
+                    .filter(x => !changes[item].oldValue.includes(x))
+                    .forEach(l => notify(l));
             }
-    
-            return true;
         }
-    });
+    })
 
     export async function get(group: LinkGroup): Promise<Link[]> {
-        return await [];
+        return (await getItems("links")).filter((l: Link) => l.groupId = group.id);
     }
 
-    export async function add(link: Link): Promise<Link> {
-        const rows = await [];
+    export async function add(link: Link): Promise<void> {
+        link.id = Date.now();
+        const links = [...await getItems("links"), link];
+        storage.sync.set({ links });
 
         notify(link);
-        return rows[0];
     }
 
-    export async function update(link: Link): Promise<Link> {
-        const rows = await [];
+    export async function update(link: Link): Promise<void> {
+        if (!link?.id) return;
+
+        const links: Link[] = await getItems("links");
+        const idx = links.findIndex(l => l.id == link.id);
+        links[idx] = link;
+        await storage.sync.set({ links });
 
         notify(link);
-        return rows[0];
     }
 
     export async function remove(link: Link): Promise<void> {
-        await [];
+        if (!link?.id) return;
+
+        const links: Link[] = await getItems("links");
+        const idx = links.findIndex(l => l.id == link.id);
+        links.splice(idx, 1);
+        await storage.sync.set({ links });
 
         notify(link);
     }
@@ -174,39 +196,37 @@ export module links {
 
 export module tasks {
     let handlers: fnCallback[] = [];
-    var _tasks: Task[] = new Proxy(t, {
-        set: (target: Task[], property: string, value: Task | number) => {
-            target[property] = value;
-            if (typeof value == "object") {
-                browser.storage.sync.set({tasks: target});
-            }
-    
-            return true;
-        }
-    });
-    
 
     export async function get(project: Project): Promise<Task[]> {
-        if (!project) return [];
-        return await [];
+        return (await getItems("tasks")).filter(t => t.projectId = project.id);
     }
 
-    export async function add(task: Task): Promise<Task> {
-        const rows = await [];
+    export async function add(task: Task): Promise<void> {
+        task.id = Date.now();
+        const tasks = [...await getItems("tasks"), task];
+        storage.sync.set({ tasks });
 
         notify(task);
-        return rows[0];
     }
 
-    export async function update(task: Task): Promise<Task> {
-        const rows = await [];
+    export async function update(task: Task): Promise<void> {
+        if (!task?.id) return;
+
+        const tasks: Task[] = await getItems("tasks");
+        const idx = tasks.findIndex(t => t.id == task.id);
+        tasks[idx] = task;
+        await storage.sync.set({ tasks });
 
         notify(task);
-        return rows[0];
     }
 
     export async function remove(task: Task): Promise<void> {
-        await [];
+        if (!task?.id) return;
+
+        const tasks: Task[] = await getItems("tasks");
+        const idx = tasks.findIndex(t => t.id == task.id);
+        tasks.splice(idx, 1);
+        await storage.sync.set({ tasks });
 
         notify(task);
     }

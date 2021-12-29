@@ -5,11 +5,11 @@
 
   let linkgroup: LinkGroup = ($editRef as LinkGroup) ?? { name: "", projectId: $project.id };
 
-  function addGroup(): void {
+  async function addGroup(): Promise<void> {
     if (linkgroup.id) {
-      db.linkgroups.update(linkgroup);
+      await db.linkgroups.update(linkgroup);
     } else {
-      db.linkgroups.add(linkgroup);
+      await db.linkgroups.add(linkgroup);
     }
 
     $editRef = null;

@@ -20,15 +20,15 @@
     }
   });
 
-  function addLink(): void {
+  async function addLink(): Promise<void> {
     if (!link.url.match(urlRegex)) {
       return alert("The url is not valid. Please check it again.");
     }
-
+    
     if (link.id) {
-      db.links.update(link);
+      await db.links.update(link);
     } else {
-      db.links.add(link);
+      await db.links.add(link);
     }
 
     $editRef = null;

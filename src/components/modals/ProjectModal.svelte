@@ -6,8 +6,8 @@
   let project: Project = { name: "" };
 
   async function addProject(): Promise<void> {
-    const newProject = await db.projects.add(project);
-    $projectStore = newProject;
+    await db.projects.add(project);
+    $projectStore = project;
 
     $editRef = null;
     $modal = null;
