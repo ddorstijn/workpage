@@ -21,6 +21,10 @@
             "name": "Link naam",
             "url": "Url",
             "save": "Link opslaan"
+        },
+        "popup": {
+            "no-project": "Geen actief project geselecteerd",
+            "project-current": "Actief project: "
         }
     },
     "tasks": {
@@ -32,6 +36,7 @@
             "high": "Hoge prioriteit"
         },
         "form": {
+            "no-project": "Selecteer eerst een project",
             "close": "Sluiten",
             "new": "Nieuw",
             "add": "Toevoegen",

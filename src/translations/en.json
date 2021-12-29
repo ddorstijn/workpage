@@ -21,6 +21,10 @@
             "name": "Link name",
             "url": "Url",
             "save": "Save link"
+        },
+        "popup": {
+            "no-project": "Not currently working on a project",
+            "project-current": "Current project: "
         }
     },
     "tasks": {
@@ -32,6 +36,7 @@
             "high": "High priority"
         },
         "form": {
+            "no-project": "First select a project",
             "close": "Close",
             "new": "New",
             "add": "Add",

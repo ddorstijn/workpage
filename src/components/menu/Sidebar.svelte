@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Link, LinkGroup, Task } from "@/lib/database/types";
+  import type { Link, LinkGroup, Project, Task } from "@/lib/database/types";
   import { darkmode, db, modal, project } from "@/lib/store";
   import { _, locale, locales } from "svelte-i18n";
 
@@ -93,9 +93,12 @@
         return;
       }
 
-      const proj = await db.projects.add({ name: res.name });
+      let proj: Project = { name: res.name };
+      await db.projects.add(proj);
+      
       for (const { name, links } of res.linkgroups) {
-        const group = await db.linkgroups.add({ name, projectId: proj.id });
+        let group: LinkGroup = { name, projectId: proj.id };
+        await db.linkgroups.add(group);
 
         for (const link of links as Link[]) {
           await db.links.add({
@@ -141,6 +144,7 @@
     <li class="fab-buttons__item">
       <button
         class="fab-buttons__link"
+        disabled={!$project}
         data-tooltip={$_("sidebar.create.linkgroup")}
         on:click={newLinkGroup}
       >
@@ -150,6 +154,7 @@
     <li class="fab-buttons__item">
       <button
         class="fab-buttons__link"
+        disabled={!$project}
         data-tooltip={$_("sidebar.create.link")}
         on:click={newLink}
       >
@@ -159,6 +164,7 @@
     <li class="fab-buttons__item">
       <button
         class="fab-buttons__link"
+        disabled={!$project}
         data-tooltip={$_("sidebar.create.task")}
         on:click={newTask}
       >

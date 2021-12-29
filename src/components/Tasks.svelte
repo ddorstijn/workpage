@@ -40,6 +40,11 @@
     modal.set(CalendarModal);
   }
 
+  function openForm() {
+    if (!$project) return alert($_("tasks.form.no-project"));
+    expanded = !expanded;
+  }
+
   function dateDiffInDays(a: Date, b: Date) {
     // Discard the time and time-zone information.
     const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
@@ -138,7 +143,7 @@
         >
         <button
           class="btn--accent [ button primary ]"
-          on:click={() => (expanded = !expanded)}
+          on:click={openForm}
         >
           {#if expanded}
             {$_("tasks.form.close")}

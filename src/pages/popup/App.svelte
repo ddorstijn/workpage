@@ -6,6 +6,8 @@
 
   import LinkModal from "@/components/modals/LinkModal.svelte";
 
+  import { _ } from "svelte-i18n";
+
 	async function getAddress() {
     const tabs = await browser.tabs.query({active: true, lastFocusedWindow: true});
     let link: Link = { name: tabs[0]?.title, url: tabs[0]?.url };
@@ -32,12 +34,12 @@
 <article>
   {#if !$project}
     <div class="no-project">
-      <span>Not currently working on a project</span>
+      <span>{$_("links.popup.no-project")}</span>
     </div>
   {:else}
-    <span class="project-title">Current project: { $project?.name }</span>
+    <span class="project-title">{$_("links.popup.project-current")} { $project?.name }</span>
     {#await getAddress()}
-      Getting URL...
+      ...
     {:then} 
       <LinkModal on:close={close} />
     {/await}
