@@ -1,56 +1,80 @@
-import { writable, get as g } from "svelte/store";
 import browser from "webextension-polyfill";
 import type { fnCallback, Link, LinkGroup, Project, Task } from "./types";
 
-let _projects = writable<Project[]>((await browser.storage.sync.get("projects")[0] ?? []));
-let _linkgroups = writable<LinkGroup[]>((await browser.storage.sync.get("linkgroups")[0] ?? []));
-let _links =  writable<Link[]>((await browser.storage.sync.get("links")[0] ?? []));
-let _tasks = writable<Task[]>((await browser.storage.sync.get("tasks")[0] ?? []));
+var _projects: Project[] = new Proxy((await browser.storage.sync.get("projects"))[0] ?? [], {
+    get: (target, property) => {
+        return target[property];
+    },
+    set: (target, property, value) => {
+        target[property] = value;
+        browser.storage.sync.set({projects: value});
 
-_projects.subscribe(val => browser.storage.sync.set({projects: val}));
-_linkgroups.subscribe(val => browser.storage.sync.set({linkgroups: val}));
-_links.subscribe(val => browser.storage.sync.set({links: val}));
-_tasks.subscribe(val => browser.storage.sync.set({tasks: val}));
+        return true;
+    }
+});
+
+var _linkgroups: LinkGroup[] = new Proxy((await browser.storage.sync.get("linkgroups"))[0] ?? [], {
+    get: (target, p, receiver) => {
+        return target[p];
+    },
+    set: (target, property, value) => {
+        target[property] = value;
+        browser.storage.sync.set({linkgroups: value});
+
+        return true;
+    }
+});
+
+var _links: Link[] = new Proxy((await browser.storage.sync.get("links"))[0] ?? [], {
+    get: (target, p, receiver) => {
+        return target[p];
+    },
+    set: (target, property, value) => {
+        target[property] = value;
+        browser.storage.sync.set({links: _projects});
+
+        return true;
+    }
+});
+
+var _tasks: Task[] = new Proxy((await browser.storage.sync.get("tasks"))[0] ?? [], {
+    get: (target, p, receiver) => {
+        return target[p];
+    },
+    set: (target, property, value) => {
+        target[property] = value;
+        browser.storage.sync.set({tasks: value});
+
+        return true;
+    }
+});
 
 export module projects {
     let handlers: fnCallback[] = [];
 
-    async function fetchProjects() {
-        _projects = (await browser.storage.sync.get()[0]);
-    }
-
     export async function get(project?: Project): Promise<Project[]> {
         if (project) {
-            return [g(_projects).find(p => p.id == project.id)];
+            return [_projects.find(p => p.id == project.id)];
         }
 
-        return g(_projects);
+        return _projects;
     }
 
-    export async function add(project: Project): Promise<Project> {
-        await fetchProjects();
-        project.id = Date.now().toString();
-        g(_projects).push()
-
-        notify(project);
-        return g(_projects).pop();
+    export async function add(project: Project): Promise<void> {
+        project.id = _projects.length;
+        _projects.push(project);
     }
 
-    export async function update(project: Project): Promise<Project> {
-        const rows = await [];
-
-        notify(project);
-        return rows[0];
+    export async function update(project: Project): Promise<void> {
+        _projects[project.id] = project;
     }
 
     export async function remove(project: Project): Promise<void> {
-        await [];
-
-        notify(project);
+        _projects.splice(Number(project.id), 1);
     }
 
-    export function subscribe(callback: fnCallback): number {
-        return handlers.push(callback);
+    export function subscribe(callback: fnCallback): void {
+        handlers.push(callback);
     }
 
     export function unsubscribe(callback: fnCallback): void {
