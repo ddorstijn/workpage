@@ -1,56 +1,24 @@
 import browser from "webextension-polyfill";
 import type { fnCallback, Link, LinkGroup, Project, Task } from "./types";
 
-var _projects: Project[] = new Proxy((await browser.storage.sync.get("projects"))[0] ?? [], {
-    get: (target, property) => {
-        return target[property];
-    },
-    set: (target, property, value) => {
-        target[property] = value;
-        browser.storage.sync.set({projects: value});
-
-        return true;
-    }
-});
-
-var _linkgroups: LinkGroup[] = new Proxy((await browser.storage.sync.get("linkgroups"))[0] ?? [], {
-    get: (target, p, receiver) => {
-        return target[p];
-    },
-    set: (target, property, value) => {
-        target[property] = value;
-        browser.storage.sync.set({linkgroups: value});
-
-        return true;
-    }
-});
-
-var _links: Link[] = new Proxy((await browser.storage.sync.get("links"))[0] ?? [], {
-    get: (target, p, receiver) => {
-        return target[p];
-    },
-    set: (target, property, value) => {
-        target[property] = value;
-        browser.storage.sync.set({links: _projects});
-
-        return true;
-    }
-});
-
-var _tasks: Task[] = new Proxy((await browser.storage.sync.get("tasks"))[0] ?? [], {
-    get: (target, p, receiver) => {
-        return target[p];
-    },
-    set: (target, property, value) => {
-        target[property] = value;
-        browser.storage.sync.set({tasks: value});
-
-        return true;
-    }
-});
+const p = (await browser.storage.sync.get("projects"))[0] ?? [];
+const lg = (await browser.storage.sync.get("linkgroups"))[0] ?? [];
+const l = (await browser.storage.sync.get("links"))[0];
+const t = (await browser.storage.sync.get("tasks"))[0] ?? [];
 
 export module projects {
     let handlers: fnCallback[] = [];
+    var _projects: Project[] = new Proxy(p , {
+        set: (target: Project[], property: string, value: Project | number) => {
+            target[property] = value;
+            if (typeof value == "object") {
+                browser.storage.sync.set({projects: target});
+            }
+    
+            return true;
+        }
+    });
+    
 
     export async function get(project?: Project): Promise<Project[]> {
         if (project) {
@@ -94,6 +62,16 @@ export module projects {
 
 export module linkgroups {
     let handlers: fnCallback[] = [];
+    var _linkgroups: LinkGroup[] = new Proxy(lg, {
+        set: (target: LinkGroup[], property: string, value: LinkGroup | number) => {
+            target[property] = value;
+            if (typeof value == "object") {
+                browser.storage.sync.set({linkgroups: target});
+            }
+    
+            return true;
+        }
+    });
 
     export async function get(project: Project): Promise<LinkGroup[]> {
         if (!project) return [];
@@ -140,6 +118,16 @@ export module linkgroups {
 
 export module links {
     let handlers: fnCallback[] = [];
+    var _links: Link[] = new Proxy(l ?? [], {
+        set: (target: Link[], property: string, value: Link | number) => {
+            target[property] = value;
+            if (typeof value == "object") {
+                browser.storage.sync.set({links: target});
+            }
+    
+            return true;
+        }
+    });
 
     export async function get(group: LinkGroup): Promise<Link[]> {
         return await [];
@@ -186,6 +174,17 @@ export module links {
 
 export module tasks {
     let handlers: fnCallback[] = [];
+    var _tasks: Task[] = new Proxy(t, {
+        set: (target: Task[], property: string, value: Task | number) => {
+            target[property] = value;
+            if (typeof value == "object") {
+                browser.storage.sync.set({tasks: target});
+            }
+    
+            return true;
+        }
+    });
+    
 
     export async function get(project: Project): Promise<Task[]> {
         if (!project) return [];
