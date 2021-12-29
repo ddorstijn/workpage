@@ -166,7 +166,7 @@ export module links {
 
     export async function get(group: LinkGroup): Promise<Link[]> {
         if (!group?.projectId) return [];
-        return (await getItems("links")).filter((l: Link) => l.groupId = group.id);
+        return (await getItems("links")).filter((l: Link) => l.groupId == group.id);
     }
 
     export async function add(link: Link): Promise<Link> {
@@ -225,11 +225,15 @@ export module tasks {
     export async function get(project: Project): Promise<Task[]> {
         if (!project?.id) return [];
         
-        return (await getItems("tasks")).filter(t => t.projectId = project.id);
+        return (await getItems("tasks")).filter(t => t.projectId = project.id).map(t => {
+            t.due = t.due ? new Date(t.due) : null;
+            return t;
+        });
     }
 
     export async function add(task: Task): Promise<Task> {
         task.id = uuidv4();
+        task.due = task.due.toJSON();
         const tasks = [...await getItems("tasks"), task];
         storage.sync.set({ tasks });
 
