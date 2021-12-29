@@ -1,5 +1,6 @@
 import { storage } from "webextension-polyfill";
 import type { fnCallback, Link, LinkGroup, Project, Task } from "./types";
+import { v4 as uuidv4 } from 'uuid';
 
 async function getItems(table: string): Promise<any[]> {
     const record = await storage.sync.get(table);
@@ -18,19 +19,21 @@ export module projects {
         const projects: Project[] = await getItems("projects");
 
         if (project) {
-            let p = projects.find(p => p.id = project.id)
+            let p = projects.find(p => p.id = project.id);
             return p ? [p] : [];
         }
+        
         return projects;
     }
 
-    export async function add(project: Project): Promise<void> {
-        project.id = Date.now();
+    export async function add(project: Project): Promise<Project> {
+        project.id = uuidv4();
         project.used = new Date();
         let projects = [...await getItems("projects"), project];
         storage.sync.set({ projects });
 
         notify(project);
+        return project;
     }
 
     export async function update(project: Project): Promise<void> {
@@ -87,15 +90,18 @@ export module linkgroups {
 
     export async function get(project: Project): Promise<LinkGroup[]> {
         if (!project?.id) return [];
-        return (await getItems("linkgroups")).filter((group: LinkGroup) => group.projectId = project.id);
+        const groups = await getItems("linkgroups");
+
+        return groups.filter((group: LinkGroup) => group.projectId = project.id);
     }
 
-    export async function add(linkgroup: LinkGroup): Promise<void> {
-        linkgroup.id = Date.now();
+    export async function add(linkgroup: LinkGroup): Promise<LinkGroup> {
+        linkgroup.id = uuidv4();
         const linkgroups = [...await getItems("linkgroups"), linkgroup];
         storage.sync.set({ linkgroups });
 
         notify(linkgroup);
+        return linkgroup;
     }
 
     export async function update(linkgroup: LinkGroup): Promise<void> {
@@ -163,12 +169,13 @@ export module links {
         return (await getItems("links")).filter((l: Link) => l.groupId = group.id);
     }
 
-    export async function add(link: Link): Promise<void> {
-        link.id = Date.now();
+    export async function add(link: Link): Promise<Link> {
+        link.id = uuidv4();
         const links = [...await getItems("links"), link];
         storage.sync.set({ links });
 
         notify(link);
+        return link;
     }
 
     export async function update(link: Link): Promise<void> {
@@ -221,12 +228,13 @@ export module tasks {
         return (await getItems("tasks")).filter(t => t.projectId = project.id);
     }
 
-    export async function add(task: Task): Promise<void> {
-        task.id = Date.now();
+    export async function add(task: Task): Promise<Task> {
+        task.id = uuidv4();
         const tasks = [...await getItems("tasks"), task];
         storage.sync.set({ tasks });
 
         notify(task);
+        return task;
     }
 
     export async function update(task: Task): Promise<void> {

@@ -12,7 +12,9 @@
   let editing = false;
   let editInput: HTMLInputElement;
 
-  function setActive(): void {
+  async function setActive() {
+    projectItem.used = new Date();
+    await db.projects.update(projectItem);
     project.set(projectItem);
     $modal = null;
   }

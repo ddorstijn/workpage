@@ -21,7 +21,7 @@
   onDestroy(() => db.links.unsubscribe(callback));
 
   async function callback(link: Link) {
-    if (linkgroup.id == link.groupId) {
+    if (link.groupId == linkgroup.id) {
       links = await db.links.get(linkgroup);
     }
   }

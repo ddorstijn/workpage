@@ -22,6 +22,7 @@
     "lovefield": "^2.1.12",
     "svelte-flatpickr": "^3.2.4",
     "svelte-i18n": "^3.3.13",
+    "uuid": "^8.3.2",
     "vite-plugin-mpa": "^1.1.1",
     "webextension-polyfill": "^0.8.0"
   }
