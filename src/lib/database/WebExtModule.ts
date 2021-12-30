@@ -19,7 +19,7 @@ export module projects {
         const projects: Project[] = await getItems("projects");
 
         if (project) {
-            let p = projects.find(p => p.id = project.id);
+            let p = projects.find(p => p.id == project.id);
             return p ? [p] : [];
         }
         
@@ -92,7 +92,7 @@ export module linkgroups {
         if (!project?.id) return [];
         const groups = await getItems("linkgroups");
 
-        return groups.filter((group: LinkGroup) => group.projectId = project.id);
+        return groups.filter((group: LinkGroup) => group.projectId == project.id);
     }
 
     export async function add(linkgroup: LinkGroup): Promise<LinkGroup> {
@@ -225,15 +225,15 @@ export module tasks {
     export async function get(project: Project): Promise<Task[]> {
         if (!project?.id) return [];
         
-        return (await getItems("tasks")).filter(t => t.projectId = project.id).map(t => {
+        return (await getItems("tasks")).filter(t => t.projectId == project.id).map(t => {
             t.due = t.due ? new Date(t.due) : null;
+            t.done = t.done ? new Date(t.done) : null;
             return t;
         });
     }
 
     export async function add(task: Task): Promise<Task> {
         task.id = uuidv4();
-        task.due = task.due.toJSON();
         const tasks = [...await getItems("tasks"), task];
         storage.sync.set({ tasks });
 
