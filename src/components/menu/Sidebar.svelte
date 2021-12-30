@@ -184,22 +184,16 @@
       </button>
     </li>
     <li class="fab-buttons__item">
-      <button
-        class="fab-buttons__link"
-        data-tooltip={$_("sidebar.project.import")}
-        on:click={importProject}
-      >
-        <i class="material-icons">file_upload</i>
-      </button>
+      <label class="button fab-buttons__link" data-tooltip={$_("sidebar.project.import")}>
+        <input type="file" class="is-hidden" on:change={importProject} />
+        <i class="material-icons"> file_upload </i>
+      </label>
     </li>
     <li class="fab-buttons__item">
-      <button
-        class="fab-buttons__link"
-        data-tooltip={$_("sidebar.project.export")}
-        on:click={exportProject}
-      >
-        <i class="material-icons">file_download</i>
-      </button>
+      <!-- svelte-ignore a11y-missing-attribute -->
+      <a class="button fab-buttons__link" on:click={exportProject} data-tooltip={$_("sidebar.project.export")}>
+        <i class="material-icons"> file_download </i>
+      </a>
     </li>
 
     <li class="seperator" />
