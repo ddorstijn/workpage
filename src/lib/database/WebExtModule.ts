@@ -16,7 +16,6 @@ export module projects {
     let handlers: fnCallback[] = [];
 
     export async function get(project?: Project): Promise<Project[]> {
-        console.log(await getItems<Project>("projects"));
         const projects = (await getItems<Project>("projects"))
             .map(p => {
                 p.used = new Date(p.used); return p 
@@ -244,6 +243,10 @@ export module tasks {
 
     export async function add(task: Task): Promise<Task> {
         task.id = uuidv4();
+        if (task.done instanceof Date) 
+            task.done = task.done.toJSON();
+        if (task.due instanceof Date) 
+            task.due = task.due.toJSON();
         const tasks = [...await getItems<Task>("tasks"), task];
         storage.sync.set({ tasks });
 
@@ -253,6 +256,10 @@ export module tasks {
 
     export async function update(task: Task): Promise<void> {
         if (!task?.id) return;
+        if (task.done instanceof Date) 
+            task.done = task.done.toJSON();
+        if (task.due instanceof Date) 
+            task.due = task.due.toJSON();
 
         const tasks = await getItems<Task>("tasks");
         const idx = tasks.findIndex(t => t.id == task.id);
