@@ -2,7 +2,7 @@ import { storage } from "webextension-polyfill";
 import type { fnCallback, Link, LinkGroup, Project, Task } from "./types";
 import { v4 as uuidv4 } from 'uuid';
 
-async function getItems(table: string): Promise<any[]> {
+async function getItems<T>(table: string): Promise<T[]> {
     const record = await storage.sync.get(table);
     if (!record[table]) {
         await storage.sync.set({ [table]: [] });
@@ -16,7 +16,10 @@ export module projects {
     let handlers: fnCallback[] = [];
 
     export async function get(project?: Project): Promise<Project[]> {
-        const projects: Project[] = await getItems("projects");
+        const projects = (await getItems<Project>("projects"))
+            .map(p => {
+                p.used = new Date(p.used); return p 
+            });
 
         if (project) {
             let p = projects.find(p => p.id == project.id);
@@ -29,7 +32,7 @@ export module projects {
     export async function add(project: Project): Promise<Project> {
         project.id = uuidv4();
         project.used = new Date();
-        let projects = [...await getItems("projects"), project];
+        let projects = [...await getItems<Project>("projects"), project];
         storage.sync.set({ projects });
 
         notify(project);
@@ -39,7 +42,7 @@ export module projects {
     export async function update(project: Project): Promise<void> {
         if (!project?.id) return;
 
-        const projects: Project[] = await getItems("projects");
+        const projects = await getItems<Project>("projects");
         const idx = projects.findIndex(p => p.id == project.id);
         projects[idx] = project;
         await storage.sync.set({ projects })
@@ -50,18 +53,20 @@ export module projects {
     export async function remove(project: Project): Promise<void> {
         if (!project?.id) return;
 
-        const projects: Project[] = await getItems("projects");
+        const projects = await getItems<Project>("projects");
         const idx = projects.findIndex(p => p.id == project.id);
         projects.splice(idx, 1);
         await storage.sync.set({ projects });
 
-        (await getItems("linkgroups"))
-            .filter((g: LinkGroup) => g.projectId == project.id)
-            .forEach((g: LinkGroup) => linkgroups.remove(g));
+        let aGroups = (await getItems<LinkGroup>("linkgroups")).filter(g => g.projectId == project.id);
+        for (const group of aGroups) {
+            await linkgroups.remove(group);   
+        }
 
-        (await getItems("tasks"))
-            .filter((t: Task) => t.projectId == project.id)
-            .forEach((t: Task) => tasks.remove(t));
+        let aTasks = (await getItems<Task>("tasks")).filter(t => t.projectId == project.id);
+        for (const task of aTasks) {
+            await tasks.remove(task);
+        }
 
         notify(project);
     }
@@ -90,14 +95,14 @@ export module linkgroups {
 
     export async function get(project: Project): Promise<LinkGroup[]> {
         if (!project?.id) return [];
-        const groups = await getItems("linkgroups");
+        const groups = await getItems<LinkGroup>("linkgroups");
 
         return groups.filter((group: LinkGroup) => group.projectId == project.id);
     }
 
     export async function add(linkgroup: LinkGroup): Promise<LinkGroup> {
         linkgroup.id = uuidv4();
-        const linkgroups = [...await getItems("linkgroups"), linkgroup];
+        const linkgroups = [...await getItems<LinkGroup>("linkgroups"), linkgroup];
         storage.sync.set({ linkgroups });
 
         notify(linkgroup);
@@ -107,7 +112,7 @@ export module linkgroups {
     export async function update(linkgroup: LinkGroup): Promise<void> {
         if (!linkgroup?.id) return;
 
-        const linkgroups: LinkGroup[] = await getItems("linkgroups");
+        const linkgroups = await getItems<LinkGroup>("linkgroups");
         const idx = linkgroups.findIndex(group => group.id == linkgroup.id);
         linkgroups[idx] = linkgroup;
         await storage.sync.set({ linkgroups });
@@ -118,14 +123,15 @@ export module linkgroups {
     export async function remove(linkgroup: LinkGroup): Promise<void> {
         if (!linkgroup?.id) return;
 
-        const linkgroups: LinkGroup[] = await getItems("linkgroups");
+        const linkgroups = await getItems<LinkGroup>("linkgroups");
         const idx = linkgroups.findIndex(group => group.id == linkgroup.id);
         linkgroups.splice(idx, 1);
         await storage.sync.set({ linkgroups });
 
-        (await getItems("links"))
-            .filter(l => l.groupId == linkgroup.id)
-            .forEach(l => links.remove(l));
+        let aLinks = (await getItems<Link>("links")).filter(l => l.groupId == linkgroup.id);
+        for (const link of aLinks) {
+            await links.remove(link);  
+        } 
 
         notify(linkgroup);
     }
@@ -166,12 +172,13 @@ export module links {
 
     export async function get(group: LinkGroup): Promise<Link[]> {
         if (!group?.projectId) return [];
-        return (await getItems("links")).filter((l: Link) => l.groupId == group.id);
+        
+        return (await getItems<Link>("links")).filter((l: Link) => l.groupId == group.id);
     }
 
     export async function add(link: Link): Promise<Link> {
         link.id = uuidv4();
-        const links = [...await getItems("links"), link];
+        const links = [...await getItems<Link>("links"), link];
         storage.sync.set({ links });
 
         notify(link);
@@ -181,7 +188,7 @@ export module links {
     export async function update(link: Link): Promise<void> {
         if (!link?.id) return;
 
-        const links: Link[] = await getItems("links");
+        const links = await getItems<Link>("links");
         const idx = links.findIndex(l => l.id == link.id);
         links[idx] = link;
         await storage.sync.set({ links });
@@ -192,7 +199,9 @@ export module links {
     export async function remove(link: Link): Promise<void> {
         if (!link?.id) return;
 
-        const links: Link[] = await getItems("links");
+        console.log("remove link " + link);
+
+        const links = await getItems<Link>("links");
         const idx = links.findIndex(l => l.id == link.id);
         links.splice(idx, 1);
         await storage.sync.set({ links });
@@ -225,7 +234,7 @@ export module tasks {
     export async function get(project: Project): Promise<Task[]> {
         if (!project?.id) return [];
         
-        return (await getItems("tasks")).filter(t => t.projectId == project.id).map(t => {
+        return (await getItems<Task>("tasks")).filter(t => t.projectId == project.id).map(t => {
             t.due = t.due ? new Date(t.due) : null;
             t.done = t.done ? new Date(t.done) : null;
             return t;
@@ -234,7 +243,7 @@ export module tasks {
 
     export async function add(task: Task): Promise<Task> {
         task.id = uuidv4();
-        const tasks = [...await getItems("tasks"), task];
+        const tasks = [...await getItems<Task>("tasks"), task];
         storage.sync.set({ tasks });
 
         notify(task);
@@ -244,7 +253,7 @@ export module tasks {
     export async function update(task: Task): Promise<void> {
         if (!task?.id) return;
 
-        const tasks: Task[] = await getItems("tasks");
+        const tasks = await getItems<Task>("tasks");
         const idx = tasks.findIndex(t => t.id == task.id);
         tasks[idx] = task;
         await storage.sync.set({ tasks });
@@ -255,7 +264,7 @@ export module tasks {
     export async function remove(task: Task): Promise<void> {
         if (!task?.id) return;
 
-        const tasks: Task[] = await getItems("tasks");
+        const tasks = await getItems<Task>("tasks");
         const idx = tasks.findIndex(t => t.id == task.id);
         tasks.splice(idx, 1);
         await storage.sync.set({ tasks });

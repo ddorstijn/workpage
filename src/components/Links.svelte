@@ -15,6 +15,7 @@
   project.subscribe(fetchLinks);
   
   async function fetchLinks() {
+    linkgroups = [];
     linkgroups = await db.linkgroups.get($project);
   }
   

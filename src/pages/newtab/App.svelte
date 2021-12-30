@@ -14,70 +14,73 @@
   
   onMount(async () => {
     if (!((await db.projects.get()).length) && !localStorage.getItem("toured")) {
+      localStorage.setItem("toured", "true");
+
       const json = {
-        "projects": [
+        projects: [
           {
-            "name": "General",
-            "id": "8adefd01-e1a8-434a-b9a7-089746ab46d1",
-            "used": "2021-12-29T22:30:31.399Z"
+            id: "8adefd01-e1a8-434a-b9a7-089746ab46d1",
+            name: "General",
+            used: "2021-12-29T22:30:31.399Z"
           }
         ],
-        "linkgroups": [
+        linkgroups: [
           {
-            "name": "Google",
-            "projectId": "8adefd01-e1a8-434a-b9a7-089746ab46d1",
-            "id": "e61169ae-a0a4-474b-8675-8a5ab5e8624e"
+            id: "e61169ae-a0a4-474b-8675-8a5ab5e8624e",
+            name: "Google",
+            projectId: "8adefd01-e1a8-434a-b9a7-089746ab46d1",
           },
           {
-            "name": "Social",
-            "projectId": "8adefd01-e1a8-434a-b9a7-089746ab46d1",
-            "id": "da866eda-a18c-496d-9a9c-869d79453562"
+            id: "da866eda-a18c-496d-9a9c-869d79453562",
+            name: "Social",
+            projectId: "8adefd01-e1a8-434a-b9a7-089746ab46d1",
           }
         ],
-        "links": [
+        links: [
           {
-            "name": "Search",
-            "url": "https://www.google.com",
-            "groupId": "e61169ae-a0a4-474b-8675-8a5ab5e8624e",
-            "id": "0d100eac-a333-4c60-8e14-f6484bf73d79"
+            id: "0d100eac-a333-4c60-8e14-f6484bf73d79",
+            name: "Search",
+            url: "https://www.google.com",
+            groupId: "e61169ae-a0a4-474b-8675-8a5ab5e8624e",
           },
           {
-            "name": "Gmail",
-            "url": "https://www.gmail.com",
-            "groupId": "e61169ae-a0a4-474b-8675-8a5ab5e8624e",
-            "id": "b18c79d8-1cc0-4d05-a18f-d202f1a854f4"
+            id: "b18c79d8-1cc0-4d05-a18f-d202f1a854f4",
+            name: "Gmail",
+            url: "https://www.gmail.com",
+            groupId: "e61169ae-a0a4-474b-8675-8a5ab5e8624e",
           },
           {
-            "name": "Drive",
-            "url": "https://drive.google.com",
-            "groupId": "e61169ae-a0a4-474b-8675-8a5ab5e8624e",
-            "id": "81d0715d-fb22-4ffe-8a55-baed8ae35c8d"
+            id: "81d0715d-fb22-4ffe-8a55-baed8ae35c8d",
+            name: "Drive",
+            url: "https://drive.google.com",
+            groupId: "e61169ae-a0a4-474b-8675-8a5ab5e8624e",
           },
           {
-            "name": "Youtube",
-            "url": "https://youtube.com",
-            "groupId": "da866eda-a18c-496d-9a9c-869d79453562",
-            "id": "81d0715d-fb22-4ffe-8a55-baed8ae35c8d"
+            id: "81d0715d-fb22-4ffe-8a55-baed8ae35c8d",
+            name: "Youtube",
+            url: "https://youtube.com",
+            groupId: "da866eda-a18c-496d-9a9c-869d79453562",
           },
           {
-            "name": "Twitter",
-            "url": "https://twitter.com",
-            "groupId": "da866eda-a18c-496d-9a9c-869d79453562",
-            "id": "81d0715d-fb22-4ffe-8a55-baed8ae35c8d"
+            id: "81d0715d-fb22-4ffe-8a55-baed8ae35c8d",
+            name: "Twitter",
+            url: "https://twitter.com",
+            groupId: "da866eda-a18c-496d-9a9c-869d79453562",
           },
           {
-            "name": "Reddit",
-            "url": "https://reddit.com",
-            "groupId": "da866eda-a18c-496d-9a9c-869d79453562",
-            "id": "81d0715d-fb22-4ffe-8a55-baed8ae35c8d"
+            id: "81d0715d-fb22-4ffe-8a55-baed8ae35c8d",
+            name: "Reddit",
+            url: "https://reddit.com",
+            groupId: "da866eda-a18c-496d-9a9c-869d79453562",
           }
         ],
-        "tasks": [
+        tasks: [
           {
-            "name": "Explore Workpage!",
-            "priority": 3,
-            "due": "2021-12-28T23:00:00.000Z",
-            "id": "06fd1f34-4672-414a-a3d0-45448db63925"
+            id: "06fd1f34-4672-414a-a3d0-45448db63925",
+            name: "Explore Workpage!",
+            priority: 3,
+            due: "2021-12-28T23:00:00.000Z",
+            projectId: "8adefd01-e1a8-434a-b9a7-089746ab46d1",
           }
         ]
       };

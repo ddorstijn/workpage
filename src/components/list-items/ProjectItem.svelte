@@ -25,6 +25,10 @@
   }
 
   function remove(): void {
+    if ($project.id == projectItem.id) {
+      $project = null;
+    }
+    
     db.projects.remove(projectItem);
   }
 
