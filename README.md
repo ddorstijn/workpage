@@ -34,3 +34,33 @@ You can add, import and export projects using the menu in the top left. Here you
 
 Projects are synced between your devices. But you can not share it with anyone else. You can export the project to another computer but any changed made there will not be synchronised.
 
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/ddorstijn/workpage
+```
+
+Go to the project directory
+
+```bash
+  cd workpage
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the development build
+
+```bash
+  npm run build-dev
+```
+
+Go into your browser and add the addon as temporary addon (or load unpacked in chrome).
+Now you can open a new tab to see the newtab page.
+
