@@ -35,6 +35,13 @@
             "medium": "Gemiddelde prioriteit",
             "high": "Hoge prioriteit"
         },
+        "date": {
+            "overdue": "Achterstallig",
+            "day": "Vandaag",
+            "week": "Deze week",
+            "long": "Lange termijn",
+            "someday": "Ooit"
+        },
         "form": {
             "no-project": "Selecteer eerst een project",
             "close": "Sluiten",
@@ -71,6 +78,7 @@
             "export": "Exporteer project"
         },
         "darkmode": "Darkmodus aan/uit",
-        "language": "Taal: Nederlands"
+        "language": "Taal: Nederlands",
+        "storage": "% opslagruimte gebruikt"
     }
 }

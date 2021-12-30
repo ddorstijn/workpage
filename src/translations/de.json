@@ -35,6 +35,13 @@
             "medium": "Mittlere Priorität",
             "high": "Hohe Priorität"
         },
+        "date": {
+            "overdue": "Überfällig",
+            "day": "Heute",
+            "week": "In dieser Woche",
+            "long": "Langfristig",
+            "someday": "Irgendwann mal"
+        },
         "form": {
             "no-project": "Wählen Sie zuerst ein Projekt aus",
             "close": "Schließen",
@@ -71,6 +78,7 @@
             "export": "Projekt exportieren"
         },
         "darkmode": "darkmode ein/aus",
-        "language": "Sprache: Deutsch"
+        "language": "Sprache: Deutsch",
+        "storage": "% Speicherverbrauch"
     }
 }

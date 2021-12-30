@@ -29,7 +29,7 @@
 <div>
   <form on:submit|preventDefault={setTask}>
     <input
-      placeholder={$_("tasks.form.placeholders.name")}
+      placeholder={$_("tasks.form.name")}
       bind:value={task.name}
       required
     />
@@ -37,7 +37,7 @@
     <div class="row">
       <Flatpickr
         class="picker col"
-        placeholder={$_("tasks.form.placeholders.due")}
+        placeholder={$_("tasks.form.due")}
         title="Due date"
         bind:value={task.due}
       />

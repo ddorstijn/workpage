@@ -1,13 +1,13 @@
 <script>
-	import { onDestroy } from "svelte";
+	import { onDestroy, onMount } from "svelte";
 	import { locale } from "svelte-i18n";
 
 	// -- Members -- \\
 	let date;
 	let time;
 
-	let timeout = setTimeout(update, 5000);
-	onDestroy(() => clearTimeout(timeout));
+	let timeout = setInterval(update, 5000);
+	onDestroy(() => clearInterval(timeout));
 	locale.subscribe(() => update());
 
 	// -- Functions -- \\

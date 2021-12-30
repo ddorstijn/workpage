@@ -63,10 +63,10 @@
 
   function sortTasksPriority() {
     let sorted = {
-      "High priority": [],
-      "Medium priority": [],
-      "Low priority": [],
-      "No priority": [],
+      [$_("tasks.priority.high")]: [],
+      [$_("tasks.priority.medium")]: [],
+      [$_("tasks.priority.low")]: [],
+      [$_("tasks.priority.no")]: [],
     };
 
     for (const task of unsortedTasks) {
@@ -75,13 +75,13 @@
       }
 
       if (task.priority == 3) {
-        sorted["High priority"].push(task);
+        sorted[$_("tasks.priority.high")].push(task);
       } else if (task.priority == 2) {
-        sorted["Medium priority"].push(task);
+        sorted[$_("tasks.priority.medium")].push(task);
       } else if (task.priority == 1) {
-        sorted["Low priority"].push(task);
+        sorted[$_("tasks.priority.low")].push(task);
       } else {
-        sorted["No priority"].push(task);
+        sorted[$_("tasks.priority.no")].push(task);
       }
     }
 
@@ -90,11 +90,11 @@
 
   function sortTasksDate() {
     let sorted = {
-      Overdue: [],
-      Today: [],
-      "This week": [],
-      "Long term": [],
-      Someday: [],
+      [$_("tasks.date.overdue")]: [],
+      [$_("tasks.date.day")]: [],
+      [$_("tasks.date.week")]: [],
+      [$_("tasks.date.long")]: [],
+      [$_("tasks.date.someday")]: [],
     };
 
     for (const task of unsortedTasks) {
@@ -103,31 +103,31 @@
       }
 
       if (!task.due) {
-        sorted["Someday"].push(task);
+        sorted[$_("tasks.date.someday")].push(task);
         continue;
       }
 
       const dateDiff = dateDiffInDays(new Date(), task.due);
       if (dateDiff < 0) {
-        sorted["Overdue"].push(task);
+        sorted[$_("tasks.date.overdue")].push(task);
       } else if (dateDiff == 0) {
-        sorted["Today"].push(task);
+        sorted[$_("tasks.date.day")].push(task);
       } else if (dateDiff > 7) {
-        sorted["Long term"].push(task);
+        sorted[$_("tasks.date.long")].push(task);
       } else if (dateDiff > 0) {
-        sorted["This week"].push(task);
+        sorted[$_("tasks.date.week")].push(task);
       }
     }
 
     tasks = sorted;
   }
 
-  function addTask() {
+  async function addTask() {
     if (!newTask.due) {
       newTask.due = null;
     }
 
-    db.tasks.add(newTask);
+    await db.tasks.add(newTask);
     newTask = { name: "", priority: 0, projectId: $project.id };
   }
 </script>

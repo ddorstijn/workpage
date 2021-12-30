@@ -199,8 +199,6 @@ export module links {
     export async function remove(link: Link): Promise<void> {
         if (!link?.id) return;
 
-        console.log("remove link " + link);
-
         const links = await getItems<Link>("links");
         const idx = links.findIndex(l => l.id == link.id);
         links.splice(idx, 1);
