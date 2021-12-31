@@ -1,5 +1,4 @@
 import { storage } from "webextension-polyfill";
-import { v4 as uuidv4 } from "uuid";
 import type { fnCallback, Link, LinkGroup, Project, Task } from "./types";
 
 type SProject = {
@@ -45,7 +44,7 @@ export module projects {
   }
 
   export async function add(project: Project): Promise<Project> {
-    project.id = uuidv4();
+    project.id = Date.now().toString();
     project.used = new Date();
 
     const p: SProject = {
@@ -131,7 +130,7 @@ export module linkgroups {
   }
 
   export async function add(linkgroup: LinkGroup): Promise<LinkGroup> {
-    linkgroup.id = uuidv4();
+    linkgroup.id = Date.now().toString();
     const linkgroups = [
       ...(await getItems<LinkGroup>("linkgroups")),
       linkgroup,
@@ -212,7 +211,7 @@ export module links {
   }
 
   export async function add(link: Link): Promise<Link> {
-    link.id = uuidv4();
+    link.id = Date.now().toString();
     const links = [...(await getItems<Link>("links")), link];
     storage.sync.set({ links });
 
@@ -275,7 +274,7 @@ export module tasks {
   }
 
   export async function add(task: Task): Promise<Task> {
-    task.id = uuidv4();
+    task.id = Date.now().toString();
 
     const t: STask = {
       id: task.id,

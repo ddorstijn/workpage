@@ -1,9 +1,7 @@
 <script lang="ts">
   import CalendarModal from "./modals/CalendarModal.svelte";
+  import DatePicker from "./DatePicker.svelte";
   import TaskItem from "./list-items/TaskItem.svelte";
-
-  import Flatpickr from "svelte-flatpickr";
-  import "flatpickr/dist/flatpickr.css";
 
   import { onDestroy, onMount } from "svelte";
   import { _ } from "svelte-i18n";
@@ -124,12 +122,9 @@
 
   async function addTask() {
     newTask.projectId = $project.id;
-    if (!newTask.due) {
-      newTask.due = null;
-    }
 
     await db.tasks.add(newTask);
-    newTask = { name: "", priority: 0, projectId: null };
+    newTask = { name: "", priority: 0, due: null, projectId: null };
   }
 </script>
 
@@ -163,14 +158,10 @@
             bind:value={newTask.name}
           />
           <div class="row">
-            <Flatpickr
-              name="due"
-              class="picker col-7"
-              placeholder={$_("tasks.form.due")}
-              title="Due date"
-              bind:value={newTask.due}
-            />
-            <select name="priorty" class="col" bind:value={newTask.priority}>
+            <div class="picker col-5">
+              <DatePicker placeholder={$_("tasks.form.due")} bind:date={newTask.due}  />
+            </div>
+            <select name="priorty" class="col-4" bind:value={newTask.priority}>
               <option value={0} class="text-grey" selected>
                 {$_("tasks.priority.no")}
               </option>
@@ -184,11 +175,11 @@
                 {$_("tasks.priority.high")}
               </option>
             </select>
+            <button type="submit" class="col">
+              {$_("tasks.form.add")}
+            </button>    
           </div>
         </div>
-        <button type="submit">
-          {$_("tasks.form.add")}
-        </button>
       </form>
     {/if}
   </header>
@@ -274,12 +265,11 @@
   .task-form {
     button[type="submit"] {
       display: block;
-      margin: 1rem auto;
+      margin-top: 1rem;
+      padding: 0;
     }
 
-    input:not([type="submit"]),
-    select,
-    :global(.picker) {
+    input, select, .picker {
       background-color: white;
       margin-top: 1rem;
     }

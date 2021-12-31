@@ -1,19 +1,14 @@
 <script lang="ts">
   import { db, editRef, modal, project } from "@/lib/store";
   import type { Task } from "@/lib/database/types";
-
-  import Flatpickr from "svelte-flatpickr";
-  import "flatpickr/dist/flatpickr.css";
-
   import { _ } from "svelte-i18n";
+  
+  import DatePicker from "../DatePicker.svelte";
 
-  let task: Task = ($editRef as Task) ?? { name: "", projectId: $project.id };
+  let task: Task = ($editRef as Task) ?? { name: "", priority: 0, projectId: null };
 
   async function setTask(): Promise<void> {
-    if (!task.due) {
-      task.due = null;
-    }
-
+    task.projectId = $project.id;
     if (task.id) {
       await db.tasks.update(task);
     } else {
@@ -35,13 +30,10 @@
     />
 
     <div class="row">
-      <Flatpickr
-        class="picker col"
-        placeholder={$_("tasks.form.due")}
-        title="Due date"
-        bind:value={task.due}
-      />
-      <select bind:value={task.priority} class="col">
+      <div class="picker col-7">
+        <DatePicker placeholder={$_("tasks.form.due")} bind:date={task.due}  />
+      </div>
+      <select bind:value={task.priority} class="col-5">
         <option value={0} class="text-grey">
           {$_("tasks.priority.no")}
         </option>
@@ -69,7 +61,7 @@
   }
 
   form {
-    width: 15vw;
+    width: 20vw;
   }
 
   input {
