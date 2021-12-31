@@ -19,68 +19,68 @@
       const json = {
         projects: [
           {
-            id: "8adefd01-e1a8-434a-b9a7-089746ab46d1",
+            id: "ExampleProject",
             name: "General",
             used: "2021-12-29T22:30:31.399Z",
           },
         ],
         linkgroups: [
           {
-            id: "e61169ae-a0a4-474b-8675-8a5ab5e8624e",
+            id: "ExampleLinkGroupGoogle",
             name: "Google",
-            projectId: "8adefd01-e1a8-434a-b9a7-089746ab46d1",
+            projectId: "ExampleProject",
           },
           {
-            id: "da866eda-a18c-496d-9a9c-869d79453562",
+            id: "ExampleLinkGroupSocial",
             name: "Social",
-            projectId: "8adefd01-e1a8-434a-b9a7-089746ab46d1",
+            projectId: "ExampleProject",
           },
         ],
         links: [
           {
-            id: "0d100eac-a333-4c60-8e14-f6484bf73d79",
+            id: "ExampleLinkSearch",
             name: "Search",
             url: "https://www.google.com",
-            groupId: "e61169ae-a0a4-474b-8675-8a5ab5e8624e",
+            groupId: "ExampleLinkGroupGoogle",
           },
           {
-            id: "b18c79d8-1cc0-4d05-a18f-d202f1a854f4",
+            id: "ExampleLinkGmal",
             name: "Gmail",
             url: "https://www.gmail.com",
-            groupId: "e61169ae-a0a4-474b-8675-8a5ab5e8624e",
+            groupId: "ExampleLinkGroupGoogle",
           },
           {
-            id: "81d0715d-fb22-4ffe-8a55-baed8ae35c8d",
+            id: "ExampleLinkDrive",
             name: "Drive",
             url: "https://drive.google.com",
-            groupId: "e61169ae-a0a4-474b-8675-8a5ab5e8624e",
+            groupId: "ExampleLinkGroupGoogle",
           },
           {
-            id: "81d0715d-fb22-4ffe-8a55-baed8ae35c8d",
+            id: "ExampleLinkYoutube",
             name: "Youtube",
             url: "https://youtube.com",
-            groupId: "da866eda-a18c-496d-9a9c-869d79453562",
+            groupId: "ExampleLinkGroupSocial",
           },
           {
-            id: "81d0715d-fb22-4ffe-8a55-baed8ae35c8d",
+            id: "ExampleLinkTwitter",
             name: "Twitter",
             url: "https://twitter.com",
-            groupId: "da866eda-a18c-496d-9a9c-869d79453562",
+            groupId: "ExampleLinkGroupSocial",
           },
           {
-            id: "81d0715d-fb22-4ffe-8a55-baed8ae35c8d",
+            id: "ExampleLinkReddit",
             name: "Reddit",
             url: "https://reddit.com",
-            groupId: "da866eda-a18c-496d-9a9c-869d79453562",
+            groupId: "ExampleLinkGroupSocial",
           },
         ],
         tasks: [
           {
-            id: "06fd1f34-4672-414a-a3d0-45448db63925",
+            id: "ExampleTaskExplore",
             name: "Explore Workpage!",
             priority: 3,
             due: "2021-12-28T23:00:00.000Z",
-            projectId: "8adefd01-e1a8-434a-b9a7-089746ab46d1",
+            projectId: "ExampleProject",
           },
         ],
       };

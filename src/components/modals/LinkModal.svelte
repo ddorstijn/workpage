@@ -8,6 +8,7 @@
 
   let linkGroups = [];
   let link: Link = ($editRef as Link) ?? { name: "", url: "" };
+  console.log($editRef)
 
   // For the popup
   const dispatch = createEventDispatcher();
@@ -21,6 +22,7 @@
 
   async function addLink(): Promise<void> {
     if (link.id) {
+      console.log("Update")
       await db.links.update(link);
     } else {
       await db.links.add(link);
