@@ -39,13 +39,18 @@
 <li
   on:mouseover={() => (hovering = true)}
   on:mouseout={() => (hovering = false)}
-  on:focus={() => hovering = true}
-  on:blur={() => hovering = false}
+  on:focus={() => (hovering = true)}
+  on:blur={() => (hovering = false)}
 >
   <label class:check={task.done}>
-    <input class="is-hidden" type="checkbox" checked={task.done != null} on:change={mark} />
+    <input
+      class="is-hidden"
+      type="checkbox"
+      checked={task.done != null}
+      on:change={mark}
+    />
   </label>
-  
+
   <div class="text">
     <div class="title">{task.name}</div>
     <small class="text-grey">
@@ -54,7 +59,11 @@
         {pretty_date(task.due)}
       </div>
       {#if task.priority > 0}
-        <div class="is-vertical-align" class:text-light={task.priority == 1} class:text-error={task.priority == 3}>
+        <div
+          class="is-vertical-align"
+          class:text-light={task.priority == 1}
+          class:text-error={task.priority == 3}
+        >
           <span class="priority-icon material-icons">priority_high</span>
           {pretty_priority(task.priority)}
         </div>
@@ -99,7 +108,7 @@
   small .due-icon {
     margin-right: 0.25rem;
   }
-  
+
   label {
     position: relative;
     margin-right: 1.5rem;

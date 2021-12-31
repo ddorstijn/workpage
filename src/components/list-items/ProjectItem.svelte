@@ -5,7 +5,7 @@
 
   import type { Project } from "@/lib/database/types";
   import { tick } from "svelte";
-  
+
   export let projectItem: Project;
 
   let hovering = false;
@@ -15,7 +15,7 @@
   async function setActive() {
     projectItem.used = new Date();
     await db.projects.update(projectItem);
-    project.set(projectItem);
+    $project = projectItem;
     $modal = null;
   }
 
@@ -28,7 +28,7 @@
     if ($project.id == projectItem.id) {
       $project = null;
     }
-    
+
     db.projects.remove(projectItem);
   }
 
@@ -61,8 +61,15 @@
       <div class="title">{projectItem.name}</div>
     {:else}
       <form class="edit-form" on:submit|preventDefault={saveEdit}>
-        <input type="text" bind:this={editInput} bind:value={projectItem.name} on:blur={saveEdit} placeholder="Project name" required>
-        <input type="submit" class="is-hidden">
+        <input
+          type="text"
+          bind:this={editInput}
+          bind:value={projectItem.name}
+          on:blur={saveEdit}
+          placeholder="Project name"
+          required
+        />
+        <input type="submit" class="is-hidden" />
       </form>
     {/if}
     <small class="text-grey">

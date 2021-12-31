@@ -1,13 +1,13 @@
 <script lang="ts">
   import { db, editRef, modal } from "@/lib/store";
   import { onDestroy, onMount } from "svelte";
-  
+
   import type { Link, LinkGroup } from "@/lib/database/types";
 
   import LinkGroupModal from "../modals/LinkGroupModal.svelte";
   import LinkItem from "./LinkItem.svelte";
   import Menu from "../menu/Menu.svelte";
-  
+
   export let linkgroup: LinkGroup;
 
   let links = [];

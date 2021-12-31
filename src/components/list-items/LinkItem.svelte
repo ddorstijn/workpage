@@ -2,11 +2,11 @@
   import Menu from "../menu/Menu.svelte";
   import { db, editRef, modal } from "@/lib/store";
   import LinkModal from "../modals/LinkModal.svelte";
-   
+
   import type { Link } from "@/lib/database/types";
 
   export let link: Link;
-  
+
   let hovering = false;
 
   function edit(): void {

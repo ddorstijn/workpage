@@ -95,7 +95,7 @@
 
       let proj: Project = { name: res.name };
       await db.projects.add(proj);
-      
+
       for (const { name, links } of res.linkgroups) {
         let group: LinkGroup = { name, projectId: proj.id };
         await db.linkgroups.add(group);
@@ -184,14 +184,21 @@
       </button>
     </li>
     <li class="fab-buttons__item">
-      <label class="button fab-buttons__link" data-tooltip={$_("sidebar.project.import")}>
+      <label
+        class="button fab-buttons__link"
+        data-tooltip={$_("sidebar.project.import")}
+      >
         <input type="file" class="is-hidden" on:change={importProject} />
         <i class="material-icons"> file_upload </i>
       </label>
     </li>
     <li class="fab-buttons__item">
       <!-- svelte-ignore a11y-missing-attribute -->
-      <a class="button fab-buttons__link" on:click={exportProject} data-tooltip={$_("sidebar.project.export")}>
+      <a
+        class="button fab-buttons__link"
+        on:click={exportProject}
+        data-tooltip={$_("sidebar.project.export")}
+      >
         <i class="material-icons"> file_download </i>
       </a>
     </li>

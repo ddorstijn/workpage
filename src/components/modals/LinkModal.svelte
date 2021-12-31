@@ -7,9 +7,8 @@
   import { _ } from "svelte-i18n";
 
   let linkGroups = [];
-  let link: Link = $editRef as Link ?? { name: "", url: "" };
+  let link: Link = ($editRef as Link) ?? { name: "", url: "" };
 
-  const urlRegex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi);
   // For the popup
   const dispatch = createEventDispatcher();
 
@@ -21,10 +20,6 @@
   });
 
   async function addLink(): Promise<void> {
-    if (!link.url.match(urlRegex)) {
-      return alert("The url is not valid. Please check it again.");
-    }
-    
     if (link.id) {
       await db.links.update(link);
     } else {
@@ -41,11 +36,17 @@
 <div>
   <form on:submit|preventDefault={addLink}>
     <input
+      type="text"
       placeholder={$_("links.form.name")}
       bind:value={link.name}
       required
     />
-    <input placeholder={$_("links.form.url")} bind:value={link.url} required />
+    <input
+      type="url"
+      placeholder={$_("links.form.url")}
+      bind:value={link.url}
+      required
+    />
     <select bind:value={link.groupId} required>
       {#each linkGroups as linkGroup}
         <option value={linkGroup.id}>{linkGroup.name}</option>

@@ -13,13 +13,13 @@
     fetchTasks();
     db.tasks.subscribe(fetchTasks);
   });
-  
+
   project.subscribe(fetchTasks);
 
   async function fetchTasks(): Promise<void> {
-    tasks = (await db.tasks.get($project)).filter(t => t.done);
+    tasks = (await db.tasks.get($project)).filter((t) => t.done);
   }
-  
+
   onDestroy(() => db.tasks.unsubscribe(fetchTasks));
 </script>
 

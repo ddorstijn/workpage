@@ -3,7 +3,10 @@
   import type { LinkGroup } from "@/lib/database/types";
   import { _ } from "svelte-i18n";
 
-  let linkgroup: LinkGroup = ($editRef as LinkGroup) ?? { name: "", projectId: $project.id };
+  let linkgroup: LinkGroup = ($editRef as LinkGroup) ?? {
+    name: "",
+    projectId: $project.id,
+  };
 
   async function addGroup(): Promise<void> {
     if (linkgroup.id) {

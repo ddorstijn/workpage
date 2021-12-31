@@ -4,16 +4,16 @@
   import Projects from "@/components/Projects.svelte";
   import Sidebar from "@/components/menu/Sidebar.svelte";
   import Tasks from "@/components/Tasks.svelte";
-  
+
   import Modal from "@/components/modals/Modal.svelte";
   import TourModal from "@/components/modals/TourModal.svelte";
 
   import { darkmode, db, modal, project } from "@/lib/store";
   import { storage } from "webextension-polyfill";
   import { onMount } from "svelte";
-  
+
   onMount(async () => {
-    if (!((await db.projects.get()).length) && !localStorage.getItem("toured")) {
+    if (!(await db.projects.get()).length && !localStorage.getItem("toured")) {
       localStorage.setItem("toured", "true");
 
       const json = {
@@ -21,8 +21,8 @@
           {
             id: "8adefd01-e1a8-434a-b9a7-089746ab46d1",
             name: "General",
-            used: "2021-12-29T22:30:31.399Z"
-          }
+            used: "2021-12-29T22:30:31.399Z",
+          },
         ],
         linkgroups: [
           {
@@ -34,7 +34,7 @@
             id: "da866eda-a18c-496d-9a9c-869d79453562",
             name: "Social",
             projectId: "8adefd01-e1a8-434a-b9a7-089746ab46d1",
-          }
+          },
         ],
         links: [
           {
@@ -72,7 +72,7 @@
             name: "Reddit",
             url: "https://reddit.com",
             groupId: "da866eda-a18c-496d-9a9c-869d79453562",
-          }
+          },
         ],
         tasks: [
           {
@@ -81,8 +81,8 @@
             priority: 3,
             due: "2021-12-28T23:00:00.000Z",
             projectId: "8adefd01-e1a8-434a-b9a7-089746ab46d1",
-          }
-        ]
+          },
+        ],
       };
 
       await storage.sync.set(json);
@@ -90,7 +90,7 @@
 
       $modal = TourModal;
     }
-  })
+  });
 </script>
 
 <article class="newtab" class:darkmode={$darkmode}>

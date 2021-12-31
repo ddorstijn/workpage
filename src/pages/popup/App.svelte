@@ -8,12 +8,15 @@
 
   import { _ } from "svelte-i18n";
 
-	async function getAddress() {
-    const tabs = await browser.tabs.query({active: true, lastFocusedWindow: true});
+  async function getAddress() {
+    const tabs = await browser.tabs.query({
+      active: true,
+      lastFocusedWindow: true,
+    });
     let link: Link = { name: tabs[0]?.title, url: tabs[0]?.url };
 
     $editRef = link;
-  };
+  }
 
   function close() {
     window.close();
@@ -21,15 +24,15 @@
 </script>
 
 <svelte:head>
-   {#if $darkmode}
-      <style>
-         body {
-            filter: invert(100%);
-            background: #000;
-         }
-      </style>
-   {/if}
-</svelte:head>	
+  {#if $darkmode}
+    <style>
+      body {
+        filter: invert(100%);
+        background: #000;
+      }
+    </style>
+  {/if}
+</svelte:head>
 
 <article>
   {#if !$project}
@@ -37,10 +40,12 @@
       <span>{$_("links.popup.no-project")}</span>
     </div>
   {:else}
-    <span class="project-title">{$_("links.popup.project-current")} { $project?.name }</span>
+    <span class="project-title"
+      >{$_("links.popup.project-current")} {$project?.name}</span
+    >
     {#await getAddress()}
       ...
-    {:then} 
+    {:then}
       <LinkModal on:close={close} />
     {/await}
   {/if}

@@ -19,7 +19,7 @@
 
   let unsortedTasks: Task[] = [];
   let tasks: { [items: string]: Task[] } = {};
-  let newTask: Task = { name: "", priority: 0, projectId: $project?.id };
+  let newTask: Task = { name: "", priority: 0, projectId: null };
 
   onMount(() => {
     fetchTasks();
@@ -27,12 +27,12 @@
   });
 
   project.subscribe(fetchTasks);
-  
+
   async function fetchTasks(): Promise<void> {
     unsortedTasks = (await db.tasks.get($project)).filter((task) => !task.done);
     sortTasks();
   }
-  
+
   onDestroy(() => db.tasks.unsubscribe(fetchTasks));
 
   // -- Functions -- \\
@@ -123,12 +123,13 @@
   }
 
   async function addTask() {
+    newTask.projectId = $project.id;
     if (!newTask.due) {
       newTask.due = null;
     }
 
     await db.tasks.add(newTask);
-    newTask = { name: "", priority: 0, projectId: $project.id };
+    newTask = { name: "", priority: 0, projectId: null };
   }
 </script>
 
@@ -141,10 +142,7 @@
           class="btn--icon [ is-paddingless ] [ material-icons ]"
           on:click={openCalendar}>history</button
         >
-        <button
-          class="btn--accent [ button primary ]"
-          on:click={openForm}
-        >
+        <button class="btn--accent [ button primary ]" on:click={openForm}>
           {#if expanded}
             {$_("tasks.form.close")}
             <i class="material-icons">remove</i>
@@ -156,11 +154,7 @@
       </div>
     </div>
     {#if expanded}
-      <form
-        class="task-form"
-        class:expanded
-        on:submit|preventDefault={addTask}
-      >
+      <form class="task-form" class:expanded on:submit|preventDefault={addTask}>
         <div>
           <input
             name="name"
