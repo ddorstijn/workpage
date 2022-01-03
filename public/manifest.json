@@ -15,16 +15,15 @@
   "browser_action": {
     "default_popup": "popup/index.html",
     "default_icon": {
-			"24": "logo.svg",
-			"32": "logo.svg",
-			"48": "logo.svg",
-			"64": "logo.svg",
-			"96": "logo.svg"
+			"32": "logo/logo-32.png",
+			"48": "logo/logo-48.png",
+			"64": "logo/logo-64.png"
     }
   },
 	"icons": {
-		"32": "logo-32.png",
-		"48": "logo-48.png"
+		"32": "logo/logo-32.png",
+		"48": "logo/logo-48.png",
+		"64": "logo/logo-64.png"
 	},
 	"permissions": ["storage", "tabs"]
 }

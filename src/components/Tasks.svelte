@@ -238,6 +238,12 @@
     }
   }
 
+  @media (max-width: 1600px) {
+    .task {
+      padding: 2rem 0 0;
+    }
+  }
+
   .title-bar__actions {
     display: flex;
     align-items: center;
