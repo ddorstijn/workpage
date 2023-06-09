@@ -1,0 +1,35 @@
+{
+  "name": "workpage",
+  "version": "1.0.0",
+  "displayName": "Workpage",
+  "author": "ddorstijn",
+  "description": "Adjust your new tab page to your personal needs. Use projects to organise your links and tasks for a productive start of your tabs.",
+  "homepage_url": "https://github.com/ddorstijn/workpage",
+  "scripts": {
+    "build": "tsc && vite build",
+    "watch": "vite build --watch --mode development --minify false",
+    "dev": "vite",
+    "serve:firefox": "web-ext run --start-url \"about:debugging#/runtime/this-firefox\"  --source-dir ./dist/",
+    "serve:chrome": "web-ext run -t chromium --start-url \"https://example.com\" --source-dir ./dist/"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@iconify-json/ic": "^1.1.13",
+    "@samrum/vite-plugin-web-extension": "^5.0.0",
+    "@types/chrome": "^0.0.228",
+    "@types/webextension-polyfill": "^0.10.0",
+    "@unocss/preset-icons": "^0.53.1",
+    "typescript": "^5.0.4",
+    "unocss": "^0.53.1",
+    "vite": "~4.3.3",
+    "vite-plugin-solid": "^2.7.0",
+    "web-ext": "^7.6.2"
+  },
+  "dependencies": {
+    "@solid-primitives/date": "^2.0.14",
+    "@thisbeyond/solid-dnd": "^0.7.4",
+    "@unocss/reset": "^0.53.1",
+    "solid-js": "^1.7.6",
+    "webextension-polyfill": "^0.10.0"
+  }
+}
