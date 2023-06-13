@@ -1,4 +1,4 @@
-const Project = () => {
+const ProjectDrawer = () => {
   return (
     <button class='flex flex-items-center bg-red-200 px-3 w-min rounded-full'>
       <h2 class='text-lg font-bold line-height-loose align-middle pl-1'>General</h2>
@@ -7,4 +7,4 @@ const Project = () => {
   )
 }
 
-export default Project;
+export default ProjectDrawer;

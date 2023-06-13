@@ -27,23 +27,23 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
           links: [
             {
               alias: 'Maps',
-              url: new URL('https://maps.google.com')
+              url: 'https://maps.google.com'
             },
             {
               alias: 'Youtube',
-              url: new URL('https://youtube.google.com')
+              url: 'https://youtube.google.com'
             },
             {
               alias: 'Gmail',
-              url: new URL('https://mail.google.com')
+              url: 'https://mail.google.com'
             },
             {
               alias: 'Drive',
-              url: new URL('https://drive.google.com')
+              url: 'https://drive.google.com'
             },
             {
               alias: 'Search',
-              url: new URL('https://search.google.com')
+              url: 'https://search.google.com'
             }
           ]
         },
@@ -53,19 +53,19 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
           links: [
             {
               alias: 'Netflix',
-              url: new URL('https://netflix.com')
+              url: 'https://netflix.com'
             },
             {
               alias: 'Reddit',
-              url: new URL('https://reddit.com')
+              url: 'https://reddit.com'
             },
             {
               alias: 'HBO',
-              url: new URL('https://hbo.com')
+              url: 'https://hbo.com'
             },
             {
               alias: 'HackerNews',
-              url: new URL('https://ycombinator.com')
+              url: 'https://ycombinator.com'
             }
           ]
         },
@@ -75,15 +75,15 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
           links: [
             {
               alias: 'Stack Overflow',
-              url: new URL('https://stackoverflow.com')
+              url: 'https://stackoverflow.com'
             },
             {
               alias: 'Stack Exchange',
-              url: new URL('https://stackexhange.com')
+              url: 'https://stackexhange.com'
             },
             {
               alias: 'ChatGPT',
-              url: new URL('https://chat.openai.com')
+              url: 'https://chat.openai.com'
             },
           ]
         },
@@ -93,15 +93,15 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
           links: [
             {
               alias: 'WhatsApp',
-              url: new URL('https://web.whatsapp.com')
+              url: 'https://web.whatsapp.com'
             },
             {
               alias: 'Discord',
-              url: new URL('https://discord.gg')
+              url: 'https://discord.gg'
             },
             {
               alias: 'Signal',
-              url: new URL('https://signal.com')
+              url: 'https://signal.com'
             }
           ]
         }]
