@@ -15,11 +15,43 @@ declare type SolidOptions = {
     dropTargetClasses?: string[] | (() => string[]);
 };
 
+declare enum TRIGGERS {
+  DRAG_STARTED = "dragStarted",
+  DRAGGED_ENTERED = "draggedEntered", //only relevant for pointer interactions
+  DRAGGED_ENTERED_ANOTHER = "dragEnteredAnother", //only relevant for pointer interactions
+  DRAGGED_OVER_INDEX = "draggedOverIndex", //only relevant for pointer interactions
+  DRAGGED_LEFT = "draggedLeft", //only relevant for pointer interactions
+  DRAGGED_LEFT_ALL = "draggedLeftAll", //only relevant for pointer interactions
+  DROPPED_INTO_ZONE = "droppedIntoZone",
+  DROPPED_INTO_ANOTHER = "droppedIntoAnother",
+  DROPPED_OUTSIDE_OF_ANY = "droppedOutsideOfAny",
+  DRAG_STOPPED = "dragStopped" //only relevant for keyboard interactions - when the use exists dragging mode
+}
+
+declare enum SOURCES {
+  POINTER = "pointer", // mouse or touch
+  KEYBOARD = "keyboard"
+}
+
+export interface DndEventInfo {
+  trigger: TRIGGERS; // the type of dnd event that took place
+  id: string;
+  source: SOURCES; // the type of interaction that the user used to perform the dnd operation
+}
+export type DndEventDetails<T = Item> = {
+  items: T[];
+  info: DndEventInfo;
+};
+
+export type DndEvent = Event & { detail: DndEventDetails};
+
+declare type Item = any;
+
 declare module "solid-js" {
   namespace JSX {
     interface CustomEvents {
-      consider: (items: any[], info: any) => any;
-      finalize: (items: any[], info: any) => any;
+      consider: (e: DndEvent) => void;
+      finalize: (e: DndEvent) => void;
     }
 
     interface Directives {

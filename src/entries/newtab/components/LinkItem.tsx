@@ -1,11 +1,10 @@
 import { Accessor, Component } from "solid-js"
 import { Link } from "@kobalte/core";
+import { Link as TLink } from "~/project"
 
-const LinkItem: Component<{alias: string, url: string, index: Accessor<number>}> = (props) => {
+const LinkItem: Component<TLink> = (props) => {
     return (
-        <li class="flex items-center ml-1.5 mb-1.5">
-            <Link.Root draggable="false" class="align-middle" href={props.url}>{props.alias} - {props.index()}</Link.Root>
-        </li>
+        <Link.Root role="listitem" class="align-middle block" href={props.url}>{props.name}</Link.Root>
     )
 }
 

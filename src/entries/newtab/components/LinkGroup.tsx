@@ -1,5 +1,5 @@
-import { Accessor, Component, For } from "solid-js";
-import {dndzone, SolidOptions } from "solid-dnd-directive";
+import { Component, For } from "solid-js";
+import {dndzone as dndzoneDirective } from "solid-dnd-directive";
 import { Link } from "~/project";
 import LinkItem from "./LinkItem";
 
@@ -11,6 +11,9 @@ interface Props {
 };
 
 const LinkGroup: Component<Props> = (props) => {
+  // @ts-ignore
+  const dndzone = dndzoneDirective;
+
   return (
     <li>
       <header>
@@ -18,13 +21,19 @@ const LinkGroup: Component<Props> = (props) => {
         <div class="h-1 w-16" style={{'background-color':  props.color}}></div>
       </header>
       
-      <ul class="mt-4">
-        <For each={props.links}>
-          {(link, index) => (
-            <LinkItem alias={link.name} url={link.url} index={index} />
+      <div 
+        role="list" 
+        use:dndzone={{ items: () => props.links, zoneTabIndex: -1 }} 
+        on:consider={props.onItemsChange}
+        on:finalize={props.onItemsChange}
+        class="mt-4"
+      >
+        <For each={props.links} fallback={<span class="text-gray">No links yet...</span>}>
+          {(link) => (
+            <LinkItem id={link.id} name={link.name} url={link.url} />
           )}
         </For>
-      </ul>
+      </div>
     </li>
   )
 }
