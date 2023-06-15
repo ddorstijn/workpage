@@ -6,8 +6,8 @@ const LinkItem: Component<{alias: string, url: string, index: Accessor<number>}>
     const sortable = createSortable(props.index());
 
     return (
-        <li use:sortable class="flex items-center ml-1.5 mb-1.5">
-            <Link.Root class="align-middle" href={props.url} disabled>{props.alias}</Link.Root>
+        <li use:sortable={sortable} class="flex items-center ml-1.5 mb-1.5">
+            <Link.Root draggable="false" class="align-middle" href={props.url}>{props.alias} - {props.index()}</Link.Root>
         </li>
     )
 }

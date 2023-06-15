@@ -1,16 +1,17 @@
-import { Accessor, Component, For } from "solid-js";
+import { Accessor, Component, For, createSignal } from "solid-js";
 import {
   DragDropProvider,
   DragDropSensors,
   DragEventHandler,
+  DragOverlay,
   SortableProvider,
   closestCenter,
 } from "@thisbeyond/solid-dnd";
 import { SetStoreFunction } from "solid-js/store";
-import { Project } from "~/project";
+import { Link, Project } from "~/project";
 import LinkItem from "./LinkItem";
 
-interface Group {
+interface Props {
   title: string,
   color: string,
   links: { alias: string, url: string }[],
@@ -18,24 +19,31 @@ interface Group {
   setLinks: SetStoreFunction<Project>,
 };
 
-const LinkGroup: Component<Group> = (props) => {
+function disableAnchor(ev: MouseEvent) {
+  ev.preventDefault();
+}
+
+const LinkGroup: Component<Props> = (props) => {
+  const [activeItem, setActiveItem] = createSignal<number | null>(null);
+  const onDragStart: DragEventHandler = ({ draggable }) => {
+    draggable.node.querySelector('a')?.addEventListener("click", disableAnchor);
+    setActiveItem(draggable.id as number);
+  };
+
   const onDragEnd: DragEventHandler = ({ draggable, droppable }) => {
     if (draggable && droppable) {
       if (draggable.id !== droppable.id) {
         let dragId = draggable.id as number;
         let dropId = droppable.id as number;
-
-        let drag = props.links.at(dragId)!;
-        let drop = props.links.at(dropId)!;
+        console.log(dragId, dropId)
 
         let items = props.links.slice();
-        items[dropId] = drag;
-        items[dragId] = drop;
-
-        console.log(items)
+        items.splice(dropId, 0, items.splice(dragId, 1)[0]);
         props.setLinks('linksgroups', props.index(), 'links', items);
       }
     }
+
+    setTimeout(() => draggable.node.querySelector('a')?.removeEventListener("click", disableAnchor), 50)
   };
 
   return (
@@ -44,10 +52,10 @@ const LinkGroup: Component<Group> = (props) => {
         <h2 class="text-2xl font-600 py-1.5" style={{'color': props.color}}>{props.title}</h2>
         <div class="h-1 w-16" style={{'background-color':  props.color}}></div>
       </header>
-      <DragDropProvider onDragEnd={onDragEnd} collisionDetector={closestCenter}>
+      <DragDropProvider onDragStart={onDragStart} onDragEnd={onDragEnd} collisionDetector={closestCenter}>
         <DragDropSensors />
         <ul class="mt-4">
-          <SortableProvider ids={props.links.map((_, i) => i)}>
+          <SortableProvider ids={props.links.map((_, i) => { console.log('Ids changed'); return i })}>
             <For each={props.links}>
               {(link, index) => (
                 <LinkItem alias={link.alias} url={link.url} index={index} />
@@ -55,6 +63,9 @@ const LinkGroup: Component<Group> = (props) => {
             </For>
           </SortableProvider>
         </ul>
+      <DragOverlay>
+        <div class="sortable">{activeItem()}</div>
+      </DragOverlay>
       </DragDropProvider>
     </li>
   )
