@@ -7,7 +7,7 @@ interface Props {
   name: string,
   color: string,
   links: Link[],
-  onItemsChange: (e: any) => any,
+  onItemsChange: (e: any, finalize: boolean) => any,
 };
 
 const LinkGroup: Component<Props> = (props) => {
@@ -24,8 +24,8 @@ const LinkGroup: Component<Props> = (props) => {
       <div 
         role="list" 
         use:dndzone={{ items: () => props.links, zoneTabIndex: -1 }} 
-        on:consider={props.onItemsChange}
-        on:finalize={props.onItemsChange}
+        on:consider={(e: any) => props.onItemsChange(e, false)}
+        on:finalize={(e: any) => props.onItemsChange(e, true)}
         class="mt-4"
       >
         <For each={props.links} fallback={<span class="text-gray">No links yet...</span>}>

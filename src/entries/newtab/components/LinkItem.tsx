@@ -1,4 +1,4 @@
-import { Accessor, Component } from "solid-js"
+import { Component } from "solid-js"
 import { Link } from "@kobalte/core";
 import { Link as TLink } from "~/project"
 

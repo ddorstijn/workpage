@@ -135,25 +135,28 @@ const App: Component = () => {
     setProject(proj);
   });
 
-  createEffect(async () => {
-    let activeProject = active()!.toString();
-    await storage.sync.set({[activeProject]: project});
-  });
-
   // @ts-ignore
   const dndzone = dndzoneDirective;
 
-  function handleDndColumnsSorted(e: any) {
+  async function handleDndColumnsSorted(e: any, finalize = false) {
     setProject("linkgroups", e.detail.items);
+
+    if (finalize) {
+      await storage.sync.set({[active()!]: project});
+    }
   }
   
-  function handleDndCardsSorted(cid: number, e: DndEvent) {
+  async function handleDndCardsSorted(e: DndEvent, cid: number, finalize = false) {
    setProject(
       "linkgroups",
       (column) => column.id === cid,
       "links",
       e.detail.items
     );
+
+    if (finalize) {
+      await storage.sync.set({[active()!]: project});
+    }
   }
 
   return (
@@ -171,8 +174,8 @@ const App: Component = () => {
               type: "column",
               flipDurationMs: 250
             }} 
-            on:consider={handleDndColumnsSorted}
-            on:finalize={handleDndColumnsSorted}
+            on:consider={(e: any) => handleDndColumnsSorted(e)}
+            on:finalize={(e: any) => handleDndColumnsSorted(e, true)}
             class='grid grid-flow-col auto-cols-fr gap-16 mt-4'
           >
             <For each={project!.linkgroups}>
@@ -181,7 +184,7 @@ const App: Component = () => {
                   name={group.name}
                   links={group.links}
                   color={group.color}
-                  onItemsChange={(e: any) => handleDndCardsSorted(group.id, e)}
+                  onItemsChange={(e: any, finalize = false) => handleDndCardsSorted(e, group.id, finalize)}
                 />
               )}
             </For>
