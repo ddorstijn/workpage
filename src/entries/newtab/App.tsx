@@ -1,4 +1,4 @@
-import { Component, For, Show, createEffect, createSignal } from 'solid-js';
+import { Component, For, Setter, Show, createEffect, createSignal } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import { storage } from 'webextension-polyfill';
 import { dndzone as dndzoneDirective } from "solid-dnd-directive";
@@ -10,12 +10,19 @@ import SideMenu from './components/SideMenu';
 import { DndEvent, Project } from '~/project';
 
 const App: Component = () => {
-  let [active, setActive] = createSignal(localStorage.getItem('active'));
-  if (!active()) {
-    setActive('General');
-  }
-
+  let [theme, setTheme] = createSignal(localStorage.getItem('theme') || 'light');
+  let [active, setActive] = createSignal(localStorage.getItem('active') || 'General');
   let [project, setProject] = createStore<Project>({ last_used: new Date(), todo: [], done: [], linkgroups: [] });
+
+  createEffect(() => {
+    localStorage.setItem('theme', theme())
+
+    if (theme() == 'dark') {
+      document.querySelector('body')?.classList.add('dark');
+    } else {
+      document.querySelector('body')?.classList.remove('dark');
+    }
+  })
   
   createEffect(async () => {
     let activeProject = active()!.toString();
@@ -166,9 +173,40 @@ const App: Component = () => {
 
   }
 
+  async function addProject(e: SubmitEvent, setError: Setter<string>): Promise<void> {
+    e.preventDefault();
+
+    const form = e.currentTarget as HTMLFormElement;
+    const name = new FormData(form).get('name') as string;
+    if (await storage.sync.get(name)) {
+      setError('A project with that name already exists');
+      return;
+    }
+    
+    const project: Record<string, Project> = {
+      [name]: { 
+        last_used: new Date(),
+        todo: [],
+        done: [],
+        linkgroups: []
+      }
+    };
+
+    // await storage.sync.set(project);
+    form.reset();
+  }
+
+  function toggleDarkMode() {
+    if (theme() == 'light') {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
+  }
+
   return (
-    <div class='flex bg-orange-50'>
-      <SideMenu />
+    <div class='flex bg-orange-50 .dark:bg-dark-3'>
+      <SideMenu toggleDarkMode={toggleDarkMode} addProject={addProject} />
       
       <main class='flex-1 grid content-center place-items-center w-full min-h-screen gap-6'>
         <Clock />
