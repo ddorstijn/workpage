@@ -15,8 +15,7 @@ const App: Component = () => {
     setActive('General');
   }
 
-  // @ts-ignore
-  let [project, setProject] = createStore<Project>();
+  let [project, setProject] = createStore<Project>({ last_used: new Date(), todo: [], done: [], linkgroups: [] });
   
   createEffect(async () => {
     let activeProject = active()!.toString();
@@ -138,7 +137,7 @@ const App: Component = () => {
   // @ts-ignore
   const dndzone = dndzoneDirective;
 
-  async function handleDndColumnsSorted(e: any, finalize = false) {
+  async function onLinkGroupSort(e: any, finalize = false) {
     setProject("linkgroups", e.detail.items);
 
     if (finalize) {
@@ -146,7 +145,7 @@ const App: Component = () => {
     }
   }
   
-  async function handleDndCardsSorted(e: DndEvent, cid: number, finalize = false) {
+  async function onLinkSort(e: DndEvent, cid: number, finalize = false) {
    setProject(
       "linkgroups",
       (column) => column.id === cid,
@@ -157,6 +156,14 @@ const App: Component = () => {
     if (finalize) {
       await storage.sync.set({[active()!]: project});
     }
+  }
+
+  async function onProjectChange() {
+
+  }
+
+  async function onActiveProjectChange() {
+
   }
 
   return (
@@ -174,8 +181,8 @@ const App: Component = () => {
               type: "column",
               flipDurationMs: 250
             }} 
-            on:consider={(e: any) => handleDndColumnsSorted(e)}
-            on:finalize={(e: any) => handleDndColumnsSorted(e, true)}
+            on:consider={(e: any) => onLinkGroupSort(e)}
+            on:finalize={(e: any) => onLinkGroupSort(e, true)}
             class='grid grid-flow-col auto-cols-fr gap-16 mt-4'
           >
             <For each={project!.linkgroups}>
@@ -184,7 +191,7 @@ const App: Component = () => {
                   name={group.name}
                   links={group.links}
                   color={group.color}
-                  onItemsChange={(e: any, finalize = false) => handleDndCardsSorted(e, group.id, finalize)}
+                  onHandleSort={(e: any, finalize = false) => onLinkSort(e, group.id, finalize)}
                 />
               )}
             </For>
