@@ -68,14 +68,14 @@ export type Project = {
 };
 
 export type LinkGroup = {
-  id: number;
+  id: string;
   name: string;
   color: string;
   links: Link[];
 };
 
 export type Link = {
-  id: number;
+  id: string;
   name: string;
   url: string;
 };

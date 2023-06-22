@@ -1,10 +1,9 @@
 import { Component } from "solid-js"
-import { Link } from "@kobalte/core";
 import { Link as TLink } from "~/project"
 
 const LinkItem: Component<TLink> = (props) => {
     return (
-        <Link.Root role="listitem" class="align-middle block" href={props.url}>{props.name}</Link.Root>
+        <a role="listitem" class="align-middle block" href={props.url}>{props.name}</a>
     )
 }
 

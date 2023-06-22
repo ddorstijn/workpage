@@ -27,9 +27,11 @@
     "web-ext": "^7.6.2"
   },
   "dependencies": {
-    "@kobalte/core": "^0.9.6",
     "@solid-primitives/date": "^2.0.14",
     "@unocss/reset": "^0.53.1",
+    "@zag-js/combobox": "^0.10.2",
+    "@zag-js/solid": "^0.10.2",
+    "@zag-js/tooltip": "^0.10.2",
     "solid-js": "^1.7.6",
     "webextension-polyfill": "^0.10.0"
   }
