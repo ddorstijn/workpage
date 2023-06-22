@@ -1,4 +1,7 @@
-import { Component, JSX } from "solid-js";
+import { Component, JSX, createUniqueId } from "solid-js";
+import * as dialog from "@zag-js/dialog"
+import { Portal } from "solid-js/web";
+import { normalizeProps, useMachine } from "@zag-js/solid";
 
 interface Props {
   title: string,
@@ -7,29 +10,29 @@ interface Props {
 }
 
 const Modal: Component<Props> = (props) => {
+  const [state, send] = useMachine(dialog.machine({ id: createUniqueId() }))
+
+  const api = dialog.connect(state, send, normalizeProps)
+  
   return (
-    <p>test</p>
-    // <Dialog.Root modal={true}>
-    //   <Dialog.Trigger>
-    //     <span class={"hover:text-gray-900 " + props.icon}></span>
-    //   </Dialog.Trigger>
-    //   <Dialog.Portal>
-    //     <Dialog.Overlay class="fixed inset-0 z-10 bg-dark opacity-20" />
-    //     <div class="z-20 fixed inset-0 grid place-items-center">
-    //       <Dialog.Content class="p-4 rounded-lg bg-orange-50 border-solid border-1 border-amber-100 .dark:bg-dark-7">
-    //         <div class="flex items-center mb-2">
-    //           <Dialog.Title class="font-bold text-lg">{props.title}</Dialog.Title>
-    //           <Dialog.CloseButton class="ml-auto">
-    //             <span class="i-ic:baseline-close"></span>
-    //           </Dialog.CloseButton>
-    //         </div>
-    //         <Dialog.Description>
-    //           {props.children}
-    //         </Dialog.Description>
-    //       </Dialog.Content>
-    //     </div>
-    //   </Dialog.Portal>
-    // </Dialog.Root>
+    <>
+      <button {...api.triggerProps}><span class={"hover:text-gray-900 " + props.icon}></span></button>
+      {api.isOpen && (
+        <Portal>
+          <div {...api.backdropProps} />
+          <div {...api.containerProps}>
+            <div {...api.contentProps}>
+              <h2 {...api.titleProps}>{props.title}</h2>
+              <p {...api.descriptionProps}>
+                {props.children}
+              </p>
+              
+              <button {...api.closeTriggerProps}>Close</button>
+            </div>
+          </div>
+        </Portal>
+      )}
+    </>
   )
 }
 

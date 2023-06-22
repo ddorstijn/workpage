@@ -30,6 +30,7 @@
     "@solid-primitives/date": "^2.0.14",
     "@unocss/reset": "^0.53.1",
     "@zag-js/combobox": "^0.10.2",
+    "@zag-js/dialog": "^0.10.2",
     "@zag-js/solid": "^0.10.2",
     "@zag-js/tooltip": "^0.10.2",
     "solid-js": "^1.7.6",

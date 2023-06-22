@@ -14,6 +14,9 @@ dependencies:
   '@zag-js/combobox':
     specifier: ^0.10.2
     version: 0.10.2
+  '@zag-js/dialog':
+    specifier: ^0.10.2
+    version: 0.10.2
   '@zag-js/solid':
     specifier: ^0.10.2
     version: 0.10.2(solid-js@1.7.6)
@@ -1221,6 +1224,29 @@ packages:
       klona: 2.0.6
     dev: false
 
+  /@zag-js/dialog@0.10.2:
+    resolution: {integrity: sha512-HQafVppC4Erz/Y4Sz0Qrc+Z15QcngvMQT6uI4abu434f1FRzvqv12m5zWwH5ALcXEWu1KCUx/Hmg13cTkplJ0w==}
+    dependencies:
+      '@zag-js/anatomy': 0.10.2
+      '@zag-js/aria-hidden': 0.10.2
+      '@zag-js/core': 0.10.2
+      '@zag-js/dismissable': 0.10.2
+      '@zag-js/dom-query': 0.10.2
+      '@zag-js/remove-scroll': 0.10.2
+      '@zag-js/types': 0.10.2
+      '@zag-js/utils': 0.10.2
+      focus-trap: 7.4.3
+    dev: false
+
+  /@zag-js/dismissable@0.10.2:
+    resolution: {integrity: sha512-PLucaqXBCyner2CIfOaFLYPd/PeHCpIcbmdahg/ZNHClGo3+J8pQLJzOJpJ6q8VxpBbNdGb+VJ7WTbw9ZDZyRA==}
+    dependencies:
+      '@zag-js/dom-event': 0.10.2
+      '@zag-js/dom-query': 0.10.2
+      '@zag-js/interact-outside': 0.10.2
+      '@zag-js/utils': 0.10.2
+    dev: false
+
   /@zag-js/dom-event@0.10.2:
     resolution: {integrity: sha512-W44npN40fufpser5SBGLhXo+0AyDSEX+ySP2gBX2uIaPxRa/GZJGt8lWJf/tVRx6XOCa8eZtLvHrYRcJ6mWqWg==}
     dependencies:
@@ -1262,6 +1288,12 @@ packages:
       '@zag-js/dom-query': 0.10.2
       '@zag-js/element-rect': 0.10.2
       '@zag-js/utils': 0.10.2
+    dev: false
+
+  /@zag-js/remove-scroll@0.10.2:
+    resolution: {integrity: sha512-PJispN7PmzbOqmhd6VFQXprLDUd5QHx9X4o8TJF0vvD1D7oNSLVzwhGUZc5QeSB1xNuIisjGs0clNoZF8z8FUA==}
+    dependencies:
+      '@zag-js/dom-query': 0.10.2
     dev: false
 
   /@zag-js/solid@0.10.2(solid-js@1.7.6):
@@ -2503,6 +2535,12 @@ packages:
   /flatted@3.2.7:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
     dev: true
+
+  /focus-trap@7.4.3:
+    resolution: {integrity: sha512-BgSSbK4GPnS2VbtZ50VtOv1Sti6DIkj3+LkVjiWMNjLeAp1SH1UlLx3ULu/DCu4vq5R4/uvTm+zrvsMsuYmGLg==}
+    dependencies:
+      tabbable: 6.1.2
+    dev: false
 
   /forever-agent@0.6.1:
     resolution: {integrity: sha512-j0KLYPhm6zeac4lz3oJ3o65qvgQCcPubiyotZrXqEaG4hNagNYO8qdlUrX5vwqv9ohqeT/Z3j6+yW067yWWdUw==}
@@ -4273,6 +4311,10 @@ packages:
   /svelte-dnd-action@0.9.11:
     resolution: {integrity: sha512-hkuBs8rT0yVD0Xq9p9GxeHN1zYD8r7oZO872VQHg7DJe3cAYwus4WXpx3DNYZiTcLcIOmDw3BVNdKvAl/B6VPg==}
     dev: true
+
+  /tabbable@6.1.2:
+    resolution: {integrity: sha512-qCN98uP7i9z0fIS4amQ5zbGBOq+OSigYeGvPy7NDk8Y9yncqDZ9pRPgfsc2PJIVM9RrJj7GIfuRgmjoUU9zTHQ==}
+    dev: false
 
   /text-table@0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
