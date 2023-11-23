@@ -6,49 +6,62 @@
   <title>Workpage</title>
   <link rel="stylesheet" href="unstyle.css">
 
-  <style>
+  <style>  
+    @import "https://unpkg.com/open-props/sizes.min.css";
+    @import "https://unpkg.com/open-props/colors.min.css";
+    @import "https://unpkg.com/open-props/fonts.min.css";
+    @import "https://unpkg.com/open-props/shadows.min.css";
+
     body {
+      --surface-1: var(--red-0);
+      --surface-2: white;
+      --theme: var(--red-3);
+      --text-1: var(--gray-9);
+      --text-2: var(--gray-7);
+      
       display: flex;
-      background: rgb(33, 37, 41);
+
+      font-family: var(--font-sans);
+      background-color: var(--surface-1);
+      color: var(--text-2);
+
+      /* @media (prefers-color-scheme: dark) {
+        --surface-1: var(--gray-9);
+      }*/
+    }
+
+    svg {
+      display: inline;
+      vertical-align: middle;
     }
 
     aside {
       position: absolute;
-      padding: 1rem .25rem;
-
-      &.left {
-        left: 0;
-      }
-
-      &.right {
-        right: 0;
-      }
+      padding: var(--size-3) var(--size-2);
     }
 
     header {
       svg {
-        width: 2rem;
-        height: 2rem;
+        width: var(--size-4);
+        height: var(--size-4);
       }
 
       .header-logo {
-        margin-bottom: 1rem;
+        margin-bottom: var(--size-3);
         background: none;
       }
   
       .header-group {
-        margin-top: 1rem;
-  
         display: flex;
         flex-direction: column;
-        gap: 0.25rem;
+        gap: var(--size-1);
   
         button {
           background: none;
-          color: #979b9d;
+          color: var(--stone-6);
   
           &:hover {
-            color: #f1f3f5;
+            color: inherit;
           }
         }
       }
@@ -56,7 +69,8 @@
 
     main {
       width: 100%;
-      padding: 3rem;
+      padding: var(--size-6);
+      
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -65,7 +79,6 @@
       .clock_time {
         font-size: 4rem;
         font-weight: bold;
-        margin: 0;
         line-height: 1;
       }
 
@@ -75,25 +88,26 @@
 
       .project > button {
         font-weight: bold;
-        background-color: #ff6b6b;
+        background-color: var(--theme);
       }
       
       .links {
         width: 100%;
-        padding-block: 1.75rem;
+        padding-block: var(--size-6);
 
         display: grid;
         grid-template-columns: repeat(3, 250px);
         justify-content: center;
-        gap: 3rem;
+        gap: var(--size-8);
 
         .links_group {
           h2 {
             position: relative;
-            padding-bottom: .5rem;
-            margin-bottom: 1rem;
+            padding-bottom: var(--size-1);
+            margin-bottom: var(--size-3);
   
-            font-size: 1.5rem;
+            font-size: var(--size-6);
+            font-weight: 600;
             
             &::after {
               content:"";
@@ -101,24 +115,21 @@
               position: absolute;
               top: 100%;
               left: 0;
-              height: 3px;
-              width: 4rem;
+              height: 4px;
+              width: var(--size-10);
 
               background-color: currentColor;
             }
           }
 
-          ul {
-            padding: 0;
-            list-style: none;
-            
+          ul { 
             li {
-              margin-top: .25rem;
+              padding-inline: var(--size-2);
+              margin-block: var(--size-1);
 
               a {
-                text-decoration: none;
-                letter-spacing: .025em;
-                color: #e9ecef;
+                letter-spacing: var(--font-letterspacing-1);
+                color: var(--text-2);
               }
             }
           }
@@ -127,35 +138,36 @@
     }
 
     .btn-icon {
-      display: block;
-      padding: .25rem .5rem;
+      padding: var(--size-1) var(--size-2);
       border-radius: 1e5px;
 
       > span {
-        padding-inline: .25rem;
+        padding-inline: var(--size-1);
       }
 
       > svg {
-        margin-inline: -.25rem;
-        display: inline;
-        vertical-align: middle;
+        margin-inline: var(--size-00);
       }
     }
 
     .tasks {
       width: 400px;
-      padding-inline: 1rem;
+      padding-inline: var(--size-3);
 
       header {
-        margin-bottom: 1.75rem;
+        margin-bottom: var(--size-6);
+
         display: flex;
         justify-content: center;
-        gap: 1rem;
-        color: #979b9d;
+        gap: var(--size-3);
+
+        font-size: var(--font-size-4);
+        font-weight: 600;
+        color: var(--stone-6);
 
         h3:hover, h3.active {
           cursor: pointer;
-          color: #f1f3f5;
+          color: var(--text-1);
         }
       }
 
@@ -163,25 +175,24 @@
         list-style: none;
 
         .task-list_item {
-          padding: 1rem;
+          padding: var(--size-3);
 
           display: flex;
           align-items: center;
-          gap: 1rem;
+          gap: var(--size-3);
           
-          font-weight: 600;;
-          background-color: #343a40;
-          border-radius: 5px;
-          box-shadow: 0 3px 5px -2px hsl(220 3% 15% / calc(1% + 3%)),
-                      0 7px 14px -5px hsl(220 3% 15% / calc(1% + 5%));;
+          font-weight: 500;;
+          background-color: var(--surface-2);
+          border-radius: 6px;
+          box-shadow: var(--shadow-1);
 
           .handle {
-            inline-size: 1.5rem;
+            inline-size: var(--size-4);
             aspect-ratio: 1;
-            border: 2px solid #f03e3e;
-            border-radius: 1e5px;
-            background-color: #212529;
-            box-shadow: inset 0 2px 8px 0 hsl(220 3% 15% / calc(1% + 9%)), inset 0 -.5px 0 0 #fff, inset 0 .5px 0 0 #0001;
+            border: 4px solid var(--theme);
+            border-radius: 100%;
+            background-color: var(--surface-1);
+            box-shadow: var(--inner-shadow-1);
           }
         }
       }
@@ -190,10 +201,11 @@
         margin-inline: auto;
 
         display: block;
-        color: #979b9d;
+        font-size: var(--font-size-0);
+        color: var(--stone-6);
         
         &:hover {
-          color: #f1f3f5;
+          color: var(--text-1);
         }
       }
     }
@@ -203,11 +215,11 @@
     }
 
     .mt-2 {
-      margin-top: .5rem;
+      margin-top: var(--size-2);
     }
 
     .mt-3 {
-      margin-top: 1rem;
+      margin-top: var(--size-3);
     }
 
     .mt-4 {
@@ -215,7 +227,7 @@
     }
     
     .mt-5 {
-      margin-top: 1.5rem;
+      margin-top: 1var(--size-2);
     }
 
     .mt-6 {
@@ -230,30 +242,34 @@
       background: none;
     }
 
-    details {
+    .task-drawer {
       position: absolute;
       right: 0;
-      height: fit-content;
+
       summary {
+        width: fit-content;
+        padding: var(--size-3);
+        margin-left: auto;
+        
         list-style: none;
-        display: block;
-        * {
-          display: inline;
-        }
+        cursor: pointer;
 
-        span {
-          margin-left: auto;
-        }
+        font-size: var(--font-size-3);
+        font-weight: 500;
+      }
 
-        svg {
-          vertical-align: middle;
+      &[open] {
+        position: static;
+
+        summary svg {
+          rotate: 180deg;
         }
       }
     }
   </style>
 </head>
 <body>
-  <aside class="left">
+  <aside>
     <header>
       <button class="header-logo">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m5.176 19.484.14-4.664c-1.476-.218-2.71-.812-3.71-1.78-1-.97-1.497-2.27-1.497-3.895 0-1.336.551-2.625 1.657-3.868C2.87 4.016 4.19 3.383 5.73 3.383c2.258 0 3.387 1.746 3.387 5.238 0 1.024-.062 2.598-.183 4.719-.11 2.101-.164 3.691-.164 4.773 0 1.078.246 1.617.738 1.617.293 0 .715-.293 1.265-.878a9.543 9.543 0 0 0 1.43-1.946c.34-4.133.508-6.601.508-7.406 0-.805-.008-1.355-.024-1.645 0-.293-.015-.578-.046-.851a7.894 7.894 0 0 0-.047-.606 2.35 2.35 0 0 0-.09-.574 3.48 3.48 0 0 0-.094-.41c0-.039-.039-.195-.113-.469a7.892 7.892 0 0 1-.094-.437c.785-.492 2.067-.867 3.848-1.125v.027c.168.64.254 1.563.254 2.77 0 1.191-.153 3.265-.461 6.226-.309 2.965-.461 4.93-.461 5.899 0 .949.23 1.425.691 1.425.477 0 1.043-.492 1.703-1.48.676-.988 1.293-2.277 1.844-3.867.57-1.594.922-3.137 1.063-4.637 0-1.48-.653-3.191-1.961-5.129.3-.777.707-1.488 1.199-2.113.492-.64.906-1.078 1.246-1.317l.504-.382c.57 0 1.055.484 1.453 1.453.414.953.621 2.074.621 3.375 0 1.277-.293 2.933-.875 4.965a38.038 38.038 0 0 1-2.21 5.812c-.876 1.867-1.915 3.465-3.114 4.8-1.18 1.317-2.309 1.977-3.387 1.977-.55 0-1.035-.332-1.45-.988-.413-.66-.628-1.5-.644-2.523-.66 1.097-1.359 1.957-2.097 2.578-.739.621-1.477.933-2.211.933-.738 0-1.352-.359-1.844-1.07-.492-.715-.738-1.59-.738-2.633zm.347-10.808c0-1.133-.093-1.903-.277-2.305-.168-.418-.508-.629-1.016-.629-.492 0-1.066.328-1.726.988-.645.657-.969 1.516-.969 2.579 0 1.058.387 1.937 1.153 2.632.785.696 1.69 1.043 2.718 1.043.078-1.738.117-3.175.117-4.308zm0 0"/></svg>
@@ -305,7 +321,7 @@
       </dialog>
     </div>
 
-    <div class="links mt-6">
+    <div class="links mt-4">
       <section class="links_group" style="color: #f03e3e">
         <h2>Google</h2>
         <ul>
@@ -336,7 +352,7 @@
     </div>
   </main>
 
-  <details>
+  <details class="task-drawer" open>
     <summary>
       <span>Tasks</span>
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m10.8 12l3.9 3.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275l-4.6-4.6q-.15-.15-.212-.325T8.425 12q0-.2.063-.375T8.7 11.3l4.6-4.6q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L10.8 12Z"/></svg>
