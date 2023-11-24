@@ -11,6 +11,7 @@
     @import "https://unpkg.com/open-props/colors.min.css";
     @import "https://unpkg.com/open-props/fonts.min.css";
     @import "https://unpkg.com/open-props/shadows.min.css";
+    @import "https://unpkg.com/open-props/borders.min.css";
 
     body {
       --surface-1: var(--red-0);
@@ -18,6 +19,26 @@
       --theme: var(--red-3);
       --text-1: var(--gray-9);
       --text-2: var(--gray-7);
+
+      --group-gray: var(--gray-5);
+      --group-stone: var(--stone-5);
+      --group-red: var(--red-5);
+      --group-pink: var(--pink-5);
+      --group-purple: var(--purple-5);
+      --group-violet: var(--violet-5);
+      --group-indigo: var(--indigo-5);
+      --group-blue: var(--blue-5);
+      --group-cyan: var(--cyan-5);
+      --group-teal: var(--teal-5);
+      --group-green: var(--green-5);
+      --group-lime: var(--lime-5);
+      --group-yellow: var(--yellow-6);
+      --group-orange: var(--orange-5);
+      --group-choco: var(--choco-5);
+      --group-brown: var(--brown-5);
+      --group-sand: var(--sand-5);
+      --group-camo: var(--camo-5);
+      --group-jungle: var(--jungle-5);
       
       display: flex;
 
@@ -25,10 +46,55 @@
       background-color: var(--surface-1);
       color: var(--text-2);
 
-      /* @media (prefers-color-scheme: dark) {
+      @media (prefers-color-scheme: dark) {
+        --text-1: var(--gray-1);
+        --text-2: var(--gray-2);
+        
         --surface-1: var(--gray-9);
-      }*/
+        --surface-2: var(--gray-8);
+
+        --theme: var(--red-3);
+        --group-gray: var(--gray-4);
+        --group-stone: var(--stone-4);
+        --group-red: var(--red-4);
+        --group-pink: var(--pink-4);
+        --group-purple: var(--purple-4);
+        --group-violet: var(--violet-4);
+        --group-indigo: var(--indigo-4);
+        --group-blue: var(--blue-4);
+        --group-cyan: var(--cyan-4);
+        --group-teal: var(--teal-4);
+        --group-green: var(--green-4);
+        --group-lime: var(--lime-4);
+        --group-yellow: var(--yellow-4);
+        --group-orange: var(--orange-4);
+        --group-choco: var(--choco-4);
+        --group-brown: var(--brown-4);
+        --group-sand: var(--sand-4);
+        --group-camo: var(--camo-4);
+        --group-jungle: var(--jungle-4);
+      }
     }
+
+    .links_group.gray { color: var(--group-gray); }
+    .links_group.stone { color: var(--group-stone); }
+    .links_group.red { color: var(--group-red); }
+    .links_group.pink { color: var(--group-pink); }
+    .links_group.purple { color: var(--group-purple); }
+    .links_group.violet { color: var(--group-violet); }
+    .links_group.indigo { color: var(--group-indigo); }
+    .links_group.blue { color: var(--group-blue); }
+    .links_group.cyan { color: var(--group-cyan); }
+    .links_group.teal { color: var(--group-teal); }
+    .links_group.green { color: var(--group-green); }
+    .links_group.lime { color: var(--group-lime); }
+    .links_group.yellow { color: var(--group-yellow); }
+    .links_group.orange { color: var(--group-orange); }
+    .links_group.choco { color: var(--group-choco); }
+    .links_group.brown { color: var(--group-brown); }
+    .links_group.sand { color: var(--group-sand); }
+    .links_group.camo { color: var(--group-camo); }
+    .links_group.jungle { color: var(--group-jungle); }
 
     svg {
       display: inline;
@@ -40,25 +106,28 @@
       padding: var(--size-3) var(--size-2);
     }
 
-    header {
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: var(--size-4);
+
       svg {
         width: var(--size-4);
         height: var(--size-4);
       }
 
       .header-logo {
-        margin-bottom: var(--size-3);
-        background: none;
+        margin-bottom: var(--size-1);
+        color: var(--text-1);
       }
   
       .header-group {
         display: flex;
         flex-direction: column;
-        gap: var(--size-1);
+        gap: var(--size-2);
   
         button {
-          background: none;
-          color: var(--stone-6);
+          color: var(--stone-7);
   
           &:hover {
             color: inherit;
@@ -75,71 +144,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-
-      .clock_time {
-        font-size: 4rem;
-        font-weight: bold;
-        line-height: 1;
-      }
-
-      .clock_date {
-        font-weight: 600;
-      }
-
-      .project > button {
-        font-weight: bold;
-        background-color: var(--theme);
-      }
-      
-      .links {
-        width: 100%;
-        padding-block: var(--size-6);
-
-        display: grid;
-        grid-template-columns: repeat(3, 250px);
-        justify-content: center;
-        gap: var(--size-8);
-
-        .links_group {
-          h2 {
-            position: relative;
-            padding-bottom: var(--size-1);
-            margin-bottom: var(--size-3);
-  
-            font-size: var(--size-6);
-            font-weight: 600;
-            
-            &::after {
-              content:"";
-
-              position: absolute;
-              top: 100%;
-              left: 0;
-              height: 4px;
-              width: var(--size-10);
-
-              background-color: currentColor;
-            }
-          }
-
-          ul { 
-            li {
-              padding-inline: var(--size-2);
-              margin-block: var(--size-1);
-
-              a {
-                letter-spacing: var(--font-letterspacing-1);
-                color: var(--text-2);
-              }
-            }
-          }
-        }
-      }
     }
 
-    .btn-icon {
+    :where(button) {
       padding: var(--size-1) var(--size-2);
-      border-radius: 1e5px;
+      color: var(--gray-9);
 
       > span {
         padding-inline: var(--size-1);
@@ -147,6 +156,78 @@
 
       > svg {
         margin-inline: var(--size-00);
+      }
+
+      &:not(:has(span)) {
+        padding: 0;
+
+        > svg {
+          margin: 0;
+        }
+      }
+
+      &[rounded] {
+        border-radius: var(--radius-round);
+      }
+    }
+
+    .clock_time {
+      font-size: 4rem;
+      font-weight: bold;
+      line-height: 1.15;
+    }
+
+    .clock_date {
+      font-weight: 600;
+    }
+
+    .project > button {
+      font-weight: bold;
+      background-color: var(--theme);
+    }
+    
+    .links {
+      width: 100%;
+      padding-block: var(--size-6);
+
+      display: grid;
+      grid-template-columns: repeat(3, 250px);
+      justify-content: center;
+      gap: var(--size-8);
+
+      .links_group {
+        h2 {
+          position: relative;
+          padding-bottom: var(--size-1);
+          margin-bottom: var(--size-3);
+
+          font-size: var(--size-6);
+          font-weight: 600;
+          
+          &::after {
+            content:"";
+
+            position: absolute;
+            top: 100%;
+            left: 0;
+            height: 4px;
+            width: var(--size-10);
+
+            background-color: currentColor;
+          }
+        }
+
+        ul { 
+          li {
+            padding-inline: var(--size-2);
+            margin-block: var(--size-1);
+
+            a {
+              letter-spacing: var(--font-letterspacing-1);
+              color: var(--text-2);
+            }
+          }
+        }
       }
     }
 
@@ -198,14 +279,39 @@
       }
 
       .btn-add-task {
+        display: block; 
         margin-inline: auto;
 
-        display: block;
         font-size: var(--font-size-0);
-        color: var(--stone-6);
+        color: var(--stone-7);
         
         &:hover {
           color: var(--text-1);
+        }
+      }
+    }
+
+    .task-drawer {
+      position: absolute;
+      right: 0;
+
+      summary {
+        width: fit-content;
+        padding: var(--size-3);
+        margin-left: auto;
+        
+        list-style: none;
+        cursor: pointer;
+
+        font-size: var(--font-size-3);
+        font-weight: 500;
+      }
+
+      &[open] {
+        position: static;
+
+        summary svg {
+          rotate: 180deg;
         }
       }
     }
@@ -233,44 +339,11 @@
     .mt-6 {
       margin-top: 1.75rem;
     }
-
-    .ml-auto {
-      margin-left: auto;
-    }
-
-    .btn-clear {
-      background: none;
-    }
-
-    .task-drawer {
-      position: absolute;
-      right: 0;
-
-      summary {
-        width: fit-content;
-        padding: var(--size-3);
-        margin-left: auto;
-        
-        list-style: none;
-        cursor: pointer;
-
-        font-size: var(--font-size-3);
-        font-weight: 500;
-      }
-
-      &[open] {
-        position: static;
-
-        summary svg {
-          rotate: 180deg;
-        }
-      }
-    }
   </style>
 </head>
 <body>
   <aside>
-    <header>
+    <header class="header">
       <button class="header-logo">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m5.176 19.484.14-4.664c-1.476-.218-2.71-.812-3.71-1.78-1-.97-1.497-2.27-1.497-3.895 0-1.336.551-2.625 1.657-3.868C2.87 4.016 4.19 3.383 5.73 3.383c2.258 0 3.387 1.746 3.387 5.238 0 1.024-.062 2.598-.183 4.719-.11 2.101-.164 3.691-.164 4.773 0 1.078.246 1.617.738 1.617.293 0 .715-.293 1.265-.878a9.543 9.543 0 0 0 1.43-1.946c.34-4.133.508-6.601.508-7.406 0-.805-.008-1.355-.024-1.645 0-.293-.015-.578-.046-.851a7.894 7.894 0 0 0-.047-.606 2.35 2.35 0 0 0-.09-.574 3.48 3.48 0 0 0-.094-.41c0-.039-.039-.195-.113-.469a7.892 7.892 0 0 1-.094-.437c.785-.492 2.067-.867 3.848-1.125v.027c.168.64.254 1.563.254 2.77 0 1.191-.153 3.265-.461 6.226-.309 2.965-.461 4.93-.461 5.899 0 .949.23 1.425.691 1.425.477 0 1.043-.492 1.703-1.48.676-.988 1.293-2.277 1.844-3.867.57-1.594.922-3.137 1.063-4.637 0-1.48-.653-3.191-1.961-5.129.3-.777.707-1.488 1.199-2.113.492-.64.906-1.078 1.246-1.317l.504-.382c.57 0 1.055.484 1.453 1.453.414.953.621 2.074.621 3.375 0 1.277-.293 2.933-.875 4.965a38.038 38.038 0 0 1-2.21 5.812c-.876 1.867-1.915 3.465-3.114 4.8-1.18 1.317-2.309 1.977-3.387 1.977-.55 0-1.035-.332-1.45-.988-.413-.66-.628-1.5-.644-2.523-.66 1.097-1.359 1.957-2.097 2.578-.739.621-1.477.933-2.211.933-.738 0-1.352-.359-1.844-1.07-.492-.715-.738-1.59-.738-2.633zm.347-10.808c0-1.133-.093-1.903-.277-2.305-.168-.418-.508-.629-1.016-.629-.492 0-1.066.328-1.726.988-.645.657-.969 1.516-.969 2.579 0 1.058.387 1.937 1.153 2.632.785.696 1.69 1.043 2.718 1.043.078-1.738.117-3.175.117-4.308zm0 0"/></svg>
       </button>
@@ -311,7 +384,7 @@
     <p class="clock_date"><time class="date" datetime="2023-11-23">23 nov 2023</time></p>
 
     <div class="project mt-3">
-      <button class="btn-icon" onclick="document.getElementById('project-drawer').showModal()">
+      <button rounded onclick="document.getElementById('project-drawer').showModal()">
         <span>General</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 14.975q-.2 0-.375-.062T11.3 14.7l-4.6-4.6q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l3.9 3.9l3.9-3.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7l-4.6 4.6q-.15.15-.325.213t-.375.062Z"/></svg>
       </button>
@@ -322,7 +395,7 @@
     </div>
 
     <div class="links mt-4">
-      <section class="links_group" style="color: #f03e3e">
+      <section class="links_group red">
         <h2>Google</h2>
         <ul>
           <li><a href="http://google.com">Search</a></li>
@@ -331,7 +404,7 @@
         </ul>
       </section>
 
-      <section class="links_group" style="color: #4263eb">
+      <section class="links_group blue">
         <h2>Entertainment</h2>
         <ul>
           <li><a href="http://google.com">Netflix</a></li>
@@ -341,7 +414,7 @@
         </ul>
       </section>
 
-      <section class="links_group" style="color: #f59f00">
+      <section class="links_group yellow">
         <h2>Development</h2>
         <ul>
           <li><a href="http://google.com">Stack Overflow</a></li>
@@ -368,7 +441,7 @@
           <span>A test task</span>
         </li>
       </ul>
-      <button class="btn-add-task btn-icon btn-clear mt-4">
+      <button class="btn-add-task mt-4">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H6q-.425 0-.713-.288T5 12q0-.425.288-.713T6 11h5V6q0-.425.288-.713T12 5q.425 0 .713.288T13 6v5h5q.425 0 .713.288T19 12q0 .425-.288.713T18 13h-5v5q0 .425-.288.713T12 19q-.425 0-.713-.288T11 18v-5Z"/></svg>
         <span>Add a task</span>
       </button>
