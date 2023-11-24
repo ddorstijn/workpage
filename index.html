@@ -101,6 +101,24 @@
       vertical-align: middle;
     }
 
+    dialog {
+      margin: auto;
+      padding: var(--size-2) var(--size-4);
+      width: max-content;
+      max-width: 95vw;
+      border-radius: var(--radius-3);
+
+      header {
+        margin-bottom: var(--size-2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+
+        font-weight: 600;
+      }
+    }
+
     aside {
       position: absolute;
       padding: var(--size-3) var(--size-2);
@@ -339,6 +357,11 @@
     .mt-6 {
       margin-top: 1.75rem;
     }
+
+    .project-subtitle {
+      display: block;
+      font-size: var(--font-size-00);
+    }
   </style>
 </head>
 <body>
@@ -390,7 +413,24 @@
       </button>
 
       <dialog id="project-drawer">
-        <h1>Choose project</h1>
+        <header>
+          <h2>Choose project</h2>
+          <button onclick="document.getElementById('project-drawer').close()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m12 13.4l-4.9 4.9q-.275.275-.7.275t-.7-.275q-.275-.275-.275-.7t.275-.7l4.9-4.9l-4.9-4.9q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l4.9 4.9l4.9-4.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L13.4 12l4.9 4.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275L12 13.4Z"/></svg>
+          </button>
+        </header>
+        <ul>
+          <li>
+            <span class="project-title">General</span>
+            <span class="project-subtitle">2 days ago</span>
+          </li>
+          <li>
+            PostNL
+          </li>
+          <li>
+            Work
+          </li>
+        </ul>
       </dialog>
     </div>
 
@@ -447,5 +487,16 @@
       </button>
     </section>
   </details>
+  <script>
+    HTMLDialogElement.prototype.triggerShow = HTMLDialogElement.prototype.showModal;
+    HTMLDialogElement.prototype.showModal = function() {
+        this.triggerShow();
+        this.onclick = event => {
+            let rect = this.getBoundingClientRect();
+            if(event.clientY < rect.top || event.clientY > rect.bottom) return this.close();
+            if(event.clientX < rect.left || event.clientX > rect.right) return this.close();
+        }
+    }
+  </script>
 </body>
 </html>
