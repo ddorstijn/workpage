@@ -22,5 +22,9 @@ customElements.define(
         showModal() {
             this.#dialog.showModal();
         }
+
+        close() {
+            this.#dialog.close();
+        }
     },
 );

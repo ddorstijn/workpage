@@ -398,7 +398,7 @@
       </button>
 
       <wp-dialog title="Choose project" id="project-drawer">
-        <ul slot="">
+        <ul slot="content">
           <li>
             <span class="project-title">General</span>
             <span class="project-subtitle">2 days ago</span>
@@ -470,13 +470,20 @@
   <template id="wp-dialog">
     <style>
       @import "unstyle.css";
+
       dialog {
         margin: auto;
         padding: var(--size-2) var(--size-4);
         width: max-content;
         max-width: 95vw;
         border-radius: var(--radius-3);
+        background-color: var(--surface-2);
+        box-shadow: var(--shadow-2);
   
+        &::backdrop {
+          backdrop-filter:blur(2px)
+        }
+
         header {
           margin-bottom: var(--size-2);
           display: flex;
@@ -496,7 +503,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m12 13.4l-4.9 4.9q-.275.275-.7.275t-.7-.275q-.275-.275-.275-.7t.275-.7l4.9-4.9l-4.9-4.9q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l4.9 4.9l4.9-4.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L13.4 12l4.9 4.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275L12 13.4Z"/></svg>
         </button>
       </header>
-      <slot></slot>
+      <slot name="content"></slot>
     </dialog>
   </template>
 
