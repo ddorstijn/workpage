@@ -80,6 +80,8 @@
 	
 	svg {
 		fill: currentColor;
+		display: inline;
+		vertical-align: middle;
 	}
 	svg:not(:root) {
 		overflow: hidden;
