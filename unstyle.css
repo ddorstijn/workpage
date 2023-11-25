@@ -33,6 +33,7 @@
 	
 	input[type="search"] {
 		box-sizing: content-box;
+		appearance: textfield;
 		-webkit-appearance: textfield;
 	}
 	input[type="search"]::-webkit-search-decoration,
@@ -101,6 +102,31 @@
 	}
 	sub {
 		top: 0.33333em;
+	}
+
+	button {
+		padding: var(--size-1) var(--size-2);
+		color: var(--gray-9);
+  
+		> span {
+		  	padding-inline: var(--size-1);
+		}
+  
+		> svg {
+		  	margin-inline: var(--size-00);
+		}
+  
+		&:not(:has(span)) {
+		  	padding: 0;
+  
+		  	> svg {
+				margin: 0;
+		  	}
+		}
+  
+		&[rounded] {
+		  	border-radius: var(--radius-round);
+		}
 	}
 	
 	

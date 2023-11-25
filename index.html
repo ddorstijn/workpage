@@ -110,36 +110,6 @@
       align-items: center;
       justify-content: center;
     }
-
-    :where(button) {
-      padding: var(--size-1) var(--size-2);
-      color: var(--gray-9);
-
-      > span {
-        padding-inline: var(--size-1);
-      }
-
-      > svg {
-        margin-inline: var(--size-00);
-      }
-
-      &:not(:has(span)) {
-        padding: 0;
-
-        > svg {
-          margin: 0;
-        }
-      }
-
-      &[rounded] {
-        border-radius: var(--radius-round);
-      }
-    }
-
-    .project > button {
-      font-weight: bold;
-      background-color: var(--theme);
-    }
     
     .links {
       width: 100%;
@@ -338,28 +308,7 @@
 
   <main>
     <wp-clock></wp-clock>
-
-    <div class="project mt-3">
-      <button rounded onclick="document.getElementById('project-drawer').showModal()">
-        <span>General</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 14.975q-.2 0-.375-.062T11.3 14.7l-4.6-4.6q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l3.9 3.9l3.9-3.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7l-4.6 4.6q-.15.15-.325.213t-.375.062Z"/></svg>
-      </button>
-
-      <wp-dialog title="Choose project" id="project-drawer">
-        <ul slot="content">
-          <li>
-            <span class="project-title">General</span>
-            <span class="project-subtitle">2 days ago</span>
-          </li>
-          <li>
-            PostNL
-          </li>
-          <li>
-            Work
-          </li>
-        </ul>
-      </wp-dialog>
-    </div>
+    <wp-project class="mt-4"></wp-project>
 
     <div class="links mt-4">
       <section class="links_group red">
@@ -454,7 +403,6 @@
       <slot name="content"></slot>
     </dialog>
   </template>
-
 
   <template id="wp-header">
     <style>
@@ -564,8 +512,42 @@
     <p class="clock_date"><time class="date"></time></p>
   </template>
 
+  <template id="wp-project">
+    <style>
+      @import "unstyle.css";
+      
+      .project__button {
+        font-weight: bold;
+        background-color: var(--theme);
+      }
+    </style>
+
+    <div class="project">
+      <button class="project__button" rounded onclick="this.getRootNode().querySelector('wp-dialog').showModal()">
+        <span></span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 14.975q-.2 0-.375-.062T11.3 14.7l-4.6-4.6q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l3.9 3.9l3.9-3.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7l-4.6 4.6q-.15.15-.325.213t-.375.062Z"/></svg>
+      </button>
+
+      <wp-dialog data-title="Choose project">
+        <ul slot="content">
+          <li>
+            <span class="project-title">General</span>
+            <span class="project-subtitle">2 days ago</span>
+          </li>
+          <li>
+            PostNL
+          </li>
+          <li>
+            Work
+          </li>
+        </ul>
+      </wp-dialog>
+    </div>
+  </template>
+
   <script src="wp-dialog.js"></script>
   <script src="wp-header.js"></script>
   <script src="wp-clock.js"></script>
+  <script src="wp-project.js"></script>
 </body>
 </html>
