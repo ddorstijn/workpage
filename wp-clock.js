@@ -22,7 +22,6 @@ customElements.define(
         }
 
         update() {
-            console.log('Upadte')
             let now = new Date();
             let timeStr = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
             this.#time.dateTime = timeStr;

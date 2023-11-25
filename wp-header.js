@@ -11,7 +11,7 @@ customElements.define(
     "wp-header-group",
     class extends HTMLElement {
         constructor() {
-            super().attachShadow({ mode: 'open' }).append(document.getElementById('wp-header-group').content.cloneNode(true));
+            super().attachShadow({ mode: 'open' }).append(document.getElementById(this.nodeName).content.cloneNode(true));
         }
     },
 );
@@ -20,7 +20,7 @@ customElements.define(
     "wp-header-item",
     class extends HTMLElement {
         constructor() {
-            super().attachShadow({ mode: 'open' }).append(document.getElementById('wp-header-item').content.cloneNode(true));
+            super().attachShadow({ mode: 'open' }).append(document.getElementById(this.nodeName).content.cloneNode(true));
         }
 
         connectedCallback() {

@@ -116,14 +116,6 @@
 		  	margin-inline: var(--size-00);
 		}
   
-		&:not(:has(span)) {
-		  	padding: 0;
-  
-		  	> svg {
-				margin: 0;
-		  	}
-		}
-  
 		&[rounded] {
 		  	border-radius: var(--radius-round);
 		}
