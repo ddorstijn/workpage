@@ -76,84 +76,19 @@
       }
     }
 
-    .links_group.gray { color: var(--group-gray); }
-    .links_group.stone { color: var(--group-stone); }
-    .links_group.red { color: var(--group-red); }
-    .links_group.pink { color: var(--group-pink); }
-    .links_group.purple { color: var(--group-purple); }
-    .links_group.violet { color: var(--group-violet); }
-    .links_group.indigo { color: var(--group-indigo); }
-    .links_group.blue { color: var(--group-blue); }
-    .links_group.cyan { color: var(--group-cyan); }
-    .links_group.teal { color: var(--group-teal); }
-    .links_group.green { color: var(--group-green); }
-    .links_group.lime { color: var(--group-lime); }
-    .links_group.yellow { color: var(--group-yellow); }
-    .links_group.orange { color: var(--group-orange); }
-    .links_group.choco { color: var(--group-choco); }
-    .links_group.brown { color: var(--group-brown); }
-    .links_group.sand { color: var(--group-sand); }
-    .links_group.camo { color: var(--group-camo); }
-    .links_group.jungle { color: var(--group-jungle); }
-
     aside {
       position: absolute;
       padding: var(--size-3) var(--size-2);
     }
 
     main {
-      width: 100%;
+      flex-grow: 1;
       padding: var(--size-6);
       
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-    }
-    
-    .links {
-      width: 100%;
-      padding-block: var(--size-6);
-
-      display: grid;
-      grid-template-columns: repeat(3, 250px);
-      justify-content: center;
-      gap: var(--size-8);
-
-      .links_group {
-        h2 {
-          position: relative;
-          padding-bottom: var(--size-1);
-          margin-bottom: var(--size-3);
-
-          font-size: var(--size-6);
-          font-weight: 600;
-          
-          &::after {
-            content:"";
-
-            position: absolute;
-            top: 100%;
-            left: 0;
-            height: 4px;
-            width: var(--size-10);
-
-            background-color: currentColor;
-          }
-        }
-
-        ul { 
-          li {
-            padding-inline: var(--size-2);
-            margin-block: var(--size-1);
-
-            a {
-              letter-spacing: var(--font-letterspacing-1);
-              color: var(--text-2);
-            }
-          }
-        }
-      }
     }
 
     .tasks {
@@ -310,35 +245,17 @@
     <wp-clock></wp-clock>
     <wp-project class="mt-4"></wp-project>
 
-    <div class="links mt-4">
-      <section class="links_group red">
-        <h2>Google</h2>
-        <ul>
-          <li><a href="http://google.com">Search</a></li>
-          <li><a href="http://gmail.com">Mail</a></li>
-          <li><a href="http://youtube.com">Youtube</a></li>
-        </ul>
-      </section>
-
-      <section class="links_group blue">
-        <h2>Entertainment</h2>
-        <ul>
-          <li><a href="http://google.com">Netflix</a></li>
-          <li><a href="http://gmail.com">Reddit</a></li>
-          <li><a href="http://youtube.com">HBO</a></li>
-          <li><a href="http://youtube.com">Hackernews</a></li>
-        </ul>
-      </section>
-
-      <section class="links_group yellow">
-        <h2>Development</h2>
-        <ul>
-          <li><a href="http://google.com">Stack Overflow</a></li>
-          <li><a href="http://gmail.com">ChatGPT</a></li>
-          <li><a href="http://youtube.com">Stack Exchange</a></li>
-        </ul>
-      </section>
-    </div>
+    <wp-links class="mt-4">
+      <wp-link-group data-title="Entertainment" data-color="yellow">
+        <wp-link-group-item data-title="Search" data-url="https://www.google.com"></wp-link-group-item>
+      </wp-link-group>
+      <wp-link-group data-title="Entertainment" data-color="orange">
+        <wp-link-group-item data-title="Search" data-url="https://www.google.com"></wp-link-group-item>
+      </wp-link-group>
+      <wp-link-group data-title="Entertainment" data-color="red">
+        <wp-link-group-item data-title="Search" data-url="https://www.google.com"></wp-link-group-item>
+      </wp-link-group>
+    </wp-links>
   </main>
 
   <details class="task-drawer" open>
@@ -545,9 +462,110 @@
     </div>
   </template>
 
+  <template id="wp-links">
+    <style>
+      slot {
+        width: 100%;
+        padding-block: var(--size-6);
+
+        display: flex;
+        gap: var(--size-6);
+      }
+    </style>
+
+    <div class="links">
+      <slot />
+    </div>
+  </template>
+
+  <template id="wp-link-group">
+    <style>
+      @import "unstyle.css";
+
+      section.gray { color: var(--group-gray); }
+      section.stone { color: var(--group-stone); }
+      section.red { color: var(--group-red); }
+      section.pink { color: var(--group-pink); }
+      section.purple { color: var(--group-purple); }
+      section.violet { color: var(--group-violet); }
+      section.indigo { color: var(--group-indigo); }
+      section.blue { color: var(--group-blue); }
+      section.cyan { color: var(--group-cyan); }
+      section.teal { color: var(--group-teal); }
+      section.green { color: var(--group-green); }
+      section.lime { color: var(--group-lime); }
+      section.yellow { color: var(--group-yellow); }
+      section.orange { color: var(--group-orange); }
+      section.choco { color: var(--group-choco); }
+      section.brown { color: var(--group-brown); }
+      section.sand { color: var(--group-sand); }
+      section.camo { color: var(--group-camo); }
+      section.jungle { color: var(--group-jungle); }
+
+      section {
+        width: 250px;
+
+        div {
+          width: max-content;
+          max-width: 100%;
+          margin-inline: auto;
+        }
+
+        h2 {
+          position: relative;
+          padding-bottom: var(--size-1);
+          margin-bottom: var(--size-3);
+
+          font-size: var(--size-6);
+          font-weight: 600;
+          
+          &::after {
+            content:"";
+
+            position: absolute;
+            top: 100%;
+            left: 0;
+            height: 4px;
+            width: var(--size-10);
+
+            background-color: currentColor;
+          }
+        }
+      }
+    </style>
+
+    <section>
+      <div>
+        <h2></h2>
+        <ul>
+          <slot></slot>
+        </ul>
+      </div>
+    </section>
+  </template>
+
+  <template id="wp-link-group-item">
+    <style>
+      @import "unstyle.css";
+
+      li {
+        padding-inline: var(--size-2);
+        margin-block: var(--size-1);
+
+        a {
+          letter-spacing: var(--font-letterspacing-1);
+          color: var(--text-2);
+        }
+      }
+    </style>
+
+    <li><a></a></li>
+  </template>
+
   <script src="wp-dialog.js"></script>
   <script src="wp-header.js"></script>
   <script src="wp-clock.js"></script>
   <script src="wp-project.js"></script>
+  <script src="wp-links.js"></script>
 </body>
 </html>
