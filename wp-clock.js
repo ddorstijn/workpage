@@ -1,25 +1,36 @@
 customElements.define(
     "wp-clock",
     class extends HTMLElement {
+        /** @type {HTMLTimeElement} */
+        #time;
+        /** @type {HTMLTimeElement} */
+        #date;
+        
         constructor() {
             super().attachShadow({ mode: 'open' }).append(document.getElementById('wp-clock').content.cloneNode(true));
         }
 
-        connectedCallback() {
-            let now = new Date();
+        connectedCallback() {            
+            /** @type {HTMLTimeElement} */
+            this.#time = this.shadowRoot.querySelector('.clock_time');
+            /** @type {HTMLTimeElement} */
+            this.#date = this.shadowRoot.querySelector('.clock_date');
+
+            this.update();
             
-            /** @type {HTMLTimeElement} */
-            let time = this.shadowRoot.querySelector('.clock_time');
-            /** @type {HTMLTimeElement} */
-            let date = this.shadowRoot.querySelector('.clock_date');
+            setInterval(() => this.update(), 5000);
+        }
 
+        update() {
+            console.log('Upadte')
+            let now = new Date();
             let timeStr = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
-            time.dateTime = timeStr;
-            time.innerText = timeStr;
+            this.#time.dateTime = timeStr;
+            this.#time.innerText = timeStr;
 
-            let dateStr = now.toLocaleTimeString(undefined, { day: 'numeric', month: 'short', year: 'numeric'});
-            date.dateTime = now;
-            date.innerText = dateStr;
+            let dateStr = now.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric'});
+            this.#date.dateTime = now;
+            this.#date.innerText = dateStr;
         }
     },
 );
