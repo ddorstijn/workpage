@@ -16,7 +16,7 @@ customElements.define(
                 if (event.clientX < rect.left || event.clientX > rect.right) return this.#dialog.close();
             });
 
-            this.shadowRoot.querySelector('header h2').innerText = this.title;
+            this.shadowRoot.querySelector('header h2').innerText = this.dataset['title'];
         }
 
         showModal() {
