@@ -154,7 +154,7 @@
   </main>
 
   <wp-tasks>
-
+    <wp-task-item></wp-task-item>
   </wp-tasks>
 
   <template id="WP-DIALOG">
@@ -173,16 +173,16 @@
         &::backdrop {
           backdrop-filter:blur(2px)
         }
+      }
 
-        header {
-          margin-bottom: var(--size-2);
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 2rem;
-  
-          font-weight: 600;
-        }
+      header {
+        margin-bottom: var(--size-2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+
+        font-weight: 600;
       }
     </style>
     
@@ -383,32 +383,32 @@
 
       section {
         width: 250px;
+      }
 
-        div {
-          width: max-content;
-          max-width: 100%;
-          margin-inline: auto;
-        }
+      div {
+        width: max-content;
+        max-width: 100%;
+        margin-inline: auto;
+      }
 
-        h2 {
-          position: relative;
-          padding-bottom: var(--size-1);
-          margin-bottom: var(--size-3);
+      h2 {
+        position: relative;
+        padding-bottom: var(--size-1);
+        margin-bottom: var(--size-3);
 
-          font-size: var(--size-6);
-          font-weight: 600;
-          
-          &::after {
-            content:"";
+        font-size: var(--size-6);
+        font-weight: 600;
 
-            position: absolute;
-            top: 100%;
-            left: 0;
-            height: 4px;
-            width: var(--size-10);
+        &::after {
+          content:"";
 
-            background-color: currentColor;
-          }
+          position: absolute;
+          top: 100%;
+          left: 0;
+          height: 4px;
+          width: var(--size-10);
+
+          background-color: currentColor;
         }
       }
     </style>
@@ -430,11 +430,11 @@
       li {
         padding-inline: var(--size-2);
         margin-block: var(--size-1);
+      }
 
-        a {
-          letter-spacing: var(--font-letterspacing-1);
-          color: var(--text-2);
-        }
+      a {
+        letter-spacing: var(--font-letterspacing-1);
+        color: var(--text-2);
       }
     </style>
 
@@ -444,61 +444,45 @@
   <template id="WP-TASKS">
     <style>
       @import "unstyle.css";
+
+      header {
+        margin-bottom: var(--size-6);
+
+        display: flex;
+        justify-content: center;
+        gap: var(--size-3);
+
+        font-size: var(--font-size-4);
+        font-weight: 600;
+        color: var(--stone-6);
+
+        h3:hover, h3.active {
+          cursor: pointer;
+          color: var(--text-1);
+        }
+      }
+
+      .add-task {
+        display: block; 
+        margin-inline: auto;
+        margin-top: var(--size-4);
+
+        font-size: var(--font-size-0);
+        color: var(--stone-7);
+        
+        &:hover {
+          color: var(--text-1);
+        }
+      }
       
       .tasks {
         width: 400px;
         padding-inline: var(--size-3);
-
-        header {
-          margin-bottom: var(--size-6);
-
-          display: flex;
-          justify-content: center;
-          gap: var(--size-3);
-
-          font-size: var(--font-size-4);
-          font-weight: 600;
-          color: var(--stone-6);
-
-          h3:hover, h3.active {
-            cursor: pointer;
-            color: var(--text-1);
-          }
-        }
-
-        .task-list {
-          list-style: none;
-        }
-
-        .btn-add-task {
-          display: block; 
-          margin-inline: auto;
-          margin-top: var(--size-4);
-
-          font-size: var(--font-size-0);
-          color: var(--stone-7);
-          
-          &:hover {
-            color: var(--text-1);
-          }
-        }
       }
 
       .task-drawer {
         position: absolute;
         right: 0;
-
-        summary {
-          width: fit-content;
-          padding: var(--size-3);
-          margin-left: auto;
-          
-          list-style: none;
-          cursor: pointer;
-
-          font-size: var(--font-size-3);
-          font-weight: 500;
-        }
 
         &[open] {
           position: static;
@@ -508,27 +492,39 @@
           }
         }
       }
+
+      summary {
+        width: fit-content;
+        padding: var(--size-3);
+        margin-left: auto;
+        
+        list-style: none;
+        cursor: pointer;
+
+        font-size: var(--font-size-3);
+        font-weight: 500;
+      }
     </style>
 
     <details class="task-drawer">
-        <summary>
-          <span>Tasks</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m10.8 12l3.9 3.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275l-4.6-4.6q-.15-.15-.212-.325T8.425 12q0-.2.063-.375T8.7 11.3l4.6-4.6q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L10.8 12Z"/></svg>
-        </summary>
-        <section class="tasks">
-          <header>
-            <h3 class="active">Todo</h3>
-            <h3>Done</h3>
-          </header>
-          <ul class="task-list">
-            <wp-task-item></wp-task-item>
-          </ul>
-          <button class="btn-add-task">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H6q-.425 0-.713-.288T5 12q0-.425.288-.713T6 11h5V6q0-.425.288-.713T12 5q.425 0 .713.288T13 6v5h5q.425 0 .713.288T19 12q0 .425-.288.713T18 13h-5v5q0 .425-.288.713T12 19q-.425 0-.713-.288T11 18v-5Z"/></svg>
-            <span>Add a task</span>
-          </button>
-        </section>
-      </details>
+      <summary>
+        <span>Tasks</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m10.8 12l3.9 3.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275l-4.6-4.6q-.15-.15-.212-.325T8.425 12q0-.2.063-.375T8.7 11.3l4.6-4.6q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L10.8 12Z"/></svg>
+      </summary>
+      <section class="tasks">
+        <header>
+          <h3 class="active">Todo</h3>
+          <h3>Done</h3>
+        </header>
+        <ul class="task-list">
+          <slot></slot>
+        </ul>
+        <button class="add-task">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H6q-.425 0-.713-.288T5 12q0-.425.288-.713T6 11h5V6q0-.425.288-.713T12 5q.425 0 .713.288T13 6v5h5q.425 0 .713.288T19 12q0 .425-.288.713T18 13h-5v5q0 .425-.288.713T12 19q-.425 0-.713-.288T11 18v-5Z"/></svg>
+          <span>Add a task</span>
+        </button>
+      </section>
+    </details>
   </template>
 
   <template id="WP-TASK-ITEM">
@@ -557,25 +553,63 @@
         background-color: var(--surface-1);
         box-shadow: var(--inner-shadow-1);
       }
-
-      .actions {
-        position: absolute;
-        right: var(--size-2);
-      }
       </style>
 
     <li class="task-list_item">
       <div class="handle"></div>
-      <span>A test task</span>
-      <div class="actions">
-        <button>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3 21v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15q.4 0 .775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.138.763t-.437.662L7.25 21H3ZM17.6 7.8L19 6.4L17.6 5l-1.4 1.4l1.4 1.4Z"/></svg>
-        </button>
-        <button>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7 21q-.825 0-1.413-.588T5 19V6q-.425 0-.713-.288T4 5q0-.425.288-.713T5 4h4q0-.425.288-.713T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5q0 .425-.288.713T19 6v13q0 .825-.588 1.413T17 21H7Zm5-7.1l1.9 1.9q.275.275.7.275t.7-.275q.275-.275.275-.7t-.275-.7l-1.9-1.9l1.9-1.9q.275-.275.275-.7t-.275-.7q-.275-.275-.7-.275t-.7.275L12 11.1l-1.9-1.9q-.275-.275-.7-.275t-.7.275q-.275.275-.275.7t.275.7l1.9 1.9l-1.9 1.9q-.275.275-.275.7t.275.7q.275.275.7.275t.7-.275l1.9-1.9Z"/></svg>
-        </button>
-      </div>
+      <wp-editable>
+        <span>A very long and interesting test task</span>
+      </wp-editable>
     </li>
+  </template>
+
+  <template id="WP-EDITABLE">
+    <style>
+      @import "unstyle.css";
+      
+      :host {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      .actions {
+        position: absolute;
+        inset: 0 0 0 auto;
+        padding-left: var(--size-12);
+
+        display: flex;
+        align-items: center;
+        gap: var(--size-1);
+
+        background: linear-gradient(to right, transparent, var(--surface-2));
+        opacity: 0;
+        transition: opacity 0.15s ease-in;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      .edit:hover {
+        color: var(--blue-4);
+      }
+
+      .delete:hover {
+        color: var(--red-4);
+      }
+    </style>
+
+    <slot></slot>
+    <input hidden />
+    <div class="actions">
+      <button class="edit">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3 21v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15q.4 0 .775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.138.763t-.437.662L7.25 21H3ZM17.6 7.8L19 6.4L17.6 5l-1.4 1.4l1.4 1.4Z"/></svg>
+      </button>
+      <button class="delete">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7 21q-.825 0-1.413-.588T5 19V6q-.425 0-.713-.288T4 5q0-.425.288-.713T5 4h4q0-.425.288-.713T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5q0 .425-.288.713T19 6v13q0 .825-.588 1.413T17 21H7Zm5-7.1l1.9 1.9q.275.275.7.275t.7-.275q.275-.275.275-.7t-.275-.7l-1.9-1.9l1.9-1.9q.275-.275.275-.7t-.275-.7q-.275-.275-.7-.275t-.7.275L12 11.1l-1.9-1.9q-.275-.275-.7-.275t-.7.275q-.275.275-.275.7t.275.7l1.9 1.9l-1.9 1.9q-.275.275-.275.7t.275.7q.275.275.7.275t.7-.275l1.9-1.9Z"/></svg>
+      </button>
+    </div>
   </template>
 
   <script src="wp-dialog.js"></script>
@@ -584,5 +618,6 @@
   <script src="wp-project.js"></script>
   <script src="wp-links.js"></script>
   <script src="wp-tasks.js"></script>
+  <script src="wp-editable.js"></script>
 </body>
 </html>
