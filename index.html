@@ -207,16 +207,11 @@
         gap: var(--size-4);
   
         .header-logo {
-          padding: 0;
           margin-bottom: var(--size-1);
           width: var(--size-4);
           height: var(--size-4);
 
           color: var(--text-1);
-
-          svg {
-            margin: 0;
-          }
         }
       }
     </style>
@@ -541,6 +536,7 @@
       @import "unstyle.css";
       
       .task-list_item {
+        position: relative;
         padding: var(--size-3);
 
         display: flex;
@@ -551,21 +547,34 @@
         background-color: var(--surface-2);
         border-radius: 6px;
         box-shadow: var(--shadow-1);
-
-        .handle {
-          inline-size: var(--size-4);
-          aspect-ratio: 1;
-          border: 4px solid var(--theme);
-          border-radius: 100%;
-          background-color: var(--surface-1);
-          box-shadow: var(--inner-shadow-1);
-        }
       }
-    </style>
+
+      .handle {
+        inline-size: var(--size-4);
+        aspect-ratio: 1;
+        border: 4px solid var(--theme);
+        border-radius: 100%;
+        background-color: var(--surface-1);
+        box-shadow: var(--inner-shadow-1);
+      }
+
+      .actions {
+        position: absolute;
+        right: var(--size-2);
+      }
+      </style>
 
     <li class="task-list_item">
       <div class="handle"></div>
       <span>A test task</span>
+      <div class="actions">
+        <button>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3 21v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15q.4 0 .775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.138.763t-.437.662L7.25 21H3ZM17.6 7.8L19 6.4L17.6 5l-1.4 1.4l1.4 1.4Z"/></svg>
+        </button>
+        <button>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7 21q-.825 0-1.413-.588T5 19V6q-.425 0-.713-.288T4 5q0-.425.288-.713T5 4h4q0-.425.288-.713T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5q0 .425-.288.713T19 6v13q0 .825-.588 1.413T17 21H7Zm5-7.1l1.9 1.9q.275.275.7.275t.7-.275q.275-.275.275-.7t-.275-.7l-1.9-1.9l1.9-1.9q.275-.275.275-.7t-.275-.7q-.275-.275-.7-.275t-.7.275L12 11.1l-1.9-1.9q-.275-.275-.7-.275t-.7.275q-.275.275-.275.7t.275.7l1.9 1.9l-1.9 1.9q-.275.275-.275.7t.275.7q.275.275.7.275t.7-.275l1.9-1.9Z"/></svg>
+        </button>
+      </div>
     </li>
   </template>
 
