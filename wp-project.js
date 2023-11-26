@@ -4,7 +4,7 @@ customElements.define(
     constructor() {
       super()
         .attachShadow({ mode: "open" })
-        .append(document.getElementById("wp-project").content.cloneNode(true));
+        .append(document.getElementById(this.nodeName).content.cloneNode(true));
     }
 
     connectedCallback() {

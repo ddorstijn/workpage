@@ -4,7 +4,7 @@ customElements.define(
     constructor() {
       super()
         .attachShadow({ mode: "open" })
-        .append(document.getElementById("wp-links").content.cloneNode(true));
+        .append(document.getElementById(this.nodeName).content.cloneNode(true));
     }
   }
 );
@@ -15,7 +15,7 @@ customElements.define(
     constructor() {
       super()
         .attachShadow({ mode: "open" })
-        .append(document.getElementById("wp-link-group").content.cloneNode(true));
+        .append(document.getElementById(this.nodeName).content.cloneNode(true));
     }
 
     connectedCallback() {
@@ -33,7 +33,7 @@ customElements.define(
     constructor() {
       super()
         .attachShadow({ mode: "open" })
-        .append(document.getElementById("wp-link-group-item").content.cloneNode(true));
+        .append(document.getElementById(this.nodeName).content.cloneNode(true));
     }
 
     connectedCallback() {

@@ -7,7 +7,7 @@ customElements.define(
         #date;
         
         constructor() {
-            super().attachShadow({ mode: 'open' }).append(document.getElementById('wp-clock').content.cloneNode(true));
+            super().attachShadow({ mode: 'open' }).append(document.getElementById(this.nodeName).content.cloneNode(true));
         }
 
         connectedCallback() {            

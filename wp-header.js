@@ -2,7 +2,7 @@ customElements.define(
     "wp-header",
     class extends HTMLElement {
         constructor() {
-            super().attachShadow({ mode: 'open' }).append(document.getElementById('wp-header').content.cloneNode(true));
+            super().attachShadow({ mode: 'open' }).append(document.getElementById(this.nodeName).content.cloneNode(true));
         }
     },
 );
