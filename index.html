@@ -255,7 +255,7 @@
         padding: 0;
         color: var(--stone-7);
 
-        .header-item__title {
+        > span {
           position: absolute;
           top: 0;
           left: 100%;
@@ -270,7 +270,7 @@
         &:hover {
           color: inherit;
 
-          .header-item__title {
+          > span {
             opacity: 1;
           }
         }
@@ -279,7 +279,7 @@
     
     <button onclick="this.getRootNode().querySelector('wp-dialog').showModal()">
       <slot name="icon"></slot>
-      <span class="header-item__title"></span>
+      <span></span>
     </button>
 
     <wp-dialog id="action">

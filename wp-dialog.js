@@ -1,30 +1,30 @@
 customElements.define(
-    "wp-dialog",
-    class extends HTMLElement {
-        /** @type {HTMLDialogElement} */
-        #dialog;
+  "wp-dialog",
+  class extends HTMLElement {
+    /** @type {HTMLDialogElement} */
+    #dialog;
 
-        constructor() {
-            super().attachShadow({ mode: 'open' }).append(document.getElementById(this.nodeName).content.cloneNode(true));
-        }
+    constructor() {
+      /** @type {HTMLElement} */
+      let node = document.getElementById(super().nodeName).content.cloneNode(true);
+      node.querySelector('header h2').innerText = this.dataset['title'];
 
-        connectedCallback() {
-            this.#dialog = this.shadowRoot.querySelector('dialog');
-            this.#dialog.addEventListener('click', event => {
-                let rect = this.#dialog.getBoundingClientRect();
-                if (event.clientY < rect.top || event.clientY > rect.bottom) return this.#dialog.close();
-                if (event.clientX < rect.left || event.clientX > rect.right) return this.#dialog.close();
-            });
+      this.#dialog = node.querySelector('dialog');
+      this.#dialog.addEventListener('click', event => {
+        let rect = this.#dialog.getBoundingClientRect();
+        if (event.clientY < rect.top || event.clientY > rect.bottom) return this.#dialog.close();
+        if (event.clientX < rect.left || event.clientX > rect.right) return this.#dialog.close();
+      });
 
-            this.shadowRoot.querySelector('header h2').innerText = this.dataset['title'];
-        }
+      this.attachShadow({ mode: 'open' }).append(node);
+    }
 
-        showModal() {
-            this.#dialog.showModal();
-        }
+    showModal() {
+      this.#dialog.showModal();
+    }
 
-        close() {
-            this.#dialog.close();
-        }
-    },
+    close() {
+      this.#dialog.close();
+    }
+  },
 );

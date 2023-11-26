@@ -1,30 +1,34 @@
 customElements.define(
-    "wp-header",
-    class extends HTMLElement {
-        constructor() {
-            super().attachShadow({ mode: 'open' }).append(document.getElementById(this.nodeName).content.cloneNode(true));
-        }
-    },
+  "wp-header",
+  class extends HTMLElement {
+    constructor() {
+      /** @type {HTMLElement} */
+      let node = document.getElementById(super().nodeName).content.cloneNode(true);
+      this.attachShadow({ mode: 'open' }).append(node);
+    }
+  },
 );
 
 customElements.define(
-    "wp-header-group",
-    class extends HTMLElement {
-        constructor() {
-            super().attachShadow({ mode: 'open' }).append(document.getElementById(this.nodeName).content.cloneNode(true));
-        }
-    },
+  "wp-header-group",
+  class extends HTMLElement {
+    constructor() {
+      /** @type {HTMLElement} */
+      let node = document.getElementById(super().nodeName).content.cloneNode(true);
+      this.attachShadow({ mode: 'open' }).append(node);
+    }
+  },
 );
 
 customElements.define(
-    "wp-header-item",
-    class extends HTMLElement {
-        constructor() {
-            super().attachShadow({ mode: 'open' }).append(document.getElementById(this.nodeName).content.cloneNode(true));
-        }
+  "wp-header-item",
+  class extends HTMLElement {
+    constructor() {
+      /** @type {HTMLElement} */
+      let node = document.getElementById(super().nodeName).content.cloneNode(true);
+      node.querySelector('span').innerText = this.dataset['title'];
 
-        connectedCallback() {
-            this.shadowRoot.querySelector('.header-item__title').innerText = this.dataset['title'];
-        }
-    },
+      this.attachShadow({ mode: 'open' }).append(node);
+    }
+  },
 );
