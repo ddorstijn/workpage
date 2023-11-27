@@ -1,11 +1,8 @@
 customElements.define(
   "wp-editable",
   class extends HTMLElement {
-    /** @type {HTMLTextAreaElement} */
-    #textarea;
-
     /** @type {HTMLElement} */
-    #title;
+    #input;
 
     /** @type {HTMLDivElement} */
     #actions;
@@ -16,37 +13,38 @@ customElements.define(
       node.querySelector('.delete').addEventListener('click', () => this.delete());
       node.querySelector('.edit').addEventListener('click', () => this.edit());
       
-      this.#textarea = node.querySelector('textarea');
       this.#actions = node.querySelector('.actions');
 
-      this.#textarea.addEventListener('blur', (ev) => this.blur(ev));
       this.attachShadow({ mode: 'open' }).append(node);
     }
     
     connectedCallback() {
-      this.#title = this.shadowRoot.querySelector('slot').assignedElements()[0];
-
-      this.#textarea.value = this.#title.innerText;
+      this.#input = this.shadowRoot.querySelector('slot').assignedElements()[0];
+      this.#input.addEventListener('blur', _ => this.blur());
+      this.#input.addEventListener('keydown', ev => this.keydown(ev));
     }
     
     edit() {
-      this.#title.hidden = true;
       this.#actions.hidden = true;
 
-      this.#textarea.hidden = false;
-      this.#textarea.focus();
+      this.#input.contentEditable = true;
+      this.#input.focus();
     }
 
     delete() {
       this.dispatchEvent(new Event('delete'));
     }
 
-    blur(ev) {
-      this.#title.innerText = this.#textarea.value;
-
-      this.#textarea.hidden = true;
-      this.#title.hidden = false;
+    blur() {
+      this.#input.contentEditable = false;
       this.#actions.hidden = false;
+    }
+
+    keydown(ev) {
+      if (ev.key == 'Enter') {
+        ev.preventDefault();
+        this.#input.blur();
+      } 
     }
   },
 );

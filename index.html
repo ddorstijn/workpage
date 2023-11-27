@@ -95,11 +95,6 @@
     .mt-4 {
       margin-top: 1.25rem;
     }
-
-    .project-subtitle {
-      display: block;
-      font-size: var(--font-size-00);
-    }
   </style>
 </head>
 
@@ -341,9 +336,19 @@
     <style>
       @import "unstyle.css";
 
+      .wrapper {
+        display: flex;
+      }
+
       .project__button {
         font-weight: bold;
         background-color: var(--theme);
+      }
+
+      .project-subtitle {
+        display: block;
+        font-size: var(--font-size-00);
+        color: var(--text-2);
       }
     </style>
 
@@ -359,14 +364,12 @@
       <wp-dialog data-title="Choose project">
         <ul slot="content">
           <li>
-            <span class="project-title">General</span>
-            <span class="project-subtitle">2 days ago</span>
-          </li>
-          <li>
-            PostNL
-          </li>
-          <li>
-            Work
+            <div class="wrapper">
+              <wp-editable>
+                <span class="project-title">General</span>
+                <span class="project-subtitle">2 days ago</span>
+              </wp-editable>
+            </div>
           </li>
         </ul>
       </wp-dialog>
@@ -469,6 +472,24 @@
         color: var(--group-jungle);
       }
 
+      header {
+        position: relative;
+        margin-bottom: var(--size-3);
+        display: flex;
+
+        &::after {
+          content: "";
+  
+          position: absolute;
+          top: 100%;
+          left: 0;
+          height: 4px;
+          width: var(--size-10);
+  
+          background-color: currentColor;
+        }
+      }
+      
       section {
         width: 250px;
       }
@@ -480,30 +501,20 @@
       }
 
       h2 {
-        position: relative;
         padding-bottom: var(--size-1);
-        margin-bottom: var(--size-3);
 
         font-size: var(--size-6);
         font-weight: 600;
-
-        &::after {
-          content: "";
-
-          position: absolute;
-          top: 100%;
-          left: 0;
-          height: 4px;
-          width: var(--size-10);
-
-          background-color: currentColor;
-        }
       }
     </style>
 
     <section>
       <div>
-        <h2></h2>
+        <header>
+          <wp-editable>
+            <h2></h2>
+          </wp-editable>
+        </header>
         <ul>
           <slot></slot>
         </ul>
@@ -518,15 +529,20 @@
       li {
         padding-inline: var(--size-2);
         margin-block: var(--size-1);
-      }
 
-      a {
+        display: flex;
+        align-items: center;
+
         letter-spacing: var(--font-letterspacing-1);
         color: var(--text-2);
       }
     </style>
 
-    <li><a></a></li>
+    <li>
+      <wp-editable>
+        <a></a>
+      </wp-editable>
+    </li>
   </template>
 
   <template id="WP-TASKS">
@@ -667,45 +683,7 @@
         height: 100%;
         position: relative;
       }
-
-      .grow-wrap {
-        /* easy way to plop the elements on top of each other and have them both sized based on the tallest one's height */
-        display: grid;
-      }
-
-      .grow-wrap::after {
-        /* Note the weird space! Needed to preventy jumpy behavior */
-        content: attr(data-replicated-value) " ";
-
-        /* This is how textarea text behaves */
-        white-space: pre-wrap;
-
-        /* Hidden from view, clicks, and screen readers */
-        visibility: hidden;
-      }
-
-      .grow-wrap > textarea {
-        resize: none;
-        overflow: hidden;
-        background: none;
-      }
-
-      .grow-wrap:has(textarea[hidden]) {
-        display: none;
-      }
-
-      .grow-wrap > textarea,
-      .grow-wrap::after {
-        /* Identical styling required!! */
-        border: 1px solid black;
-        margin-inline: calc(-1 * var(--size-1));
-        padding: 0 var(--size-1);
-        font: inherit;
-
-        /* Place on top of each other */
-        grid-area: 1 / 1 / 2 / 2;
-      }
-
+      
       .actions[hidden] {
         visibility: hidden;
       }
@@ -717,36 +695,46 @@
       .actions {
         position: absolute;
         inset: 0 0 0 auto;
-        padding-left: var(--size-8);
-
+        
         display: flex;
         align-items: center;
-        gap: var(--size-1);
 
-        background: linear-gradient(to right, transparent 0px, var(--surface-2) var(--size-8));
         opacity: 0;
         transition: opacity 0.15s ease-in;
       }
 
-      .edit:hover {
-        color: var(--blue-4);
+      .actions button {
+        display: grid;
+        place-items: center;
+
+        padding: var(--size-2);
+        background-color: var(--surface-1);
       }
 
-      .delete:hover {
-        color: var(--red-4);
+      svg {
+        width: var(--size-3);
+        height: var(--size-3);
+        color: var(--text-1);
+      }
+
+      .edit {
+        border-radius: var(--radius-2) 0 0 var(--radius-2);
+        &:hover svg {
+          color: var(--blue-4);
+        }
+      }
+
+      .delete {
+        border-radius: 0 var(--radius-2) var(--radius-2) 0;
+
+        &:hover svg {
+          color: var(--red-4);
+        }
       }
     </style>
 
     <div class="wrapper">
       <slot></slot>
-      <div class="grow-wrap">
-        <textarea 
-          name="text"
-          oninput="this.parentNode.dataset.replicatedValue = this.value" 
-          onkeydown="if (event.key == 'Enter') event.preventDefault()"
-          hidden
-        ></textarea>
-      </div>
       <div class="actions">
         <button class="edit">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
