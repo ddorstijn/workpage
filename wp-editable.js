@@ -18,7 +18,6 @@ customElements.define(
       
       this.#textarea = node.querySelector('textarea');
       this.#actions = node.querySelector('.actions');
-      console.log(this.#actions)
 
       this.#textarea.addEventListener('blur', (ev) => this.blur(ev));
       this.attachShadow({ mode: 'open' }).append(node);

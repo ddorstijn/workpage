@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Workpage</title>
   <link rel="stylesheet" href="unstyle.css">
 
-  <style>  
+  <style>
     @import "https://unpkg.com/open-props/sizes.min.css";
     @import "https://unpkg.com/open-props/colors.min.css";
     @import "https://unpkg.com/open-props/fonts.min.css";
@@ -39,7 +40,7 @@
       --group-sand: var(--sand-5);
       --group-camo: var(--camo-5);
       --group-jungle: var(--jungle-5);
-      
+
       display: flex;
 
       font-family: var(--font-sans);
@@ -49,7 +50,7 @@
       @media (prefers-color-scheme: dark) {
         --text-1: var(--gray-1);
         --text-2: var(--gray-2);
-        
+
         --surface-1: var(--gray-9);
         --surface-2: var(--gray-8);
 
@@ -84,7 +85,7 @@
     main {
       flex-grow: 1;
       padding: var(--size-6);
-      
+
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -101,36 +102,58 @@
     }
   </style>
 </head>
+
 <body>
   <aside>
     <wp-header>
       <wp-header-group>
         <wp-header-item data-title="Add project">
-          <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5 8h8.45H13h.35H5Zm11 0h3h-3ZM5.4 6h13.2l-.85-1H6.25L5.4 6Zm4.6 6.75l2-1l2 1V8h-4v4.75ZM14.55 21H5q-.825 0-1.413-.588T3 19V6.525q0-.35.113-.675t.337-.6L4.7 3.725q.275-.35.687-.538T6.25 3h11.5q.45 0 .863.188t.687.537l1.25 1.525q.225.275.338.6t.112.675v4.9q-.475-.175-.975-.275T19 11.05V8h-3v3.825q-.875.5-1.525 1.238t-1.025 1.662L12 14l-2.55 1.275q-.5.25-.975-.037T8 14.375V8H5v11h8.35q.2.575.5 1.075t.7.925ZM19 21q-.425 0-.713-.288T18 20v-2h-2q-.425 0-.713-.288T15 17q0-.425.288-.713T16 16h2v-2q0-.425.288-.713T19 13q.425 0 .713.288T20 14v2h2q.425 0 .713.288T23 17q0 .425-.288.713T22 18h-2v2q0 .425-.288.713T19 21ZM5 8h8.45H13h.35H5Z"/></svg>
+          <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="M5 8h8.45H13h.35H5Zm11 0h3h-3ZM5.4 6h13.2l-.85-1H6.25L5.4 6Zm4.6 6.75l2-1l2 1V8h-4v4.75ZM14.55 21H5q-.825 0-1.413-.588T3 19V6.525q0-.35.113-.675t.337-.6L4.7 3.725q.275-.35.687-.538T6.25 3h11.5q.45 0 .863.188t.687.537l1.25 1.525q.225.275.338.6t.112.675v4.9q-.475-.175-.975-.275T19 11.05V8h-3v3.825q-.875.5-1.525 1.238t-1.025 1.662L12 14l-2.55 1.275q-.5.25-.975-.037T8 14.375V8H5v11h8.35q.2.575.5 1.075t.7.925ZM19 21q-.425 0-.713-.288T18 20v-2h-2q-.425 0-.713-.288T15 17q0-.425.288-.713T16 16h2v-2q0-.425.288-.713T19 13q.425 0 .713.288T20 14v2h2q.425 0 .713.288T23 17q0 .425-.288.713T22 18h-2v2q0 .425-.288.713T19 21ZM5 8h8.45H13h.35H5Z" />
+          </svg>
         </wp-header-item>
-    
+
         <wp-header-item data-title="Add group">
-          <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5 21q-.825 0-1.413-.588T3 19V5q0-.825.588-1.413T5 3h14q.825 0 1.413.588T21 5v6.7q-.475-.225-.975-.388T19 11.075V5H5v14h6.05q.075.55.238 1.05t.387.95H5Zm0-3v1V5v6.075V11v7Zm2-2q0 .425.288.713T8 17h3.075q.075-.525.238-1.025t.362-.975H8q-.425 0-.713.288T7 16Zm0-4q0 .425.288.713T8 13h5.1q.8-.75 1.788-1.25T17 11.075q-.225-.05-.5-.063T16 11H8q-.425 0-.713.288T7 12Zm0-4q0 .425.288.713T8 9h8q.425 0 .713-.288T17 8q0-.425-.288-.713T16 7H8q-.425 0-.713.288T7 8Zm11 15q-2.075 0-3.538-1.463T13 18q0-2.075 1.463-3.538T18 13q2.075 0 3.538 1.463T23 18q0 2.075-1.463 3.538T18 23Zm-.5-4.5v2q0 .2.15.35T18 21q.2 0 .35-.15t.15-.35v-2h2q.2 0 .35-.15T21 18q0-.2-.15-.35t-.35-.15h-2v-2q0-.2-.15-.35T18 15q-.2 0-.35.15t-.15.35v2h-2q-.2 0-.35.15T15 18q0 .2.15.35t.35.15h2Z"/></svg>
+          <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="M5 21q-.825 0-1.413-.588T3 19V5q0-.825.588-1.413T5 3h14q.825 0 1.413.588T21 5v6.7q-.475-.225-.975-.388T19 11.075V5H5v14h6.05q.075.55.238 1.05t.387.95H5Zm0-3v1V5v6.075V11v7Zm2-2q0 .425.288.713T8 17h3.075q.075-.525.238-1.025t.362-.975H8q-.425 0-.713.288T7 16Zm0-4q0 .425.288.713T8 13h5.1q.8-.75 1.788-1.25T17 11.075q-.225-.05-.5-.063T16 11H8q-.425 0-.713.288T7 12Zm0-4q0 .425.288.713T8 9h8q.425 0 .713-.288T17 8q0-.425-.288-.713T16 7H8q-.425 0-.713.288T7 8Zm11 15q-2.075 0-3.538-1.463T13 18q0-2.075 1.463-3.538T18 13q2.075 0 3.538 1.463T23 18q0 2.075-1.463 3.538T18 23Zm-.5-4.5v2q0 .2.15.35T18 21q.2 0 .35-.15t.15-.35v-2h2q.2 0 .35-.15T21 18q0-.2-.15-.35t-.35-.15h-2v-2q0-.2-.15-.35T18 15q-.2 0-.35.15t-.15.35v2h-2q-.2 0-.35.15T15 18q0 .2.15.35t.35.15h2Z" />
+          </svg>
         </wp-header-item>
-    
+
         <wp-header-item data-title="Add link">
-          <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m12 18l-4.2 1.8q-1 .425-1.9-.163T5 17.976V5q0-.825.588-1.413T7 3h6v2H7v12.95l5-2.15l5 2.15V11h2v6.975q0 1.075-.9 1.663t-1.9.162L12 18Zm0-13H7h6h-1Zm5 2h-1q-.425 0-.713-.288T15 6q0-.425.288-.713T16 5h1V4q0-.425.288-.713T18 3q.425 0 .713.288T19 4v1h1q.425 0 .713.288T21 6q0 .425-.288.713T20 7h-1v1q0 .425-.288.713T18 9q-.425 0-.713-.288T17 8V7Z"/></svg>
+          <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="m12 18l-4.2 1.8q-1 .425-1.9-.163T5 17.976V5q0-.825.588-1.413T7 3h6v2H7v12.95l5-2.15l5 2.15V11h2v6.975q0 1.075-.9 1.663t-1.9.162L12 18Zm0-13H7h6h-1Zm5 2h-1q-.425 0-.713-.288T15 6q0-.425.288-.713T16 5h1V4q0-.425.288-.713T18 3q.425 0 .713.288T19 4v1h1q.425 0 .713.288T21 6q0 .425-.288.713T20 7h-1v1q0 .425-.288.713T18 9q-.425 0-.713-.288T17 8V7Z" />
+          </svg>
         </wp-header-item>
       </wp-header-group>
       <wp-header-group>
         <wp-header-item data-title="Download">
-          <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11l-5 5Zm-6 4q-.825 0-1.413-.588T4 18v-3h2v3h12v-3h2v3q0 .825-.588 1.413T18 20H6Z"/></svg>
+          <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11l-5 5Zm-6 4q-.825 0-1.413-.588T4 18v-3h2v3h12v-3h2v3q0 .825-.588 1.413T18 20H6Z" />
+          </svg>
         </wp-header-item>
         <wp-header-item data-title="Upload">
-          <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M6 20q-.825 0-1.413-.588T4 18v-2q0-.425.288-.713T5 15q.425 0 .713.288T6 16v2h12v-2q0-.425.288-.713T19 15q.425 0 .713.288T20 16v2q0 .825-.588 1.413T18 20H6Zm5-12.15L9.125 9.725q-.3.3-.713.288T7.7 9.7q-.275-.3-.288-.7t.288-.7l3.6-3.6q.15-.15.325-.212T12 4.425q.2 0 .375.063t.325.212l3.6 3.6q.3.3.288.7t-.288.7q-.3.3-.713.313t-.712-.288L13 7.85V15q0 .425-.288.713T12 16q-.425 0-.713-.288T11 15V7.85Z"/></svg>
+          <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="M6 20q-.825 0-1.413-.588T4 18v-2q0-.425.288-.713T5 15q.425 0 .713.288T6 16v2h12v-2q0-.425.288-.713T19 15q.425 0 .713.288T20 16v2q0 .825-.588 1.413T18 20H6Zm5-12.15L9.125 9.725q-.3.3-.713.288T7.7 9.7q-.275-.3-.288-.7t.288-.7l3.6-3.6q.15-.15.325-.212T12 4.425q.2 0 .375.063t.325.212l3.6 3.6q.3.3.288.7t-.288.7q-.3.3-.713.313t-.712-.288L13 7.85V15q0 .425-.288.713T12 16q-.425 0-.713-.288T11 15V7.85Z" />
+          </svg>
         </wp-header-item>
       </wp-header-group>
       <wp-header-group>
         <wp-header-item data-title="Translate">
-          <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m15.1 18.95l-.875 2.425q-.1.275-.35.45t-.55.175q-.5 0-.812-.413t-.113-.912l3.8-10.05q.125-.275.375-.45t.55-.175h.75q.3 0 .55.175t.375.45L22.6 20.7q.2.475-.1.888t-.8.412q-.325 0-.562-.188t-.363-.487l-.825-2.375H15.1Zm.6-1.75h3.6l-1.75-4.95h-.1L15.7 17.2ZM9 14l-4.3 4.3q-.275.275-.7.275t-.7-.275q-.275-.275-.275-.7t.275-.7l4.35-4.35q-.95-1.05-1.663-2.175T4.75 8h2.1q.45.9.963 1.625T9.05 11.15q1.1-1.2 1.825-2.463T12.1 6H2q-.425 0-.713-.288T1 5q0-.425.288-.713T2 4h6V3q0-.425.288-.713T9 2q.425 0 .713.288T10 3v1h6q.425 0 .713.288T17 5q0 .425-.288.713T16 6h-1.9q-.525 1.775-1.425 3.45T10.45 12.6l2.4 2.45l-.75 2.05L9 14Z"/></svg>
+          <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="m15.1 18.95l-.875 2.425q-.1.275-.35.45t-.55.175q-.5 0-.812-.413t-.113-.912l3.8-10.05q.125-.275.375-.45t.55-.175h.75q.3 0 .55.175t.375.45L22.6 20.7q.2.475-.1.888t-.8.412q-.325 0-.562-.188t-.363-.487l-.825-2.375H15.1Zm.6-1.75h3.6l-1.75-4.95h-.1L15.7 17.2ZM9 14l-4.3 4.3q-.275.275-.7.275t-.7-.275q-.275-.275-.275-.7t.275-.7l4.35-4.35q-.95-1.05-1.663-2.175T4.75 8h2.1q.45.9.963 1.625T9.05 11.15q1.1-1.2 1.825-2.463T12.1 6H2q-.425 0-.713-.288T1 5q0-.425.288-.713T2 4h6V3q0-.425.288-.713T9 2q.425 0 .713.288T10 3v1h6q.425 0 .713.288T17 5q0 .425-.288.713T16 6h-1.9q-.525 1.775-1.425 3.45T10.45 12.6l2.4 2.45l-.75 2.05L9 14Z" />
+          </svg>
         </wp-header-item>
         <wp-header-item data-title="Switch themes">
-          <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22q-2.05 0-3.875-.788t-3.188-2.15q-1.362-1.362-2.15-3.187T2 12q0-2.075.813-3.9t2.2-3.175Q6.4 3.575 8.25 2.788T12.2 2q2 0 3.775.688t3.113 1.9q1.337 1.212 2.125 2.875T22 11.05q0 2.875-1.75 4.413T16 17h-1.85q-.225 0-.313.125t-.087.275q0 .3.375.863t.375 1.287q0 1.25-.688 1.85T12 22Zm0-10Zm-5.5 1q.65 0 1.075-.425T8 11.5q0-.65-.425-1.075T6.5 10q-.65 0-1.075.425T5 11.5q0 .65.425 1.075T6.5 13Zm3-4q.65 0 1.075-.425T11 7.5q0-.65-.425-1.075T9.5 6q-.65 0-1.075.425T8 7.5q0 .65.425 1.075T9.5 9Zm5 0q.65 0 1.075-.425T16 7.5q0-.65-.425-1.075T14.5 6q-.65 0-1.075.425T13 7.5q0 .65.425 1.075T14.5 9Zm3 4q.65 0 1.075-.425T19 11.5q0-.65-.425-1.075T17.5 10q-.65 0-1.075.425T16 11.5q0 .65.425 1.075T17.5 13ZM12 20q.225 0 .363-.125t.137-.325q0-.35-.375-.825T11.75 17.3q0-1.05.725-1.675T14.25 15H16q1.65 0 2.825-.963T20 11.05q0-3.025-2.313-5.038T12.2 4Q8.8 4 6.4 6.325T4 12q0 3.325 2.337 5.663T12 20Z"/></svg>
+          <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="M12 22q-2.05 0-3.875-.788t-3.188-2.15q-1.362-1.362-2.15-3.187T2 12q0-2.075.813-3.9t2.2-3.175Q6.4 3.575 8.25 2.788T12.2 2q2 0 3.775.688t3.113 1.9q1.337 1.212 2.125 2.875T22 11.05q0 2.875-1.75 4.413T16 17h-1.85q-.225 0-.313.125t-.087.275q0 .3.375.863t.375 1.287q0 1.25-.688 1.85T12 22Zm0-10Zm-5.5 1q.65 0 1.075-.425T8 11.5q0-.65-.425-1.075T6.5 10q-.65 0-1.075.425T5 11.5q0 .65.425 1.075T6.5 13Zm3-4q.65 0 1.075-.425T11 7.5q0-.65-.425-1.075T9.5 6q-.65 0-1.075.425T8 7.5q0 .65.425 1.075T9.5 9Zm5 0q.65 0 1.075-.425T16 7.5q0-.65-.425-1.075T14.5 6q-.65 0-1.075.425T13 7.5q0 .65.425 1.075T14.5 9Zm3 4q.65 0 1.075-.425T19 11.5q0-.65-.425-1.075T17.5 10q-.65 0-1.075.425T16 11.5q0 .65.425 1.075T17.5 13ZM12 20q.225 0 .363-.125t.137-.325q0-.35-.375-.825T11.75 17.3q0-1.05.725-1.675T14.25 15H16q1.65 0 2.825-.963T20 11.05q0-3.025-2.313-5.038T12.2 4Q8.8 4 6.4 6.325T4 12q0 3.325 2.337 5.663T12 20Z" />
+          </svg>
         </wp-header-item>
       </wp-header-group>
     </wp-header>
@@ -169,9 +192,9 @@
         border-radius: var(--radius-3);
         background-color: var(--surface-2);
         box-shadow: var(--shadow-2);
-  
+
         &::backdrop {
-          backdrop-filter:blur(2px)
+          backdrop-filter: blur(2px)
         }
       }
 
@@ -185,12 +208,15 @@
         font-weight: 600;
       }
     </style>
-    
+
     <dialog>
       <header>
         <h2>Dialog</h2>
         <button onclick="this.closest('dialog').close()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m12 13.4l-4.9 4.9q-.275.275-.7.275t-.7-.275q-.275-.275-.275-.7t.275-.7l4.9-4.9l-4.9-4.9q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l4.9 4.9l4.9-4.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L13.4 12l4.9 4.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275L12 13.4Z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="m12 13.4l-4.9 4.9q-.275.275-.7.275t-.7-.275q-.275-.275-.275-.7t.275-.7l4.9-4.9l-4.9-4.9q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l4.9 4.9l4.9-4.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L13.4 12l4.9 4.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275L12 13.4Z" />
+          </svg>
         </button>
       </header>
       <slot name="content"></slot>
@@ -205,7 +231,7 @@
         display: flex;
         flex-direction: column;
         gap: var(--size-4);
-  
+
         .header-logo {
           margin-bottom: var(--size-1);
           width: var(--size-4);
@@ -215,16 +241,19 @@
         }
       }
     </style>
-    
+
     <header>
       <button class="header-logo">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m5.176 19.484.14-4.664c-1.476-.218-2.71-.812-3.71-1.78-1-.97-1.497-2.27-1.497-3.895 0-1.336.551-2.625 1.657-3.868C2.87 4.016 4.19 3.383 5.73 3.383c2.258 0 3.387 1.746 3.387 5.238 0 1.024-.062 2.598-.183 4.719-.11 2.101-.164 3.691-.164 4.773 0 1.078.246 1.617.738 1.617.293 0 .715-.293 1.265-.878a9.543 9.543 0 0 0 1.43-1.946c.34-4.133.508-6.601.508-7.406 0-.805-.008-1.355-.024-1.645 0-.293-.015-.578-.046-.851a7.894 7.894 0 0 0-.047-.606 2.35 2.35 0 0 0-.09-.574 3.48 3.48 0 0 0-.094-.41c0-.039-.039-.195-.113-.469a7.892 7.892 0 0 1-.094-.437c.785-.492 2.067-.867 3.848-1.125v.027c.168.64.254 1.563.254 2.77 0 1.191-.153 3.265-.461 6.226-.309 2.965-.461 4.93-.461 5.899 0 .949.23 1.425.691 1.425.477 0 1.043-.492 1.703-1.48.676-.988 1.293-2.277 1.844-3.867.57-1.594.922-3.137 1.063-4.637 0-1.48-.653-3.191-1.961-5.129.3-.777.707-1.488 1.199-2.113.492-.64.906-1.078 1.246-1.317l.504-.382c.57 0 1.055.484 1.453 1.453.414.953.621 2.074.621 3.375 0 1.277-.293 2.933-.875 4.965a38.038 38.038 0 0 1-2.21 5.812c-.876 1.867-1.915 3.465-3.114 4.8-1.18 1.317-2.309 1.977-3.387 1.977-.55 0-1.035-.332-1.45-.988-.413-.66-.628-1.5-.644-2.523-.66 1.097-1.359 1.957-2.097 2.578-.739.621-1.477.933-2.211.933-.738 0-1.352-.359-1.844-1.07-.492-.715-.738-1.59-.738-2.633zm.347-10.808c0-1.133-.093-1.903-.277-2.305-.168-.418-.508-.629-1.016-.629-.492 0-1.066.328-1.726.988-.645.657-.969 1.516-.969 2.579 0 1.058.387 1.937 1.153 2.632.785.696 1.69 1.043 2.718 1.043.078-1.738.117-3.175.117-4.308zm0 0"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path fill="currentColor"
+            d="m5.176 19.484.14-4.664c-1.476-.218-2.71-.812-3.71-1.78-1-.97-1.497-2.27-1.497-3.895 0-1.336.551-2.625 1.657-3.868C2.87 4.016 4.19 3.383 5.73 3.383c2.258 0 3.387 1.746 3.387 5.238 0 1.024-.062 2.598-.183 4.719-.11 2.101-.164 3.691-.164 4.773 0 1.078.246 1.617.738 1.617.293 0 .715-.293 1.265-.878a9.543 9.543 0 0 0 1.43-1.946c.34-4.133.508-6.601.508-7.406 0-.805-.008-1.355-.024-1.645 0-.293-.015-.578-.046-.851a7.894 7.894 0 0 0-.047-.606 2.35 2.35 0 0 0-.09-.574 3.48 3.48 0 0 0-.094-.41c0-.039-.039-.195-.113-.469a7.892 7.892 0 0 1-.094-.437c.785-.492 2.067-.867 3.848-1.125v.027c.168.64.254 1.563.254 2.77 0 1.191-.153 3.265-.461 6.226-.309 2.965-.461 4.93-.461 5.899 0 .949.23 1.425.691 1.425.477 0 1.043-.492 1.703-1.48.676-.988 1.293-2.277 1.844-3.867.57-1.594.922-3.137 1.063-4.637 0-1.48-.653-3.191-1.961-5.129.3-.777.707-1.488 1.199-2.113.492-.64.906-1.078 1.246-1.317l.504-.382c.57 0 1.055.484 1.453 1.453.414.953.621 2.074.621 3.375 0 1.277-.293 2.933-.875 4.965a38.038 38.038 0 0 1-2.21 5.812c-.876 1.867-1.915 3.465-3.114 4.8-1.18 1.317-2.309 1.977-3.387 1.977-.55 0-1.035-.332-1.45-.988-.413-.66-.628-1.5-.644-2.523-.66 1.097-1.359 1.957-2.097 2.578-.739.621-1.477.933-2.211.933-.738 0-1.352-.359-1.844-1.07-.492-.715-.738-1.59-.738-2.633zm.347-10.808c0-1.133-.093-1.903-.277-2.305-.168-.418-.508-.629-1.016-.629-.492 0-1.066.328-1.726.988-.645.657-.969 1.516-.969 2.579 0 1.058.387 1.937 1.153 2.632.785.696 1.69 1.043 2.718 1.043.078-1.738.117-3.175.117-4.308zm0 0" />
+        </svg>
       </button>
 
       <slot></slot>
     </header>
   </template>
-  
+
   <template id="WP-HEADER-GROUP">
     <style>
       .header-group {
@@ -255,7 +284,7 @@
         padding: 0;
         color: var(--stone-7);
 
-        > span {
+        >span {
           position: absolute;
           top: 0;
           left: 100%;
@@ -270,13 +299,13 @@
         &:hover {
           color: inherit;
 
-          > span {
+          >span {
             opacity: 1;
           }
         }
       }
     </style>
-    
+
     <button onclick="this.getRootNode().querySelector('wp-dialog').showModal()">
       <slot name="icon"></slot>
       <span></span>
@@ -290,11 +319,11 @@
   <template id="WP-CLOCK">
     <style>
       @import "unstyle.css";
-      
+
       .clock_time {
         font-size: 4rem;
         font-weight: bold;
-        
+
         line-height: 1.2;
         text-align: center;
       }
@@ -311,7 +340,7 @@
   <template id="WP-PROJECT">
     <style>
       @import "unstyle.css";
-      
+
       .project__button {
         font-weight: bold;
         background-color: var(--theme);
@@ -321,7 +350,10 @@
     <div class="project">
       <button class="project__button" rounded onclick="this.getRootNode().querySelector('wp-dialog').showModal()">
         <span></span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 14.975q-.2 0-.375-.062T11.3 14.7l-4.6-4.6q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l3.9 3.9l3.9-3.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7l-4.6 4.6q-.15.15-.325.213t-.375.062Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path fill="currentColor"
+            d="M12 14.975q-.2 0-.375-.062T11.3 14.7l-4.6-4.6q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l3.9 3.9l3.9-3.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7l-4.6 4.6q-.15.15-.325.213t-.375.062Z" />
+        </svg>
       </button>
 
       <wp-dialog data-title="Choose project">
@@ -361,25 +393,81 @@
     <style>
       @import "unstyle.css";
 
-      section.gray { color: var(--group-gray); }
-      section.stone { color: var(--group-stone); }
-      section.red { color: var(--group-red); }
-      section.pink { color: var(--group-pink); }
-      section.purple { color: var(--group-purple); }
-      section.violet { color: var(--group-violet); }
-      section.indigo { color: var(--group-indigo); }
-      section.blue { color: var(--group-blue); }
-      section.cyan { color: var(--group-cyan); }
-      section.teal { color: var(--group-teal); }
-      section.green { color: var(--group-green); }
-      section.lime { color: var(--group-lime); }
-      section.yellow { color: var(--group-yellow); }
-      section.orange { color: var(--group-orange); }
-      section.choco { color: var(--group-choco); }
-      section.brown { color: var(--group-brown); }
-      section.sand { color: var(--group-sand); }
-      section.camo { color: var(--group-camo); }
-      section.jungle { color: var(--group-jungle); }
+      section.gray {
+        color: var(--group-gray);
+      }
+
+      section.stone {
+        color: var(--group-stone);
+      }
+
+      section.red {
+        color: var(--group-red);
+      }
+
+      section.pink {
+        color: var(--group-pink);
+      }
+
+      section.purple {
+        color: var(--group-purple);
+      }
+
+      section.violet {
+        color: var(--group-violet);
+      }
+
+      section.indigo {
+        color: var(--group-indigo);
+      }
+
+      section.blue {
+        color: var(--group-blue);
+      }
+
+      section.cyan {
+        color: var(--group-cyan);
+      }
+
+      section.teal {
+        color: var(--group-teal);
+      }
+
+      section.green {
+        color: var(--group-green);
+      }
+
+      section.lime {
+        color: var(--group-lime);
+      }
+
+      section.yellow {
+        color: var(--group-yellow);
+      }
+
+      section.orange {
+        color: var(--group-orange);
+      }
+
+      section.choco {
+        color: var(--group-choco);
+      }
+
+      section.brown {
+        color: var(--group-brown);
+      }
+
+      section.sand {
+        color: var(--group-sand);
+      }
+
+      section.camo {
+        color: var(--group-camo);
+      }
+
+      section.jungle {
+        color: var(--group-jungle);
+      }
 
       section {
         width: 250px;
@@ -400,7 +488,7 @@
         font-weight: 600;
 
         &::after {
-          content:"";
+          content: "";
 
           position: absolute;
           top: 100%;
@@ -456,25 +544,26 @@
         font-weight: 600;
         color: var(--stone-6);
 
-        h3:hover, h3.active {
+        h3:hover,
+        h3.active {
           cursor: pointer;
           color: var(--text-1);
         }
       }
 
       .add-task {
-        display: block; 
+        display: block;
         margin-inline: auto;
         margin-top: var(--size-4);
 
         font-size: var(--font-size-0);
         color: var(--stone-7);
-        
+
         &:hover {
           color: var(--text-1);
         }
       }
-      
+
       .tasks {
         width: 400px;
         padding-inline: var(--size-3);
@@ -497,7 +586,7 @@
         width: fit-content;
         padding: var(--size-3);
         margin-left: auto;
-        
+
         list-style: none;
         cursor: pointer;
 
@@ -509,7 +598,10 @@
     <details class="task-drawer">
       <summary>
         <span>Tasks</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m10.8 12l3.9 3.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275l-4.6-4.6q-.15-.15-.212-.325T8.425 12q0-.2.063-.375T8.7 11.3l4.6-4.6q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L10.8 12Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path fill="currentColor"
+            d="m10.8 12l3.9 3.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275l-4.6-4.6q-.15-.15-.212-.325T8.425 12q0-.2.063-.375T8.7 11.3l4.6-4.6q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L10.8 12Z" />
+        </svg>
       </summary>
       <section class="tasks">
         <header>
@@ -520,7 +612,10 @@
           <slot></slot>
         </ul>
         <button class="add-task">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H6q-.425 0-.713-.288T5 12q0-.425.288-.713T6 11h5V6q0-.425.288-.713T12 5q.425 0 .713.288T13 6v5h5q.425 0 .713.288T19 12q0 .425-.288.713T18 13h-5v5q0 .425-.288.713T12 19q-.425 0-.713-.288T11 18v-5Z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="M11 13H6q-.425 0-.713-.288T5 12q0-.425.288-.713T6 11h5V6q0-.425.288-.713T12 5q.425 0 .713.288T13 6v5h5q.425 0 .713.288T19 12q0 .425-.288.713T18 13h-5v5q0 .425-.288.713T12 19q-.425 0-.713-.288T11 18v-5Z" />
+          </svg>
           <span>Add a task</span>
         </button>
       </section>
@@ -530,7 +625,7 @@
   <template id="WP-TASK-ITEM">
     <style>
       @import "unstyle.css";
-      
+
       .task-list_item {
         position: relative;
         padding: var(--size-3);
@@ -538,7 +633,7 @@
         display: flex;
         align-items: center;
         gap: var(--size-3);
-        
+
         font-weight: 500;
         background-color: var(--surface-2);
         border-radius: 6px;
@@ -553,7 +648,7 @@
         background-color: var(--surface-1);
         box-shadow: var(--inner-shadow-1);
       }
-      </style>
+    </style>
 
     <li class="task-list_item">
       <div class="handle"></div>
@@ -566,42 +661,71 @@
   <template id="WP-EDITABLE">
     <style>
       @import "unstyle.css";
-      
+
       :host {
         width: 100%;
         height: 100%;
         position: relative;
       }
 
-      textarea {
-        width: 100%;
-        margin-inline: calc(-1 * var(--size-1));
-        padding-inline: var(--size-1);
+      .grow-wrap {
+        /* easy way to plop the elements on top of each other and have them both sized based on the tallest one's height */
+        display: grid;
+      }
 
-        background: none;
+      .grow-wrap::after {
+        /* Note the weird space! Needed to preventy jumpy behavior */
+        content: attr(data-replicated-value) " ";
+
+        /* This is how textarea text behaves */
+        white-space: pre-wrap;
+
+        /* Hidden from view, clicks, and screen readers */
+        visibility: hidden;
+      }
+
+      .grow-wrap > textarea {
         resize: none;
+        overflow: hidden;
+        background: none;
+      }
+
+      .grow-wrap:has(textarea[hidden]) {
+        display: none;
+      }
+
+      .grow-wrap > textarea,
+      .grow-wrap::after {
+        /* Identical styling required!! */
+        border: 1px solid black;
+        margin-inline: calc(-1 * var(--size-1));
+        padding: 0 var(--size-1);
+        font: inherit;
+
+        /* Place on top of each other */
+        grid-area: 1 / 1 / 2 / 2;
       }
 
       .actions[hidden] {
-        display: none;
+        visibility: hidden;
+      }
+
+      .wrapper:hover .actions {
+        opacity: 1;
       }
 
       .actions {
         position: absolute;
         inset: 0 0 0 auto;
-        padding-left: var(--size-12);
+        padding-left: var(--size-8);
 
         display: flex;
         align-items: center;
         gap: var(--size-1);
 
-        background: linear-gradient(to right, transparent, var(--surface-2));
+        background: linear-gradient(to right, transparent 0px, var(--surface-2) var(--size-8));
         opacity: 0;
         transition: opacity 0.15s ease-in;
-
-        &:hover {
-          opacity: 1;
-        }
       }
 
       .edit:hover {
@@ -613,15 +737,30 @@
       }
     </style>
 
-    <slot></slot>
-    <textarea hidden></textarea>
-    <div class="actions">
-      <button class="edit">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3 21v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15q.4 0 .775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.138.763t-.437.662L7.25 21H3ZM17.6 7.8L19 6.4L17.6 5l-1.4 1.4l1.4 1.4Z"/></svg>
-      </button>
-      <button class="delete">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7 21q-.825 0-1.413-.588T5 19V6q-.425 0-.713-.288T4 5q0-.425.288-.713T5 4h4q0-.425.288-.713T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5q0 .425-.288.713T19 6v13q0 .825-.588 1.413T17 21H7Zm5-7.1l1.9 1.9q.275.275.7.275t.7-.275q.275-.275.275-.7t-.275-.7l-1.9-1.9l1.9-1.9q.275-.275.275-.7t-.275-.7q-.275-.275-.7-.275t-.7.275L12 11.1l-1.9-1.9q-.275-.275-.7-.275t-.7.275q-.275.275-.275.7t.275.7l1.9 1.9l-1.9 1.9q-.275.275-.275.7t.275.7q.275.275.7.275t.7-.275l1.9-1.9Z"/></svg>
-      </button>
+    <div class="wrapper">
+      <slot></slot>
+      <div class="grow-wrap">
+        <textarea 
+          name="text"
+          oninput="this.parentNode.dataset.replicatedValue = this.value" 
+          onkeydown="if (event.key == 'Enter') event.preventDefault()"
+          hidden
+        ></textarea>
+      </div>
+      <div class="actions">
+        <button class="edit">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="M3 21v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15q.4 0 .775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.138.763t-.437.662L7.25 21H3ZM17.6 7.8L19 6.4L17.6 5l-1.4 1.4l1.4 1.4Z" />
+          </svg>
+        </button>
+        <button class="delete">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="M7 21q-.825 0-1.413-.588T5 19V6q-.425 0-.713-.288T4 5q0-.425.288-.713T5 4h4q0-.425.288-.713T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5q0 .425-.288.713T19 6v13q0 .825-.588 1.413T17 21H7Zm5-7.1l1.9 1.9q.275.275.7.275t.7-.275q.275-.275.275-.7t-.275-.7l-1.9-1.9l1.9-1.9q.275-.275.275-.7t-.275-.7q-.275-.275-.7-.275t-.7.275L12 11.1l-1.9-1.9q-.275-.275-.7-.275t-.7.275q-.275.275-.275.7t.275.7l1.9 1.9l-1.9 1.9q-.275.275-.275.7t.275.7q.275.275.7.275t.7-.275l1.9-1.9Z" />
+          </svg>
+        </button>
+      </div>
     </div>
   </template>
 
@@ -633,4 +772,5 @@
   <script src="wp-tasks.js"></script>
   <script src="wp-editable.js"></script>
 </body>
+
 </html>
