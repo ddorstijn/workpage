@@ -539,7 +539,7 @@
         align-items: center;
         gap: var(--size-3);
         
-        font-weight: 500;;
+        font-weight: 500;
         background-color: var(--surface-2);
         border-radius: 6px;
         box-shadow: var(--shadow-1);
@@ -573,6 +573,19 @@
         position: relative;
       }
 
+      textarea {
+        width: 100%;
+        margin-inline: calc(-1 * var(--size-1));
+        padding-inline: var(--size-1);
+
+        background: none;
+        resize: none;
+      }
+
+      .actions[hidden] {
+        display: none;
+      }
+
       .actions {
         position: absolute;
         inset: 0 0 0 auto;
@@ -601,7 +614,7 @@
     </style>
 
     <slot></slot>
-    <input hidden />
+    <textarea hidden></textarea>
     <div class="actions">
       <button class="edit">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3 21v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15q.4 0 .775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.138.763t-.437.662L7.25 21H3ZM17.6 7.8L19 6.4L17.6 5l-1.4 1.4l1.4 1.4Z"/></svg>
