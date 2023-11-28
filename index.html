@@ -172,7 +172,6 @@
   </main>
 
   <wp-tasks>
-    <wp-task-item></wp-task-item>
   </wp-tasks>
 
   <template id="WP-DIALOG">
@@ -624,9 +623,9 @@
           <h3 class="active">Todo</h3>
           <h3>Done</h3>
         </header>
-        <ul class="task-list">
-          <slot></slot>
-        </ul>
+        <wp-sortable>
+          <wp-task-item></wp-task-item>
+        </wp-sortable>
         <button class="add-task">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path fill="currentColor"
@@ -752,6 +751,12 @@
     </div>
   </template>
 
+  <template id="WP-SORTABLE">
+    <ol>
+      <slot></slot>
+    </ol>
+  </template>
+
   <script src="wp-dialog.js"></script>
   <script src="wp-header.js"></script>
   <script src="wp-clock.js"></script>
@@ -759,6 +764,7 @@
   <script src="wp-links.js"></script>
   <script src="wp-tasks.js"></script>
   <script src="wp-editable.js"></script>
+  <script src="wp-sortable.js"></script>
 </body>
 
 </html>
