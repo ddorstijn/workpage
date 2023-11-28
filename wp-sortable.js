@@ -6,14 +6,16 @@ customElements.define(
       let node = document.getElementById(super().nodeName).content.cloneNode(true);
 
       node.querySelector('ol').addEventListener('dragover', ev => {
+        ev.preventDefault();
+        
         /** @type {HTMLElement[]} */
-        const siblings = this.shadowRoot.querySelector('slot').assignedElements().filter(el => el instanceof HTMLElement && !el.classList.contains('dragging'));
+        const siblings = [...this.querySelectorAll(':not(.dragging)')];
         const next = siblings.find(s => {
           return ev.clientY <= s.offsetTop + s.offsetHeight / 2;
         });
 
-        const dragging = this.shadowRoot.querySelector('slot').assignedElements().filter(el => el instanceof HTMLElement && el.classList.contains('dragging'));
-        this.shadowRoot.querySelector('slot').insertBefore(next, dragging);
+        const dragging = this.querySelector('.dragging');
+        this.insertBefore(dragging, next);
       })
       
       this.attachShadow({ mode: "open" }).append(node);
@@ -21,7 +23,7 @@ customElements.define(
 
     connectedCallback() {
       /** @type {HTMLElement[]} */
-      let elements = this.shadowRoot.querySelector('slot').assignedElements().filter(el => el instanceof HTMLElement);
+      let elements = this.querySelectorAll('*');
       for (const el of elements) {
         el.draggable = true;
 

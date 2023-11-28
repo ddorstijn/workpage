@@ -624,7 +624,9 @@
           <h3>Done</h3>
         </header>
         <wp-sortable>
-          <wp-task-item></wp-task-item>
+          <wp-task-item data-title="A new todo"></wp-task-item>
+          <wp-task-item data-title="A second todo"></wp-task-item>
+          <wp-task-item data-title="A very extremely long new todo"></wp-task-item>
         </wp-sortable>
         <button class="add-task">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -643,6 +645,7 @@
 
       .task-list_item {
         position: relative;
+        margin-top: var(--size-2);
         padding: var(--size-3);
 
         display: flex;
@@ -668,7 +671,7 @@
     <li class="task-list_item">
       <div class="handle"></div>
       <wp-editable>
-        <span>A very long and interesting test task</span>
+        <span></span>
       </wp-editable>
     </li>
   </template>
