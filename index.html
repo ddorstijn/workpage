@@ -205,7 +205,7 @@
     <dialog>
       <header>
         <h2>Dialog</h2>
-        <button onclick="this.closest('dialog').close()">
+        <button>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path fill="currentColor"
               d="m12 13.4l-4.9 4.9q-.275.275-.7.275t-.7-.275q-.275-.275-.275-.7t.275-.7l4.9-4.9l-4.9-4.9q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l4.9 4.9l4.9-4.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L13.4 12l4.9 4.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275L12 13.4Z" />
@@ -299,7 +299,7 @@
       }
     </style>
 
-    <button onclick="this.getRootNode().querySelector('wp-dialog').showModal()">
+    <button>
       <slot name="icon"></slot>
       <span></span>
     </button>
@@ -338,7 +338,7 @@
         display: flex;
       }
 
-      .project__button {
+      button {
         font-weight: bold;
         background-color: var(--theme);
       }
@@ -351,7 +351,7 @@
     </style>
 
     <div class="project">
-      <button class="project__button" rounded onclick="this.getRootNode().querySelector('wp-dialog').showModal()">
+      <button rounded>
         <span></span>
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
           <path fill="currentColor"
@@ -394,81 +394,25 @@
     <style>
       @import "unstyle.css";
 
-      section.gray {
-        color: var(--group-gray);
-      }
-
-      section.stone {
-        color: var(--group-stone);
-      }
-
-      section.red {
-        color: var(--group-red);
-      }
-
-      section.pink {
-        color: var(--group-pink);
-      }
-
-      section.purple {
-        color: var(--group-purple);
-      }
-
-      section.violet {
-        color: var(--group-violet);
-      }
-
-      section.indigo {
-        color: var(--group-indigo);
-      }
-
-      section.blue {
-        color: var(--group-blue);
-      }
-
-      section.cyan {
-        color: var(--group-cyan);
-      }
-
-      section.teal {
-        color: var(--group-teal);
-      }
-
-      section.green {
-        color: var(--group-green);
-      }
-
-      section.lime {
-        color: var(--group-lime);
-      }
-
-      section.yellow {
-        color: var(--group-yellow);
-      }
-
-      section.orange {
-        color: var(--group-orange);
-      }
-
-      section.choco {
-        color: var(--group-choco);
-      }
-
-      section.brown {
-        color: var(--group-brown);
-      }
-
-      section.sand {
-        color: var(--group-sand);
-      }
-
-      section.camo {
-        color: var(--group-camo);
-      }
-
-      section.jungle {
-        color: var(--group-jungle);
-      }
+      section.gray { color: var(--group-gray); }
+      section.stone { color: var(--group-stone); }
+      section.red { color: var(--group-red); }
+      section.pink { color: var(--group-pink); }
+      section.purple { color: var(--group-purple); }
+      section.violet { color: var(--group-violet); }
+      section.indigo { color: var(--group-indigo); }
+      section.blue { color: var(--group-blue); }
+      section.cyan { color: var(--group-cyan); }
+      section.teal { color: var(--group-teal); }
+      section.green { color: var(--group-green); }
+      section.lime { color: var(--group-lime); }
+      section.yellow { color: var(--group-yellow); }
+      section.orange { color: var(--group-orange); }
+      section.choco { color: var(--group-choco); }
+      section.brown { color: var(--group-brown); }
+      section.sand { color: var(--group-sand); }
+      section.camo { color: var(--group-camo); }
+      section.jungle { color: var(--group-jungle); }
 
       header {
         position: relative;
@@ -765,6 +709,20 @@
     <ol>
       <slot></slot>
     </ol>
+  </template>
+
+  <template id="WP-PLACEHOLDER">
+    <style>
+      div {
+        display: block;
+        height: inherit;
+
+        border: 3px dashed var(--text-2);
+        border-radius: var(--radius-2);
+      }
+    </style>
+
+    <div></div>
   </template>
 
   <script src="wp-dialog.js"></script>

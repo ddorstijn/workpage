@@ -8,7 +8,8 @@ customElements.define(
       /** @type {HTMLElement} */
       let node = document.getElementById(super().nodeName).content.cloneNode(true);
       node.querySelector('header h2').innerText = this.dataset['title'];
-
+      node.querySelector('button').addEventListener('click', () => this.close());
+      
       this.#dialog = node.querySelector('dialog');
       this.#dialog.addEventListener('click', event => {
         let rect = this.#dialog.getBoundingClientRect();

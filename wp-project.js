@@ -4,7 +4,9 @@ customElements.define(
     constructor() {
       /** @type {HTMLElement} */
       let node = document.getElementById(super().nodeName).content.cloneNode(true);
-      node.querySelector(".project__button span").innerText = localStorage.getItem('activeProject') ?? 'General';
+      let button = node.querySelector('button');
+      button.addEventListener('click', () => this.shadowRoot.querySelector('wp-dialog').showModal());
+      button.querySelector("span").innerText = localStorage.getItem('activeProject') ?? 'General';
 
       this.attachShadow({ mode: "open" }).append(node);
     }
