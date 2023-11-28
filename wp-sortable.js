@@ -7,7 +7,7 @@ customElements.define(
 
       node.querySelector('ol').addEventListener('dragover', ev => {
         ev.preventDefault();
-        
+
         /** @type {HTMLElement[]} */
         const siblings = [...this.querySelectorAll(':not(.dragging)')];
         const next = siblings.find(s => {
@@ -28,6 +28,8 @@ customElements.define(
         el.draggable = true;
 
         el.addEventListener('dragstart', () => setTimeout(el.classList.add('dragging')));
+        el.addEventListener('dragover', ev => ev.preventDefault());
+        el.addEventListener('drop', ev => ev.preventDefault());
         el.addEventListener('dragend', () => el.classList.remove('dragging'));
       }
     }

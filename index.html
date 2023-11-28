@@ -160,7 +160,6 @@
 
     <wp-links class="mt-4">
       <wp-link-group data-title="Entertainment" data-color="yellow">
-        <wp-link-group-item data-title="Search" data-url="https://www.google.com"></wp-link-group-item>
       </wp-link-group>
       <wp-link-group data-title="Entertainment" data-color="orange">
         <wp-link-group-item data-title="Search" data-url="https://www.google.com"></wp-link-group-item>
@@ -514,9 +513,11 @@
             <h2></h2>
           </wp-editable>
         </header>
-        <ul>
-          <slot></slot>
-        </ul>
+        <wp-sortable>
+          <wp-link-group-item data-title="Search" data-url="https://www.google.com"></wp-link-group-item>
+          <wp-link-group-item data-title="Youtube" data-url="https://www.google.com"></wp-link-group-item>
+          <wp-link-group-item data-title="Gmail" data-url="https://www.google.com"></wp-link-group-item>
+        </wp-sortable>          
       </div>
     </section>
   </template>
@@ -755,6 +756,12 @@
   </template>
 
   <template id="WP-SORTABLE">
+    <style>
+      ol {
+        padding: 0;
+      }
+    </style>
+
     <ol>
       <slot></slot>
     </ol>

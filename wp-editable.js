@@ -20,6 +20,7 @@ customElements.define(
     
     connectedCallback() {
       this.#input = this.shadowRoot.querySelector('slot').assignedElements()[0];
+      this.#input.addEventListener('pointermove', ev => ev.stopPropagation());
       this.#input.addEventListener('blur', _ => this.blur());
       this.#input.addEventListener('keydown', ev => this.keydown(ev));
     }
