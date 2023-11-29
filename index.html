@@ -159,14 +159,6 @@
     <wp-project class="mt-4"></wp-project>
 
     <wp-links class="mt-4">
-      <wp-link-group data-title="Entertainment" data-color="yellow">
-      </wp-link-group>
-      <wp-link-group data-title="Entertainment" data-color="orange">
-        <wp-link-group-item data-title="Search" data-url="https://www.google.com"></wp-link-group-item>
-      </wp-link-group>
-      <wp-link-group data-title="Entertainment" data-color="red">
-        <wp-link-group-item data-title="Search" data-url="https://www.google.com"></wp-link-group-item>
-      </wp-link-group>
     </wp-links>
   </main>
 
@@ -376,7 +368,7 @@
 
   <template id="WP-LINKS">
     <style>
-      slot {
+      div {
         width: 100%;
         padding-block: var(--size-6);
 
@@ -385,8 +377,7 @@
       }
     </style>
 
-    <div class="links">
-      <slot />
+    <div>
     </div>
   </template>
 
@@ -458,9 +449,7 @@
           </wp-editable>
         </header>
         <wp-sortable>
-          <wp-link-group-item data-title="Search" data-url="https://www.google.com"></wp-link-group-item>
-          <wp-link-group-item data-title="Youtube" data-url="https://www.google.com"></wp-link-group-item>
-          <wp-link-group-item data-title="Gmail" data-url="https://www.google.com"></wp-link-group-item>
+          <slot></slot>
         </wp-sortable>          
       </div>
     </section>
@@ -736,6 +725,8 @@
 
     <div></div>
   </template>
+  
+  <script src="app.js"></script>
 
   <script src="components/wp-dialog.js"></script>
   <script src="components/wp-header.js"></script>
@@ -745,8 +736,6 @@
   <script src="components/wp-tasks.js"></script>
   <script src="components/wp-editable.js"></script>
   <script src="components/wp-sortable.js"></script>
-
-  <script src="app.js"></script>
 </body>
 
 </html>
