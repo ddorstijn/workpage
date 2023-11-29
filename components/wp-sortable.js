@@ -22,7 +22,6 @@ customElements.define(
       /**@param ev {MouseEvent} */
       const mouseDownHandler = ev => {
         draggingEl = ev.target.getRootNode().host;
-        console.log(draggingEl);
 
         // Calculate the mouse position
         const rect = draggingEl.getBoundingClientRect();
@@ -68,8 +67,7 @@ customElements.define(
       };
 
       const mouseUpHandler = () => {
-        // Remove the placeholder
-        placeholder && placeholder.parentNode.removeChild(placeholder);
+        placeholder?.remove();
 
         draggingEl.style.removeProperty('top');
         draggingEl.style.removeProperty('left');
