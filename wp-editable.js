@@ -10,8 +10,8 @@ customElements.define(
     constructor() {
       /** @type {HTMLElement} */
       let node = document.getElementById(super().nodeName).content.cloneNode(true);
-      node.querySelector('.delete').addEventListener('click', () => this.delete());
-      node.querySelector('.edit').addEventListener('click', () => this.edit());
+      node.querySelector('.delete').addEventListener('click', ev => this.delete(ev));
+      node.querySelector('.edit').addEventListener('click', ev => this.edit(ev));
       
       this.#actions = node.querySelector('.actions');
 
@@ -20,19 +20,20 @@ customElements.define(
     
     connectedCallback() {
       this.#input = this.shadowRoot.querySelector('slot').assignedElements()[0];
-      this.#input.addEventListener('pointermove', ev => ev.stopPropagation());
       this.#input.addEventListener('blur', _ => this.blur());
       this.#input.addEventListener('keydown', ev => this.keydown(ev));
     }
     
-    edit() {
+    edit(ev) {
+      ev.stopPropagation();
       this.#actions.hidden = true;
 
       this.#input.contentEditable = true;
       this.#input.focus();
     }
 
-    delete() {
+    delete(ev) {
+      ev.stopPropagation();
       this.dispatchEvent(new Event('delete'));
     }
 

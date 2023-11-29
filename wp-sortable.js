@@ -9,8 +9,6 @@ customElements.define(
     }
 
     connectedCallback() {
-      const list = this.shadowRoot.querySelector('ol');
-
       /** @type {HTMLElement} */
       let draggingEl;
       /** @type {HTMLElement} */
@@ -21,13 +19,15 @@ customElements.define(
       let x = 0;
       let y = 0;
 
-      const mouseDownHandler = (e) => {
-        draggingEl = e.target;
+      /**@param ev {MouseEvent} */
+      const mouseDownHandler = ev => {
+        draggingEl = ev.target.getRootNode().host;
+        console.log(draggingEl);
 
         // Calculate the mouse position
         const rect = draggingEl.getBoundingClientRect();
-        x = e.pageX - rect.left;
-        y = e.pageY - rect.top;
+        x = ev.pageX - rect.left;
+        y = ev.pageY - rect.top;
 
         // Attach the listeners to document
         document.addEventListener('mousemove', mouseMoveHandler);
@@ -52,18 +52,18 @@ customElements.define(
         draggingEl.style.top = (e.pageY - y) + 'px';
         draggingEl.style.left = (e.pageX - x) + 'px';
 
-        const prevEle = draggingEl.previousElementSibling;
-        const nextEle = placeholder.nextElementSibling;
+        const prevEl = draggingEl.previousElementSibling;
+        const nextEl = placeholder.nextElementSibling;
 
-        if (prevEle && this.isAbove(draggingEl, prevEle)) {
+        if (prevEl && this.isAbove(draggingEl, prevEl)) {
           this.swap(placeholder, draggingEl);
-          this.swap(placeholder, prevEle);
+          this.swap(placeholder, prevEl);
           return;
         }
 
-        if (nextEle && this.isAbove(nextEle, draggingEl)) {
-          this.swap(nextEle, placeholder);
-          this.swap(nextEle, draggingEl);
+        if (nextEl && this.isAbove(nextEl, draggingEl)) {
+          this.swap(nextEl, placeholder);
+          this.swap(nextEl, draggingEl);
         }
       };
 
@@ -86,8 +86,8 @@ customElements.define(
       };
 
       // Query all items
-      [...list.querySelectorAll('*')].forEach(function (item) {
-        item.addEventListener('mousedown', mouseDownHandler);
+      [...this.querySelectorAll('*')].forEach(item => {
+        item.shadowRoot.querySelector('.handle').addEventListener('mousedown', mouseDownHandler);
       });
     }
 
