@@ -4,6 +4,7 @@ customElements.define(
     constructor() {
       /** @type {HTMLElement} */
       let node = document.getElementById(super().nodeName).content.cloneNode(true);
+      sortable(node.querySelector('ol'));
       this.attachShadow({ mode: 'open' }).append(node);
     }
   },
@@ -15,7 +16,7 @@ customElements.define(
     constructor() {
       /** @type {HTMLElement} */
       let node = document.getElementById(super().nodeName).content.cloneNode(true);
-      node.querySelector('span').textContent = this.dataset['title'];
+      node.querySelector('span').textContent = this.dataset['name'];
       this.attachShadow({ mode: 'open' }).append(node);
     }
   },

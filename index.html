@@ -92,6 +92,14 @@
       justify-content: center;
     }
 
+    .links {
+      width: 100%;
+      padding-block: var(--size-6);
+
+      display: flex;
+      gap: var(--size-6);
+    }
+
     .mt-4 {
       margin-top: 1.25rem;
     }
@@ -160,8 +168,7 @@
     <wp-clock></wp-clock>
     <wp-project class="mt-4"></wp-project>
 
-    <wp-links class="mt-4">
-    </wp-links>
+    <wp-links class="mt-4"></wp-links>
   </main>
 
   <wp-tasks>
@@ -565,6 +572,7 @@
           <h3>Done</h3>
         </header>
         <ol sortable>
+          <wp-task-item data-name="Test"></wp-task-item>
         </ol>
         <button class="add-task">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -612,12 +620,14 @@
     </li>
   </template>
 
-  <script defer src="components/wp-dialog.js"></script>
-  <script defer src="components/wp-header.js"></script>
-  <script defer src="components/wp-clock.js"></script>
-  <script defer src="components/wp-project.js"></script>
-  <script defer src="components/wp-links.js"></script>
-  <script defer src="components/wp-tasks.js"></script>
+  <script src="actions/sortable.js"></script>
+
+  <script src="components/wp-dialog.js"></script>
+  <script src="components/wp-header.js"></script>
+  <script src="components/wp-clock.js"></script>
+  <script src="components/wp-project.js"></script>
+  <script src="components/wp-links.js"></script>
+  <script src="components/wp-tasks.js"></script>
 </body>
 
 </html>

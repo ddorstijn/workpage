@@ -1,5 +1,8 @@
-[...document.querySelectorAll('ol[sortable]')].forEach(el => {
-  console.log(el);
+/**
+ * Make a sortable list
+ * @param {HTMLOListElement} el 
+ */
+function sortable(el) {
   /** @type {HTMLElement} */
   let draggingEl;
   /** @type {HTMLElement} */
@@ -99,7 +102,8 @@
   };
 
   // Query all items
-  // [...document.querySelectorAll('.draggable')].forEach(item => {
-  //   item.shadowRoot.querySelector('.drag-handle').addEventListener('mousedown', mouseDownHandler);
-  // });
-});
+  [...el.children].forEach(child => {
+    console.log(child);
+    // child.shadowRoot.querySelector('.drag-handle').addEventListener('mousedown', mouseDownHandler);
+  });
+}
