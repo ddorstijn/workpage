@@ -14,8 +14,8 @@ customElements.define(
           const linkEl = document.createElement('wp-link');
           linkEl.dataset['name'] = link.name;
           linkEl.dataset['url'] = link.url;
-          console.log(linkEl);
-          groupEl.querySelector('wp-sortable').append(linkEl);
+          
+          groupEl.append(linkEl);
         }
 
         links.append(groupEl);

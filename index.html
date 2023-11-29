@@ -96,6 +96,8 @@
       margin-top: 1.25rem;
     }
   </style>
+
+  <script src="app.js"></script>
 </head>
 
 <body>
@@ -355,10 +357,8 @@
         <ul slot="content">
           <li>
             <div class="wrapper">
-              <wp-editable>
-                <span class="project-title">General</span>
-                <span class="project-subtitle">2 days ago</span>
-              </wp-editable>
+              <span class="project-title" editable>General</span>
+              <span class="project-subtitle">2 days ago</span>
             </div>
           </li>
         </ul>
@@ -444,13 +444,10 @@
     <section>
       <div>
         <header>
-          <wp-editable>
-            <h2></h2>
-          </wp-editable>
+          <h2 editable></h2>
         </header>
-        <wp-sortable>
-          <slot></slot>
-        </wp-sortable>          
+        <ol sortable>
+        </ol>          
       </div>
     </section>
   </template>
@@ -484,9 +481,7 @@
       <button class="handle">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5 15q-.425 0-.712-.288T4 14q0-.425.288-.712T5 13h14q.425 0 .713.288T20 14q0 .425-.288.713T19 15H5Zm0-4q-.425 0-.712-.288T4 10q0-.425.288-.712T5 9h14q.425 0 .713.288T20 10q0 .425-.288.713T19 11H5Z"/></svg>
       </button>
-      <wp-editable>
-        <a></a>
-      </wp-editable>
+      <a></a>
     </li>
   </template>
 
@@ -569,11 +564,8 @@
           <h3 class="active">Todo</h3>
           <h3>Done</h3>
         </header>
-        <wp-sortable>
-          <wp-task-item data-title="A new todo"></wp-task-item>
-          <wp-task-item data-title="A second todo"></wp-task-item>
-          <wp-task-item data-title="A very extremely long new todo"></wp-task-item>
-        </wp-sortable>
+        <ol sortable>
+        </ol>
         <button class="add-task">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path fill="currentColor"
@@ -616,126 +608,16 @@
 
     <li class="task-list_item">
       <div class="handle"></div>
-      <wp-editable>
-        <span></span>
-      </wp-editable>
+      <span editable></span>
     </li>
   </template>
 
-  <template id="WP-EDITABLE">
-    <style>
-      @import "unstyle.css";
-
-      :host {
-        width: 100%;
-        height: 100%;
-        position: relative;
-      }
-      
-      .actions[hidden] {
-        visibility: hidden;
-      }
-
-      .wrapper:hover .actions {
-        opacity: 1;
-      }
-
-      .actions {
-        position: absolute;
-        inset: 0 0 0 auto;
-        
-        display: flex;
-        align-items: center;
-
-        opacity: 0;
-        transition: opacity 0.15s ease-in;
-      }
-
-      .actions button {
-        display: grid;
-        place-items: center;
-
-        padding: var(--size-2);
-        background-color: var(--surface-2);
-      }
-
-      svg {
-        width: var(--size-3);
-        height: var(--size-3);
-        color: var(--text-1);
-      }
-
-      .edit {
-        border-radius: var(--radius-2) 0 0 var(--radius-2);
-        &:hover svg {
-          color: var(--blue-4);
-        }
-      }
-
-      .delete {
-        border-radius: 0 var(--radius-2) var(--radius-2) 0;
-
-        &:hover svg {
-          color: var(--red-4);
-        }
-      }
-    </style>
-
-    <div class="wrapper">
-      <slot></slot>
-      <div class="actions">
-        <button class="edit">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-            <path fill="currentColor"
-              d="M3 21v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15q.4 0 .775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.138.763t-.437.662L7.25 21H3ZM17.6 7.8L19 6.4L17.6 5l-1.4 1.4l1.4 1.4Z" />
-          </svg>
-        </button>
-        <button class="delete">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-            <path fill="currentColor"
-              d="M7 21q-.825 0-1.413-.588T5 19V6q-.425 0-.713-.288T4 5q0-.425.288-.713T5 4h4q0-.425.288-.713T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5q0 .425-.288.713T19 6v13q0 .825-.588 1.413T17 21H7Zm5-7.1l1.9 1.9q.275.275.7.275t.7-.275q.275-.275.275-.7t-.275-.7l-1.9-1.9l1.9-1.9q.275-.275.275-.7t-.275-.7q-.275-.275-.7-.275t-.7.275L12 11.1l-1.9-1.9q-.275-.275-.7-.275t-.7.275q-.275.275-.275.7t.275.7l1.9 1.9l-1.9 1.9q-.275.275-.275.7t.275.7q.275.275.7.275t.7-.275l1.9-1.9Z" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  </template>
-
-  <template id="WP-SORTABLE">
-    <style>
-      ol {
-        padding: 0;
-      }
-    </style>
-
-    <ol>
-      <slot></slot>
-    </ol>
-  </template>
-
-  <template id="WP-PLACEHOLDER">
-    <style>
-      div {
-        display: block;
-        height: inherit;
-
-        border: 3px dashed var(--text-2);
-        border-radius: var(--radius-2);
-      }
-    </style>
-
-    <div></div>
-  </template>
-  
-  <script src="app.js"></script>
-
-  <script src="components/wp-dialog.js"></script>
-  <script src="components/wp-header.js"></script>
-  <script src="components/wp-clock.js"></script>
-  <script src="components/wp-project.js"></script>
-  <script src="components/wp-links.js"></script>
-  <script src="components/wp-tasks.js"></script>
-  <script src="components/wp-editable.js"></script>
-  <script src="components/wp-sortable.js"></script>
+  <script defer src="components/wp-dialog.js"></script>
+  <script defer src="components/wp-header.js"></script>
+  <script defer src="components/wp-clock.js"></script>
+  <script defer src="components/wp-project.js"></script>
+  <script defer src="components/wp-links.js"></script>
+  <script defer src="components/wp-tasks.js"></script>
 </body>
 
 </html>
