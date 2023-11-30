@@ -27,7 +27,7 @@ customElements.define(
         list.append(taskEl);
       }
 
-      sortable(list);
+      sortable(list, null, { group: "tasks" });
     }
   }
 );

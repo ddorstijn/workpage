@@ -47,7 +47,12 @@ customElements.define(
         list.append(linkEl);
       }
 
-      sortable(list);
+      sortable(list, null, "links", (el) => {
+        return { 
+          type: 'text/plain',
+          content: el.link.url
+        }
+      });
     }
   }
 );

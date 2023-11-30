@@ -2,10 +2,16 @@
  * Make a sortable list
  * @param {HTMLOListElement} listEl 
  * @param {(el: HTMLElement) => void?} callback 
- * @param {{group: string, data: {type: string, content: any}}?} options 
+ * @param {string} group Group for filtering dropzones
+ * @param {(el: HTMLElement) => {type: string, content: any}?} data 
  */
-export async function sortable(listEl, callback, options) {
+export async function sortable(listEl, callback, group, data) {
   listEl.addEventListener('dragover', ev => {
+    let itemGroup = ev.dataTransfer.getData("group");
+    if (group && itemGroup && group != itemGroup) {
+      return false;
+    }
+    
     ev.preventDefault();
 
     const bottomEl = insertAbove(listEl, ev.clientY);
@@ -22,8 +28,13 @@ export async function sortable(listEl, callback, options) {
       childEl.classList.add('dragging');
       window.draggingEl = childEl;
 
-      if (options?.data) {
-        ev.dataTransfer.setData(options.data.type, options.data.content);
+      if (group) {
+        ev.dataTransfer.setData("group", group);
+      }
+
+      if (data) {
+        let d = data(childEl);
+        ev.dataTransfer.setData(d.type, d.content);
       }
     });
     childEl.addEventListener('dragend', ev => {
