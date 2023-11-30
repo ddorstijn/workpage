@@ -2,7 +2,7 @@
  * Make a sortable list
  * @param {HTMLOListElement} el 
  */
-function sortable(el) {
+export async function sortable(el) {
   /** @type {HTMLElement} */
   let draggingEl;
   /** @type {HTMLElement} */
@@ -38,10 +38,14 @@ function sortable(el) {
       placeholder = document.createElement('wp-placeholder');
       draggingEl.parentNode.insertBefore(placeholder, draggingEl.nextSibling);
       placeholder.style.height = draggingRect.height + 'px';
+      placeholder.style.border = "3px solid var(--text-2)";
+      placeholder.style.borderRadius = "var(--radius-2)";
+
+      draggingEl.style.width = draggingRect.width + 'px';
+      draggingEl.style.position = 'absolute';
     }
 
     // Set position for dragging element
-    draggingEl.style.position = 'absolute';
     draggingEl.style.top = (e.pageY - y) + 'px';
     draggingEl.style.left = (e.pageX - x) + 'px';
 
@@ -102,8 +106,7 @@ function sortable(el) {
   };
 
   // Query all items
-  [...el.children].forEach(child => {
-    console.log(child);
-    // child.shadowRoot.querySelector('.drag-handle').addEventListener('mousedown', mouseDownHandler);
+  [...el.children].forEach(async child => {
+    child.shadowRoot.querySelector('.handle').addEventListener('mousedown', mouseDownHandler);
   });
 }

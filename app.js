@@ -1,44 +1,9 @@
-class Project {
-  #name = "";
-  #used = new Date();
-  #todo = [];
-  #done = [];
-  #linkgroups = [];
-
-  get name() { return this.#name; }
-  set name(val) { this.#name = val; this.save(); }
-
-  get used() { return this.#used; }
-  set used(val) { this.#used = val; this.save(); }
-
-  get todo() { return this.#todo; }
-  set todo(val) { this.#todo = val; this.save(); }
-
-  get done() { return this.#done; }
-  set done(val) { this.#done = val; this.save(); }
-
-  get linkgroups() { return this.#linkgroups; }
-  set linkgroups(val) { this.#linkgroups = val; this.save(); }
-  
-  constructor(name) {
-    browser.storage.sync.get(name).then((record) => {
-      if (!record.hasOwnProperty(name)) {
-        this.default();
-        return;
-      }
-
-      let p = record[name];
-      this.#name = name;
-      this.#used = p.used;
-      this.#todo = p.todo;
-      this.#done = p.done;
-      this.#linkgroups = p.linkgroups;
-    });
-  }
-
-  async default() {
-    this.#name = "General";
-    this.#linkgroups = [
+const DEFAULT = {
+  General: {
+    used: "2023-11-29T11:16:08.139Z",
+    todo: [],
+    done: [],
+    linkgroups: [
       {
         name: "Google",
         color: "red",
@@ -123,22 +88,46 @@ class Project {
           },
         ],
       },
-    ];
+    ],
+  },
+};
 
-    await this.save();
+async function init() {
+  let active = localStorage.getItem("active") ?? "General";
+  let project;
+
+  const handler = {
+    get(target, key) {
+      if (key == 'isProxy') return true;
+  
+      const prop = target[key];
+      if (typeof prop == 'undefined') return;
+  
+      // set value as proxy if object
+      if (!prop.isProxy && typeof prop === 'object')
+        target[key] = new Proxy(prop, handler);
+  
+      return target[key];
+    },
+    set(target, key, value) {
+      target[key] = value;
+  
+      browser.storage.sync.set(Object.assign({}, project));
+      return true;
+    }
+  };
+  
+  project = new Proxy(await browser.storage.sync.get(localStorage.getItem("active")), handler);
+
+  if (!project[active]) {
+    project = DEFAULT;
   }
+  window.project = project;
 
-  async save() {
-    let project = { [this.#name]: {
-        used: this.#used,
-        todo: this.#todo,
-        done: this.#done,
-        linkgroups: this.#linkgroups
-    }};
-
-    await browser.storage.sync.set(project);
-  }
+  await customElements.whenDefined("wp-links");
+  await customElements.whenDefined("wp-tasks");
+  document.querySelector("wp-links").load(project[active].linkgroups);
+  document.querySelector("wp-tasks").load(project[active].todo);
 }
 
-window.project = new Project(localStorage.getItem("active") ?? "General");
-
+init();

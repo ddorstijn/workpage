@@ -105,7 +105,14 @@
     }
   </style>
 
-  <script src="app.js"></script>
+  <script type="module" src="components/wp-clock.js"></script>
+  <script type="module" src="components/wp-dialog.js"></script>
+  <script type="module" src="components/wp-project.js"></script>
+  <script type="module" src="components/wp-header.js"></script>
+  <script type="module" src="components/wp-links.js"></script>
+  <script type="module" src="components/wp-tasks.js"></script>
+
+  <script type="module" src="app.js"></script>
 </head>
 
 <body>
@@ -446,14 +453,20 @@
         font-size: var(--size-6);
         font-weight: 600;
       }
+
+      ol {
+        display: flex;
+        flex-direction: column;
+        gap: var(--size-1);
+      }
     </style>
 
     <section>
       <div>
         <header>
-          <h2 editable></h2>
+          <h2></h2>
         </header>
-        <ol sortable>
+        <ol>
         </ol>          
       </div>
     </section>
@@ -469,8 +482,6 @@
       }
 
       li {
-        margin-block: var(--size-1);
-
         display: flex;
         align-items: center;
         gap: var(--size-2);
@@ -484,11 +495,11 @@
       }
     </style>
 
-    <li>
+    <li draggable="true">
       <button class="handle">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5 15q-.425 0-.712-.288T4 14q0-.425.288-.712T5 13h14q.425 0 .713.288T20 14q0 .425-.288.713T19 15H5Zm0-4q-.425 0-.712-.288T4 10q0-.425.288-.712T5 9h14q.425 0 .713.288T20 10q0 .425-.288.713T19 11H5Z"/></svg>
       </button>
-      <a></a>
+      <a draggable="false"></a>
     </li>
   </template>
 
@@ -545,6 +556,12 @@
         }
       }
 
+      ol {
+        display: flex;
+        flex-direction: column;
+        gap: var(--size-2);
+      }
+
       summary {
         width: fit-content;
         padding: var(--size-3);
@@ -571,8 +588,7 @@
           <h3 class="active">Todo</h3>
           <h3>Done</h3>
         </header>
-        <ol sortable>
-          <wp-task-item data-name="Test"></wp-task-item>
+        <ol>
         </ol>
         <button class="add-task">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -591,7 +607,6 @@
 
       .task-list_item {
         position: relative;
-        margin-top: var(--size-2);
         padding: var(--size-3);
 
         display: flex;
@@ -619,15 +634,6 @@
       <span editable></span>
     </li>
   </template>
-
-  <script src="actions/sortable.js"></script>
-
-  <script src="components/wp-dialog.js"></script>
-  <script src="components/wp-header.js"></script>
-  <script src="components/wp-clock.js"></script>
-  <script src="components/wp-project.js"></script>
-  <script src="components/wp-links.js"></script>
-  <script src="components/wp-tasks.js"></script>
 </body>
 
 </html>
