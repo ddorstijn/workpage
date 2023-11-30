@@ -1,112 +1,56 @@
 /**
  * Make a sortable list
- * @param {HTMLOListElement} el 
+ * @param {HTMLOListElement} listEl 
+ * @param {(el: HTMLElement) => void?} callback 
+ * @param {{group: string, data: {type: string, content: any}}?} options 
  */
-export async function sortable(el) {
-  /** @type {HTMLElement} */
-  let draggingEl;
-  /** @type {HTMLElement} */
-  let placeholder;
-  /**@type {boolean} */
-  let isDraggingStarted = false;
+export async function sortable(listEl, callback, options) {
+  listEl.addEventListener('dragover', ev => {
+    ev.preventDefault();
 
-  let x = 0;
-  let y = 0;
-
-  /** @param ev {MouseEvent} */
-  const mouseDownHandler = ev => {
-    draggingEl = ev.target.getRootNode().host;
-
-    // Calculate the mouse position
-    const rect = draggingEl.getBoundingClientRect();
-    x = ev.pageX - rect.left;
-    y = ev.pageY - rect.top;
-
-    // Attach the listeners to document
-    document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('mouseup', mouseUpHandler);
-  };
-
-  const mouseMoveHandler = (e) => {
-    const draggingRect = draggingEl.getBoundingClientRect();
-
-    if (!isDraggingStarted) {
-      isDraggingStarted = true;
-
-      // Let the placeholder take the height of dragging element
-      // So the next element won't move up
-      placeholder = document.createElement('wp-placeholder');
-      draggingEl.parentNode.insertBefore(placeholder, draggingEl.nextSibling);
-      placeholder.style.height = draggingRect.height + 'px';
-      placeholder.style.border = "3px solid var(--text-2)";
-      placeholder.style.borderRadius = "var(--radius-2)";
-
-      draggingEl.style.width = draggingRect.width + 'px';
-      draggingEl.style.position = 'absolute';
+    const bottomEl = insertAbove(listEl, ev.clientY);
+    if (!bottomEl) {
+      listEl.append(window.draggingEl);
+    } else {
+      listEl.insertBefore(window.draggingEl, bottomEl);
     }
-
-    // Set position for dragging element
-    draggingEl.style.top = (e.pageY - y) + 'px';
-    draggingEl.style.left = (e.pageX - x) + 'px';
-
-    const prevEl = draggingEl.previousElementSibling;
-    const nextEl = placeholder.nextElementSibling;
-
-    if (prevEl && isAbove(draggingEl, prevEl)) {
-      swap(placeholder, draggingEl);
-      swap(placeholder, prevEl);
-      return;
-    }
-
-    if (nextEl && isAbove(nextEl, draggingEl)) {
-      swap(nextEl, placeholder);
-      swap(nextEl, draggingEl);
-    }
-  };
-
-  const mouseUpHandler = () => {
-    placeholder?.remove();
-
-    draggingEl.style.removeProperty('top');
-    draggingEl.style.removeProperty('left');
-    draggingEl.style.removeProperty('position');
-
-    x = null;
-    y = null;
-    draggingEl = null;
-    isDraggingStarted = false;
-
-    // Remove the handlers of mousemove and mouseup
-    document.removeEventListener('mousemove', mouseMoveHandler);
-    document.removeEventListener('mouseup', mouseUpHandler);
-  };
-
-  /** 
-   *  @param {HTMLElement} nodeA 
-   *  @param {HTMLElement} nodeB  
-   */
-  function swap(nodeA, nodeB) {
-    const parentA = nodeA.parentNode;
-    const siblingA = nodeA.nextSibling === nodeB ? nodeA : nodeA.nextSibling;
-
-    nodeB.parentNode.insertBefore(nodeA, nodeB);
-    parentA.insertBefore(nodeB, siblingA);
-  }
-
-  /** 
-   *  @param {HTMLElement} nodeA 
-   *  @param {HTMLElement} nodeB  
-   */
-  function isAbove(nodeA, nodeB) {
-    // Get the bounding rectangle of nodes
-    const rectA = nodeA.getBoundingClientRect();
-    const rectB = nodeB.getBoundingClientRect();
-
-    return rectA.top + rectA.height / 2 < rectB.top + rectB.height / 2;
-  };
-
-  // Query all items
-  [...el.children].forEach(async child => {
-    child.shadowRoot.querySelector('.handle').addEventListener('mousedown', mouseDownHandler);
   });
+  
+  listEl.querySelectorAll('*').forEach((/** @type {HTMLElement} */ childEl) => {
+    childEl.draggable = true;
+    childEl.addEventListener('dragstart', ev => {
+      childEl.classList.add('dragging');
+      window.draggingEl = childEl;
+
+      if (options?.data) {
+        ev.dataTransfer.setData(options.data.type, options.data.content);
+      }
+    });
+    childEl.addEventListener('dragend', ev => {
+      childEl.classList.remove('dragging');
+      window.draggingEl = null;
+      
+      if (callback) {
+        callback(listEl);
+      }
+    });
+  })
+};
+
+/**
+ * Insert element above one of child element based on mouseposition
+ * @param {HTMLOListElement} listEl List Element
+ * @param {number} mouseY Vertical mouse position in the viewport
+ * 
+ * @returns {HTMLElement?}
+ */
+function insertAbove(listEl, mouseY) {
+  /** @type {HTMLElement[]} */
+  const els = Array.from(listEl.querySelectorAll(':scope > [draggable]:not(.dragging)'));
+  
+  return els.reduce((closest, el) => {
+    const { top, height } = el.getBoundingClientRect();
+    const offset = mouseY - (top + height / 2.0);
+    return (offset < 0 && (!closest || offset > mouseY - closest.getBoundingClientRect().top)) ? el : closest;
+  }, null);
 }

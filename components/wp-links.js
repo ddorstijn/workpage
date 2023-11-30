@@ -66,14 +66,10 @@ customElements.define(
 
     load(link) {
       this.link = link;
-      
+
       let a = this.shadowRoot.querySelector("a");
       a.innerText = link.name;
       a.href = link.url;
-      
-      this.shadowRoot.querySelector('li').addEventListener("dragstart", (event) =>
-        event.dataTransfer.setData("text/plain", link.url),
-      );
     }
   }
 );
