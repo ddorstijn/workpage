@@ -6,6 +6,9 @@
  * @param {(el: HTMLElement) => {type: string, content: any}?} data 
  */
 export async function sortable(listEl, callback, group, data) {
+  /** @type {HTMLElement} */
+  let draggingEl;
+  
   listEl.addEventListener('dragover', ev => {
     let itemGroup = ev.dataTransfer.getData("group");
     if (group && itemGroup && group != itemGroup) {
@@ -16,17 +19,19 @@ export async function sortable(listEl, callback, group, data) {
 
     const bottomEl = insertAbove(listEl, ev.clientY);
     if (!bottomEl) {
-      listEl.append(window.draggingEl);
+      listEl.append(draggingEl);
     } else {
-      listEl.insertBefore(window.draggingEl, bottomEl);
+      listEl.insertBefore(draggingEl, bottomEl);
     }
   });
+
+  listEl.addEventListener('dragend')
   
   listEl.querySelectorAll('*').forEach((/** @type {HTMLElement} */ childEl) => {
     childEl.draggable = true;
     childEl.addEventListener('dragstart', ev => {
       childEl.classList.add('dragging');
-      window.draggingEl = childEl;
+      draggingEl = childEl;
 
       if (group) {
         ev.dataTransfer.setData("group", group);
@@ -37,13 +42,14 @@ export async function sortable(listEl, callback, group, data) {
         ev.dataTransfer.setData(d.type, d.content);
       }
     });
-    childEl.addEventListener('dragend', ev => {
+    childEl.addEventListener('dragend', _ => {
       childEl.classList.remove('dragging');
-      window.draggingEl = null;
       
       if (callback) {
         callback(listEl);
       }
+      
+      draggingEl = null;
     });
   })
 };
