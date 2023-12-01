@@ -458,6 +458,7 @@
         display: flex;
         flex-direction: column;
         gap: var(--size-1);
+        padding-left: var(--size-3);
       }
     </style>
 
@@ -472,7 +473,7 @@
     </section>
   </template>
 
-  <template id="WP-LINK-GROUP-ITEM">
+  <template id="WP-LINK-ITEM">
     <style>
       @import "unstyle.css";
 
@@ -488,17 +489,10 @@
 
         letter-spacing: var(--font-letterspacing-1);
         color: var(--text-2);
-
-        &:hover .handle {
-          opacity: 1;
-        }
       }
     </style>
 
-    <li draggable="true">
-      <button class="handle">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5 15q-.425 0-.712-.288T4 14q0-.425.288-.712T5 13h14q.425 0 .713.288T20 14q0 .425-.288.713T19 15H5Zm0-4q-.425 0-.712-.288T4 10q0-.425.288-.712T5 9h14q.425 0 .713.288T20 10q0 .425-.288.713T19 11H5Z"/></svg>
-      </button>
+    <li>
       <a draggable="false"></a>
     </li>
   </template>

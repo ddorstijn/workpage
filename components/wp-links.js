@@ -52,7 +52,7 @@ customElements.define(
       let list = this.shadowRoot.querySelector("ol");
       list.replaceChildren();
       group.links.forEach((l) => {
-        list.appendChild(document.createElement("wp-link-group-item")).load(l);
+        list.appendChild(document.createElement("wp-link-item")).load(l);
       });
 
       sortable(list, "links", (el) => {
@@ -71,7 +71,7 @@ customElements.define(
 );
 
 customElements.define(
-  "wp-link-group-item",
+  "wp-link-item",
   class extends HTMLElement {
     data;
 

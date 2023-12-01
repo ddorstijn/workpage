@@ -112,16 +112,16 @@ async function init() {
     set(target, key, value) {
       target[key] = value;
   
-      browser.storage.sync.set(Object.assign({}, project));
+      chrome.storage.sync.set(Object.assign({}, project));
       return true;
     }
   };
   
-  project = new Proxy(await browser.storage.sync.get(localStorage.getItem("active")), handler);
+  project = new Proxy(await chrome.storage.sync.get(localStorage.getItem("active")), handler);
 
   if (!project[active]) {
     project = DEFAULT;
-    browser.storage.sync.set(project);
+    chrome.storage.sync.set(project);
   }
 
   await customElements.whenDefined("wp-links");
