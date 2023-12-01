@@ -15,6 +15,8 @@ customElements.define(
 
     load(linkgroups) {
       const groupList = this.shadowRoot.querySelector("ol");
+      groupList.replaceChildren();
+      
       for (const group of linkgroups) {
         const groupEl = document.createElement("wp-link-group");
         groupEl.load(group);
