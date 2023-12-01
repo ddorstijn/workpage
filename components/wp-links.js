@@ -14,12 +14,14 @@ customElements.define(
     }
 
     load(linkgroups) {
-      const links = this.shadowRoot.querySelector("div");
+      const groupList = this.shadowRoot.querySelector("ol");
       for (const group of linkgroups) {
         const groupEl = document.createElement("wp-link-group");
         groupEl.load(group);
-        links.append(groupEl);
+        groupList.append(groupEl);
       }
+
+      sortable(groupList, "linkgroup", "horizontal");
     }
   }
 );
@@ -55,7 +57,7 @@ customElements.define(
         list.appendChild(document.createElement("wp-link-item")).load(l);
       });
 
-      sortable(list, "links", (el) => {
+      sortable(list, "links", "vertical", (el) => {
         return {
           type: "text/plain",
           content: el.data.url,

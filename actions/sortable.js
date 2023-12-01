@@ -6,32 +6,36 @@ var startList;
 
 /**
  * Make a sortable list. Calls optional save method on list after move
- * @param {HTMLOListElement} listEl 
+ * @param {HTMLOListElement} listEl
  * @param {string} group Group for filtering dropzones
- * @param {(el: HTMLElement) => {type: string, content: any}?} data 
+ * @param {"horizontal" | "vertical"} mode
+ * @param {(el: HTMLElement) => {type: string, content: any}?} data
  */
-export async function sortable(listEl, group, data) {
-  listEl.addEventListener('dragover', ev => {
+export async function sortable(listEl, group, mode = "vertical", data) {
+  listEl.addEventListener("dragover", (ev) => {
+    ev.stopPropagation();
     let itemGroup = ev.dataTransfer.getData("group");
     if (group && itemGroup && group != itemGroup) {
       return false;
     }
-    
+
     ev.preventDefault();
 
-    const bottomEl = insertAbove(listEl, ev.clientY);
-    if (!bottomEl) {
+    const mousePos = mode == "vertical" ? ev.clientY : ev.clientX;
+    const lastEl = insertBefore(listEl, mousePos, mode);
+    if (!lastEl) {
       listEl.append(draggingEl);
     } else {
-      listEl.insertBefore(draggingEl, bottomEl);
+      listEl.insertBefore(draggingEl, lastEl);
     }
   });
-  
-  listEl.querySelectorAll('*').forEach((/** @type {HTMLElement} */ childEl) => {
+
+  listEl.querySelectorAll("*").forEach((/** @type {HTMLElement} */ childEl) => {
     childEl.draggable = true;
-    childEl.addEventListener('dragstart', ev => {
+    childEl.addEventListener("dragstart", (ev) => {
+      ev.stopPropagation();
       startList = childEl.parentElement;
-      childEl.classList.add('dragging');
+      childEl.classList.add("dragging");
       draggingEl = childEl;
 
       if (group) {
@@ -44,34 +48,46 @@ export async function sortable(listEl, group, data) {
       }
     });
 
-    childEl.addEventListener('dragend', _ => {
-      childEl.classList.remove('dragging');
+    childEl.addEventListener("dragend", (ev) => {
+      ev.stopPropagation();
+      childEl.classList.remove("dragging");
       draggingEl = null;
 
-      startList.dispatchEvent(new Event('save'));
+      startList.dispatchEvent(new Event("save"));
 
       const endList = childEl.parentElement;
       if (startList != endList) {
-        endList.dispatchEvent(new Event('save'));
+        endList.dispatchEvent(new Event("save"));
       }
     });
-  })
-};
+  });
+}
 
 /**
- * Insert element above one of child element based on mouseposition
+ * Insert element above one of child element based on mouse position
  * @param {HTMLOListElement} listEl List Element
- * @param {number} mouseY Vertical mouse position in the viewport
- * 
+ * @param {number} mousePos Mouse position in the viewport
+ * @param {'vertical' | 'horizontal'} direction Direction of insertion ('vertical' or 'horizontal')
+ *
  * @returns {HTMLElement?}
  */
-function insertAbove(listEl, mouseY) {
-  /** @type {HTMLElement[]} */
-  const els = Array.from(listEl.querySelectorAll(':scope > [draggable]:not(.dragging)'));
-  
-  return els.reduce((closest, el) => {
-    const { top, height } = el.getBoundingClientRect();
-    const offset = mouseY - (top + height / 2.0);
-    return (offset < 0 && (!closest || offset > mouseY - closest.getBoundingClientRect().top)) ? el : closest;
+function insertBefore(listEl, mousePos, direction) {
+  return Array.from(
+    listEl.querySelectorAll(":scope > [draggable]:not(.dragging)")
+  ).reduce((closest, el) => {
+    const rect = el.getBoundingClientRect();
+    const startPos = direction === "vertical" ? rect.top : rect.left;
+    const extent = direction === "vertical" ? rect.height : rect.width;
+    const offset = mousePos - (startPos + extent / 2.0);
+
+    return offset < 0 &&
+      (closest === null ||
+        offset >
+          mousePos -
+            (direction === "vertical"
+              ? closest.getBoundingClientRect().top
+              : closest.getBoundingClientRect().left))
+      ? el
+      : closest;
   }, null);
 }
