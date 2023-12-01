@@ -41,28 +41,31 @@ customElements.define(
 
       let title = this.shadowRoot.querySelector("h2");
       title.innerText = group.name;
-      editable(this, title, (val) => (group.name = val));
+
+      editable(title);
+      title.addEventListener("edit", () => (this.draggable = false));
+      title.addEventListener("save", () => {
+        this.draggable = true;
+        group.name = title.innerText;
+      });
 
       let list = this.shadowRoot.querySelector("ol");
       list.replaceChildren();
-
-      group.links.forEach(l => {
-        list.appendChild(document.createElement("wp-link-group-item")).load(l)
+      group.links.forEach((l) => {
+        list.appendChild(document.createElement("wp-link-group-item")).load(l);
       });
 
-      sortable(
-        list,
-        "links",
-        () => this.group.links = [...this.shadowRoot.querySelectorAll("wp-link-group-item")].map(
-          (linkEl) => linkEl.data
-        ),
-        (el) => {
-          return {
-            type: "text/plain",
-            content: el.data.url,
-          };
-        }
-      );
+      sortable(list, "links", (el) => {
+        return {
+          type: "text/plain",
+          content: el.data.url,
+        };
+      });
+
+      list.addEventListener("save", () => {
+        let children = [...list.querySelectorAll("*")];
+        group.links = children.map((linkEl) => linkEl.data);
+      });
     }
   }
 );
@@ -71,7 +74,7 @@ customElements.define(
   "wp-link-group-item",
   class extends HTMLElement {
     data;
-    
+
     constructor() {
       /** @type {HTMLElement} */
       let node = document

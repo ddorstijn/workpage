@@ -1,14 +1,16 @@
 /** @type {HTMLElement} */
 var draggingEl;
 
+/** @type {HTMLOListElement} */
+var startList;
+
 /**
- * Make a sortable list
+ * Make a sortable list. Calls optional save method on list after move
  * @param {HTMLOListElement} listEl 
  * @param {string} group Group for filtering dropzones
- * @param {Function} callback Debounced call when dragging
  * @param {(el: HTMLElement) => {type: string, content: any}?} data 
  */
-export async function sortable(listEl, group, callback, data) {
+export async function sortable(listEl, group, data) {
   listEl.addEventListener('dragover', ev => {
     let itemGroup = ev.dataTransfer.getData("group");
     if (group && itemGroup && group != itemGroup) {
@@ -28,6 +30,7 @@ export async function sortable(listEl, group, callback, data) {
   listEl.querySelectorAll('*').forEach((/** @type {HTMLElement} */ childEl) => {
     childEl.draggable = true;
     childEl.addEventListener('dragstart', ev => {
+      startList = childEl.parentElement;
       childEl.classList.add('dragging');
       draggingEl = childEl;
 
@@ -40,9 +43,17 @@ export async function sortable(listEl, group, callback, data) {
         ev.dataTransfer.setData(d.type, d.content);
       }
     });
+
     childEl.addEventListener('dragend', _ => {
-      childEl.classList.remove('dragging');      
+      childEl.classList.remove('dragging');
       draggingEl = null;
+
+      startList.dispatchEvent(new Event('save'));
+
+      const endList = childEl.parentElement;
+      if (startList != endList) {
+        endList.dispatchEvent(new Event('save'));
+      }
     });
   })
 };
@@ -63,18 +74,4 @@ function insertAbove(listEl, mouseY) {
     const offset = mouseY - (top + height / 2.0);
     return (offset < 0 && (!closest || offset > mouseY - closest.getBoundingClientRect().top)) ? el : closest;
   }, null);
-}
-
-/**
- * Debounce a function call
- * @param {Function} func Function to be called after timeout
- * @param {number} timeout Timeout in ms
- * @returns Debounced function
- */
-function debounce(func, timeout = 500){
-  let timer;
-  return () => {
-    clearTimeout(timer);
-    timer = setTimeout(() => { func(); }, timeout);
-  };
 }
