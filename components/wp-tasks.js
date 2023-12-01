@@ -12,6 +12,13 @@ customElements.define(
         .getElementById(super().nodeName)
         .content.cloneNode(true);
 
+      let open = localStorage.getItem("task-open") == "true";
+      let details = node.querySelector("details");
+      details.open = open;
+      details.addEventListener("toggle", () =>
+        localStorage.setItem("task-open", details.open)
+      );
+
       node.querySelector("button").addEventListener("click", () => {
         this.data.push({ name: "Task" });
 
