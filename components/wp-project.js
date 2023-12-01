@@ -19,7 +19,7 @@ customElements.define(
 
       let button = this.shadowRoot.querySelector('button');
       button.addEventListener('click', () => this.shadowRoot.querySelector('wp-dialog').showModal());
-      button.querySelector("span").innerText = localStorage.getItem('activeProject') ?? 'General';
+      button.querySelector("span").textContent = localStorage.getItem('active') ?? 'General';
 
       let list = this.shadowRoot.querySelector("ol");
       list.replaceChildren();

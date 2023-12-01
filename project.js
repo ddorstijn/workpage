@@ -120,7 +120,8 @@ export async function initWorkpage(active) {
     }
   };
   
-  project = new Proxy(await chrome.storage.sync.get(localStorage.getItem("active")), handler);
+  project = new Proxy(await chrome.storage.sync.get(active), handler);
+  console.log(project);
 
   if (!project[active]) {
     project = DEFAULT;
