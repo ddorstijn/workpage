@@ -41,7 +41,7 @@ customElements.define(
 
       let list = this.shadowRoot.querySelector("ol");
       list.replaceChildren();
-      this.data.forEach((t) => {
+      todo.forEach((t) => {
         list.appendChild(document.createElement("wp-task-item")).load(t);
       });
 

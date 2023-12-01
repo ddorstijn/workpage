@@ -350,12 +350,6 @@
         font-weight: bold;
         background-color: var(--theme);
       }
-
-      .project-subtitle {
-        display: block;
-        font-size: var(--font-size-00);
-        color: var(--text-2);
-      }
     </style>
 
     <div class="project">
@@ -368,16 +362,28 @@
       </button>
 
       <wp-dialog data-title="Choose project">
-        <ul slot="content">
-          <li>
-            <div class="wrapper">
-              <span class="project-title">General</span>
-              <span class="project-subtitle">2 days ago</span>
-            </div>
-          </li>
-        </ul>
+        <ol slot="content">
+          
+        </ol>
       </wp-dialog>
     </div>
+  </template>
+
+  <template id="WP-PROJECT-ITEM">
+    <style>
+      .project-subtitle {
+        display: block;
+        font-size: var(--font-size-00);
+        color: var(--text-2);
+      }
+    </style>
+    
+    <li>
+      <div class="wrapper">
+        <span class="project-title"></span>
+        <span class="project-subtitle"></span>
+      </div>
+    </li>
   </template>
 
   <template id="WP-LINKS">

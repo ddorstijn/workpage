@@ -122,11 +122,17 @@ async function init() {
   if (!project[active]) {
     project = DEFAULT;
     chrome.storage.sync.set(project);
+    localStorage.setItem("active", "General");
   }
 
+  let projectData = await chrome.storage.sync.get();
+  let projects = Object.keys(projectData).map(name => { return { name, used: projectData[name].used}});
+
+  await customElements.whenDefined("wp-project");
+  document.querySelector("wp-project").load(projects);
   await customElements.whenDefined("wp-links");
-  await customElements.whenDefined("wp-tasks");
   document.querySelector("wp-links").load(project[active].linkgroups);
+  await customElements.whenDefined("wp-tasks");
   document.querySelector("wp-tasks").load(project[active].todo);
 }
 
