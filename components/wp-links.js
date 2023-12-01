@@ -27,8 +27,6 @@ customElements.define(
 customElements.define(
   "wp-link-group",
   class extends HTMLElement {
-    group;
-
     constructor() {
       /** @type {HTMLElement} */
       let node = document
@@ -39,38 +37,29 @@ customElements.define(
     }
 
     load(group) {
-      this.group = group;
-      console.log(this.group);
       this.shadowRoot.querySelector("section").classList.add(group.color);
 
       let title = this.shadowRoot.querySelector("h2");
       title.innerText = group.name;
-      editable(title, (val) => (group.name = val));
+      editable(this, title, (val) => (group.name = val));
 
       let list = this.shadowRoot.querySelector("ol");
+      list.replaceChildren();
 
-      for (const link of group.links) {
-        const linkEl = document.createElement("wp-link-group-item");
-        linkEl.load(link);
-        list.append(linkEl);
-      }
+      group.links.forEach(l => {
+        list.appendChild(document.createElement("wp-link-group-item")).load(l)
+      });
 
       sortable(
         list,
-        (el) => {
-          let json = [...el.querySelectorAll("wp-link-group-item")].map(
-            (linkEl) => {
-              return linkEl.link;
-            }
-          );
-
-          this.group.links = json;
-        },
         "links",
+        () => this.group.links = [...this.shadowRoot.querySelectorAll("wp-link-group-item")].map(
+          (linkEl) => linkEl.data
+        ),
         (el) => {
           return {
             type: "text/plain",
-            content: el.link.url,
+            content: el.data.url,
           };
         }
       );
@@ -81,8 +70,8 @@ customElements.define(
 customElements.define(
   "wp-link-group-item",
   class extends HTMLElement {
-    link;
-
+    data;
+    
     constructor() {
       /** @type {HTMLElement} */
       let node = document
@@ -93,7 +82,7 @@ customElements.define(
     }
 
     load(link) {
-      this.link = link;
+      this.data = link;
 
       let a = this.shadowRoot.querySelector("a");
       a.innerText = link.name;

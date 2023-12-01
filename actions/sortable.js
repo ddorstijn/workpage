@@ -1,14 +1,14 @@
+/** @type {HTMLElement} */
+var draggingEl;
+
 /**
  * Make a sortable list
  * @param {HTMLOListElement} listEl 
- * @param {(el: HTMLElement) => void?} callback 
  * @param {string} group Group for filtering dropzones
+ * @param {Function} callback Debounced call when dragging
  * @param {(el: HTMLElement) => {type: string, content: any}?} data 
  */
-export async function sortable(listEl, callback, group, data) {
-  /** @type {HTMLElement} */
-  let draggingEl;
-  
+export async function sortable(listEl, group, callback, data) {
   listEl.addEventListener('dragover', ev => {
     let itemGroup = ev.dataTransfer.getData("group");
     if (group && itemGroup && group != itemGroup) {
@@ -24,8 +24,6 @@ export async function sortable(listEl, callback, group, data) {
       listEl.insertBefore(draggingEl, bottomEl);
     }
   });
-
-  listEl.addEventListener('dragend')
   
   listEl.querySelectorAll('*').forEach((/** @type {HTMLElement} */ childEl) => {
     childEl.draggable = true;
@@ -43,12 +41,7 @@ export async function sortable(listEl, callback, group, data) {
       }
     });
     childEl.addEventListener('dragend', _ => {
-      childEl.classList.remove('dragging');
-      
-      if (callback) {
-        callback(listEl);
-      }
-      
+      childEl.classList.remove('dragging');      
       draggingEl = null;
     });
   })
@@ -70,4 +63,18 @@ function insertAbove(listEl, mouseY) {
     const offset = mouseY - (top + height / 2.0);
     return (offset < 0 && (!closest || offset > mouseY - closest.getBoundingClientRect().top)) ? el : closest;
   }, null);
+}
+
+/**
+ * Debounce a function call
+ * @param {Function} func Function to be called after timeout
+ * @param {number} timeout Timeout in ms
+ * @returns Debounced function
+ */
+function debounce(func, timeout = 500){
+  let timer;
+  return () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => { func(); }, timeout);
+  };
 }

@@ -1,25 +1,27 @@
 /**
  * Initialize element as editable
+ * @param {HTMLElement} root The main element where the editable area is part of
  * @param {HTMLElement} el
  * @param {(val: string) => void | undefined} callback
  */
-export function editable(el, callback) {  
-  let resetDraggable = false;
-  
-  el.addEventListener("dblclick", (_) => {
+export function editable(root, el, callback) {  
+  root.edit = () => {
+    if (el.contentEditable == 'true') return;
+    
     el.contentEditable = true;
     el.focus();
-    document.getSelection().collapseToEnd();
+    document.getSelection()?.collapseToStart();
     
-    if (el.getRootNode().host.draggable) {
-      resetDraggable = true;
+    if (root.draggable) {
+      root.freezeDrag = true;
       el.getRootNode().host.draggable = false;
     }
-  });
+  };
 
-  el.addEventListener("blur", (_) => {
-    if (resetDraggable) {
-      el.getRootNode().host.draggable = true;
+  root.save = () => {
+    if (root.freezeDrag) {
+      root.freezeDrag = false;
+      root.draggable = true;
     }
     
     el.contentEditable = false;
@@ -27,8 +29,10 @@ export function editable(el, callback) {
     if (callback) {
       callback(el.textContent);
     }
-  });
+  };
 
+  el.addEventListener("dblclick", root.edit);
+  el.addEventListener("blur", root.save);
   el.addEventListener("keydown", (ev) => {
     if (ev.key == "Enter") {
       ev.preventDefault();

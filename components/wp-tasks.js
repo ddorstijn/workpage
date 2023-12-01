@@ -4,30 +4,36 @@ import { editable } from "../actions/editable.js";
 customElements.define(
   "wp-tasks",
   class extends HTMLElement {
-    todos;
+    data;
     
     constructor() {
       /** @type {HTMLElement} */
       let node = document.getElementById(super().nodeName).content.cloneNode(true);
 
       node.querySelector('button').addEventListener('click', () => {
-        this.todos.push({ name: 'Task'});
+        this.data.push({ name: 'Task'});
+        
+        let newTask = this.shadowRoot.querySelector('ol').appendChild(document.createElement('wp-task-item'));
+        newTask.load({ name: '' });
+        newTask.edit();
       });
 
       this.attachShadow({ mode: 'open' }).append(node);
     }
 
     load(todo) {
-      this.todos = todo;
-      let list = this.shadowRoot.querySelector('ol');
+      this.data = todo;
       
-      for (const t of todo) {
-        const taskEl = document.createElement('wp-task-item');
-        taskEl.load(t);  
-        list.append(taskEl);
-      }
+      let list = this.shadowRoot.querySelector('ol');
+      list.replaceChildren();
+      
+      this.data.forEach(t => {
+        list.appendChild(document.createElement('wp-task-item')).load(t);
+      });
 
-      sortable(list, null, { group: "tasks" });
+      sortable(list, "tasks", () => this.todo = [...this.shadowRoot.querySelectorAll("wp-task-item")].map(
+        (taskEl) => taskEl.data
+      ));
     }
   }
 );
@@ -35,6 +41,8 @@ customElements.define(
 customElements.define(
   "wp-task-item",
   class extends HTMLElement {
+    data;
+
     constructor() {
       /** @type {HTMLElement} */
       let node = document.getElementById(super().nodeName).content.cloneNode(true);
@@ -43,9 +51,11 @@ customElements.define(
     }
 
     load(todo) {
+      this.data = todo;
+
       const name = this.shadowRoot.querySelector('span');
       name.textContent = todo.name;
-      editable(name);
+      editable(this, name, (val) => todo.name = val);
     }
   },
 );

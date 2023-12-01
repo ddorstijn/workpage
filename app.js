@@ -121,8 +121,8 @@ async function init() {
 
   if (!project[active]) {
     project = DEFAULT;
+    browser.storage.sync.set(project);
   }
-  window.project = project;
 
   await customElements.whenDefined("wp-links");
   await customElements.whenDefined("wp-tasks");
