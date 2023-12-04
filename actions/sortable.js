@@ -1,6 +1,6 @@
 /** 
  * @template T
- * @type {{ el: HTMLElement, source: T[], item: T }?} 
+ * @type {{ el: HTMLElement, group: string, source: T[], item: T }?} 
  **/
 var dragCtx;
 
@@ -10,14 +10,14 @@ var dragCtx;
  * @param {HTMLOListElement} listEl
  * @param {{ items: T[], tagName: string, group: string, mode: "horizontal" | "vertical", data: (item: T) => {type: string, content: string}? }} options 
  */
-export async function sortable(listEl, options) {
+export async function sortable(listEl, { items, tagName, group, mode, data}) {
   // Make sure there are no elements when initializing
   listEl.replaceChildren();
-  for (const item of options.items) {
-    const childEl = document.createElement(options.tagName);
+  for (const item of items) {
+    const childEl = document.createElement(tagName);
+    childEl.draggable = true;
     
     childEl.load(item);
-    childEl.draggable = true;
     childEl.addEventListener("dragstart", (ev) => {
       ev.stopPropagation();
       
@@ -25,14 +25,13 @@ export async function sortable(listEl, options) {
 
       dragCtx = {
         el: childEl,
-        source: options.items,
+        group: group,
+        source: items,
         item: item
       };
       
-      ev.dataTransfer.setData("group", options.group);
-
-      if (options.data) {
-        let {type, content} = options.data(item);
+      if (data) {
+        let {type, content} = data(item);
         ev.dataTransfer.setData(type, content);
       }
     });
@@ -49,18 +48,15 @@ export async function sortable(listEl, options) {
     ev.preventDefault();
     ev.stopPropagation();
     
-    let itemGroup = ev.dataTransfer.getData("group");
-    if (options.group && itemGroup && options.group != itemGroup) {
+    if (group && dragCtx.group && group != dragCtx.group) {
+      ev.dataTransfer.dropEffect = "none";
       return false;
     }
 
-    const mousePos = options.mode == "vertical" ? ev.clientY : ev.clientX;
-    const lastEl = insertBefore(listEl, mousePos, options.mode);
-    if (!lastEl) {
-      listEl.append(dragCtx.el);
-    } else {
-      listEl.insertBefore(dragCtx.el, lastEl);
-    }
+    ev.dataTransfer.dropEffect = "move";
+
+    const mousePos = mode == "vertical" ? ev.clientY : ev.clientX;
+    moveElement(listEl, dragCtx.el, mousePos, mode);
 
     return true;
   });
@@ -68,11 +64,15 @@ export async function sortable(listEl, options) {
   listEl.addEventListener('drop', ev => {
     ev.stopPropagation();
 
+    if (group && dragCtx.group && group != dragCtx.group) {
+      return false;
+    }
+
     // Move item from source array to target array 
     dragCtx.source.splice(dragCtx.source.indexOf(dragCtx.item), 1)[0];
 
     const dropIndex = [...listEl.children].indexOf(dragCtx.el);
-    options.items.splice(dropIndex, 0, dragCtx.item);
+    items.splice(dropIndex, 0, dragCtx.item);
     dragCtx = null;
   });
 }
@@ -80,13 +80,12 @@ export async function sortable(listEl, options) {
 /**
  * Insert element above one of child element based on mouse position
  * @param {HTMLOListElement} listEl List Element
+ * @param {HTMLElement} dragEl The dragged element
  * @param {number} mousePos Mouse position in the viewport
  * @param {'vertical' | 'horizontal'} direction Direction of insertion ('vertical' or 'horizontal')
- *
- * @returns {HTMLElement?}
  */
-function insertBefore(listEl, mousePos, direction) {
-  return [...listEl.querySelectorAll("[draggable]:not(.dragging)")].reduce((closest, el) => {
+function moveElement(listEl, dragEl, mousePos, direction) {
+  const el = [...listEl.querySelectorAll("[draggable]:not(.dragging)")].reduce((closest, el) => {
     const rect = el.getBoundingClientRect();
     const startPos = direction === "vertical" ? rect.top : rect.left;
     const extent = direction === "vertical" ? rect.height : rect.width;
@@ -102,4 +101,10 @@ function insertBefore(listEl, mousePos, direction) {
       ? el
       : closest;
   }, null);
+
+  if (!el) {
+    listEl.append(dragEl);
+  } else {
+    listEl.insertBefore(dragEl, el);
+  }
 }
