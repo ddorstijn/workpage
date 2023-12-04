@@ -1,10 +1,14 @@
-/** @type {HTMLElement} */
-var draggingEl;
+/** 
+ * @template T
+ * @type {{ el: HTMLElement, source: T[], item: T }?} 
+ **/
+var dragCtx;
 
 /**
  * Make a sortable list. Calls optional save method on list after move
+ * @template T
  * @param {HTMLOListElement} listEl
- * @param {{ items: object[], tagName: string, group: string, mode: "horizontal" | "vertical", data: (item) => {type: string, content: string}? }} options 
+ * @param {{ items: T[], tagName: string, group: string, mode: "horizontal" | "vertical", data: (item: T) => {type: string, content: string}? }} options 
  */
 export async function sortable(listEl, options) {
   // Make sure there are no elements when initializing
@@ -17,12 +21,14 @@ export async function sortable(listEl, options) {
     childEl.addEventListener("dragstart", (ev) => {
       ev.stopPropagation();
       
-      let dataObj = options.items.splice(options.items.indexOf(item), 1)[0];
-      ev.dataTransfer.setData('application/json', JSON.stringify(dataObj));
-
       childEl.classList.add("dragging");
-      draggingEl = childEl;
 
+      dragCtx = {
+        el: childEl,
+        source: options.items,
+        item: item
+      };
+      
       ev.dataTransfer.setData("group", options.group);
 
       if (options.data) {
@@ -51,9 +57,9 @@ export async function sortable(listEl, options) {
     const mousePos = options.mode == "vertical" ? ev.clientY : ev.clientX;
     const lastEl = insertBefore(listEl, mousePos, options.mode);
     if (!lastEl) {
-      listEl.append(draggingEl);
+      listEl.append(dragCtx.el);
     } else {
-      listEl.insertBefore(draggingEl, lastEl);
+      listEl.insertBefore(dragCtx.el, lastEl);
     }
 
     return true;
@@ -62,10 +68,12 @@ export async function sortable(listEl, options) {
   listEl.addEventListener('drop', ev => {
     ev.stopPropagation();
 
-    const dropIndex = [...listEl.children].indexOf(draggingEl);
-    const dataObj = JSON.parse(ev.dataTransfer.getData('application/json'));
-    options.items.splice(dropIndex, 0, dataObj);
-    draggingEl = null;
+    // Move item from source array to target array 
+    dragCtx.source.splice(dragCtx.source.indexOf(dragCtx.item), 1)[0];
+
+    const dropIndex = [...listEl.children].indexOf(dragCtx.el);
+    options.items.splice(dropIndex, 0, dragCtx.item);
+    dragCtx = null;
   });
 }
 

@@ -4,8 +4,6 @@ import { editable } from "../actions/editable.js";
 customElements.define(
   "wp-tasks",
   class extends HTMLElement {
-    data;
-
     constructor() {
       /** @type {HTMLElement} */
       let node = document
@@ -19,16 +17,6 @@ customElements.define(
         localStorage.setItem("task-open", details.open)
       );
 
-      node.querySelector("button").addEventListener("click", () => {
-        this.data.push({ name: "Task" });
-
-        let newTask = this.shadowRoot
-          .querySelector("ol")
-          .appendChild(document.createElement("wp-task-item"));
-        newTask.load({ name: "" });
-        newTask.edit();
-      });
-
       this.attachShadow({ mode: "open" }).append(node);
     }
 
@@ -37,20 +25,21 @@ customElements.define(
      * @param {{name: string}[]} todo
      */
     load(todo) {
-      this.data = todo;
-
-      let list = this.shadowRoot.querySelector("ol");
-      list.replaceChildren();
-      todo.forEach((t) => {
-        list.appendChild(document.createElement("wp-task-item")).load(t);
+      sortable(this.shadowRoot.querySelector("ol"), {
+        items: todo,
+        tagName: "wp-task-item",
+        group: 'tasks',
+        mode: "vertical",
       });
 
-      // sortable(list, "tasks");
-      list.addEventListener("save", () => {
-        todo.length = 0;
+      this.shadowRoot.querySelector("button").addEventListener("click", () => {
+        todo = [...todo, { name: "Task" }];
 
-        const children = [...list.querySelectorAll("wp-task-item")];
-        todo.push(...children.map((taskEl) => taskEl.data));
+        let newTask = this.shadowRoot
+          .querySelector("ol")
+          .appendChild(document.createElement("wp-task-item"));
+        newTask.load({ name: "" });
+        newTask.edit();
       });
     }
   }
@@ -59,8 +48,6 @@ customElements.define(
 customElements.define(
   "wp-task-item",
   class extends HTMLElement {
-    data;
-
     constructor() {
       /** @type {HTMLElement} */
       let node = document
@@ -71,8 +58,6 @@ customElements.define(
     }
 
     load(todo) {
-      this.data = todo;
-
       const name = this.shadowRoot.querySelector("span");
       name.textContent = todo.name;
 

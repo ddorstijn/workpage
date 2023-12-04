@@ -27,8 +27,6 @@ customElements.define(
 customElements.define(
   "wp-link-group",
   class extends HTMLElement {
-    data;
-    
     constructor() {
       /** @type {HTMLElement} */
       let node = document
@@ -70,8 +68,6 @@ customElements.define(
 customElements.define(
   "wp-link-item",
   class extends HTMLElement {
-    data;
-
     constructor() {
       /** @type {HTMLElement} */
       let node = document
@@ -82,8 +78,6 @@ customElements.define(
     }
 
     load(link) {
-      this.data = link;
-
       let a = this.shadowRoot.querySelector("a");
       a.innerText = link.name;
       a.href = link.url;
