@@ -140,19 +140,19 @@ function createDeepOnChangeProxy(target, onChange) {
 }
 
 
-document.getElementById('add-project').addEventListener('submit', async ev => {
-  ev.stopPropagation();
+document.getElementById('add-project').addEventListener('submit', ev => {
+  ev.stopImmediatePropagation();
   ev.preventDefault();
 
   /** @type {HTMLFormElement} */
   const form = ev.currentTarget;
-  
+
   const fd = new FormData(form);
   const name = fd.get('name');
 
   if (!name) return;
 
-  await chrome.storage.sync.set({ [name]: TEMPLATE });
+  chrome.storage.sync.set({ [name]: TEMPLATE });
 
   form.reset();
 })
