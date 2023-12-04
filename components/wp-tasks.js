@@ -45,7 +45,7 @@ customElements.define(
         list.appendChild(document.createElement("wp-task-item")).load(t);
       });
 
-      sortable(list, "tasks");
+      // sortable(list, "tasks");
       list.addEventListener("save", () => {
         todo.length = 0;
 

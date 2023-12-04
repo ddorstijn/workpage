@@ -1,65 +1,71 @@
 /** @type {HTMLElement} */
 var draggingEl;
 
-/** @type {HTMLOListElement} */
-var startList;
-
 /**
  * Make a sortable list. Calls optional save method on list after move
  * @param {HTMLOListElement} listEl
- * @param {string} group Group for filtering dropzones
- * @param {"horizontal" | "vertical"} mode
- * @param {(el: HTMLElement) => {type: string, content: any}?} data
+ * @param {{ items: object[], tagName: string, group: string, mode: "horizontal" | "vertical", data: (item) => {type: string, content: string}? }} options 
  */
-export async function sortable(listEl, group, mode = "vertical", data) {
-  listEl.addEventListener("dragover", (ev) => {
-    ev.stopPropagation();
-    let itemGroup = ev.dataTransfer.getData("group");
-    if (group && itemGroup && group != itemGroup) {
-      return false;
-    }
-
-    ev.preventDefault();
-
-    const mousePos = mode == "vertical" ? ev.clientY : ev.clientX;
-    const lastEl = insertBefore(listEl, mousePos, mode);
-    if (!lastEl) {
-      listEl.append(draggingEl);
-    } else {
-      listEl.insertBefore(draggingEl, lastEl);
-    }
-  });
-
-  listEl.querySelectorAll("*").forEach((/** @type {HTMLElement} */ childEl) => {
+export async function sortable(listEl, options) {
+  // Make sure there are no elements when initializing
+  listEl.replaceChildren();
+  for (const item of options.items) {
+    const childEl = document.createElement(options.tagName);
+    
+    childEl.load(item);
     childEl.draggable = true;
     childEl.addEventListener("dragstart", (ev) => {
       ev.stopPropagation();
-      startList = childEl.parentElement;
+      
+      let dataObj = options.items.splice(options.items.indexOf(item), 1)[0];
+      ev.dataTransfer.setData('application/json', JSON.stringify(dataObj));
+
       childEl.classList.add("dragging");
       draggingEl = childEl;
 
-      if (group) {
-        ev.dataTransfer.setData("group", group);
-      }
+      ev.dataTransfer.setData("group", options.group);
 
-      if (data) {
-        let d = data(childEl);
-        ev.dataTransfer.setData(d.type, d.content);
+      if (options.data) {
+        let {type, content} = options.data(item);
+        ev.dataTransfer.setData(type, content);
       }
     });
 
     childEl.addEventListener("dragend", (ev) => {
       ev.stopPropagation();
       childEl.classList.remove("dragging");
-      draggingEl = null;
-
-      startList.dispatchEvent(new Event("save"));
-
-      const endList = childEl.parentElement;
-      if (startList != endList) {
-        endList.dispatchEvent(new Event("save"));
-      }
     });
+
+    listEl.append(childEl);
+  }
+
+  listEl.addEventListener("dragover", (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    
+    let itemGroup = ev.dataTransfer.getData("group");
+    if (options.group && itemGroup && options.group != itemGroup) {
+      return false;
+    }
+
+    const mousePos = options.mode == "vertical" ? ev.clientY : ev.clientX;
+    const lastEl = insertBefore(listEl, mousePos, options.mode);
+    if (!lastEl) {
+      listEl.append(draggingEl);
+    } else {
+      listEl.insertBefore(draggingEl, lastEl);
+    }
+
+    return true;
+  });
+
+  listEl.addEventListener('drop', ev => {
+    ev.stopPropagation();
+
+    const dropIndex = [...listEl.children].indexOf(draggingEl);
+    const dataObj = JSON.parse(ev.dataTransfer.getData('application/json'));
+    options.items.splice(dropIndex, 0, dataObj);
+    draggingEl = null;
   });
 }
 
@@ -72,9 +78,7 @@ export async function sortable(listEl, group, mode = "vertical", data) {
  * @returns {HTMLElement?}
  */
 function insertBefore(listEl, mousePos, direction) {
-  return Array.from(
-    listEl.querySelectorAll(":scope > [draggable]:not(.dragging)")
-  ).reduce((closest, el) => {
+  return [...listEl.querySelectorAll("[draggable]:not(.dragging)")].reduce((closest, el) => {
     const rect = el.getBoundingClientRect();
     const startPos = direction === "vertical" ? rect.top : rect.left;
     const extent = direction === "vertical" ? rect.height : rect.width;

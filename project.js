@@ -115,20 +115,20 @@ export async function initWorkpage(active) {
     set(target, key, value) {
       target[key] = value;
   
+      console.log(target);
       chrome.storage.sync.set(Object.assign({}, project));
       return true;
     }
   };
   
   project = new Proxy(await chrome.storage.sync.get(active), handler);
-  console.log(project);
 
   if (!project[active]) {
     project = DEFAULT;
     chrome.storage.sync.set(project);
     localStorage.setItem("active", "General");
   }
-
+  
   let projectData = await chrome.storage.sync.get();
   let projects = Object.keys(projectData).map(name => { return { name, used: projectData[name].used}});
 

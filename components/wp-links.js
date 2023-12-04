@@ -14,16 +14,12 @@ customElements.define(
     }
 
     load(linkgroups) {
-      const groupList = this.shadowRoot.querySelector("ol");
-      groupList.replaceChildren();
-      
-      for (const group of linkgroups) {
-        const groupEl = document.createElement("wp-link-group");
-        groupEl.load(group);
-        groupList.append(groupEl);
-      }
-
-      sortable(groupList, "linkgroup", "horizontal");
+      sortable(this.shadowRoot.querySelector("ol"), {
+        items: linkgroups,
+        tagName: 'wp-link-group',
+        group: "linkgroup",
+        mode: "horizontal"
+      });
     }
   }
 );
@@ -31,6 +27,8 @@ customElements.define(
 customElements.define(
   "wp-link-group",
   class extends HTMLElement {
+    data;
+    
     constructor() {
       /** @type {HTMLElement} */
       let node = document
@@ -53,22 +51,17 @@ customElements.define(
         group.name = title.innerText;
       });
 
-      let list = this.shadowRoot.querySelector("ol");
-      list.replaceChildren();
-      group.links.forEach((l) => {
-        list.appendChild(document.createElement("wp-link-item")).load(l);
-      });
-
-      sortable(list, "links", "vertical", (el) => {
-        return {
-          type: "text/plain",
-          content: el.data.url,
-        };
-      });
-
-      list.addEventListener("save", () => {
-        let children = [...list.querySelectorAll("*")];
-        group.links = children.map((linkEl) => linkEl.data);
+      sortable(this.shadowRoot.querySelector("ol"), {
+        items: group.links,
+        tagName: 'wp-link-item',
+        group: "links",
+        mode: "vertical",
+        data: (item) => {
+          return {
+            type: "text/plain",
+            content: item.url,
+          };
+        }
       });
     }
   }
