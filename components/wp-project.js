@@ -1,4 +1,4 @@
-import { initWorkpage } from "../project.js";
+import { initWorkpage } from "../workpage.js";
 
 customElements.define(
   "wp-project",
@@ -50,6 +50,8 @@ customElements.define(
       this.shadowRoot.querySelector('li').addEventListener('click', () => {
         localStorage.setItem('active', project.name);
         initWorkpage(project.name)
+
+        this.closest('wp-dialog').close();
       }); 
 
       this.shadowRoot.querySelector('.project-title').textContent = project.name;

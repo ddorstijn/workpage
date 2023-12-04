@@ -14,6 +14,11 @@
     @import "https://unpkg.com/open-props/shadows.min.css";
     @import "https://unpkg.com/open-props/borders.min.css";
 
+    a {
+      text-decoration: none;
+      color: white;
+    }
+
     body {
       --surface-1: var(--red-0);
       --surface-2: white;
@@ -92,12 +97,12 @@
       justify-content: center;
     }
 
-    .links {
-      width: 100%;
-      padding-block: var(--size-6);
-
-      display: flex;
-      gap: var(--size-6);
+    form input {
+      display: block;
+      padding-inline: var(--size-1);
+      border-radius: var(--radius-1);
+      border: var(--border-size-1) solid var(--gray-1);
+      cursor: text;
     }
 
     .mt-4 {
@@ -112,7 +117,7 @@
   <script type="module" src="components/wp-links.js"></script>
   <script type="module" src="components/wp-tasks.js"></script>
 
-  <script type="module" src="app.js"></script>
+  <script type="module" src="workpage.js"></script>
 </head>
 
 <body>
@@ -124,6 +129,10 @@
             <path fill="currentColor"
               d="M5 8h8.45H13h.35H5Zm11 0h3h-3ZM5.4 6h13.2l-.85-1H6.25L5.4 6Zm4.6 6.75l2-1l2 1V8h-4v4.75ZM14.55 21H5q-.825 0-1.413-.588T3 19V6.525q0-.35.113-.675t.337-.6L4.7 3.725q.275-.35.687-.538T6.25 3h11.5q.45 0 .863.188t.687.537l1.25 1.525q.225.275.338.6t.112.675v4.9q-.475-.175-.975-.275T19 11.05V8h-3v3.825q-.875.5-1.525 1.238t-1.025 1.662L12 14l-2.55 1.275q-.5.25-.975-.037T8 14.375V8H5v11h8.35q.2.575.5 1.075t.7.925ZM19 21q-.425 0-.713-.288T18 20v-2h-2q-.425 0-.713-.288T15 17q0-.425.288-.713T16 16h2v-2q0-.425.288-.713T19 13q.425 0 .713.288T20 14v2h2q.425 0 .713.288T23 17q0 .425-.288.713T22 18h-2v2q0 .425-.288.713T19 21ZM5 8h8.45H13h.35H5Z" />
           </svg>
+          <form slot="modal" id="add-project">
+            <input name="name" type="text" />
+            <button type="submit">Add</button>
+          </form>
         </wp-header-item>
 
         <wp-header-item data-title="Add group">
@@ -220,7 +229,7 @@
           </svg>
         </button>
       </header>
-      <slot name="content"></slot>
+      <slot></slot>
     </dialog>
   </template>
 
@@ -362,9 +371,7 @@
       </button>
 
       <wp-dialog data-title="Choose project">
-        <ol slot="content">
-          
-        </ol>
+        <ol></ol>
       </wp-dialog>
     </div>
   </template>

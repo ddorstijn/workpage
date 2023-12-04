@@ -53,8 +53,6 @@ export async function sortable(listEl, { items, tagName, group, mode, data}) {
       return false;
     }
 
-    ev.dataTransfer.dropEffect = "move";
-
     const mousePos = mode == "vertical" ? ev.clientY : ev.clientX;
     moveElement(listEl, dragCtx.el, mousePos, mode);
 
@@ -85,26 +83,24 @@ export async function sortable(listEl, { items, tagName, group, mode, data}) {
  * @param {'vertical' | 'horizontal'} direction Direction of insertion ('vertical' or 'horizontal')
  */
 function moveElement(listEl, dragEl, mousePos, direction) {
-  const el = [...listEl.querySelectorAll("[draggable]:not(.dragging)")].reduce((closest, el) => {
+  const draggableElements = [...listEl.querySelectorAll("[draggable]:not(.dragging)")];
+
+  const el = draggableElements.reduce((closest, el) => {
     const rect = el.getBoundingClientRect();
     const startPos = direction === "vertical" ? rect.top : rect.left;
     const extent = direction === "vertical" ? rect.height : rect.width;
     const offset = mousePos - (startPos + extent / 2.0);
 
-    return offset < 0 &&
-      (closest === null ||
-        offset >
-          mousePos -
-            (direction === "vertical"
-              ? closest.getBoundingClientRect().top
-              : closest.getBoundingClientRect().left))
-      ? el
-      : closest;
-  }, null);
+    const isCloser = offset < 0 && (closest === null || offset > mousePos - (direction === "vertical" ? closest.getBoundingClientRect().top : closest.getBoundingClientRect().left));
 
-  if (!el) {
-    listEl.append(dragEl);
-  } else {
+    return isCloser ? el : closest;
+}, null);
+
+  if (el) {
+    if (dragEl.nextSibling === el) return;
     listEl.insertBefore(dragEl, el);
+  } else {
+    if (listEl.lastChild === dragEl) return;
+    listEl.append(dragEl);
   }
 }
