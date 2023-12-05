@@ -68,10 +68,12 @@ export async function sortable(listEl, { items, tagName, group, mode, data}) {
 
     // Move item from source array to target array 
     dragCtx.source.splice(dragCtx.source.indexOf(dragCtx.item), 1)[0];
-
-    const dropIndex = [...listEl.children].indexOf(dragCtx.el);
-    items.splice(dropIndex, 0, dragCtx.item);
-    dragCtx = null;
+    for (let i = 0; i < listEl.children.length; i++) {
+      if (dragCtx.el === listEl.children[i]) {
+        items.splice(i, 0, dragCtx.item);
+        break;
+      }
+    }
   });
 }
 
@@ -83,22 +85,31 @@ export async function sortable(listEl, { items, tagName, group, mode, data}) {
  * @param {'vertical' | 'horizontal'} direction Direction of insertion ('vertical' or 'horizontal')
  */
 function moveElement(listEl, dragEl, mousePos, direction) {
-  const draggableElements = [...listEl.querySelectorAll("[draggable]:not(.dragging)")];
-
-  const el = draggableElements.reduce((closest, el) => {
+  let closest = null;
+  for (const el of listEl.querySelectorAll("[draggable]:not(.dragging)")) {
     const rect = el.getBoundingClientRect();
     const startPos = direction === "vertical" ? rect.top : rect.left;
     const extent = direction === "vertical" ? rect.height : rect.width;
     const offset = mousePos - (startPos + extent / 2.0);
 
-    const isCloser = offset < 0 && (closest === null || offset > mousePos - (direction === "vertical" ? closest.getBoundingClientRect().top : closest.getBoundingClientRect().left));
+    if (offset >= 0) {
+      continue;
+    }
 
-    return isCloser ? el : closest;
-}, null);
+    if (!closest) {
+      closest = el;
+    }
+    
+    const closestRect = closest.getBoundingClientRect();
+    const closestStartPos = direction === "vertical" ? closestRect.top : closestRect.left;
+    if (offset > mousePos - closestStartPos) {
+      closest = el;
+    }
+  }
 
-  if (el) {
-    if (dragEl.nextSibling === el) return;
-    listEl.insertBefore(dragEl, el);
+  if (closest) {
+    if (dragEl.nextSibling === closest) return;
+    listEl.insertBefore(dragEl, closest);
   } else {
     if (listEl.lastChild === dragEl) return;
     listEl.append(dragEl);

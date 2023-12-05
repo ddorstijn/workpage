@@ -20,12 +20,5 @@
         "gecko": {
             "id": "dannydorstijn1997@gmail.com"
         }
-    },
-
-    "action": {
-        "default_icon": {
-            "32": "icons/32.png"
-        },
-        "default_popup": "src/entries/popup/index.html"
     }
 }

@@ -33,7 +33,7 @@ customElements.define(
       });
 
       this.shadowRoot.querySelector("button").addEventListener("click", () => {
-        todo = [...todo, { name: "Task" }];
+        todo.push({ name: "Task" });
 
         let newTask = this.shadowRoot
           .querySelector("ol")
