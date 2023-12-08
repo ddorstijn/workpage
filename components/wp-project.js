@@ -14,17 +14,19 @@ customElements.define(
      *
      * @param {{ name: string, used: Date }[]} projects
      */
-    load(projects) {
-      this.data = projects;
-
-      let button = this.shadowRoot.querySelector('button');
-      button.addEventListener('click', () => this.shadowRoot.querySelector('wp-dialog').showModal());
-      button.querySelector("span").textContent = localStorage.getItem('active') ?? 'General';
-
-      let list = this.shadowRoot.querySelector("ol");
-      list.replaceChildren();
-      projects.forEach((p) => {
-        list.appendChild(document.createElement("wp-project-item")).load(p);
+    load() {
+      chrome.storage.sync.get().then(data => {
+        let projects = Object.keys(data).map(name => { return { name, used: data[name].used } });
+  
+        let button = this.shadowRoot.querySelector('button');
+        button.addEventListener('click', () => this.shadowRoot.querySelector('wp-dialog').showModal());
+        button.querySelector("span").textContent = localStorage.getItem('active') ?? 'General';
+  
+        let list = this.shadowRoot.querySelector("ol");
+        list.replaceChildren();
+        projects.forEach((p) => {
+          list.appendChild(document.createElement("wp-project-item")).load(p);
+        });
       });
     }
   }

@@ -1,3 +1,6 @@
+/// <reference path="typedefs.js" />
+
+/** @type {Project} */
 const TEMPLATE = {
   used: new Date(),
   todo: [],
@@ -90,6 +93,7 @@ const TEMPLATE = {
   ],
 };
 
+/** @type {Project} */
 export var project = {};
 
 /**
@@ -97,22 +101,23 @@ export var project = {};
  * @param {string} active 
  */
 export async function initWorkpage(active) {
-  project = createDeepOnChangeProxy(await chrome.storage.sync.get(active), () => chrome.storage.sync.set(JSON.parse(JSON.stringify(project))));
-  if (!project[active]) {
-    project = { "General": TEMPLATE };
-    chrome.storage.sync.set(project);
+  const record = await chrome.storage.sync.get(active);
+  if (!record[active]) {
+    record[active] = TEMPLATE;
+    chrome.storage.sync.set({ "General": record });
     localStorage.setItem("active", "General");
   }
-
-  let projectData = await chrome.storage.sync.get();
-  let projects = Object.keys(projectData).map(name => { return { name, used: projectData[name].used } });
+  
+  project = createDeepOnChangeProxy(record[active], () => {
+    chrome.storage.sync.set({ [active]: JSON.parse(JSON.stringify(record[active])) })
+  });
 
   await customElements.whenDefined("wp-project");
-  document.querySelector("wp-project").load(projects);
+  document.querySelector("wp-project").load();
   await customElements.whenDefined("wp-links");
-  document.querySelector("wp-links").load(project[active].linkgroups);
+  document.querySelector("wp-links").load(project.linkgroups);
   await customElements.whenDefined("wp-tasks");
-  document.querySelector("wp-tasks").load(project[active].todo);
+  document.querySelector("wp-tasks").load(project.todo);
 }
 
 
@@ -156,3 +161,69 @@ document.getElementById('add-project').addEventListener('submit', ev => {
 
   form.reset();
 })
+
+document.getElementById('add-project').addEventListener('submit', ev => {
+  ev.stopImmediatePropagation();
+  ev.preventDefault();
+
+  /** @type {HTMLFormElement} */
+  const form = ev.currentTarget;
+
+  const fd = new FormData(form);
+  const name = fd.get('name');
+
+  if (!name) return;
+
+  chrome.storage.sync.set({ [name]: TEMPLATE });
+
+  form.reset();
+});
+
+document.getElementById('add-linkgroup').addEventListener('submit', ev => {
+  ev.stopImmediatePropagation();
+  ev.preventDefault();
+
+  /** @type {HTMLFormElement} */
+  const form = ev.currentTarget;
+
+  const fd = new FormData(form);
+  const name = fd.get('name');
+  const color = fd.get('color');
+
+  if (!name || project.linkgroups.find(l => l.name == name)) return;
+
+  project.linkgroups.push({ name, color, links: [] });
+
+  form.reset();
+});
+
+const addLink = document.getElementById('add-link');
+addLink.querySelector('input[list="dl-linkgroups"]').addEventListener("focus", _ => {
+  const options = project.linkgroups.map(group => {
+    let el = document.createElement('option');
+    el.textContent = group.name;
+
+    return el;
+  });
+  
+  addLink.querySelector('datalist').replaceChildren(...options);
+})
+
+addLink.addEventListener('submit', ev => {
+  ev.stopImmediatePropagation();
+  ev.preventDefault();
+  
+  /** @type {HTMLFormElement} */
+  const form = ev.currentTarget;
+
+  const fd = new FormData(form);
+  const group = fd.get('group');
+  const name = fd.get('name');
+  const url = fd.get('url');
+
+  if (!group || !name) return;
+
+  project.linkgroups.find(l => l.name == group).links.push({ name, url })
+
+  form.reset();
+});
