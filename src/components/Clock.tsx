@@ -7,7 +7,7 @@ export default function Clock() {
 
   const update = () => {
     let now = new Date();
-    setTime(now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }));
+    setTime(now.toLocaleTimeString(undefined, { hourCycle: "h24", hour: '2-digit', minute: '2-digit' }));
     setDate(now.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }));
   }
 

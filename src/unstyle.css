@@ -124,7 +124,7 @@
 		  	}
 		}
   
-		&[rounded] {
+		&[data-rounded] {
 		  	border-radius: var(--radius-round);
 		}
 	}

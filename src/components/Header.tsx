@@ -11,22 +11,37 @@ import Dialog from "./Dialog";
 import styles from "./Header.module.css";
 
 export default function Header() {
+  function addProject(event: SubmitEvent) {
+    event.preventDefault();
+    let form = event.currentTarget! as HTMLFormElement;
+    form.reset();
+  }
+  
+  function addLinkGroup(event: SubmitEvent) {
+    event.preventDefault();
+    let form = event.currentTarget! as HTMLFormElement;
+    form.reset();
+  }
+  
+  function addLink(event: SubmitEvent) {
+    event.preventDefault();
+    let form = event.currentTarget! as HTMLFormElement;
+    form.reset();
+  }
+  
+  
   return (
     <header class={styles.header}>
       <div class={styles['header-group']}>
         <HeaderItem icon={AddProjectIcon} name="Add Project">
-          <form
-            slot="modal"
-            id="add-project"
-            onSubmit={(event) => event.preventDefault()}
-          >
+          <form onSubmit={addProject}>
             <input name="name" type="text" />
             <button type="submit">Add</button>
           </form>
         </HeaderItem>
 
         <HeaderItem icon={AddLinkGroupIcon} name="Add link group">
-          <form id="add-linkgroup">
+          <form onSubmit={addLinkGroup}>
             <input name="name" type="text" />
             <select name="color">
               <option value="gray">Gray</option>
@@ -54,7 +69,7 @@ export default function Header() {
         </HeaderItem>
 
         <HeaderItem icon={AddLinkIcon} name="Add link">
-          <form id="add-link">
+          <form onSubmit={addLink}>
             <input name="group" list="dl-linkgroups"></input>
             <datalist id="dl-linkgroups">
               <option></option>

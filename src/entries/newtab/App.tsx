@@ -1,6 +1,9 @@
 import Clock from "~/components/Clock";
 import "./App.css";
 import Header from "~/components/Header";
+import Project from "~/components/Project";
+import Tasks from "~/components/Tasks";
+import Links from "~/components/Links";
 
 function App() {
   return (
@@ -11,13 +14,12 @@ function App() {
 
       <main>
         <Clock></Clock>
-        <wp-project class="mt-4"></wp-project>
+        <Project class="mt-4" />
 
-        <wp-links class="mt-4"></wp-links>
+        <Links class="mt-4" />
       </main>
 
-      <wp-tasks>
-      </wp-tasks>
+      <Tasks />
     </>
   );
 }
