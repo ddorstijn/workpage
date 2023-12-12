@@ -1,6 +1,6 @@
-# web-extension-vite
+# workpage
 
-This template should help get you started developing a vanilla web extension in Vite.
+This template should help get you started developing a solid web extension in Vite.
 
 ## Usage Notes
 
@@ -13,7 +13,7 @@ and handles style injection for HMR and build modes.
 
 Otherwise, the project functions just like a regular Vite project.
 
-To switch between Manifest V2 and Manifest V3 builds, use the MANIFEST_VERSION environment variable defined in `.env`
+
 
 HMR during development in Manifest V3 requires Chromium version >= 110.0.5480.0.
 
@@ -26,7 +26,7 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 ## Project Setup
 
 ```sh
-pnpm install
+npm install
 ```
 
 ## Commands
@@ -36,30 +36,30 @@ pnpm install
 Hot Module Reloading is used to load changes inline without requiring extension rebuilds and extension/page reloads
 Currently only works in Chromium based browsers.
 ```sh
-pnpm dev
+npm run dev
 ```
 
 #### Development, Watch
 
 Rebuilds extension on file changes. Requires a reload of the extension (and page reload if using content scripts)
 ```sh
-pnpm watch
+npm run watch
 ```
 
 #### Production
 
 Minifies and optimizes extension build
 ```sh
-pnpm build
+npm run build
 ```
 
 ### Load extension in browser
 
 Loads the contents of the dist directory into the specified browser
 ```sh
-pnpm serve:chrome
+npm run serve:chrome
 ```
 
 ```sh
-pnpm serve:firefox
+npm run serve:firefox
 ```

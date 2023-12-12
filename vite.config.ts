@@ -1,8 +1,6 @@
 import { defineConfig } from "vite";
+import solid from "vite-plugin-solid";
 import webExtension from "@samrum/vite-plugin-web-extension";
-import solidPlugin from "vite-plugin-solid";
-import UnoCSS from 'unocss/vite';
-
 import path from "path";
 import { getManifest } from "./src/manifest";
 
@@ -10,11 +8,10 @@ import { getManifest } from "./src/manifest";
 export default defineConfig(() => {
   return {
     plugins: [
+      solid(),
       webExtension({
         manifest: getManifest(),
       }),
-      solidPlugin(),
-      UnoCSS()
     ],
     resolve: {
       alias: {
