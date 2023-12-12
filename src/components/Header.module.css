@@ -1,0 +1,52 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-4);
+
+  > .header-logo {
+    margin-bottom: var(--size-1);
+    width: var(--size-4);
+    height: var(--size-4);
+
+    color: var(--text-1);
+  }
+}
+
+.header-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-2);
+}
+
+svg {
+  width: var(--size-4);
+  height: var(--size-4);
+
+  margin: 0;
+}
+
+button {
+  position: relative;
+  padding: 0;
+  color: var(--stone-7);
+
+  >span {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: max-content;
+    height: 100%;
+    vertical-align: middle;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease-in;
+  }
+
+  &:hover {
+    color: inherit;
+
+    >span {
+      opacity: 1;
+    }
+  }
+}

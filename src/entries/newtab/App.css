@@ -1,0 +1,102 @@
+@import "https://unpkg.com/open-props/sizes.min.css";
+@import "https://unpkg.com/open-props/colors.min.css";
+@import "https://unpkg.com/open-props/fonts.min.css";
+@import "https://unpkg.com/open-props/shadows.min.css";
+@import "https://unpkg.com/open-props/borders.min.css";
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+body {
+  --surface-1: var(--red-0);
+  --surface-2: white;
+  --theme: var(--red-3);
+  --text-1: var(--gray-9);
+  --text-2: var(--gray-7);
+
+  --group-gray: var(--gray-5);
+  --group-stone: var(--stone-5);
+  --group-red: var(--red-5);
+  --group-pink: var(--pink-5);
+  --group-purple: var(--purple-5);
+  --group-violet: var(--violet-5);
+  --group-indigo: var(--indigo-5);
+  --group-blue: var(--blue-5);
+  --group-cyan: var(--cyan-5);
+  --group-teal: var(--teal-5);
+  --group-green: var(--green-5);
+  --group-lime: var(--lime-5);
+  --group-yellow: var(--yellow-6);
+  --group-orange: var(--orange-5);
+  --group-choco: var(--choco-5);
+  --group-brown: var(--brown-5);
+  --group-sand: var(--sand-5);
+  --group-camo: var(--camo-5);
+  --group-jungle: var(--jungle-5);
+
+  font-family: var(--font-sans);
+  background-color: var(--surface-1);
+  color: var(--text-2);
+
+  @media (prefers-color-scheme: dark) {
+    --text-1: var(--gray-1);
+    --text-2: var(--gray-2);
+
+    --surface-1: var(--gray-9);
+    --surface-2: var(--gray-8);
+
+    --theme: var(--red-3);
+    --group-gray: var(--gray-4);
+    --group-stone: var(--stone-4);
+    --group-red: var(--red-4);
+    --group-pink: var(--pink-4);
+    --group-purple: var(--purple-4);
+    --group-violet: var(--violet-4);
+    --group-indigo: var(--indigo-4);
+    --group-blue: var(--blue-4);
+    --group-cyan: var(--cyan-4);
+    --group-teal: var(--teal-4);
+    --group-green: var(--green-4);
+    --group-lime: var(--lime-4);
+    --group-yellow: var(--yellow-4);
+    --group-orange: var(--orange-4);
+    --group-choco: var(--choco-4);
+    --group-brown: var(--brown-4);
+    --group-sand: var(--sand-4);
+    --group-camo: var(--camo-4);
+    --group-jungle: var(--jungle-4);
+  }
+}
+
+#app {
+  display: flex;
+}
+
+aside {
+  position: absolute;
+  padding: var(--size-3) var(--size-2);
+}
+
+main {
+  flex-grow: 1;
+  padding: var(--size-6);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+form input {
+  display: block;
+  padding-inline: var(--size-1);
+  border-radius: var(--radius-1);
+  border: var(--border-size-1) solid var(--gray-1);
+  cursor: text;
+}
+
+.mt-4 {
+  margin-top: 1.25rem;
+}

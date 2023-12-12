@@ -19,6 +19,7 @@
     "jsxImportSource": "solid-js",
     /* Linting */
     "strict": true,
+    "types": ["vite/client", "unplugin-icons/types/solid"],
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true

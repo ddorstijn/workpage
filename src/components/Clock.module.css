@@ -1,0 +1,12 @@
+.clock_time {
+  font-size: 4rem;
+  font-weight: bold;
+
+  line-height: 1.2;
+  text-align: center;
+}
+
+.clock_date {
+  font-weight: 600;
+  text-align: center;
+}

@@ -1,9 +1,10 @@
 {
-  "name": "vite-web-extension",
+  "name": "workpage",
   "version": "1.0.0",
-  "displayName": "Vite Web Extension",
-  "author": "@samrum/vite-plugin-web-extension",
-  "description": "A @samrum/vite-plugin-web-extension web extension",
+  "displayName": "Workpage",
+  "author": "ddorstijn",
+  "description": "Adjust your new tab page to your personal needs. Use projects to organise your links and tasks for a productive start of your tabs",
+  "homepage_url": "https://github.com/ddorstijn/workpage",
   "type": "module",
   "scripts": {
     "build": "vite build",
@@ -14,16 +15,20 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@samrum/vite-plugin-web-extension": "^5.0.0",
+    "@iconify-json/material-symbols": "^1.1.67",
+    "@svgr/core": "^8.1.0",
+    "@svgr/plugin-jsx": "^8.1.0",
+    "@samrum/vite-plugin-web-extension": "^5.1.0",
     "@types/chrome": "^0.0.254",
-    "@types/webextension-polyfill": "^0.10.6",
-    "typescript": "^5.2.2",
-    "vite": "^5.0.0",
-    "vite-plugin-solid": "^2.7.2",
-    "web-ext": "^7.8.0"
+    "@types/webextension-polyfill": "^0.10.7",
+    "typescript": "^5.3.3",
+    "unplugin-icons": "^0.18.1",
+    "vite": "^5.0.8",
+    "vite-plugin-solid": "^2.8.0",
+    "web-ext": "^7.9.0"
   },
   "dependencies": {
-    "solid-js": "^1.8.5",
+    "solid-js": "^1.8.7",
     "webextension-polyfill": "^0.10.0"
   }
 }

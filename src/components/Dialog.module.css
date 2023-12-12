@@ -1,0 +1,23 @@
+.dialog {
+  margin: auto;
+  padding: var(--size-2) var(--size-4);
+  width: max-content;
+  max-width: 95vw;
+  border-radius: var(--radius-3);
+  background-color: var(--surface-2);
+  box-shadow: var(--shadow-2);
+
+  &::backdrop {
+    backdrop-filter: blur(2px)
+  }
+
+  > header {
+    margin-bottom: var(--size-2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+
+    font-weight: 600;
+  }
+}
