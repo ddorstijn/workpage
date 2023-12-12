@@ -4,10 +4,11 @@ import Header from "~/components/Header";
 import Project from "~/components/Project";
 import Tasks from "~/components/Tasks";
 import Links from "~/components/Links";
+import { ProjectContextProvider } from "~/components/Context";
 
 function App() {
   return (
-    <>
+    <ProjectContextProvider>
       <aside>
         <Header />
       </aside>
@@ -20,7 +21,7 @@ function App() {
       </main>
 
       <Tasks />
-    </>
+    </ProjectContextProvider>
   );
 }
 
