@@ -110,7 +110,7 @@ export const ProjectContextProvider: Component<ParentProps> = (props) => {
   });
 
   createEffect(() => {
-    storage.sync.set({ [active()]: project });
+    storage.sync.set({ [active()]: JSON.parse(JSON.stringify(project)) });
   })
 
   return (
