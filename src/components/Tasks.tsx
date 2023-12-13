@@ -1,5 +1,5 @@
-import { Component, For, useContext } from "solid-js";
-import { DragEventHandler, DragDropProvider, SortableProvider, createSortable, closestCenter, DragDropSensors } from "@thisbeyond/solid-dnd";
+import { Component, For, createEffect, createSignal, useContext } from "solid-js";
+import { DragEventHandler, DragDropProvider, SortableProvider, createSortable, closestCenter, DragDropSensors, DragOverlay } from "@thisbeyond/solid-dnd";
 
 import AddIcon from "~icons/material-symbols/add";
 import ChevronLeftIcon from "~icons/material-symbols/chevron-left-rounded";
@@ -9,10 +9,12 @@ import { ProjectContext } from "./Context";
 
 const Tasks: Component = () => {
   let ctx = useContext(ProjectContext);
+  let [ids, setIds] = createSignal<number[]>([]);
+  createEffect(() => setIds(ctx!.project.todo.map((_, id) => id + 1)));
 
   const onDragEnd: DragEventHandler = ({ draggable, droppable }) => {
     if (draggable && droppable) {
-      const currentItems = ctx!.project.todo.map((_, id) => id);
+      const currentItems = ids();
       const fromIndex = currentItems.findIndex(id => id == draggable.id);
       const toIndex = currentItems.findIndex(id => id == droppable.id);
       if (fromIndex !== toIndex) {
@@ -37,9 +39,9 @@ const Tasks: Component = () => {
         <DragDropProvider onDragEnd={onDragEnd} collisionDetector={closestCenter}>
           <DragDropSensors />
           <ol>
-            <SortableProvider ids={ctx!.project.todo.map((_, id) => id)}>
+            <SortableProvider ids={ids()}>
               <For each={ctx?.project.todo}>
-                { (task, id) => <Task id={id()} task={task} /> }
+                { (task, id) => <Task id={id() + 1} task={task} /> }
               </For>
             </SortableProvider>
           </ol>
@@ -70,7 +72,7 @@ const Task: Component<{id: number, task: Task}> = (props) => {
   return (
     <li use:sortable class={styles["task-list_item"]}>
       <div class={styles["handle"]}></div>
-      <span>{props.task.name}</span>
+      <span>{props.id} - {props.task.name}</span>
     </li>
   )
 }
