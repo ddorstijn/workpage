@@ -72,6 +72,7 @@ body {
 
 #app {
   display: flex;
+  height: 100%;
 }
 
 aside {
