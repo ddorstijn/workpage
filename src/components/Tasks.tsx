@@ -1,5 +1,5 @@
 import { Component, For, createEffect, createSignal, useContext } from "solid-js";
-import { DragEventHandler, DragDropProvider, SortableProvider, createSortable, closestCenter, DragDropSensors, DragOverlay } from "@thisbeyond/solid-dnd";
+import { DragEventHandler, DragDropProvider, SortableProvider, createSortable, closestCenter, DragDropSensors } from "@thisbeyond/solid-dnd";
 
 import AddIcon from "~icons/material-symbols/add";
 import ChevronLeftIcon from "~icons/material-symbols/chevron-left-rounded";
@@ -14,9 +14,8 @@ const Tasks: Component = () => {
 
   const onDragEnd: DragEventHandler = ({ draggable, droppable }) => {
     if (draggable && droppable) {
-      const currentItems = ids();
-      const fromIndex = currentItems.findIndex(id => id == draggable.id);
-      const toIndex = currentItems.findIndex(id => id == droppable.id);
+      const fromIndex = draggable.id as number - 1;
+      const toIndex = droppable.id as number - 1;
       if (fromIndex !== toIndex) {
         const updatedItems = ctx!.project.todo.slice();
         updatedItems.splice(toIndex, 0, ...updatedItems.splice(fromIndex, 1));
@@ -72,7 +71,7 @@ const Task: Component<{id: number, task: Task}> = (props) => {
   return (
     <li use:sortable class={styles["task-list_item"]}>
       <div class={styles["handle"]}></div>
-      <span>{props.id} - {props.task.name}</span>
+      <span>{props.task.name}</span>
     </li>
   )
 }
