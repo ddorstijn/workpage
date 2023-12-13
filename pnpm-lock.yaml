@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  '@thisbeyond/solid-dnd':
+    specifier: ^0.7.5
+    version: 0.7.5(solid-js@1.8.7)
   solid-js:
     specifier: ^1.8.7
     version: 1.8.7
@@ -1062,6 +1065,15 @@ packages:
     dependencies:
       defer-to-connect: 2.0.1
     dev: true
+
+  /@thisbeyond/solid-dnd@0.7.5(solid-js@1.8.7):
+    resolution: {integrity: sha512-DfI5ff+yYGpK9M21LhYwIPlbP2msKxN2ARwuu6GF8tT1GgNVDTI8VCQvH4TJFoVApP9d44izmAcTh/iTCH2UUw==}
+    engines: {node: '>=18.0.0', pnpm: '>=8.6.0'}
+    peerDependencies:
+      solid-js: ^1.5
+    dependencies:
+      solid-js: 1.8.7
+    dev: false
 
   /@types/babel__core@7.20.5:
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
