@@ -1,4 +1,4 @@
-import { Component, For, createEffect, createSignal, useContext } from "solid-js";
+import { Component, For, useContext } from "solid-js";
 import { DragEventHandler, DragDropProvider, SortableProvider, createSortable, closestCenter, DragDropSensors } from "@thisbeyond/solid-dnd";
 
 import AddIcon from "~icons/material-symbols/add";
@@ -9,37 +9,19 @@ import { ProjectContext } from "./Context";
 
 const Tasks: Component = () => {
   let ctx = useContext(ProjectContext);
-  let [items, setItems] = createSignal<[string, Task][]>([]);
-
-  createEffect(() => {
-    if (!ctx) return;
-    setItems(ctx!.project.todo.map(t => { 
-      return [crypto.randomUUID(), t ] as [string, Task];
-    }));
-  });
-
-  const [activeItem, setActiveItem] = createSignal<string>();
-  const onDragStart: DragEventHandler = ({ draggable }) => {
-    setActiveItem(draggable.id as string);
-    console.log("START DRAGGING");
-  }
-  createEffect(() => console.log(activeItem()));
 
   const onDragEnd: DragEventHandler = ({ draggable, droppable }) => {
     if (draggable && droppable) {
-      const currentItems = items().map(([id, _]) => id);
+      const currentItems = ctx!.project.todo.map((_, id) => id);
       const fromIndex = currentItems.findIndex(id => id == draggable.id);
       const toIndex = currentItems.findIndex(id => id == droppable.id);
       if (fromIndex !== toIndex) {
-        const updatedItems = items().slice();
+        const updatedItems = ctx!.project.todo.slice();
         updatedItems.splice(toIndex, 0, ...updatedItems.splice(fromIndex, 1));
-        console.log(updatedItems);
-        
-        setItems(updatedItems);
+        ctx?.setProject("todo", updatedItems);
       }
     }
   }
-  
   
   return (
     <details class={styles["task-drawer"]}>
@@ -52,16 +34,12 @@ const Tasks: Component = () => {
           <h3 class="active">Todo</h3>
           <h3>Done</h3>
         </header>
-        <DragDropProvider
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-          collisionDetector={closestCenter}
-        >
+        <DragDropProvider onDragEnd={onDragEnd} collisionDetector={closestCenter}>
           <DragDropSensors />
           <ol>
-            <SortableProvider ids={items().map(([id, _]) => id)}>
-              <For each={items()}>
-                { ([id, task]) => <Task id={id} task={task} /> }
+            <SortableProvider ids={ctx!.project.todo.map((_, id) => id)}>
+              <For each={ctx?.project.todo}>
+                { (task, id) => <Task id={id()} task={task} /> }
               </For>
             </SortableProvider>
           </ol>
@@ -85,7 +63,7 @@ declare module "solid-js" {
   }
 }
 
-const Task: Component<{id: string, task: Task}> = (props) => {
+const Task: Component<{id: number, task: Task}> = (props) => {
   // @ts-ignore
   const sortable = createSortable(props.id);
 
