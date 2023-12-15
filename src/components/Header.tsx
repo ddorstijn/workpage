@@ -29,11 +29,12 @@ export default function Header() {
     let empty: Project = { used: new Date(), linkgroups: [], todo: [], done: [] };
     storage.sync.set({ [name]: empty });
     form.reset();
+    form.closest('dialog')?.close();
   }
   
   function addLinkGroup(event: SubmitEvent) {
     event.preventDefault();
-    let form = event.currentTarget! as HTMLFormElement;
+    const form = event.currentTarget! as HTMLFormElement;
     const fd = new FormData(form);
     const name = fd.get("name")! as string;
     const color = fd.get("color")! as string;
@@ -43,11 +44,12 @@ export default function Header() {
     ctx.setProject("linkgroups", [...ctx.project.linkgroups, { name, color, links: [] }]);
     
     form.reset();
+    form.closest('dialog')?.close();
   }
   
   function addLink(event: SubmitEvent) {
     event.preventDefault();
-    let form = event.currentTarget! as HTMLFormElement;
+    const form = event.currentTarget! as HTMLFormElement;
     const fd = new FormData(form);
     const group = Number(fd.get("group")!);
     const name = fd.get("name")! as string;
@@ -59,6 +61,7 @@ export default function Header() {
     ctx.setProject("linkgroups", group, "links", links);
 
     form.reset();
+    form.closest('dialog')?.close();
   }
 
   async function checkProject(ev: InputEvent) {

@@ -100,14 +100,20 @@ export const ProjectContext: Context<{ project: Project, setProject: SetStoreFun
 export const ProjectContextProvider: Component<ParentProps> = (props) => {
   const [active, setActive] = createSignal(localStorage.getItem('active') ?? 'General');
   const [project, setProject] = createStore<Project>(TEMPLATE);
-  storage.sync.get(active()).then(record => {
-    if (!record[active()]) {
-      storage.sync.set({ [active()]: record });
-      localStorage.setItem("active", active());
-    } else {
-      setProject(record[active()]);
-    }
+
+  createEffect(() => {
+    localStorage.setItem('active', active());
   });
+  
+  createEffect(async () => {
+    let proj: Project | undefined = (await storage.sync.get(active()))[active()];
+    if (!proj && active() == "General") {
+      localStorage.setItem("active", active());
+      storage.sync.set({ [active()]: JSON.parse(JSON.stringify(project)) });
+    } else {
+      setProject(proj!);
+    }
+  })
 
   createEffect(() => {
     storage.sync.set({ [active()]: JSON.parse(JSON.stringify(project)) });
