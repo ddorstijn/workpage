@@ -3,7 +3,7 @@ import { SetStoreFunction, createStore } from "solid-js/store";
 import { storage } from "webextension-polyfill";
 
 
-const TEMPLATE: Project = {
+export const TEMPLATE: Project = {
   used: new Date(),
   todo: [],
   done: [],

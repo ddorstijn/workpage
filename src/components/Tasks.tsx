@@ -9,6 +9,11 @@ import { SortableList } from "./Sortable";
 
 const Tasks: Component = () => {
   let ctx = useContext(ProjectContext); 
+
+  function addTask() {
+    let tasks = [...ctx!.project.todo, { name: "" }];
+    ctx!.setProject("todo", tasks);
+  }
   
   return (
     <details class={styles["task-drawer"]}>
@@ -22,7 +27,7 @@ const Tasks: Component = () => {
           <h3>Done</h3>
         </header>
         <SortableList list={ctx!.project.todo} callback={(val) => { ctx!.setProject("todo", val)}} component={Task} />
-        <button class={styles["add-task"]}>
+        <button class={styles["add-task"]} onClick={addTask}>
           <AddIcon />
           <span>Add a task</span>
         </button>

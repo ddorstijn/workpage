@@ -6,26 +6,56 @@ import UploadIcon from "~icons/material-symbols/upload";
 import TranslateIcon from "~icons/material-symbols/translate-rounded";
 import ThemeIcon from "~icons/material-symbols/palette-outline";
 
-import { Component, JSXElement } from "solid-js";
+import { Component, JSXElement, useContext } from "solid-js";
 import Dialog from "./Dialog";
 import styles from "./Header.module.css";
+import { ProjectContext, TEMPLATE } from "./Context";
+import { storage } from "webextension-polyfill";
 
 export default function Header() {
+  let ctx = useContext(ProjectContext);
+  
   function addProject(event: SubmitEvent) {
     event.preventDefault();
-    let form = event.currentTarget! as HTMLFormElement;
+    const form = event.currentTarget! as HTMLFormElement;
+    const fd = new FormData(form);
+    const name = fd.get("name")! as string;
+
+    if (!name) return;
+
+    storage.sync.set({ [name]: TEMPLATE });
     form.reset();
   }
   
   function addLinkGroup(event: SubmitEvent) {
     event.preventDefault();
     let form = event.currentTarget! as HTMLFormElement;
+    const fd = new FormData(form);
+    const name = fd.get("name")! as string;
+    const color = fd.get("color")! as string;
+
+    if (!name || !color) return;
+    
+    ctx?.setProject("linkgroups", [...ctx.project.linkgroups, { name, color, links: [] }]);
+    
     form.reset();
   }
   
   function addLink(event: SubmitEvent) {
     event.preventDefault();
     let form = event.currentTarget! as HTMLFormElement;
+    const fd = new FormData(form);
+    const group = fd.get("group")! as string;
+    const name = fd.get("name")! as string;
+    const url = fd.get("url")! as string;
+
+    if (!group || !name || !url) return;
+
+    const groupIdx = ctx!.project.linkgroups.findIndex(l => l.name = group)!;
+    let links = [...ctx!.project.linkgroups[groupIdx].links, { name, url }];
+
+    ctx?.setProject("linkgroups", groupIdx, "links", links);
+
     form.reset();
   }
   
@@ -42,6 +72,7 @@ export default function Header() {
 
         <HeaderItem icon={AddLinkGroupIcon} name="Add link group">
           <form onSubmit={addLinkGroup}>
+            <input name="group" type="text" />
             <input name="name" type="text" />
             <select name="color">
               <option value="gray">Gray</option>
