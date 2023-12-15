@@ -13,7 +13,7 @@ declare module "solid-js" {
 
 interface ListProps<T> {
   list: Array<T>,
-  component: Component<{item: T}>,
+  component: Component<{idx: number, item: T}>,
   callback: (val: Array<T>) => void
 }
 
@@ -47,7 +47,7 @@ export function SortableList<T>(props: ListProps<T>): JSXElement {
       <ol>
         <SortableProvider ids={items().map(([id]) => id)}>
           <For each={items()}>
-            { ([id, task]) => <SortableItem id={id} item={task} component={props.component} /> }
+            { ([id, task], idx) => <SortableItem id={id} idx={idx()} item={task} component={props.component} /> }
           </For>
         </SortableProvider>
       </ol>
@@ -57,8 +57,9 @@ export function SortableList<T>(props: ListProps<T>): JSXElement {
 
 type ItemProps<T> = {
   id: string,
+  idx: number,
   item: T,
-  component: Component<{item: T}>
+  component: Component<{idx: number, item: T}>
 }
 
 export function SortableItem<T>(props: ItemProps<T>): JSXElement {
@@ -67,7 +68,7 @@ export function SortableItem<T>(props: ItemProps<T>): JSXElement {
   
   return (
     <li use:sortable>
-      <props.component item={props.item} />
+      <props.component idx={props.idx} item={props.item} />
     </li>
   )
 }

@@ -6,6 +6,8 @@ import ChevronLeftIcon from "~icons/material-symbols/chevron-left-rounded";
 import styles from "./Tasks.module.css";
 import { ProjectContext } from "./Context";
 import { SortableList } from "./Sortable";
+import { editable } from "~/directives/editable";
+editable;
 
 const Tasks: Component = () => {
   let ctx = useContext(ProjectContext); 
@@ -16,7 +18,7 @@ const Tasks: Component = () => {
   }
   
   return (
-    <details class={styles["task-drawer"]}>
+    <details class={styles["task-drawer"]} open>
       <summary>
         <span>Tasks</span>
         <ChevronLeftIcon />
@@ -38,11 +40,13 @@ const Tasks: Component = () => {
 
 export default Tasks;
 
-const Task: Component<{ item: Task }> = (props) => {
+const Task: Component<{ idx: number, item: Task }> = (props) => {
+  const ctx = useContext(ProjectContext)!;
+  
   return (
     <div class={styles["task-list_item"]}>
       <div class={styles["handle"]}></div>
-      <span>{props.item.name}</span>
+      <span use:editable={(val: string) => ctx.setProject("todo", props.idx, "name", val)}>{props.item.name}</span>
     </div>
   )
 }
