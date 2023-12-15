@@ -104,12 +104,12 @@ type Ctx = {
   setTheme: Setter<string>
 }
 
-export const ProjectContext: Context<Ctx | undefined> = createContext();
+export const ProjectContext = createContext<Ctx>();
 
 export const ProjectContextProvider: Component<ParentProps> = (props) => {
   const [active, setActive] = createSignal(localStorage.getItem('active') ?? 'General');
   const [project, setProject] = createStore<Project>(TEMPLATE);
-  const [theme, setTheme] = createSignal(localStorage.getItem("theme") ?? "light");
+  const [theme, setTheme] = createSignal(localStorage.getItem("theme") ?? window?.matchMedia?.('(prefers-color-scheme:dark)')?.matches ? 'dark' : 'light' ?? "light");
 
   createEffect(() => localStorage.setItem('active', active()));
   createEffect(() => {

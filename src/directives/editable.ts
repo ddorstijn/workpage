@@ -7,7 +7,7 @@ declare module "solid-js" {
 }
 
 
-export function editable(el: HTMLElement, accessor: Function) {  
+export function editable(el: HTMLElement, accessor: () => (val: string) => void | undefined) {  
   el.addEventListener("dblclick", () => {
     el.contentEditable = "true";
     el.focus();
