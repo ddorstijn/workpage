@@ -6,14 +6,14 @@ import UploadIcon from "~icons/material-symbols/upload";
 import TranslateIcon from "~icons/material-symbols/translate-rounded";
 import ThemeIcon from "~icons/material-symbols/palette-outline";
 
-import { Component, JSXElement, useContext } from "solid-js";
+import { Component, For, JSXElement, useContext } from "solid-js";
 import Dialog from "./Dialog";
 import styles from "./Header.module.css";
-import { ProjectContext, TEMPLATE } from "./Context";
+import { ProjectContext } from "./Context";
 import { storage } from "webextension-polyfill";
 
 export default function Header() {
-  let ctx = useContext(ProjectContext);
+  let ctx = useContext(ProjectContext)!;
   
   function addProject(event: SubmitEvent) {
     event.preventDefault();
@@ -21,9 +21,13 @@ export default function Header() {
     const fd = new FormData(form);
     const name = fd.get("name")! as string;
 
-    if (!name) return;
+    if (form.checkValidity()) {
+      console.error("Not a valid form");
+      return;
+    }
 
-    storage.sync.set({ [name]: TEMPLATE });
+    let empty: Project = { used: new Date(), linkgroups: [], todo: [], done: [] };
+    storage.sync.set({ [name]: empty });
     form.reset();
   }
   
@@ -36,7 +40,7 @@ export default function Header() {
 
     if (!name || !color) return;
     
-    ctx?.setProject("linkgroups", [...ctx.project.linkgroups, { name, color, links: [] }]);
+    ctx.setProject("linkgroups", [...ctx.project.linkgroups, { name, color, links: [] }]);
     
     form.reset();
   }
@@ -45,36 +49,60 @@ export default function Header() {
     event.preventDefault();
     let form = event.currentTarget! as HTMLFormElement;
     const fd = new FormData(form);
-    const group = fd.get("group")! as string;
+    const group = Number(fd.get("group")!);
     const name = fd.get("name")! as string;
     const url = fd.get("url")! as string;
 
     if (!group || !name || !url) return;
 
-    const groupIdx = ctx!.project.linkgroups.findIndex(l => l.name = group)!;
-    let links = [...ctx!.project.linkgroups[groupIdx].links, { name, url }];
-
-    ctx?.setProject("linkgroups", groupIdx, "links", links);
+    let links = [...ctx.project.linkgroups[group].links, { name, url }];
+    ctx.setProject("linkgroups", group, "links", links);
 
     form.reset();
   }
-  
-  
+
+  async function checkProject(ev: InputEvent) {
+    const el = ev.currentTarget as HTMLInputElement;
+    const projects = await storage.sync.get();
+    const names = Array.from(Object.keys(projects));
+    if (names.find(n => n == el.value)) {
+      el.setCustomValidity("A project with that name already exists");
+    } else {
+      el.setCustomValidity("");
+    }
+
+    el.reportValidity();
+  }
+
+  async function checkLinkgroup(ev: InputEvent) {
+    const el = ev.currentTarget as HTMLInputElement;
+    const names = ctx.project.linkgroups.map(l => l.name);
+    if (names.find(n => n == el.value)) {
+      el.setCustomValidity("A link group with that name already exists");
+    } else {
+      el.setCustomValidity("");
+    }
+
+    el.reportValidity();
+  }
+
   return (
     <header class={styles.header}>
       <div class={styles['header-group']}>
         <HeaderItem icon={AddProjectIcon} name="Add Project">
           <form onSubmit={addProject}>
-            <input name="name" type="text" />
+            <label>
+              Project name
+              <input onInput={checkProject} name="name" type="text" required />
+            </label>
             <button type="submit">Add</button>
           </form>
         </HeaderItem>
 
         <HeaderItem icon={AddLinkGroupIcon} name="Add link group">
           <form onSubmit={addLinkGroup}>
-            <input name="group" type="text" />
-            <input name="name" type="text" />
-            <select name="color">
+            <input onInput={checkLinkgroup} name="name" type="text" required />
+            <select name="color" required>
               <option value="gray">Gray</option>
               <option value="stone">Stone</option>
               <option value="red">Red</option>
@@ -101,12 +129,13 @@ export default function Header() {
 
         <HeaderItem icon={AddLinkIcon} name="Add link">
           <form onSubmit={addLink}>
-            <input name="group" list="dl-linkgroups"></input>
-            <datalist id="dl-linkgroups">
-              <option></option>
-            </datalist>
-            <input name="name" type="text" />
-            <input name="url" type="url" />
+            <select name="group">
+              <For each={ctx.project.linkgroups}>
+                {(group, idx) => <option value={idx()}>{group.name}</option>}
+              </For>
+            </select>
+            <input name="name" type="text" required />
+            <input name="url" type="url" required />
             <button type="submit">Add</button>
           </form>
         </HeaderItem>
