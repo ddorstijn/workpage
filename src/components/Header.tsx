@@ -64,6 +64,8 @@ export default function Header() {
     form.closest('dialog')?.close();
   }
 
+  // Form validation
+
   async function checkProject(ev: InputEvent) {
     const el = ev.currentTarget as HTMLInputElement;
     const projects = await storage.sync.get();
@@ -87,6 +89,29 @@ export default function Header() {
     }
 
     el.reportValidity();
+  }
+
+  // Theme selection
+
+  function changeThemeTemp() {
+    // @ts-ignore
+    document.querySelector('body')!.classList.value = this.value;
+  }
+
+  function changeTheme(ev: SubmitEvent) {
+    ev.preventDefault();
+
+    const form = ev.currentTarget as HTMLFormElement;
+    ctx.setTheme(form.querySelector('select')!.value);
+    form.closest('dialog')!.close();
+  }
+
+  function restoreTheme(ev: MouseEvent) {
+    document.querySelector('body')!.classList.value = ctx.theme();
+    const target = ev.currentTarget! as HTMLButtonElement;
+    target.form!.querySelector('select')!.value = ctx.theme();
+    
+    target.closest('dialog')!.close();
   }
 
   return (
@@ -158,10 +183,14 @@ export default function Header() {
         </HeaderItem>
 
         <HeaderItem icon={ThemeIcon} name="Change theme">
-          <select onChange={ev => ctx.setTheme(ev.currentTarget.value)}>
-            <option value="light" selected={ctx.theme() == "light"}>Light</option>
-            <option value="dark" selected={ctx.theme() == "dark"}>Dark</option>
-          </select>
+          <form onSubmit={changeTheme}>
+            <select onChange={changeThemeTemp}>
+              <option value="light" selected={ctx.theme() == "light"}>Light</option>
+              <option value="dark" selected={ctx.theme() == "dark"}>Dark</option>
+            </select>
+            <button type="button" onClick={restoreTheme}>Cancel</button>
+            <button type="submit">Keep it</button>
+          </form>
         </HeaderItem>
       </div>
     </header>
