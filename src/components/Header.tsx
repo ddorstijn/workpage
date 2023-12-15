@@ -156,9 +156,12 @@ export default function Header() {
         <HeaderItem icon={TranslateIcon} name="Translate">
         
         </HeaderItem>
-        
+
         <HeaderItem icon={ThemeIcon} name="Change theme">
-        
+          <select onChange={ev => ctx.setTheme(ev.currentTarget.value)}>
+            <option value="light" selected={ctx.theme() == "light"}>Light</option>
+            <option value="dark" selected={ctx.theme() == "dark"}>Dark</option>
+          </select>
         </HeaderItem>
       </div>
     </header>

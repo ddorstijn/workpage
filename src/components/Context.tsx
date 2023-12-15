@@ -95,16 +95,37 @@ const TEMPLATE: Project = {
   ],
 };
 
-export const ProjectContext: Context<{ project: Project, setProject: SetStoreFunction<Project>, active: Accessor<string>, setActive: Setter<string> } | undefined> = createContext();
+type Ctx = {
+  project: Project,
+  setProject: SetStoreFunction<Project>,
+  active: Accessor<string>,
+  setActive: Setter<string>
+  theme: Accessor<string>,
+  setTheme: Setter<string>
+}
+
+export const ProjectContext: Context<Ctx | undefined> = createContext();
 
 export const ProjectContextProvider: Component<ParentProps> = (props) => {
   const [active, setActive] = createSignal(localStorage.getItem('active') ?? 'General');
   const [project, setProject] = createStore<Project>(TEMPLATE);
+  const [theme, setTheme] = createSignal(localStorage.getItem("theme") ?? "light");
 
-  createEffect(() => {
-    localStorage.setItem('active', active());
-  });
-  
+  createEffect((oldTheme) => {
+    localStorage.setItem("theme", theme());
+    
+    const classList = document.querySelector('body')!.classList;
+    if (!oldTheme) {
+      classList.add(theme());
+      return theme();
+    }
+
+    classList.replace(oldTheme as string, theme());
+    return theme();
+  })
+
+  createEffect(() => localStorage.setItem('active', active()));
+
   createEffect(async () => {
     let proj: Project | undefined = (await storage.sync.get(active()))[active()];
     if (!proj && active() == "General") {
@@ -120,7 +141,7 @@ export const ProjectContextProvider: Component<ParentProps> = (props) => {
   })
 
   return (
-    <ProjectContext.Provider value={{ project, setProject, active, setActive }}>
+    <ProjectContext.Provider value={{ project, setProject, active, setActive, theme, setTheme }}>
       {props.children}
     </ProjectContext.Provider>
   )

@@ -4,11 +4,6 @@
 @import "https://unpkg.com/open-props/shadows.min.css";
 @import "https://unpkg.com/open-props/borders.min.css";
 
-a {
-  text-decoration: none;
-  color: white;
-}
-
 body {
   --surface-1: var(--red-0);
   --surface-2: white;
@@ -39,35 +34,38 @@ body {
   font-family: var(--font-sans);
   background-color: var(--surface-1);
   color: var(--text-2);
+  color-scheme: light;
+}
 
-  @media (prefers-color-scheme: dark) {
-    --text-1: var(--gray-1);
-    --text-2: var(--gray-2);
+body.dark {
+  color-scheme: dark;
 
-    --surface-1: var(--gray-9);
-    --surface-2: var(--gray-8);
+  --text-1: var(--gray-1);
+  --text-2: var(--gray-2);
 
-    --theme: var(--red-3);
-    --group-gray: var(--gray-4);
-    --group-stone: var(--stone-4);
-    --group-red: var(--red-4);
-    --group-pink: var(--pink-4);
-    --group-purple: var(--purple-4);
-    --group-violet: var(--violet-4);
-    --group-indigo: var(--indigo-4);
-    --group-blue: var(--blue-4);
-    --group-cyan: var(--cyan-4);
-    --group-teal: var(--teal-4);
-    --group-green: var(--green-4);
-    --group-lime: var(--lime-4);
-    --group-yellow: var(--yellow-4);
-    --group-orange: var(--orange-4);
-    --group-choco: var(--choco-4);
-    --group-brown: var(--brown-4);
-    --group-sand: var(--sand-4);
-    --group-camo: var(--camo-4);
-    --group-jungle: var(--jungle-4);
-  }
+  --surface-1: var(--gray-9);
+  --surface-2: var(--gray-8);
+
+  --theme: var(--red-3);
+  --group-gray: var(--gray-4);
+  --group-stone: var(--stone-4);
+  --group-red: var(--red-4);
+  --group-pink: var(--pink-4);
+  --group-purple: var(--purple-4);
+  --group-violet: var(--violet-4);
+  --group-indigo: var(--indigo-4);
+  --group-blue: var(--blue-4);
+  --group-cyan: var(--cyan-4);
+  --group-teal: var(--teal-4);
+  --group-green: var(--green-4);
+  --group-lime: var(--lime-4);
+  --group-yellow: var(--yellow-4);
+  --group-orange: var(--orange-4);
+  --group-choco: var(--choco-4);
+  --group-brown: var(--brown-4);
+  --group-sand: var(--sand-4);
+  --group-camo: var(--camo-4);
+  --group-jungle: var(--jungle-4);
 }
 
 #app {
