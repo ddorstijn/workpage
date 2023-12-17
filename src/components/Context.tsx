@@ -1,4 +1,4 @@
-import { Accessor, Component, Context, ParentProps, Setter, createContext, createEffect, createSignal } from "solid-js";
+import { Accessor, Component, ParentProps, Setter, createContext, createEffect, createSignal } from "solid-js";
 import { SetStoreFunction, createStore } from "solid-js/store";
 import { storage } from "webextension-polyfill";
 

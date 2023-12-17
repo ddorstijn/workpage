@@ -21,7 +21,7 @@ export default function Header() {
     const fd = new FormData(form);
     const name = fd.get("name")! as string;
 
-    if (form.checkValidity()) {
+    if (!form.checkValidity()) {
       console.error("Not a valid form");
       return;
     }
@@ -39,7 +39,10 @@ export default function Header() {
     const name = fd.get("name")! as string;
     const color = fd.get("color")! as string;
 
-    if (!name || !color) return;
+    if (!form.checkValidity()) {
+      console.error("Not a valid form");
+      return;
+    }
     
     ctx.setProject("linkgroups", [...ctx.project.linkgroups, { name, color, links: [] }]);
     
@@ -49,14 +52,18 @@ export default function Header() {
   
   function addLink(event: SubmitEvent) {
     event.preventDefault();
+
     const form = event.currentTarget! as HTMLFormElement;
     const fd = new FormData(form);
     const group = Number(fd.get("group")!);
     const name = fd.get("name")! as string;
     const url = fd.get("url")! as string;
 
-    if (!group || !name || !url) return;
-
+    if (!form.checkValidity()) {
+      console.error("Not a valid form");
+      return;
+    }
+    
     let links = [...ctx.project.linkgroups[group].links, { name, url }];
     ctx.setProject("linkgroups", group, "links", links);
 
