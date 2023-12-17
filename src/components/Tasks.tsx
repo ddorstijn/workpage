@@ -13,7 +13,7 @@ const Tasks: Component = () => {
   let ctx = useContext(ProjectContext); 
 
   function addTask() {
-    let tasks = [...ctx!.project.todo, { name: "" }];
+    let tasks = [...ctx!.project.todo, { name: "New task" }];
     ctx!.setProject("todo", tasks);
   }
   
