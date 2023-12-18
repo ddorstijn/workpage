@@ -1,5 +1,5 @@
 import { DragDropProvider, DragDropSensors, DragEventHandler, SortableProvider, closestCenter, createSortable } from "@thisbeyond/solid-dnd";
-import { Component, For, JSXElement, createEffect, createSignal } from "solid-js";
+import { Component, For, JSXElement, Ref, createEffect, createSignal } from "solid-js";
 
 
 declare module "solid-js" {
@@ -14,7 +14,8 @@ declare module "solid-js" {
 interface ListProps<T> {
   list: Array<T>,
   component: Component<{idx: number, item: T}>,
-  callback: (val: Array<T>) => void
+  callback: (val: Array<T>) => void,
+  ref?: Ref<HTMLOListElement>
 }
 
 export function SortableList<T>(props: ListProps<T>): JSXElement {
@@ -36,7 +37,7 @@ export function SortableList<T>(props: ListProps<T>): JSXElement {
         updatedItems.splice(toIndex, 0, ...updatedItems.splice(fromIndex, 1));
 
         setItems(updatedItems);
-        props.callback(items().map(([_, i]) => i));
+        props.callback(items().map(([_, item]) => item));
       }
     }
   }
@@ -44,7 +45,7 @@ export function SortableList<T>(props: ListProps<T>): JSXElement {
   return (
     <DragDropProvider onDragEnd={onDragEnd} collisionDetector={closestCenter}>
       <DragDropSensors />
-      <ol>
+      <ol ref={props.ref}>
         <SortableProvider ids={items().map(([id]) => id)}>
           <For each={items()}>
             { ([id, task], idx) => <SortableItem id={id} idx={idx()} item={task} component={props.component} /> }
