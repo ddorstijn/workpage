@@ -1,3 +1,4 @@
+import { initLinks } from "./links.js";
 import { initWorkpage } from "./workpage.js";
 
 /**
@@ -45,6 +46,7 @@ export function initHeader(project) {
         if (!name || project.linkgroups.find(l => l.name == name)) return;
 
         project.linkgroups.push({ name, color, links: [] });
+        initLinks(project);
 
         form.reset();
     });
@@ -76,6 +78,7 @@ export function initHeader(project) {
         if (!group || !name) return;
 
         project.linkgroups.find(l => l.name == group).links.push({ name, url })
+        initLinks(project);
 
         form.reset();
     });
