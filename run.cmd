@@ -1,0 +1,1 @@
+web-ext run --start-url "about:debugging#/runtime/this-firefox"  -f deved
