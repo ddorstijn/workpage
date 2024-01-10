@@ -26,26 +26,10 @@ export function initHeader(project) {
             }
         });
 
-        form.reset();
-    })
-
-    document.getElementById('add-project').addEventListener('submit', ev => {
-        ev.stopImmediatePropagation();
-        ev.preventDefault();
-
-        /** @type {HTMLFormElement} */
-        const form = ev.currentTarget;
-
-        const fd = new FormData(form);
-        const name = fd.get('name');
-
-        if (!name) return;
-
-        chrome.storage.sync.set({ [name]: TEMPLATE });
         initWorkpage(name);
 
         form.reset();
-    });
+    })
 
     document.getElementById('add-linkgroup').addEventListener('submit', ev => {
         ev.stopImmediatePropagation();

@@ -169,6 +169,12 @@ form input {
   background-color: var(--theme);
 }
 
+.project__item-used {
+  display: block;
+  font-size: var(--font-size-00);
+  color: var(--text-2);
+}
+
 .links {
   width: 100%;
   padding-block: var(--size-6);

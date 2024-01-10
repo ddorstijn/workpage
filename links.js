@@ -5,7 +5,6 @@ import { sortable } from './utils/sortable.js';
  * @param {Project} project 
  */
 export function initLinks(project) {
-    console.log(project);
     sortable(document.querySelector('.links'), {
         items: project.linkgroups,
         template: (group) => {

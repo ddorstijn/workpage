@@ -10,4 +10,6 @@ for (const dialog of document.querySelectorAll('dialog')) {
         if (event.clientY < rect.top || event.clientY > rect.bottom) return dialog.close();
         if (event.clientX < rect.left || event.clientX > rect.right) return dialog.close();
     });
+
+    dialog.querySelector('form')?.addEventListener('submit', () => dialog.close());
 }

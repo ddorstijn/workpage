@@ -1,6 +1,7 @@
 import { initClock } from "./clock.js";
 import { initHeader } from "./header.js";
 import { initLinks } from "./links.js";
+import { initProject } from "./project.js";
 
 /** @type {Project} */
 const TEMPLATE = {
@@ -103,41 +104,47 @@ export var project = {};
  * @param {string} active 
  */
 export async function initWorkpage(active) {
-  const record = (await chrome.storage.sync.get(active));
-  if (!record[active]) {
-    record[active] = TEMPLATE;
-    chrome.storage.sync.set({ "General": record[active] });
-    localStorage.setItem("active", "General");
-  }
-  
-  project = createDeepOnChangeProxy(record[active], () => {
-    chrome.storage.sync.set({ [active]: JSON.parse(JSON.stringify(project)) })
-  });
+    let record = (await chrome.storage.sync.get(active))[active];
+    if (!record) {
+        active = "General";
+        
+        if (!(await chrome.storage.sync.get(active))[active]) {
+            record = TEMPLATE;
+            chrome.storage.sync.set({ [active]: record });
+        }
+    }
+    
+    localStorage.setItem("active", active);
+    project = createDeepOnChangeProxy(record, () => {
+        console.log(record);
+        chrome.storage.sync.set({ [active]: JSON.parse(JSON.stringify(record)) })
+    });
 
-  initClock();
-  initLinks(project);
-  initHeader(project);
+    initClock();
+    initProject();
+    initLinks(project);
+    initHeader(project);
 }
 
 initWorkpage(localStorage.getItem("active") ?? "General");
 
 let proxyCache = new WeakMap();
 function createDeepOnChangeProxy(target, onChange) {
-  return new Proxy(target, {
-    get(target, property) {
-      const item = target[property];
-      if (item && typeof item === 'object') {
-        if (proxyCache.has(item)) return proxyCache.get(item);
-        const proxy = createDeepOnChangeProxy(item, onChange);
-        proxyCache.set(item, proxy);
-        return proxy;
-      }
-      return item;
-    },
-    set(target, property, newValue) {
-      target[property] = newValue;
-      onChange();
-      return true;
-    },
-  });
+    return new Proxy(target, {
+        get(target, property) {
+            const item = target[property];
+            if (item && typeof item === 'object') {
+                if (proxyCache.has(item)) return proxyCache.get(item);
+                const proxy = createDeepOnChangeProxy(item, onChange);
+                proxyCache.set(item, proxy);
+                return proxy;
+            }
+            return item;
+        },
+        set(target, property, newValue) {
+            target[property] = newValue;
+            onChange();
+            return true;
+        },
+    });
 }
