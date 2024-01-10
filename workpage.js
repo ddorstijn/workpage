@@ -2,6 +2,7 @@ import { initClock } from "./clock.js";
 import { initHeader } from "./header.js";
 import { initLinks } from "./links.js";
 import { initProject } from "./project.js";
+import { initTasks } from "./tasks.js";
 
 /** @type {Project} */
 const TEMPLATE = {
@@ -122,8 +123,9 @@ export async function initWorkpage(active) {
 
     initClock();
     initProject();
-    initLinks(project);
     initHeader(project);
+    initLinks(project);
+    initTasks(project);
 }
 
 initWorkpage(localStorage.getItem("active") ?? "General");

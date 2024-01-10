@@ -8,7 +8,7 @@ export function initClock() {
   function update() {
     let now = new Date();
     
-    let timeStr = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
+    let timeStr = now.toLocaleTimeString('en-gb', { hour: '2-digit', minute: '2-digit' })
     time.dateTime = timeStr;
     time.innerText = timeStr;
   

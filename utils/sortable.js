@@ -4,6 +4,41 @@
  **/
 var dragCtx;
 
+
+/**
+ * 
+ * @param {HTMLOListElement} listEl 
+ * @param {HTMLLIElement} el 
+ */
+export function sortableItem(listEl, el) {
+  el.draggable = true;
+    
+  el.addEventListener("dragstart", (ev) => {
+    ev.stopPropagation();
+    
+    el.classList.add("dragging");
+
+    dragCtx = {
+      source: listEl,
+      el,
+      group,
+      items,
+      item
+    };
+    
+    if (data) {
+      let {type, content} = data(item);
+      ev.dataTransfer.setData(type, content);
+    }
+  });
+
+  el.addEventListener("dragend", (ev) => {
+    ev.stopPropagation();
+    el.classList.remove("dragging");
+  });
+}
+
+
 /**
  * Make a sortable list. Calls optional save method on list after move
  * @template T
@@ -15,33 +50,8 @@ export async function sortable(listEl, { items, template, group, mode, data}) {
   listEl.replaceChildren();
   for (const item of items) {
     const childEl = template(item);
-    childEl.draggable = true;
-    
-    childEl.addEventListener("dragstart", (ev) => {
-      ev.stopPropagation();
-      
-      childEl.classList.add("dragging");
-
-      dragCtx = {
-        source: listEl,
-        el: childEl,
-        group,
-        items,
-        item
-      };
-      
-      if (data) {
-        let {type, content} = data(item);
-        ev.dataTransfer.setData(type, content);
-      }
-    });
-
-    childEl.addEventListener("dragend", (ev) => {
-      ev.stopPropagation();
-      childEl.classList.remove("dragging");
-    });
-
     listEl.append(childEl);
+    sortableItem(listEl, childEl);
   }
 
   listEl.addEventListener("dragover", (ev) => {
