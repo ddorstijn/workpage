@@ -1,5 +1,5 @@
 import { editable } from "./utils/editable.js";
-import { sortable, sortableItem } from "./utils/sortable.js";
+import { sortable } from "./utils/sortable.js";
 
 /** @type {HTMLOListElement} */
 const taskList = document.querySelector('.tasks > ol');
@@ -42,7 +42,6 @@ export function initTasks(project) {
         let newTask = { name: '' };
         project.todo.push(newTask);
         let taskEl = createTask(project.todo[project.todo.length - 1]);
-        sortableItem(taskList, taskEl);
         taskEl.querySelector('span').edit();
     });
 }

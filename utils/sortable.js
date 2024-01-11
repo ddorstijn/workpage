@@ -4,41 +4,6 @@
  **/
 var dragCtx;
 
-
-/**
- * 
- * @param {HTMLOListElement} listEl 
- * @param {HTMLLIElement} el 
- */
-export function sortableItem(listEl, el) {
-  el.draggable = true;
-    
-  el.addEventListener("dragstart", (ev) => {
-    ev.stopPropagation();
-    
-    el.classList.add("dragging");
-
-    dragCtx = {
-      source: listEl,
-      el,
-      group,
-      items,
-      item
-    };
-    
-    if (data) {
-      let {type, content} = data(item);
-      ev.dataTransfer.setData(type, content);
-    }
-  });
-
-  el.addEventListener("dragend", (ev) => {
-    ev.stopPropagation();
-    el.classList.remove("dragging");
-  });
-}
-
-
 /**
  * Make a sortable list. Calls optional save method on list after move
  * @template T
@@ -48,10 +13,46 @@ export function sortableItem(listEl, el) {
 export async function sortable(listEl, { items, template, group, mode, data}) {
   // Make sure there are no elements when initializing
   listEl.replaceChildren();
+
+  const observer = new MutationObserver((changes) => {
+    for (const change of changes) {
+      for (const el of change.addedNodes) {
+        const item = items[[...listEl.children].findIndex(c => c == el)];
+        
+        el.draggable = true;
+
+        el.ondragstart = (ev) => {
+          ev.stopPropagation();
+          
+          el.classList.add("dragging");
+      
+          dragCtx = {
+            source: listEl,
+            el,
+            group,
+            items,
+            item,
+          };
+          
+          if (data) {
+            let {type, content} = data(item);
+            ev.dataTransfer.setData(type, content);
+          }
+        };
+      
+        el.ondragend = (ev) => {
+          ev.stopPropagation();
+          el.classList.remove("dragging");
+        };
+      }
+    } 
+  });
+
+  observer.observe(listEl, { childList: true});
+  
   for (const item of items) {
     const childEl = template(item);
     listEl.append(childEl);
-    sortableItem(listEl, childEl);
   }
 
   listEl.addEventListener("dragover", (ev) => {
