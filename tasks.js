@@ -16,11 +16,10 @@ function createTask(todo) {
     
     const nameEl = todoEl.querySelector('span');
     editable(nameEl);
-    nameEl.addEventListener("edit", () => (nameEl.draggable = false));
+    nameEl.addEventListener("edit", () => (todoEl.draggable = false));
     nameEl.addEventListener("save", () => {
-        nameEl.draggable = true;
-        todo.name = nameEl.innerText;
-        
+        todoEl.draggable = true;
+        todo.name = nameEl.innerText; 
     });
     
     return todoEl;
