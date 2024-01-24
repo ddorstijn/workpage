@@ -250,10 +250,13 @@ form input {
 
   font-size: var(--font-size-4);
   font-weight: 600;
-  color: var(--stone-6);
+  
+  > button {
+    color: var(--stone-6);
+  }
 
-  > h3:hover,
-  > h3.active {
+  > button h3:hover,
+  > button h3.active {
     cursor: pointer;
     color: var(--text-1);
   }

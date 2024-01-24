@@ -36,11 +36,41 @@ export function initTasks(project) {
         group: 'tasks',
         mode: "vertical",
     });
-    
+
     document.querySelector('.add-task').addEventListener('click', () => {
         let newTask = { name: '' };
         project.todo.push(newTask);
         let taskEl = createTask(project.todo[project.todo.length - 1]);
         taskEl.querySelector('span').edit();
+    });
+
+    /** @type {HTMLButtonElement} */
+    const todoBtn = document.querySelector('.tasks > header > .tasks_todo');
+
+    /** @type {HTMLButtonElement} */
+    const doneBtn = document.querySelector('.tasks > header > .tasks_done');
+
+    todoBtn.addEventListener('click', () => {
+        sortable(taskList, {
+            items: project.todo,
+            template: createTask,
+            group: 'tasks',
+            mode: "vertical",
+        });
+
+        todoBtn.className = 'active';
+        doneBtn.className = '';
+    })
+
+    doneBtn.addEventListener('click', () => {
+        sortable(taskList, {
+            items: project.done,
+            template: createTask,
+            group: 'tasks',
+            mode: "vertical",
+        });
+
+        todoBtn.className = '';
+        doneBtn.className = 'active';
     });
 }
