@@ -5,31 +5,44 @@ import { sortable } from "./utils/sortable.js";
 const taskList = () => document.querySelector('.tasks > ol');
 
 /**
- * Map task to HTMLElement
- * @param {Task} todo 
- * @returns Created element
- */
-function createTask(todo) {
-    let todoEl = taskList().appendChild(document.createElement('li'));
-    todoEl.classList.add('task-list_item');
-    todoEl.innerHTML = `<div class="handle"></div><span>${todo.name}</span>`;
-    
-    const nameEl = todoEl.querySelector('span');
-    editable(nameEl);
-    nameEl.addEventListener("edit", () => (todoEl.draggable = false));
-    nameEl.addEventListener("save", () => {
-        todoEl.draggable = true;
-        todo.name = nameEl.innerText; 
-    });
-    
-    return todoEl;
-}
-
-/**
  * 
  * @param {Project} project 
  */
 export function initTasks(project) {
+    /** @type {HTMLDetailsElement} */
+    const drawer = document.querySelector('.task-drawer');
+    drawer.open = localStorage.getItem('tasks-open') == "true";
+    drawer.querySelector('summary').addEventListener('click', _ => setTimeout(() => localStorage.setItem('tasks-open', drawer.open)));
+
+    /**
+     * Map task to HTMLElement
+     * @param {Task} todo 
+     * @returns Created element
+     */
+    const createTask = (todo) => {
+        /** @type {HTMLLIElement} */
+        let todoEl = taskList().appendChild(document.createElement('li'));
+        todoEl.classList.add('task-list_item');
+        todoEl.innerHTML = `<div class="handle"></div><span>${todo.name}</span>`;
+
+        const handle = todoEl.querySelector('.handle');
+        handle.addEventListener('click', () => {
+            project.todo.splice(project.todo.indexOf(todo), 1);
+            project.done.unshift(todo);
+            todoEl.remove();
+        });
+        
+        const nameEl = todoEl.querySelector('span');
+        editable(nameEl);
+        nameEl.addEventListener("edit", () => (todoEl.draggable = false));
+        nameEl.addEventListener("save", () => {
+            todoEl.draggable = true;
+            todo.name = nameEl.innerText; 
+        });
+        
+        return todoEl;
+    }
+    
     sortable(taskList(), {
         items: project.todo,
         template: createTask,
