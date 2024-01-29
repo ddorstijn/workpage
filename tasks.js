@@ -2,7 +2,7 @@ import { editable } from "./utils/editable.js";
 import { sortable } from "./utils/sortable.js";
 
 /** @type {HTMLOListElement} */
-const taskList = document.querySelector('.tasks > ol');
+const taskList = () => document.querySelector('.tasks > ol');
 
 /**
  * Map task to HTMLElement
@@ -10,7 +10,7 @@ const taskList = document.querySelector('.tasks > ol');
  * @returns Created element
  */
 function createTask(todo) {
-    let todoEl = taskList.appendChild(document.createElement('li'));
+    let todoEl = taskList().appendChild(document.createElement('li'));
     todoEl.classList.add('task-list_item');
     todoEl.innerHTML = `<div class="handle"></div><span>${todo.name}</span>`;
     
@@ -30,7 +30,7 @@ function createTask(todo) {
  * @param {Project} project 
  */
 export function initTasks(project) {
-    sortable(taskList, {
+    sortable(taskList(), {
         items: project.todo,
         template: createTask,
         group: 'tasks',
@@ -51,7 +51,7 @@ export function initTasks(project) {
     const doneBtn = document.querySelector('.tasks > header > .tasks_done');
 
     todoBtn.addEventListener('click', () => {
-        sortable(taskList, {
+        sortable(taskList(), {
             items: project.todo,
             template: createTask,
             group: 'tasks',
@@ -63,7 +63,7 @@ export function initTasks(project) {
     })
 
     doneBtn.addEventListener('click', () => {
-        sortable(taskList, {
+        sortable(taskList(), {
             items: project.done,
             template: createTask,
             group: 'tasks',

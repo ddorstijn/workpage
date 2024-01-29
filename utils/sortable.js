@@ -11,8 +11,10 @@ var dragCtx;
  * @param {{ items: T[], template: (item: T) => HTMLElement, group: string, mode: "horizontal" | "vertical", data: (item: T) => {type: string, content: string}? }} options 
  */
 export async function sortable(listEl, { items, template, group, mode, data}) {
-  // Make sure there are no elements when initializing
-  listEl.replaceChildren();
+  // Remove any eventlisteners or children
+  const newNode = listEl.cloneNode(false);
+  listEl.replaceWith(newNode);
+  listEl = newNode;
 
   const observer = new MutationObserver((changes) => {
     for (const change of changes) {
