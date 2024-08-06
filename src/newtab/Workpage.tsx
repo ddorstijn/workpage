@@ -1,5 +1,5 @@
-import { Component, createResource, For } from "solid-js";
-import { bookmarks } from "webextension-polyfill";
+import { Component, createResource, createSignal, For } from "solid-js";
+import { Bookmarks, bookmarks, storage } from "webextension-polyfill";
 
 export const Workpage: Component = () => {
     const [root] = createResource(async () => {
@@ -18,7 +18,7 @@ export const Workpage: Component = () => {
         return roots[0];
     });
 
-    const [projects, { refetch }] = createResource(root, async () => {
+    const [projects, { refetch: refetchProjects }] = createResource(root, async () => {
         return (await bookmarks.getChildren(root()!.id)).sort((a, b) => {
             if (!a.index || !b.index) {
                 return 0;
@@ -27,6 +27,16 @@ export const Workpage: Component = () => {
             return a.index - b.index;
         });
     });
+
+    const [currentProject, { refetch: refetchCurrent }] = createResource(async () => {
+        const record = await storage.local.get("currentProject");
+        return record.currentProject as Bookmarks.BookmarkTreeNode | undefined;
+    });
+
+    async function setCurrentProject(project: Bookmarks.BookmarkTreeNode) {
+        await storage.local.set({ currentProject: project });
+        refetchCurrent();
+    }
 
     async function addProject() {
         const title = prompt("What is the project name?")
@@ -39,16 +49,24 @@ export const Workpage: Component = () => {
         });
 
         await bookmarks.create({ title, parentId: root()!.id, index });
-        await refetch();
+        await refetchProjects();
     }
 
     return (
         <div>
             <h1>Workpage</h1>
             <button onClick={addProject}>Add Project</button>
+            <span>{currentProject() ? `Current project: ${currentProject()!.title}` : ""}</span>
+            <h2>Projects</h2>
             <ol>
                 <For each={projects()}>
-                    {(project) => <li>{project.title}</li>}
+                    {(project) =>
+                        <li>
+                            <button onClick={() => setCurrentProject(project)}>
+                                {project.title}
+                                {currentProject()?.id === project.id ? "(current)" : ""}
+                            </button>
+                        </li>}
                 </For>
             </ol>
         </div>
