@@ -38,6 +38,15 @@ export const Workpage: Component = () => {
         refetchCurrent();
     }
 
+    async function deleteProject(project: Bookmarks.BookmarkTreeNode) {
+        await bookmarks.remove(project.id);
+        await refetchProjects();
+    }
+
+    const [groups, { refetch: refetchGroups }] = createResource(currentProject, async (project) => {
+        return await bookmarks.getChildren(project!.id);
+    });
+
     async function addProject() {
         const title = prompt("What is the project name?")
         if (!title) {
@@ -52,10 +61,25 @@ export const Workpage: Component = () => {
         await refetchProjects();
     }
 
+    async function addGroup() {
+        if (!currentProject()) {
+            return;
+        }
+
+        const title = prompt("What is the group name?");
+        if (!title) {
+            return;
+        }
+
+        await bookmarks.create({ title, parentId: currentProject()!.id });
+        await refetchGroups();
+    }
+
     return (
         <div>
             <h1>Workpage</h1>
             <button onClick={addProject}>Add Project</button>
+            <button onClick={addGroup}>Add group</button>
             <span>{currentProject() ? `Current project: ${currentProject()!.title}` : ""}</span>
             <h2>Projects</h2>
             <ol>
@@ -66,7 +90,19 @@ export const Workpage: Component = () => {
                                 {project.title}
                                 {currentProject()?.id === project.id ? "(current)" : ""}
                             </button>
-                        </li>}
+                            <button onClick={() => deleteProject(project)}>Delete</button>
+                        </li>
+                    }
+                </For>
+            </ol>
+
+            <ol>
+                <For each={groups()}>
+                    {(group) =>
+                        <li>
+                            {group.title}
+                        </li>
+                    }
                 </For>
             </ol>
         </div>
