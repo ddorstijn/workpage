@@ -26,3 +26,10 @@ export async function recursiveDeleteBookmarks(node: Bookmarks.BookmarkTreeNode)
 
     await bookmarks.remove(node.id);
 }
+
+export async function mergeLocalStorage(id: string, data: Object) {
+    const record = (await storage.local.get(id)).id;
+    const merged = { ...record, ...data };
+
+    await storage.local.set({ [id]: merged });
+}

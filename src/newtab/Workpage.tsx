@@ -1,6 +1,7 @@
 import { Component, createResource, For } from "solid-js";
 import { getCurrentProject, recursiveDeleteBookmarks } from "../util";
 import { Bookmarks, bookmarks, storage } from "webextension-polyfill";
+import { Tasks } from "./Tasks";
 
 export const Workpage: Component = () => {
     const [root] = createResource(async () => {
@@ -125,6 +126,11 @@ export const Workpage: Component = () => {
                     }
                 </For>
             </ol>
+
+            <div>
+                <Tasks currentProject={currentProject} />
+            </div>
         </div>
+
     );
 }
