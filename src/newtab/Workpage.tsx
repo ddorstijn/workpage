@@ -1,16 +1,28 @@
-import { Component, createResource, createSignal, For } from "solid-js";
+import { Component, createResource, For } from "solid-js";
 import { Bookmarks, bookmarks, storage } from "webextension-polyfill";
+
+async function deleteRecursive(node: Bookmarks.BookmarkTreeNode) {
+    const tree = (await bookmarks.getSubTree(node.id))[0];
+
+    if (tree.children) {
+        for (const child of tree.children!) {
+            await deleteRecursive(child);
+        }
+    }
+
+    await bookmarks.remove(node.id);
+}
 
 export const Workpage: Component = () => {
     const [root] = createResource(async () => {
         const roots = await bookmarks.search({ title: "Workpage" });
-        if (root.length === 0) {
+        if (roots.length === 0) {
             await bookmarks.create({ title: "Workpage" });
 
             // TODO: create default project
         }
 
-        if (root.length > 1) {
+        if (roots.length > 1) {
             alert("Error fetching projects: Too many bookmark folders named 'Workpage'. Please delete the one that is not needed.");
             return;
         }
@@ -19,43 +31,48 @@ export const Workpage: Component = () => {
     });
 
     const [projects, { refetch: refetchProjects }] = createResource(root, async () => {
-        return (await bookmarks.getChildren(root()!.id)).sort((a, b) => {
-            if (!a.index || !b.index) {
-                return 0;
-            }
-
-            return a.index - b.index;
-        });
+        return await bookmarks.getChildren(root()!.id);
     });
 
     const [currentProject, { refetch: refetchCurrent }] = createResource(async () => {
-        const record = await storage.local.get("currentProject");
-        return record.currentProject as Bookmarks.BookmarkTreeNode | undefined;
+        const record = await storage.local.get("currentProjectId");
+        if (record.currentProjectId === undefined) {
+            return null;
+        }
+
+        const projects = await bookmarks.getSubTree(record.currentProjectId).catch(() => undefined);
+
+        if (projects === undefined) {
+            return null;
+        }
+
+        return projects[0];
     });
 
-    async function setCurrentProject(project: Bookmarks.BookmarkTreeNode) {
-        await storage.local.set({ currentProject: project });
-        refetchCurrent();
+    async function setCurrentProject(project: Bookmarks.BookmarkTreeNode | null) {
+        await storage.local.set({ currentProjectId: project?.id });
+        await refetchCurrent();
     }
 
     async function deleteProject(project: Bookmarks.BookmarkTreeNode) {
-        await bookmarks.remove(project.id);
+        await deleteRecursive(project);
         await refetchProjects();
-    }
 
-    const [groups, { refetch: refetchGroups }] = createResource(currentProject, async (project) => {
-        return await bookmarks.getChildren(project!.id);
-    });
+        if (currentProject()?.id === project.id) {
+            await setCurrentProject(null);
+        }
+    }
 
     async function addProject() {
         const title = prompt("What is the project name?")
+
         if (!title) {
             return;
         }
 
         const index = projects()!.map(({ index }) => index ?? 0).reduce((prev, cur) => {
             return prev > cur ? prev : cur;
-        });
+        }, 0);
 
         await bookmarks.create({ title, parentId: root()!.id, index });
         await refetchProjects();
@@ -72,7 +89,22 @@ export const Workpage: Component = () => {
         }
 
         await bookmarks.create({ title, parentId: currentProject()!.id });
-        await refetchGroups();
+        await refetchCurrent();
+    }
+
+    async function deleteGroup(group: Bookmarks.BookmarkTreeNode) {
+        await deleteRecursive(group);
+        await refetchCurrent();
+    }
+
+    async function addLink(groupId: string) {
+        await bookmarks.create({ title: "Link", url: "https://google.com", parentId: groupId });
+        await refetchCurrent();
+    }
+
+    async function deleteLink(link: Bookmarks.BookmarkTreeNode) {
+        await bookmarks.remove(link.id);
+        await refetchCurrent();
     }
 
     return (
@@ -97,10 +129,22 @@ export const Workpage: Component = () => {
             </ol>
 
             <ol>
-                <For each={groups()}>
+                <For each={currentProject()?.children}>
                     {(group) =>
                         <li>
-                            {group.title}
+                            <h3>{group.title}</h3>
+                            <button onClick={() => addLink(group.id)}>Add link</button>
+                            <button onClick={() => deleteGroup(group)}>Delete</button>
+                            <ol>
+                                <For each={group.children}>
+                                    {(link) =>
+                                        <li>
+                                            <a href={link.url}>{link.title}</a>
+                                            <button onClick={() => deleteLink(link)}>Delete</button>
+                                        </li>
+                                    }
+                                </For>
+                            </ol>
                         </li>
                     }
                 </For>
