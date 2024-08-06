@@ -1,17 +1,6 @@
 import { Component, createResource, For } from "solid-js";
+import { getCurrentProject, recursiveDeleteBookmarks } from "../util";
 import { Bookmarks, bookmarks, storage } from "webextension-polyfill";
-
-async function deleteRecursive(node: Bookmarks.BookmarkTreeNode) {
-    const tree = (await bookmarks.getSubTree(node.id))[0];
-
-    if (tree.children) {
-        for (const child of tree.children!) {
-            await deleteRecursive(child);
-        }
-    }
-
-    await bookmarks.remove(node.id);
-}
 
 export const Workpage: Component = () => {
     const [root] = createResource(async () => {
@@ -34,20 +23,7 @@ export const Workpage: Component = () => {
         return await bookmarks.getChildren(root()!.id);
     });
 
-    const [currentProject, { refetch: refetchCurrent }] = createResource(async () => {
-        const record = await storage.local.get("currentProjectId");
-        if (record.currentProjectId === undefined) {
-            return null;
-        }
-
-        const projects = await bookmarks.getSubTree(record.currentProjectId).catch(() => undefined);
-
-        if (projects === undefined) {
-            return null;
-        }
-
-        return projects[0];
-    });
+    const [currentProject, { refetch: refetchCurrent }] = createResource(getCurrentProject);
 
     async function setCurrentProject(project: Bookmarks.BookmarkTreeNode | null) {
         await storage.local.set({ currentProjectId: project?.id });
@@ -55,7 +31,7 @@ export const Workpage: Component = () => {
     }
 
     async function deleteProject(project: Bookmarks.BookmarkTreeNode) {
-        await deleteRecursive(project);
+        await recursiveDeleteBookmarks(project);
         await refetchProjects();
 
         if (currentProject()?.id === project.id) {
@@ -93,7 +69,7 @@ export const Workpage: Component = () => {
     }
 
     async function deleteGroup(group: Bookmarks.BookmarkTreeNode) {
-        await deleteRecursive(group);
+        await recursiveDeleteBookmarks(group);
         await refetchCurrent();
     }
 

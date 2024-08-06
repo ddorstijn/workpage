@@ -1,5 +1,4 @@
-import { For, render } from 'solid-js/web';
-import { bookmarks } from 'webextension-polyfill';
+import { render } from 'solid-js/web';
 import { Workpage } from './Workpage';
 
 const element = document.getElementById('app');
