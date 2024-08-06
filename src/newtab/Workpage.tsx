@@ -2,9 +2,8 @@ import { Component, createResource, For } from "solid-js";
 import { bookmarks } from "webextension-polyfill";
 
 export const Workpage: Component = () => {
-    const [projects] = createResource(async () => {
-        const root = await bookmarks.search({ title: "Workpage" });
-
+    const [root] = createResource(async () => {
+        const roots = await bookmarks.search({ title: "Workpage" });
         if (root.length === 0) {
             await bookmarks.create({ title: "Workpage" });
 
@@ -16,7 +15,17 @@ export const Workpage: Component = () => {
             return;
         }
 
-        return await bookmarks.getChildren(root[0].id);
+        return roots[0];
+    });
+
+    const [projects, { refetch }] = createResource(root, async () => {
+        return (await bookmarks.getChildren(root()!.id)).sort((a, b) => {
+            if (!a.index || !b.index) {
+                return 0;
+            }
+
+            return a.index - b.index;
+        });
     });
 
     async function addProject() {
@@ -25,8 +34,12 @@ export const Workpage: Component = () => {
             return;
         }
 
-        const parentId = (await bookmarks.search({ title: 'Workpage' }))[0].id;
-        bookmarks.create({ title, parentId });
+        const index = projects()!.map(({ index }) => index ?? 0).reduce((prev, cur) => {
+            return prev > cur ? prev : cur;
+        });
+
+        await bookmarks.create({ title, parentId: root()!.id, index });
+        await refetch();
     }
 
     return (
