@@ -1,0 +1,35 @@
+{
+  "name": "workpage",
+  "version": "0.1.0",
+  "description": "Adjust your new tab page to your personal needs. Use projects to organise your links and tasks for a productive start of your tabs",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "watch": "vite build --watch",
+    "serve:firefox": "web-ext run --start-url \"about:debugging#/runtime/this-firefox\" --source-dir ./dist/ -f deved",
+    "serve:chrome": "web-ext run -t chromium --start-url \"https://github.com\" --source-dir ./dist/",
+    "tsc": "tsc",
+    "build": "vite build",
+    "test": "vitest",
+    "lint": "eslint .",
+    "webext:lint": "web-ext lint -s ./dist"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@samrum/vite-plugin-web-extension": "^5.1.0",
+    "@types/webextension-polyfill": "^0.10.7",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.8.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-solid": "^0.14.1",
+    "typescript": "^5.5.4",
+    "vite": "^5.3.5",
+    "vite-plugin-solid": "^2.10.2",
+    "web-ext": "^8.2.0",
+    "webextension-polyfill": "^0.12.0"
+  },
+  "dependencies": {
+    "solid-js": "^1.8.19"
+  }
+}
