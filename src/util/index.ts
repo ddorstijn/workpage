@@ -15,18 +15,6 @@ export async function getCurrentProject(): Promise<Bookmarks.BookmarkTreeNode | 
     return projects[0];
 }
 
-export async function recursiveDeleteBookmarks(node: Bookmarks.BookmarkTreeNode) {
-    const tree = (await bookmarks.getSubTree(node.id))[0];
-
-    if (tree.children) {
-        for (const child of tree.children!) {
-            await recursiveDeleteBookmarks(child);
-        }
-    }
-
-    await bookmarks.remove(node.id);
-}
-
 export async function mergeLocalStorage(id: string, data: Object) {
     const record = (await storage.local.get(id)).id;
     const merged = { ...record, ...data };

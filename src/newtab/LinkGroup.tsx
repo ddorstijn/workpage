@@ -1,22 +1,22 @@
 import { Component, For } from "solid-js"
-import { Bookmarks } from "webextension-polyfill"
+import { bookmarks, Bookmarks } from "webextension-polyfill"
 import { LinkItem } from "./LinkItem"
 
 type Props = {
     group: Bookmarks.BookmarkTreeNode
-    deleteGroup: (group: Bookmarks.BookmarkTreeNode) => void
-    deleteLink: (link: Bookmarks.BookmarkTreeNode) => void
 }
 
 export const LinkGroup: Component<Props> = props => {
+    async function deleteGroup() {
+        await bookmarks.removeTree(props.group.id);
+    }
+
     return <li>
         <h3>{props.group.title}</h3>
-        <button onClick={() => props.deleteGroup(props.group)}>Delete</button>
+        <button onClick={deleteGroup}>Delete</button>
         <ol>
             <For each={props.group.children}>
-                {(link) =>
-                    <LinkItem link={link} deleteLink={props.deleteLink} />
-                }
+                {(link) => <LinkItem link={link} />}
             </For>
         </ol>
     </li>

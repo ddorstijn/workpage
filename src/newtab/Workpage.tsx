@@ -1,5 +1,5 @@
 import { Component, createResource, For } from "solid-js";
-import { getCurrentProject, recursiveDeleteBookmarks } from "../util";
+import { getCurrentProject } from "../util";
 import { Bookmarks, bookmarks, storage } from "webextension-polyfill";
 import { Tasks } from "./Tasks";
 import { LinkGroup } from "./LinkGroup";
@@ -50,7 +50,7 @@ export const Workpage: Component = () => {
     }
 
     async function deleteProject(project: Bookmarks.BookmarkTreeNode) {
-        await recursiveDeleteBookmarks(project);
+        await bookmarks.removeTree(project.id);
         await refetchProjects();
 
         if (currentProject()?.id === project.id) {
@@ -71,18 +71,26 @@ export const Workpage: Component = () => {
         }
 
         await bookmarks.create({ title, parentId: currentProject()!.id });
-        await refetchCurrent();
     }
 
-    async function deleteGroup(group: Bookmarks.BookmarkTreeNode) {
-        await recursiveDeleteBookmarks(group);
-        await refetchCurrent();
+    async function reloadCurrent(id: string) {
+        const bookmark = (await bookmarks.get(id))[0];
+        if (bookmark.parentId === root()?.id) {
+            refetchProjects();
+            return;
+        }
+
+        if (!currentProject()) {
+            return;
+        }
+
+        refetchCurrent();
     }
 
-    async function deleteLink(link: Bookmarks.BookmarkTreeNode) {
-        await bookmarks.remove(link.id);
-        await refetchCurrent();
-    }
+    bookmarks.onChanged.addListener(reloadCurrent);
+    bookmarks.onCreated.addListener(reloadCurrent);
+    bookmarks.onRemoved.addListener(reloadCurrent);
+    bookmarks.onMoved.addListener(reloadCurrent);
 
     return (
         <div>
@@ -128,9 +136,7 @@ export const Workpage: Component = () => {
 
             <ol>
                 <For each={currentProject()?.children}>
-                    {(group) =>
-                        <LinkGroup group={group} deleteGroup={deleteGroup} deleteLink={deleteLink} />
-                    }
+                    {(group) => <LinkGroup group={group} />}
                 </For>
             </ol>
 
