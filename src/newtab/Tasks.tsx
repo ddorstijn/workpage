@@ -1,8 +1,7 @@
 import { Component, createResource, For, Resource } from "solid-js";
 import { mergeLocalStorage } from "../util";
 import { Bookmarks, storage } from "webextension-polyfill";
-
-type TaskItem = { id: string, title: string, completed: boolean };
+import { Item, TaskItem } from "./TaskItem";
 
 type Props = { currentProject: Resource<Bookmarks.BookmarkTreeNode | null> };
 
@@ -13,29 +12,31 @@ export const Tasks: Component<Props> = (props) => {
         }
 
         const project = (await storage.local.get(props.currentProject()!.id))[props.currentProject()!.id];
-
         if (project === undefined) {
             return [];
         }
 
-        return project.tasks as TaskItem[];
+        return project.tasks as Item[];
     });
 
-    async function addTodo(e: SubmitEvent) {
+    async function addTask(e: SubmitEvent) {
         e.preventDefault();
 
-        const formData = new FormData(e.target as HTMLFormElement);
-        const title = formData.get("title") as string;
+        if (!props.currentProject()) {
+            return;
+        }
 
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+        const title = formData.get("title") as string;
         if (!title) {
             return;
         }
 
-        const newTask: TaskItem = { id: crypto.randomUUID(), title, completed: false };
-        setTasks((todos) => [...todos!, newTask]);
-
-        (e.target as HTMLFormElement).reset();
+        setTasks((todos) => [...todos!, { id: crypto.randomUUID(), title, completed: false }]);
         await mergeLocalStorage(props.currentProject()!.id, { tasks: tasks() });
+
+        form.reset();
     };
 
     async function toggleCompleted(id: string) {
@@ -48,25 +49,15 @@ export const Tasks: Component<Props> = (props) => {
     return (
         <div>
             <h1>Tasks</h1>
-            <form onSubmit={addTodo}>
-                <label>
-                    <span>Title</span>
-                    <input name="title" type="text" />
-                </label>
+            <form onSubmit={addTask}>
+                <input aria-label="Add a new task" name="title" type="text" placeholder="Add a new task" />
                 <button type="submit">Add</button>
             </form>
 
             <ol>
                 <For each={tasks()}>
-                    {(todo) =>
-                        <li>
-                            <input
-                                type="checkbox"
-                                checked={todo.completed}
-                                onChange={[toggleCompleted, todo.id]}
-                            />
-                            {todo.title}
-                        </li>
+                    {(item) =>
+                        <TaskItem item={item} toggleCompleted={toggleCompleted} />
                     }
                 </For>
             </ol>

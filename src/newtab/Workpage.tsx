@@ -2,6 +2,7 @@ import { Component, createResource, For } from "solid-js";
 import { getCurrentProject, recursiveDeleteBookmarks } from "../util";
 import { Bookmarks, bookmarks, storage } from "webextension-polyfill";
 import { Tasks } from "./Tasks";
+import { LinkGroup } from "./LinkGroup";
 
 export const Workpage: Component = () => {
     let groupDialog: HTMLDialogElement | undefined;
@@ -23,10 +24,7 @@ export const Workpage: Component = () => {
         return roots[0];
     });
 
-    const [projects, { refetch: refetchProjects }] = createResource(root, async () => {
-        return await bookmarks.getChildren(root()!.id);
-    });
-
+    const [projects, { refetch: refetchProjects }] = createResource(root, async () => await bookmarks.getChildren(root()!.id));
     const [currentProject, { refetch: refetchCurrent }] = createResource(getCurrentProject);
 
     async function setCurrentProject(project: Bookmarks.BookmarkTreeNode | null) {
@@ -35,8 +33,6 @@ export const Workpage: Component = () => {
     }
 
     async function addProject(e: SubmitEvent) {
-        e.preventDefault();
-
         const form = e.target as HTMLFormElement;
         const formData = new FormData(form);
         const title = formData.get("title") as string;
@@ -51,9 +47,6 @@ export const Workpage: Component = () => {
 
         await bookmarks.create({ title, parentId: root()!.id, index });
         await refetchProjects();
-
-        form.reset();
-        form.closest('dialog')?.close();
     }
 
     async function deleteProject(project: Bookmarks.BookmarkTreeNode) {
@@ -66,8 +59,6 @@ export const Workpage: Component = () => {
     }
 
     async function addGroup(e: SubmitEvent) {
-        e.preventDefault();
-
         if (!currentProject()) {
             return;
         }
@@ -81,9 +72,6 @@ export const Workpage: Component = () => {
 
         await bookmarks.create({ title, parentId: currentProject()!.id });
         await refetchCurrent();
-
-        form.reset();
-        form.closest('dialog')?.close();
     }
 
     async function deleteGroup(group: Bookmarks.BookmarkTreeNode) {
@@ -141,20 +129,7 @@ export const Workpage: Component = () => {
             <ol>
                 <For each={currentProject()?.children}>
                     {(group) =>
-                        <li>
-                            <h3>{group.title}</h3>
-                            <button onClick={() => deleteGroup(group)}>Delete</button>
-                            <ol>
-                                <For each={group.children}>
-                                    {(link) =>
-                                        <li>
-                                            <a href={link.url}>{link.title}</a>
-                                            <button onClick={() => deleteLink(link)}>Delete</button>
-                                        </li>
-                                    }
-                                </For>
-                            </ol>
-                        </li>
+                        <LinkGroup group={group} deleteGroup={deleteGroup} deleteLink={deleteLink} />
                     }
                 </For>
             </ol>
