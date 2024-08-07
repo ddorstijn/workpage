@@ -3,6 +3,7 @@ import { getCurrentProject } from "../util";
 import { Bookmarks, bookmarks, storage } from "webextension-polyfill";
 import { Tasks } from "./Tasks";
 import { LinkGroup } from "./LinkGroup";
+import Clock from "./Clock";
 
 export const Workpage: Component = () => {
     let groupDialog: HTMLDialogElement | undefined;
@@ -133,6 +134,8 @@ export const Workpage: Component = () => {
                     }
                 </For>
             </ol>
+
+            <Clock />
 
             <ol>
                 <For each={currentProject()?.children}>
