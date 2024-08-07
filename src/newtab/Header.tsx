@@ -1,7 +1,7 @@
-import { Component, Resource } from "solid-js";
+import { Component, JSX, Resource } from "solid-js";
 import { bookmarks, type Bookmarks } from "webextension-polyfill";
 
-type Props = {
+interface Props extends JSX.HTMLAttributes<HTMLElement> {
     currentProject: Resource<Bookmarks.BookmarkTreeNode | null>;
     projects: Resource<Bookmarks.BookmarkTreeNode[]>;
     root: Resource<Bookmarks.BookmarkTreeNode | undefined>;
@@ -43,7 +43,7 @@ export const Header: Component<Props> = (props) => {
     }
 
     return (
-        <header>
+        <header {...props}>
             <div>
                 <button onClick={() => projectDialog?.showModal()}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">

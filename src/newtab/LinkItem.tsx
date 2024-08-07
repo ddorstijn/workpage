@@ -10,7 +10,7 @@ export const LinkItem: Component<Props> = props => {
         await bookmarks.remove(props.link.id);
     }
 
-    return <li>
+    return <li style={{ display: "flex", "justify-content": "space-between" }}>
         <a href={props.link.url}>{props.link.title}</a>
         <button onClick={deleteLink}>Delete</button>
     </li>

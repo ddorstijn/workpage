@@ -1,7 +1,7 @@
-import { Component, For, Resource } from "solid-js";
+import { Component, For, JSX, Resource } from "solid-js";
 import { bookmarks, storage, Bookmarks } from "webextension-polyfill";
 
-type Props = {
+interface Props extends JSX.HTMLAttributes<HTMLButtonElement> {
     projects: Resource<Bookmarks.BookmarkTreeNode[]>;
     currentProject: Resource<Bookmarks.BookmarkTreeNode | null>;
     refetchCurrent: Function;
@@ -24,7 +24,7 @@ export const Projects: Component<Props> = (props) => {
     }
 
     return <>
-        <button onClick={() => projectDialog?.showModal()}>{props.currentProject()?.title}</button>
+        <button {...props} onClick={() => projectDialog?.showModal()}>{props.currentProject()?.title}</button>
         <dialog ref={projectDialog}>
             <ol>
                 <For each={props.projects()}>

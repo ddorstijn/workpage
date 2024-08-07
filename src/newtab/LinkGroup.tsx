@@ -11,9 +11,11 @@ export const LinkGroup: Component<Props> = props => {
         await bookmarks.removeTree(props.group.id);
     }
 
-    return <li>
-        <h3>{props.group.title}</h3>
-        <button onClick={deleteGroup}>Delete</button>
+    return <li style={{ width: "min(300px, 25%)" }}>
+        <div style={{ display: "flex", "justify-content": "space-between" }}>
+            <h3>{props.group.title}</h3>
+            <button onClick={deleteGroup}>Delete</button>
+        </div>
         <ol>
             <For each={props.group.children}>
                 {(link) => <LinkItem link={link} />}

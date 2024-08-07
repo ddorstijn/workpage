@@ -3,7 +3,7 @@ import { getCurrentProject } from "../util";
 import { bookmarks } from "webextension-polyfill";
 import { Tasks } from "./Tasks";
 import { LinkGroup } from "./LinkGroup";
-import Clock from "./Clock";
+import { Clock } from "./Clock";
 import { Header } from "./Header";
 import { Projects } from "./Projects";
 
@@ -47,17 +47,19 @@ export const Workpage: Component = () => {
     bookmarks.onMoved.addListener(reloadCurrent);
 
     return (
-        <div>
+        <div style={{ display: "flex", height: "100vh" }}>
             <Header currentProject={currentProject} projects={projects} root={root} />
 
-            <Clock />
-            <Projects projects={projects} currentProject={currentProject} refetchCurrent={refetchCurrent} />
+            <main style={{ display: "flex", flex: 1, 'flex-direction': "column", "align-items": "center", "justify-content": "center" }}>
+                <Clock />
+                <Projects projects={projects} currentProject={currentProject} refetchCurrent={refetchCurrent} />
 
-            <ol>
-                <For each={currentProject()?.children}>
-                    {(group) => <LinkGroup group={group} />}
-                </For>
-            </ol>
+                <ol style={{ display: "flex", "justify-content": "center" }}>
+                    <For each={currentProject()?.children}>
+                        {(group) => <LinkGroup group={group} />}
+                    </For>
+                </ol>
+            </main>
 
             <aside>
                 <Tasks currentProject={currentProject} />
