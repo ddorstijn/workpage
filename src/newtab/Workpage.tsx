@@ -4,6 +4,9 @@ import { Bookmarks, bookmarks, storage } from "webextension-polyfill";
 import { Tasks } from "./Tasks";
 
 export const Workpage: Component = () => {
+    let groupDialog: HTMLDialogElement | undefined;
+    let projectDialog: HTMLDialogElement | undefined;
+
     const [root] = createResource(async () => {
         const roots = await bookmarks.search({ title: "Workpage" });
         if (roots.length === 0) {
@@ -88,30 +91,6 @@ export const Workpage: Component = () => {
         await refetchCurrent();
     }
 
-    async function addLink(e: SubmitEvent) {
-        e.preventDefault();
-
-        if (!currentProject()) {
-            return;
-        }
-
-        const form = e.target as HTMLFormElement;
-        const formData = new FormData(form);
-        const title = formData.get("title") as string;
-        const url = formData.get("url") as string;
-        const parentId = formData.get("group") as string;
-
-        if (!title || !url || !parentId) {
-            return;
-        }
-
-        await bookmarks.create({ title, url, parentId });
-        await refetchCurrent();
-
-        form.reset();
-        form.closest('dialog')?.close();
-    }
-
     async function deleteLink(link: Bookmarks.BookmarkTreeNode) {
         await bookmarks.remove(link.id);
         await refetchCurrent();
@@ -120,8 +99,8 @@ export const Workpage: Component = () => {
     return (
         <div>
             <h1>Workpage</h1>
-            <button onClick={() => document.getElementById("add-project")?.showModal()}>Add Project</button>
-            <dialog id="add-project">
+            <button onClick={() => projectDialog?.showModal()}>Add Project</button>
+            <dialog ref={projectDialog}>
                 <form method="dialog" onSubmit={addProject}>
                     <label>
                         Title
@@ -131,37 +110,13 @@ export const Workpage: Component = () => {
                 </form>
             </dialog>
 
-            <button onClick={() => document.getElementById("add-group")?.showModal()}>Add group</button>
+            <button onClick={() => groupDialog?.showModal()}>Add group</button>
 
-            <dialog id="add-group">
-                <form onSubmit={addGroup}>
+            <dialog ref={groupDialog}>
+                <form method="dialog" onSubmit={addGroup}>
                     <label>
                         Title
                         <input name="title" type="text" />
-                    </label>
-                    <button type="submit">Add</button>
-                </form>
-            </dialog>
-
-            <button onClick={() => document.getElementById("add-link")?.showModal()}>Add link</button>
-
-            <dialog id="add-link">
-                <form onSubmit={addLink}>
-                    <label>
-                        Title
-                        <input name="title" type="text" />
-                    </label>
-                    <label>
-                        URL
-                        <input name="url" type="text" />
-                    </label>
-                    <label>
-                        Group
-                        <select name="group">
-                            <For each={currentProject()?.children}>
-                                {(group) => <option value={group.id}>{group.title}</option>}
-                            </For>
-                        </select>
                     </label>
                     <button type="submit">Add</button>
                 </form>
