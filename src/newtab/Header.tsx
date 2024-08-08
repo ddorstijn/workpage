@@ -1,4 +1,5 @@
 import { Component, JSX, Resource } from "solid-js";
+import { setCurrentProject } from "../util";
 import { bookmarks, type Bookmarks } from "webextension-polyfill";
 
 interface Props extends JSX.HTMLAttributes<HTMLElement> {
@@ -15,16 +16,17 @@ export const Header: Component<Props> = (props) => {
         const form = e.target as HTMLFormElement;
         const formData = new FormData(form);
         const title = formData.get("title") as string;
-
         if (!title) {
             return;
         }
 
-        const index = props.projects()!.map(({ index }) => index ?? 0).reduce((prev, cur) => {
+        const index = (props.projects() ?? []).map(({ index }) => index ?? 0).reduce((prev, cur) => {
             return prev > cur ? prev : cur;
         }, 0);
 
-        await bookmarks.create({ title, parentId: props.root()!.id, index });
+        const bookmark = await bookmarks.create({ title, parentId: props.root()!.id, index });
+        setCurrentProject(bookmark);
+        form.reset();
     }
 
     async function addGroup(e: SubmitEvent) {
@@ -39,13 +41,14 @@ export const Header: Component<Props> = (props) => {
             return;
         }
 
+        form.reset()
         await bookmarks.create({ title, parentId: props.currentProject()!.id });
     }
 
     return (
         <header {...props}>
             <div>
-                <button onClick={() => projectDialog?.showModal()}>
+                <button onClick={() => projectDialog!.showModal()}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                         <path fill="currentColor"
                             d="M5 8h8.45H13h.35H5Zm11 0h3h-3ZM5.4 6h13.2l-.85-1H6.25L5.4 6Zm4.6 6.75l2-1l2 1V8h-4v4.75ZM14.55 21H5q-.825 0-1.413-.588T3 19V6.525q0-.35.113-.675t.337-.6L4.7 3.725q.275-.35.687-.538T6.25 3h11.5q.45 0 .863.188t.687.537l1.25 1.525q.225.275.338.6t.112.675v4.9q-.475-.175-.975-.275T19 11.05V8h-3v3.825q-.875.5-1.525 1.238t-1.025 1.662L12 14l-2.55 1.275q-.5.25-.975-.037T8 14.375V8H5v11h8.35q.2.575.5 1.075t.7.925ZM19 21q-.425 0-.713-.288T18 20v-2h-2q-.425 0-.713-.288T15 17q0-.425.288-.713T16 16h2v-2q0-.425.288-.713T19 13q.425 0 .713.288T20 14v2h2q.425 0 .713.288T23 17q0 .425-.288.713T22 18h-2v2q0 .425-.288.713T19 21ZM5 8h8.45H13h.35H5Z" />
