@@ -1,6 +1,6 @@
 import { Component, For, Resource } from "solid-js";
-import { setCurrentProject } from "../../util";
-import { bookmarks, Bookmarks } from "webextension-polyfill";
+import { Bookmarks } from "webextension-polyfill";
+import { ProjectItem } from "./ProjectItem";
 
 interface Props {
     projects: Resource<Bookmarks.BookmarkTreeNode[]>;
@@ -10,29 +10,13 @@ interface Props {
 export const Projects: Component<Props> = (props) => {
     let projectDialog: HTMLDialogElement | undefined;
 
-    async function deleteProject(project: Bookmarks.BookmarkTreeNode) {
-        await bookmarks.removeTree(project.id);
-
-        if (props.currentProject()?.id === project.id) {
-            await setCurrentProject(null);
-        }
-    }
-
     return <>
         <button onClick={() => projectDialog?.showModal()}>{props.currentProject()?.title}</button>
         <dialog ref={projectDialog}>
-            <div>
+            <div style={{ width: "250px" }}>
                 <ol>
                     <For each={props.projects()}>
-                        {(project) =>
-                            <li>
-                                <button onClick={[setCurrentProject, project]}>
-                                    {project.title}
-                                    {props.currentProject()?.id === project.id ? "(current)" : ""}
-                                </button>
-                                <button onClick={[deleteProject, project]}>Delete</button>
-                            </li>
-                        }
+                        {(project) => <ProjectItem project={project} currentProject={props.currentProject} />}
                     </For>
                 </ol>
             </div>

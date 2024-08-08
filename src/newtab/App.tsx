@@ -133,6 +133,7 @@ export const App: Component = () => {
 
     bookmarks.onMoved.addListener(async (_, info) => await refetch(info.parentId));
     bookmarks.onCreated.addListener(async (_, bookmark) => await refetch(bookmark.parentId));
+    bookmarks.onChanged.addListener(async (id) => await refetch((await bookmarks.get(id))[0].parentId));
     bookmarks.onRemoved.addListener(async (id, info) => {
         await refetch(info.parentId);
         // This will make current project null if it is removed
