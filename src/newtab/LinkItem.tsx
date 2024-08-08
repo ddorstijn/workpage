@@ -1,7 +1,7 @@
 import { Component } from "solid-js"
 import { bookmarks, Bookmarks } from "webextension-polyfill"
 
-type Props = {
+interface Props {
     link: Bookmarks.BookmarkTreeNode
 }
 

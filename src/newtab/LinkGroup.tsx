@@ -2,7 +2,7 @@ import { Component, For } from "solid-js"
 import { bookmarks, Bookmarks } from "webextension-polyfill"
 import { LinkItem } from "./LinkItem"
 
-type Props = {
+interface Props {
     group: Bookmarks.BookmarkTreeNode
 }
 
@@ -11,7 +11,7 @@ export const LinkGroup: Component<Props> = props => {
         await bookmarks.removeTree(props.group.id);
     }
 
-    return <li style={{ width: "min(300px, 25%)" }}>
+    return <li style={{ width: "max(300px, 25%)" }}>
         <div style={{ display: "flex", "justify-content": "space-between" }}>
             <h3>{props.group.title}</h3>
             <button onClick={deleteGroup}>Delete</button>

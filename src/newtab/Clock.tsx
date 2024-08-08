@@ -1,6 +1,6 @@
-import { Component, createSignal, JSX } from "solid-js";
+import { Component, createSignal } from "solid-js";
 
-export const Clock: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => {
+export const Clock: Component = () => {
     const [time, setTime] = createSignal("");
     const [date, setDate] = createSignal("");
 
@@ -14,7 +14,7 @@ export const Clock: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => {
     setInterval(() => update(), 5000);
 
     return (
-        <div {...props}>
+        <div>
             <h1>
                 <time class="time" dateTime={time()}>{time()}</time>
             </h1>

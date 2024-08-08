@@ -3,7 +3,6 @@ import { Bookmarks, bookmarks, storage } from "webextension-polyfill";
 const PROJECT_KEY = "currentProjectId";
 
 export async function getCurrentProject(): Promise<Bookmarks.BookmarkTreeNode | null> {
-    debugger;
     const currentProject = (await storage.local.get(PROJECT_KEY))[PROJECT_KEY];
     if (currentProject === undefined) {
         return null;

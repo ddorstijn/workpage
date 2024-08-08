@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 
 export type Item = { id: string, title: string, completed: boolean };
 
-type Props = {
+interface Props {
     item: Item
     toggleCompleted: (id: string) => void
 }

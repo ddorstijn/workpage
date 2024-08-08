@@ -3,7 +3,9 @@ import { mergeLocalStorage } from "../util";
 import { Bookmarks, storage } from "webextension-polyfill";
 import { Item, TaskItem } from "./TaskItem";
 
-type Props = { currentProject: Resource<Bookmarks.BookmarkTreeNode | null> };
+interface Props {
+    currentProject: Resource<Bookmarks.BookmarkTreeNode | null>
+};
 
 export const Tasks: Component<Props> = (props) => {
     const [tasks, { mutate: setTasks }] = createResource(props.currentProject, async () => {
