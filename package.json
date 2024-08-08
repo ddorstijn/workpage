@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "watch": "vite build --watch",
-    "serve:firefox": "web-ext run --start-url \"about:debugging#/runtime/this-firefox\" --source-dir ./dist/ -f deved",
-    "serve:chrome": "web-ext run -t chromium --start-url \"https://github.com\" --source-dir ./dist/",
+    "serve:firefox": "web-ext run -f deved --start-url \"about:newtab\" --source-dir ./dist/",
+    "serve:chrome": "web-ext run -t chromium --start-url \"about:newtab\" --source-dir ./dist/",
     "tsc": "tsc",
     "build": "vite build",
     "test": "vitest",

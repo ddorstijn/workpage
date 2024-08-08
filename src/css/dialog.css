@@ -1,0 +1,13 @@
+dialog {
+  border: none;
+  padding: 0px;
+  background: none;
+}
+
+dialog.div {
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow);
+  background: var(--color-background);
+  padding: 10px;
+  border-radius: 4px;
+}

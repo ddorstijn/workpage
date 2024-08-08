@@ -1,5 +1,5 @@
 import { Component, For, Resource } from "solid-js";
-import { setCurrentProject } from "../util";
+import { setCurrentProject } from "../../util";
 import { bookmarks, Bookmarks } from "webextension-polyfill";
 
 interface Props {
@@ -21,19 +21,21 @@ export const Projects: Component<Props> = (props) => {
     return <>
         <button onClick={() => projectDialog?.showModal()}>{props.currentProject()?.title}</button>
         <dialog ref={projectDialog}>
-            <ol>
-                <For each={props.projects()}>
-                    {(project) =>
-                        <li>
-                            <button onClick={[setCurrentProject, project]}>
-                                {project.title}
-                                {props.currentProject()?.id === project.id ? "(current)" : ""}
-                            </button>
-                            <button onClick={[deleteProject, project]}>Delete</button>
-                        </li>
-                    }
-                </For>
-            </ol>
+            <div>
+                <ol>
+                    <For each={props.projects()}>
+                        {(project) =>
+                            <li>
+                                <button onClick={[setCurrentProject, project]}>
+                                    {project.title}
+                                    {props.currentProject()?.id === project.id ? "(current)" : ""}
+                                </button>
+                                <button onClick={[deleteProject, project]}>Delete</button>
+                            </li>
+                        }
+                    </For>
+                </ol>
+            </div>
         </dialog>
     </>
 }

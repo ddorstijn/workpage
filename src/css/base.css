@@ -1,4 +1,40 @@
 @import '/node_modules/modern-normalize/modern-normalize.css';
 
 @import './button.css';
+@import './dialog.css';
+@import './form.css';
+@import './icons.css';
 @import './list.css';
+@import './tokens.css';
+
+* :has(> .options) {
+  position: relative;
+}
+
+*:hover > .options {
+  opacity: 1;
+}
+
+.options {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  opacity: 0;
+  transition: opacity 0.2s;
+
+  & > button {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    background: none;
+
+    &.delete:hover {
+      color: red;
+    }
+  }
+}

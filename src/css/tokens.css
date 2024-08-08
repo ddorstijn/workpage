@@ -1,0 +1,8 @@
+:root {
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  --color-background: #f7f7f7;
+  --color-text: #000;
+  --color-text-muted: #777;
+  --color-border: #ddd;
+}

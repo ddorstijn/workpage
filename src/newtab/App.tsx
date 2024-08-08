@@ -1,11 +1,11 @@
 import { Component, createResource, For } from "solid-js";
 import { getCurrentProject, setCurrentProject } from "../util";
 import { bookmarks, storage } from "webextension-polyfill";
-import { Tasks } from "./Tasks";
-import { LinkGroup } from "./LinkGroup";
-import { Clock } from "./Clock";
-import { Header } from "./Header";
-import { Projects } from "./Projects";
+import { Tasks } from "./components/Tasks";
+import { LinkGroup } from "./components/LinkGroup";
+import { Clock } from "./components/Clock";
+import { Header } from "./components/Header";
+import { Projects } from "./components/Projects";
 
 const TEMPLATE = [
     {
@@ -90,7 +90,7 @@ const TEMPLATE = [
     },
 ];
 
-export const Workpage: Component = () => {
+export const App: Component = () => {
     const [root] = createResource(async () => {
         const roots = await bookmarks.search({ title: "Workpage" });
         if (roots.length > 1) {

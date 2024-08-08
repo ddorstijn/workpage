@@ -1,5 +1,5 @@
 import { Component, createResource, For, Resource } from "solid-js";
-import { mergeLocalStorage } from "../util";
+import { mergeLocalStorage } from "../../util";
 import { Bookmarks, storage } from "webextension-polyfill";
 import { Item, TaskItem } from "./TaskItem";
 
