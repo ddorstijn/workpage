@@ -9,15 +9,4 @@ import './components/wp/project/wp-project-drawer.js';
 import './components/wp/project/wp-project-item.js';
 import './components/wp/tasks/wp-task-list.js';
 import './components/wp/tasks/wp-task-item.js';
-
-import { createDefaultProject, getRoot } from '../../utils/bookmark.js';
-
-async function init() {
-    const root = await getRoot();
-    const projects = await chrome.bookmarks.getChildren(root.id);
-    if (projects.length === 0) {
-        createDefaultProject(root.id);
-    }
-}
-
-init();
+import './components/wp/wp-workpage.js';

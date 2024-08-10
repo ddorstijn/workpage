@@ -1,4 +1,4 @@
-import { getCurrentProjectId } from "../../../../../utils/bookmark.js";
+import { getCurrentProjectId, PROJECT_KEY } from "../../../../../utils/bookmark.js";
 
 const template = String.raw`
 <template id="links-template">
@@ -19,6 +19,12 @@ customElements.define(
     "wp-links",
     class extends HTMLElement {
         #wrapper;
+
+        #changeListener = async (info) => {
+            if (info[PROJECT_KEY]) {
+                this.rerender();
+            };
+        };
 
         #createListener = async (_, bookmark) => {
             const projectId = await getCurrentProjectId();
@@ -45,11 +51,13 @@ customElements.define(
         async connectedCallback() {
             await this.rerender();
 
+            chrome.storage.local.onChanged.addListener(this.#changeListener);
             chrome.bookmarks.onCreated.addListener(this.#createListener);
             chrome.bookmarks.onRemoved.addListener(this.#removeListener);
         }
 
         disconnectedCallback() {
+            chrome.storage.local.onChanged.removeListener(this.#changeListener);
             chrome.bookmarks.onCreated.removeListener(this.#createListener);
             chrome.bookmarks.onRemoved.removeListener(this.#removeListener);
         }
