@@ -84,7 +84,7 @@ const TEMPLATE = [
 ];
 
 export async function createDefaultProject() {
-    const rootBookmark = await chrome.bookmarks.create({ title: "Workpage" });
+    const rootBookmark = await getRoot();
     const defaultBookmark = await chrome.bookmarks.create({ title: "Default", parentId: rootBookmark.id });
     for (const group of TEMPLATE) {
         const groupBookmark = await chrome.bookmarks.create({ title: group.title, parentId: defaultBookmark.id });

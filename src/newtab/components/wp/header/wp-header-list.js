@@ -1,4 +1,4 @@
-import { getRoot, PROJECT_KEY } from "../../../../../utils/bookmark.js";
+import { PROJECT_KEY } from "../../../../../utils/bookmark.js";
 
 const template = String.raw`
 <template id="header-template">
@@ -73,7 +73,7 @@ customElements.define('wp-header', class extends HTMLElement {
       const name = fd.get('name');
       if (!name) return;
 
-      const bookmark = await chrome.bookmarks.create({ title: name, parentId: (await getRoot()).id });
+      const bookmark = await chrome.bookmarks.create({ title: name, parentId: document.querySelector('wp-workpage').dataset.key });
       await chrome.storage.local.set({ [PROJECT_KEY]: bookmark.id });
       form.reset();
     })

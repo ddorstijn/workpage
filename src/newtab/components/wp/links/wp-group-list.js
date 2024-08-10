@@ -66,7 +66,9 @@ customElements.define(
             const projectId = await getCurrentProjectId();
             if (!projectId) return;
 
-            const groups = await chrome.bookmarks.getChildren(projectId);
+            const groups = await chrome.bookmarks.getChildren(projectId).catch(() => null);
+            if (!groups) return;
+
             const fragment = document.createDocumentFragment();
             for (const group of groups) {
                 const groupElement = document.createElement("wp-group-item");

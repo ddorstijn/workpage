@@ -31,12 +31,10 @@ customElements.define("wp-workpage", class extends HTMLElement {
         super();
         const shadowRoot = this.attachShadow({ mode: "open" });
         getRoot().then((root) => {
-            const rootEl = document.createElement("div");
-            rootEl.dataset.key = root.id;
-            shadowRoot.appendChild(rootEl);
+            this.dataset.key = root.id;
 
             const node = document.getElementById("workpage-template").content.cloneNode(true);
-            rootEl.appendChild(node);
+            shadowRoot.appendChild(node);
 
             chrome.bookmarks.getChildren(root.id).then((projects) => {
                 if (projects.length === 0) {

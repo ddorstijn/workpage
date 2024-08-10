@@ -1,4 +1,4 @@
-import { getCurrentProject, getRoot, PROJECT_KEY } from "../../../../../utils/bookmark.js";
+import { getCurrentProject, PROJECT_KEY } from "../../../../../utils/bookmark.js";
 
 const template = String.raw`
 <template id="project-template">
@@ -21,7 +21,6 @@ document.head.insertAdjacentHTML("beforeend", template);
 customElements.define(
   "wp-project",
   class extends HTMLElement {
-    #root;
     #button;
 
     #changeListener = async (info) => {
@@ -31,13 +30,13 @@ customElements.define(
     };
 
     #createdListener = async (_, bookmark) => {
-      if (bookmark.parentId === this.#root.id) {
+      if (bookmark.parentId === document.querySelector('wp-workpage').dataset.key) {
         await this.rerender();
       }
     }
 
     #removedListener = async (_, info) => {
-      if (info.parentId === this.#root.id) {
+      if (info.parentId === document.querySelector('wp-workpage').dataset.key) {
         await this.rerender();
       }
     }
@@ -53,7 +52,6 @@ customElements.define(
     }
 
     async connectedCallback() {
-      this.#root = await getRoot();
       await this.rerender();
 
       chrome.storage.local.onChanged.addListener(this.#changeListener);
@@ -71,7 +69,7 @@ customElements.define(
       const project = await getCurrentProject();
       this.#button.textContent = project?.title;
 
-      const projects = await chrome.bookmarks.getChildren(this.#root.id);
+      const projects = await chrome.bookmarks.getChildren(document.querySelector('wp-workpage').dataset.key);
       const fragment = document.createDocumentFragment();
       for (const project of projects) {
         const projectElement = document.createElement("wp-project-item");
