@@ -1,0 +1,29 @@
+{
+  "name": "workpage",
+  "version": "1.0.0",
+  "displayName": "Workpage",
+  "author": "dannydorstijn1997@gmail.com",
+  "description": "Adjust your new tab page to your personal needs. Use projects to organise your links and tasks for a productive start of your tabs",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && vite build",
+    "watch": "vite build --watch --mode development --minify false",
+    "dev": "vite",
+    "serve:firefox": "web-ext run -f deved --start-url \"about:newtab\" --source-dir ./dist/",
+    "serve:chrome": "web-ext run -t chromium --start-url \"about:newtab\" --source-dir ./dist/"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@samrum/vite-plugin-web-extension": "^5.0.0",
+    "@types/chrome": "^0.0.254",
+    "@types/webextension-polyfill": "^0.10.6",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.0",
+    "vite-include-html-plugin": "^0.0.3",
+    "web-ext": "^7.8.0"
+  },
+  "dependencies": {
+    "modern-normalize": "^2.0.0",
+    "webextension-polyfill": "^0.10.0"
+  }
+}

@@ -1,0 +1,31 @@
+<script type="module" src="/src/entries/newtab/components/wp/links/wp-link-item.ts"></script>
+<template id="link-template">
+    <style>
+        .link-item {
+            display: flex;
+        }
+    </style>
+
+    <div class="link-item">
+        <a></a>
+        <div class="options">
+            <button class="edit" aria-controls="edit-link-dialog"><ut-icon data-icon="ph-pen"></ut-icon></button>
+            <dialog id="edit-link-dialog">
+                <div>
+                    <form method="dialog" id="edit-link-form">
+                        <label>
+                            <span>Title</span>
+                            <input name="title" type="text" />
+                        </label>
+                        <label>
+                            <span>URL</span>
+                            <input name="url" type="text" />
+                        </label>
+                        <button type="submit">Save</button>
+                    </form>
+                </div>
+            </dialog>
+            <button class="delete" onClick="deleteLink"><ut-icon data-icon="ph-x"></ut-icon></button>
+        </div>
+    </div>
+</template>
