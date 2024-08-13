@@ -1,0 +1,37 @@
+<script type="module" src="/src/entries/newtab/components/util/ut-options.ts"></script>
+<template id="options-template">
+    <style>
+        .options {
+            opacity: 0;
+        }
+
+        .row {
+            display: flex;
+        }
+
+        .row:hover .options {
+            opacity: 1;
+        }
+    </style>
+
+    <div class="row">
+        <slot></slot>
+        <div class="options">
+            <ut-dialog data-title="Edit link">
+                <ut-button slot="button"><ut-icon data-icon="ph-pen"></ut-icon></ut-button>
+                <form method="dialog" id="edit-link-form">
+                    <label>
+                        <span>Title</span>
+                        <input name="title" type="text" />
+                    </label>
+                    <label>
+                        <span>URL</span>
+                        <input name="url" type="text" />
+                    </label>
+                    <ut-button type="submit">Save</ut-button>
+                </form>
+            </ut-dialog>
+            <button class="delete" onClick="deleteLink"><ut-icon data-icon="ph-x"></ut-icon></button>
+        </div>
+    </div>
+</template>

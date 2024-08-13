@@ -54,11 +54,8 @@ function processIncludes(
     const includeRegex =
         /<include\s+src="(.+?)"(?:\s+locals='([\s\S]*?)')?(?:\s+locals="([\s\S]*?)")?\s*><\/include>/g;
 
-    let match: RegExpExecArray | null;
-    let newHtml = html;
-
-    while ((match = includeRegex.exec(newHtml)) !== null) {
-        const [includeTag, src, singleQuoteLocals, doubleQuoteLocals] = match;
+    return html.replace(includeRegex, (...args: string[]) => {
+        const [, src, singleQuoteLocals, doubleQuoteLocals] = args;
         const filePath = path.resolve(parentDir, src);
 
         let content = "";
@@ -66,21 +63,17 @@ function processIncludes(
             content = fs.readFileSync(filePath, "utf-8");
         } catch (err) {
             console.error(`Error reading file: ${filePath}`, err);
-            continue;
+            return "";
         }
 
         let locals = { ...parentLocals };
         const localsString = singleQuoteLocals || doubleQuoteLocals;
         if (localsString) {
-            const parsedLocals = parseLocals(localsString);
-            locals = { ...locals, ...parsedLocals };
+            locals = { ...locals, ...parseLocals(localsString) };
         }
 
-        content = renderTemplate(content, locals);
-        content = processIncludes(content, path.dirname(filePath), locals);
-        newHtml = newHtml.replace(includeTag, content);
-    }
-    return newHtml;
+        return renderTemplate(content, locals);
+    });
 }
 
 /**
@@ -97,6 +90,30 @@ export function htmlIncludePlugin(): Plugin {
             handler(html: string, context) {
                 return processIncludes(html, path.dirname(context.filename));
             },
+        },
+
+        buildStart() {
+            function findHtmlFiles(dir: string, fileList: string[] = []) {
+                const files = fs.readdirSync(dir);
+
+                files.forEach(file => {
+                    const filePath = path.join(dir, file);
+                    const stat = fs.lstatSync(filePath);
+
+                    if (stat.isDirectory()) {
+                        findHtmlFiles(filePath, fileList);
+                    } else if (filePath.endsWith('.template.html')) {
+                        fileList.push(filePath);
+                    }
+                });
+
+                return fileList;
+            }
+
+            const htmlFiles = findHtmlFiles(path.resolve(__dirname, 'src/entries/'));
+            htmlFiles.forEach(file => {
+                this.addWatchFile(file);
+            })
         }
     };
 }
