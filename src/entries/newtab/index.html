@@ -6,28 +6,70 @@
   <title>Workpage: newtab</title>
 
   <link rel="stylesheet" href="./style.css" />
+  <script type="module" src="./index.ts"></script>
 </head>
 
 <body>
-  <wp-workpage></wp-workpage>
+  <header id="header">
+    <button class="header__item"><i class="ph ph-gear"></i></button>
+  </header>
+  <main>
+    <section aria-label="Clock" id="clock">
+      <h1 class="clock__time"><time class="time"></time></h1>
+      <p class="clock__date"><time class="date"></time></p>
+    </section>
+    <button id="project" popovertarget="project-drawer"></button>
+    <div id="project-drawer" popover>
+      <ol class="project-drawer__list"></ol>
+      <template id="project-item-template">
+        <li>
+          <button type="text" class="project-drawer__item"></button>
+        </li>
+      </template>
+    </div>
+    <section aria-label="Links" id="links">
+      <template id="group-template">
+        <div class="group-item">
+          <div class="group-item__header">
+            <h3 class="group-title"></h3>
+          </div>
+          <ol class="group-links"></ol>
+        </div>
+      </template>
+      <template id="link-template">
+        <div class="link-item">
+          <ut-options>
+            <a></a>
+          </ut-options>
+        </div>
+      </template>
 
-  <include src="./components/wp/clock/wp-clock.template.html"></include>
-  <include src="./components/wp/header/wp-header-item.template.html"></include>
-  <include src="./components/wp/header/wp-header-list.template.html"></include>
-  <include src="./components/wp/links/wp-group-item.template.html"></include>
-  <include src="./components/wp/links/wp-group-list.template.html"></include>
-  <include src="./components/wp/links/wp-link-item.template.html"></include>
-  <include src="./components/wp/project/wp-project-drawer.template.html"></include>
-  <include src="./components/wp/project/wp-project-item.template.html"></include>
-  <include src="./components/wp/tasks/wp-task-item.template.html"></include>
-  <include src="./components/wp/tasks/wp-task-list.template.html"></include>
-  <include src="./components/wp/workpage/wp-workpage.template.html"></include>
+      <ol class="links__group-list">
+      </ol>
+      <button>Add group</button>
+    </section>
+  </main>
 
-  <!-- Util -->
-  <include src="./components/util/ut-button.template.html"></include>
-  <include src="./components/util/ut-dialog.template.html"></include>
-  <include src="./components/util/ut-icon.template.html"></include>
-  <include src="./components/util/ut-options.template.html"></include>
+  <aside class="sidebar">
+    <section id="tasks">
+      <form>
+        <input type="text" placeholder="Add task" />
+        <button type="submit">Add</button>
+      </form>
+
+      <ol>
+        <template id="task-item-template">
+          <li>
+            <input type="checkbox" />
+            <span></span>
+          </li>
+        </template>
+      </ol>
+    </section>
+    <section id="timer">
+
+    </section>
+  </aside>
 </body>
 
 </html>
