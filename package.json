@@ -14,16 +14,16 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@samrum/vite-plugin-web-extension": "^5.0.0",
-    "@types/chrome": "^0.0.254",
-    "@types/webextension-polyfill": "^0.10.6",
-    "typescript": "^5.2.2",
-    "vite": "^5.0.0",
+    "@samrum/vite-plugin-web-extension": "^5.1.0",
+    "@types/chrome": "^0.0.270",
+    "@types/webextension-polyfill": "^0.12.0",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.1",
     "vite-include-html-plugin": "^0.0.3",
-    "web-ext": "^7.8.0"
+    "web-ext": "^8.2.0"
   },
   "dependencies": {
-    "modern-normalize": "^2.0.0",
-    "webextension-polyfill": "^0.10.0"
+    "@phosphor-icons/web": "^2.1.1",
+    "modern-normalize": "^3.0.0"
   }
 }

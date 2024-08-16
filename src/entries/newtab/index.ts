@@ -1,64 +1,64 @@
-import { bookmarks, storage } from "webextension-polyfill";
 import { createDefaultProject, getCurrentProject, getCurrentProjectId, getRoot, PROJECT_KEY } from "~/utils/bookmark";
 import { initClock } from "./components/clock";
-import { createGroupElement, createLinks, initLinks } from "./components/links";
-import { initProject } from "./components/project";
-import { initTasks } from "./components/tasks";
+import { setGroups, setGroupLinks, setLinkTitleUrl, setGroupTitle } from "./components/links";
+import { initProject, setProjectTitle, setProjectList } from "./components/project";
+import { createTaskItems, initTasks } from "./components/tasks";
+
+import "@phosphor-icons/web/regular";
 
 async function main() {
     initClock();
 
+    document.getElementById('header')!.addEventListener('click', () => {
+        chrome.runtime.openOptionsPage();
+    })
+
     const root = await getRoot();
     document.body.dataset.key = root.id;
 
-    const projects = await bookmarks.getChildren(root.id)
+    const projects = await chrome.bookmarks.getChildren(root.id)
     if (projects.length === 0) {
-        createDefaultProject();
+        await createDefaultProject();
     }
 
     const projectId = await getCurrentProjectId();
-    await initProject(root);
-    await initLinks(projectId);
+    await initProject(projectId, root);
+    await setGroups(projectId);
     await initTasks(projectId);
 
-    const bookmark = (await bookmarks.get(projectId))[0];
-    if (bookmark) {
-        document.getElementById('project')!.textContent = bookmark.title;
-    }
-
-    storage.local.onChanged.addListener(async (info) => {
+    chrome.storage.local.onChanged.addListener(async (info) => {
         if (info[PROJECT_KEY]) {
             const current = await getCurrentProject();
-            document.getElementById('project')!.textContent = current!.title;
+            setProjectTitle(current!);
 
-            await initLinks(info[PROJECT_KEY].newValue);
+            await setGroups(info[PROJECT_KEY].newValue);
         }
     });
 
-    bookmarks.onCreated.addListener(async (_, bookmark) => {
+    chrome.bookmarks.onCreated.addListener(async (_, bookmark) => {
         if (!bookmark.parentId) return;
 
         if (bookmark.parentId === root.id) {
-            await initLinks(bookmark.id);
+            await setProjectList(root);
         }
 
         const projectId = await getCurrentProjectId();
         if (bookmark.parentId === projectId) {
-            await createGroupElement(bookmark);
+            await setGroups(projectId);
         }
 
         // Create link if in same project
         const parentGroup = document.getElementById(bookmark.parentId);
         if (parentGroup) {
-            await createLinks(bookmark.parentId);
+            await setGroupLinks(bookmark.parentId);
         }
     });
 
-    bookmarks.onRemoved.addListener(async (_, info) => {
+    chrome.bookmarks.onRemoved.addListener(async (_, info) => {
         if (!info.parentId) return;
 
         if (info.parentId === root.id) {
-            await initLinks(info.parentId);
+            await setGroups(info.parentId);
         }
 
         if (info.parentId === await getCurrentProjectId()) {
@@ -70,7 +70,24 @@ async function main() {
 
         const parentGroup = document.getElementById(info.parentId);
         if (parentGroup) {
-            await createLinks(info.parentId);
+            await setGroupLinks(info.parentId);
+        }
+    });
+
+    chrome.bookmarks.onChanged.addListener(async (id, info) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        if (info.url) {
+            setLinkTitleUrl({ id, title: info.title, url: info.url });
+        } else {
+            setGroupTitle({ id, title: info.title });
+        }
+    });
+
+    chrome.storage.sync.onChanged.addListener(async (info) => {
+        if (info[`t-${projectId}`]) {
+            await createTaskItems(projectId);
         }
     });
 }

@@ -1,10 +1,25 @@
-import { bookmarks, Bookmarks } from "webextension-polyfill";
-import { getCurrentProject, setCurrentProject } from "~/utils/bookmark";
+import { setCurrentProject } from "~/utils/bookmark";
 
-export async function initProject(root: Bookmarks.BookmarkTreeNode) {
-    document.getElementById('project')!.textContent = (await getCurrentProject())?.id ?? "No project";
+export async function initProject(projectId: string, root: chrome.bookmarks.BookmarkTreeNode) {
+    const bookmark = (await chrome.bookmarks.get(projectId))[0];
+    if (!bookmark) return;
 
-    const projects = await bookmarks.getChildren(root.id);
+    await setProjectTitle(bookmark);
+    await setProjectList(root);
+
+    document.getElementById('project-drawer')?.addEventListener('click', async (event) => {
+        // Set current project
+        const button = event.target as HTMLButtonElement;
+        setCurrentProject(button.id);
+    });
+}
+
+export async function setProjectTitle(project: chrome.bookmarks.BookmarkTreeNode) {
+    document.getElementById('project')!.textContent = project.title ?? "No project";
+}
+
+export async function setProjectList(root: chrome.bookmarks.BookmarkTreeNode) {
+    const projects = await chrome.bookmarks.getChildren(root.id);
     const fragment = document.createDocumentFragment();
     for (const project of projects) {
         const template = document.getElementById('project-item-template') as HTMLTemplateElement;
@@ -20,9 +35,3 @@ export async function initProject(root: Bookmarks.BookmarkTreeNode) {
 
     document.getElementById('project-drawer')?.querySelector('.project-drawer__list')?.replaceChildren(fragment);
 }
-
-document.getElementById('project-drawer')?.addEventListener('click', async (event) => {
-    // Set current project
-    const button = event.target as HTMLButtonElement;
-    setCurrentProject(button.id);
-});

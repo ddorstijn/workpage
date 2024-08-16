@@ -11,7 +11,7 @@
 
 <body>
   <header id="header">
-    <button class="header__item"><i class="ph ph-gear"></i></button>
+    <button id="open-settings" class="header__item"><i class="ph ph-gear"></i></button>
   </header>
   <main>
     <section aria-label="Clock" id="clock">
@@ -29,19 +29,17 @@
     </div>
     <section aria-label="Links" id="links">
       <template id="group-template">
-        <div class="group-item">
+        <li class="group-item">
           <div class="group-item__header">
             <h3 class="group-title"></h3>
           </div>
           <ol class="group-links"></ol>
-        </div>
+        </li>
       </template>
       <template id="link-template">
-        <div class="link-item">
-          <ut-options>
-            <a></a>
-          </ut-options>
-        </div>
+        <li class="link-item">
+          <a></a>
+        </li>
       </template>
 
       <ol class="links__group-list">
@@ -52,22 +50,21 @@
 
   <aside class="sidebar">
     <section id="tasks">
-      <form>
+      <form id="add-task-form">
         <input type="text" placeholder="Add task" />
         <button type="submit">Add</button>
       </form>
 
-      <ol>
-        <template id="task-item-template">
-          <li>
-            <input type="checkbox" />
-            <span></span>
-          </li>
-        </template>
+      <ol id="task-list">
       </ol>
+      <template id="task-item-template">
+        <li>
+          <input type="checkbox" />
+          <span class="task-title"></span>
+        </li>
+      </template>
     </section>
     <section id="timer">
-
     </section>
   </aside>
 </body>
