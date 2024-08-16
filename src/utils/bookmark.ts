@@ -83,17 +83,16 @@ const TEMPLATE = [
     },
 ];
 
-export async function createDefaultProject() {
-    const rootBookmark = await getRoot();
-    const defaultBookmark = await chrome.bookmarks.create({ title: "Default", parentId: rootBookmark.id });
-    for (const group of TEMPLATE) {
-        const groupBookmark = await chrome.bookmarks.create({ title: group.title, parentId: defaultBookmark.id });
-        for (const link of group.links) {
-            await chrome.bookmarks.create({ title: link.title, url: link.url, parentId: groupBookmark.id });
+export async function createDefaultProject(root: chrome.bookmarks.BookmarkTreeNode) {
+    const project = await chrome.bookmarks.create({ title: "Default", parentId: root.id });
+    for (const groupTpl of TEMPLATE) {
+        const group = await chrome.bookmarks.create({ title: groupTpl.title, parentId: project.id });
+        for (const linkTpl of groupTpl.links) {
+            await chrome.bookmarks.create({ title: linkTpl.title, url: linkTpl.url, parentId: group.id });
         }
     }
 
-    await setCurrentProject(defaultBookmark.id);
+    await setCurrentProject(project.id);
 }
 
 /**
@@ -114,7 +113,7 @@ export async function getRoot(): Promise<chrome.bookmarks.BookmarkTreeNode> {
     return roots[0];
 }
 
-export async function getCurrentProjectId() {
+export async function getCurrentProjectId(): Promise<string | null> {
     return (await chrome.storage.local.get(PROJECT_KEY))[PROJECT_KEY];
 }
 

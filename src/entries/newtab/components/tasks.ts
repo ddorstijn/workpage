@@ -1,4 +1,6 @@
 export async function initTasks(projectId: string) {
+    await createTaskItems(projectId);
+
     document.getElementById('add-task-form')!.addEventListener('submit', async (event) => {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
@@ -6,9 +8,20 @@ export async function initTasks(projectId: string) {
         form.reset();
 
         await createTask(projectId, title);
-    })
+    });
 
-    await createTaskItems(projectId);
+    document.getElementById('task-list')!.addEventListener('change', async (event) => {
+        const checkbox = event.target as HTMLInputElement;
+        const taskId = checkbox.closest('.task-item')!.id;
+        const task = (await chrome.storage.sync.get(taskId))[taskId];
+        chrome.storage.sync.set({ [taskId]: Object.assign({}, task, { completed: checkbox.checked }) });
+    });
+
+    chrome.storage.sync.onChanged.addListener(async (info) => {
+        if (info[`t-${projectId}`]) {
+            await createTaskItems(projectId);
+        }
+    });
 }
 
 export async function createTask(projectId: string, title: string) {
@@ -34,6 +47,7 @@ export async function createTaskItems(projectId: string) {
 
         taskElement.firstElementChild!.id = taskId;
         taskElement.querySelector('.task-title')!.textContent = task.title;
+        taskElement.querySelector('input')!.checked = task.completed;
 
         fragment.appendChild(taskElement);
     }
