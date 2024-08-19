@@ -1,0 +1,16 @@
+#clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  > .clock__time {
+    font-size: 4rem;
+    margin: 0;
+  }
+
+  > .clock__date {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+}

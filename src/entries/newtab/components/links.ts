@@ -1,3 +1,5 @@
+import './links.css';
+
 export async function initLinks(projectId: string, root: chrome.bookmarks.BookmarkTreeNode) {
     await setGroups(projectId);
 

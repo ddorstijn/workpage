@@ -1,3 +1,5 @@
+import './clock.css';
+
 export function initClock() {
   const clock = document.getElementById('clock')! as HTMLDivElement;
   const time = clock.querySelector('.clock__time')! as HTMLTimeElement;

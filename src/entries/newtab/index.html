@@ -12,7 +12,7 @@
 
 <body>
   <header id="header">
-    <button id="open-settings" class="header__item clear"><i class="ph ph-gear"></i></button>
+    <button id="open-settings" class="header__item clear"><i class="ph-fill ph-gear"></i></button>
   </header>
   <main>
     <section aria-label="Clock" id="clock">
@@ -26,6 +26,21 @@
         <i class="ph ph-caret-down"></i>
       </button>
       <div id="project-drawer" popover>
+        <header>
+          <h2>Projects</h2>
+          <div class="toolbar">
+            <input id="project-search" type="search" placeholder="Search project" />
+            <button id="add-project-btn"><i class="ph ph-plus"></i>new</button>
+          </div>
+        </header>
+
+        <div id="add-project-form" class="card hidden">
+          <form>
+            <input id="project-new" type="text" placeholder="New project" />
+            <button type="submit">Add</button>
+          </form>
+        </div>
+
         <ol id="project-list"></ol>
         <template id="project-item-template">
           <li class="project-item">
@@ -35,10 +50,10 @@
             </button>
             <div class="options">
               <button class="clear">
-                <i class="ph ph-pen"></i>
+                <i class="ph-fill ph-pen"></i>
               </button>
               <button class="clear">
-                <i class="ph ph-trash-simple"></i>
+                <i class="ph-fill ph-trash-simple"></i>
               </button>
             </div>
           </li>

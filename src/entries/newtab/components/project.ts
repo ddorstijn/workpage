@@ -1,5 +1,7 @@
 import { getCurrentProjectId, PROJECT_KEY, setCurrentProject } from "~/utils/bookmark";
 
+import './project.css';
+
 export async function initProject(projectId: string, root: chrome.bookmarks.BookmarkTreeNode) {
     const [bookmark] = await chrome.bookmarks.get(projectId).catch(() => []);
     if (!bookmark) return;
@@ -14,6 +16,38 @@ export async function initProject(projectId: string, root: chrome.bookmarks.Book
             setCurrentProject(item.id);
         }
     });
+
+    document.getElementById('project-search')?.addEventListener('input', async (event) => {
+        const input = event.target as HTMLInputElement;
+        const searchTerm = input.value.trim().toLowerCase();
+        const listItems = document.getElementById('project-list')!.querySelectorAll('.project-item') as NodeListOf<HTMLLIElement>;
+
+        for (let i = 0; i < listItems.length; i++) {
+            const item = listItems[i];
+
+            if (!item.querySelector('.project-item__title')!.textContent!.trim().toLowerCase().includes(searchTerm)) {
+                item.classList.add('hidden');
+                continue;
+            }
+
+            item.classList.remove('hidden');
+        }
+    })
+
+    document.getElementById('add-project-btn')!.addEventListener('click', async () => {
+        document.getElementById('add-project-form')!.classList.toggle('hidden');
+        document.getElementById('project-new')!.focus();
+    });
+
+    document.getElementById('add-project-form')!.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const form = event.target as HTMLFormElement;
+        const title = form.querySelector('input')!.value;
+        form.reset();
+
+        const project = await chrome.bookmarks.create({ title, parentId: root.id });
+        setCurrentProject(project.id);
+    })
 
     chrome.storage.local.onChanged.addListener(async (info) => {
         if (info[PROJECT_KEY]) {
@@ -79,14 +113,15 @@ export async function setProjectList(root: chrome.bookmarks.BookmarkTreeNode) {
     for (const project of projects) {
         const template = document.getElementById('project-item-template') as HTMLTemplateElement;
         const projectElement = template.content.cloneNode(true) as HTMLElement;
-        projectElement.id = project.id;
 
         const button = projectElement.querySelector('.project-item')!;
         button.id = project.id;
 
+        button.querySelector('.project-item__title')!.textContent = project.title;
         const currentProjectId = await getCurrentProjectId();
-        let title = project.id === currentProjectId ? project.title + " (Current)" : project.title;
-        button.querySelector('.project-item__title')!.textContent = title;
+        if (currentProjectId === project.id) {
+            button.classList.add('active');
+        }
 
         const dateSettings = { year: 'numeric', month: 'short', day: 'numeric' } as Intl.DateTimeFormatOptions;
         const used = history[project.id] ? new Date(history[project.id]).toLocaleString('en-GB', dateSettings) : "unkown";

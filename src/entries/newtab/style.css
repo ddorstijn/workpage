@@ -22,98 +22,10 @@ main {
   justify-content: center;
 }
 
-#clock {
+.options {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-
-  > .clock__time {
-    font-size: 4rem;
-    margin: 0;
-  }
-
-  > .clock__date {
-    font-size: 1.25rem;
-    margin: 0;
-  }
-}
-
-#project {
-  margin-top: 1rem;
-}
-
-#project-button {
-  font-size: 1rem;
-  border-radius: 4px;
-
-  > .ph {
-    margin-right: -3px;
-  }
-}
-
-#project-list {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.project-item {
-  width: 100%;
-  display: flex;
-
-  > .project-item__btn {
-    text-align: left;
-    padding: 0;
-    border: none;
-
-    flex-direction: column;
-    align-items: flex-start;
-
-    > .project-item__title {
-      font-weight: bold;
-    }
-
-    > .project-item__used {
-      color: var(--color-text-muted);
-      font-size: 0.75rem;
-    }
-  }
-}
-
-#links {
-  margin-top: 3rem;
-}
-
-#group-list {
-  padding: 0;
-  margin: 0;
-
-  display: flex;
-  gap: 1rem;
-
-  list-style: none;
-}
-
-.group-title {
-  font-size: 1.25rem;
-}
-
-.group-item {
-  width: 300px;
-}
-
-.group-links {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-
-  display: flex;
-  flex-direction: column;
+  padding: 0 0.5rem;
   gap: 0.5rem;
 }
 
@@ -154,4 +66,14 @@ button.clear {
 
 [popover]::backdrop {
   filter: blur(5px);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.card {
+  background: var(--color-secondary);
+  border-radius: 4px;
+  padding: 1rem;
 }

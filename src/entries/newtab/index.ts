@@ -5,6 +5,7 @@ import { initProject, setProjectTitle } from "./components/project";
 import { initTasks } from "./components/tasks";
 
 import "@phosphor-icons/web/regular";
+import "@phosphor-icons/web/fill";
 
 async function main() {
     initClock();
