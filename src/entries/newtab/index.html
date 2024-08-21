@@ -29,12 +29,20 @@
         <header>
           <h2>Projects</h2>
           <div class="toolbar">
-            <input id="project-search" type="search" placeholder="Search project" />
-            <button id="add-project-btn"><i class="ph ph-plus"></i>new</button>
+            <label class="expand-search">
+              <input id="project-search" type="search" placeholder="Search project" />
+              <i class="ph ph-magnifying-glass"></i>
+            </label>
+            <label id="add-project-btn" class="toggle" aria-controls="add-project-form">
+              <input type="checkbox" />
+              <i class="open ph ph-plus"></i>
+              <i class="close ph ph-minus"></i>
+              new
+            </label>
           </div>
         </header>
 
-        <div id="add-project-form" class="card hidden">
+        <div id="add-project-form" class="card">
           <form>
             <input id="project-new" type="text" placeholder="New project" />
             <button type="submit">Add</button>
@@ -83,16 +91,39 @@
 
   <aside class="sidebar">
     <section id="tasks">
-      <form id="add-task-form">
-        <input type="text" placeholder="Add task" />
-        <button type="submit">Add</button>
-      </form>
+      <header>
+        <h2>Tasks</h2>
+
+        <div class="toolbar">
+          <label class="expand-search">
+            <input id="task-search" type="search" placeholder="Search task" />
+            <i class="ph ph-magnifying-glass"></i>
+          </label>
+          <label id="add-task-btn" class="toggle" aria-controls="add-task-form">
+            <input type="checkbox" />
+            <i class="open ph ph-plus"></i>
+            <i class="close ph ph-minus"></i>
+            new
+          </label>
+        </div>
+      </header>
+
+      <div id="add-task-form" class="card">
+        <form>
+          <input id="task-new" type="text" placeholder="New task" />
+          <button type="submit">Add</button>
+        </form>
+      </div>
 
       <ol id="task-list">
       </ol>
       <template id="task-item-template">
-        <li class="task-item">
-          <input type="checkbox" />
+        <li class="task-item card">
+          <label class="checkbox">
+            <input type="checkbox" />
+            <span class="unchecked"><i class="ph ph-circle"></i></span>
+            <span class="checked"><i class="ph ph-check-circle"></i></span>
+          </label>
           <span class="task-title"></span>
         </li>
       </template>

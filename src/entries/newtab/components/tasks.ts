@@ -1,3 +1,5 @@
+import "./tasks.css";
+
 export async function initTasks(projectId: string) {
     await createTaskItems(projectId);
 
@@ -15,6 +17,26 @@ export async function initTasks(projectId: string) {
         const taskId = checkbox.closest('.task-item')!.id;
         const task = (await chrome.storage.sync.get(taskId))[taskId];
         chrome.storage.sync.set({ [taskId]: Object.assign({}, task, { completed: checkbox.checked }) });
+    });
+
+    document.getElementById('task-search')!.addEventListener('input', async (event) => {
+        const input = event.target as HTMLInputElement;
+        const searchTerm = input.value.trim().toLowerCase();
+        const listItems = document.getElementById('task-list')!.querySelectorAll('.task-item') as NodeListOf<HTMLLIElement>;
+        for (let i = 0; i < listItems.length; i++) {
+            const item = listItems[i];
+
+            if (!item.querySelector('.task-title')!.textContent!.trim().toLowerCase().includes(searchTerm)) {
+                item.classList.add('hidden');
+                continue;
+            }
+
+            item.classList.remove('hidden');
+        }
+    });
+
+    document.getElementById('add-task-btn')!.addEventListener('click', async () => {
+        document.getElementById('task-new')?.focus();
     });
 
     chrome.storage.sync.onChanged.addListener(async (info) => {

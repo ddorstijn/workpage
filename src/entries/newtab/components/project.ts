@@ -35,7 +35,6 @@ export async function initProject(projectId: string, root: chrome.bookmarks.Book
     })
 
     document.getElementById('add-project-btn')!.addEventListener('click', async () => {
-        document.getElementById('add-project-form')!.classList.toggle('hidden');
         document.getElementById('project-new')!.focus();
     });
 

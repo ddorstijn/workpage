@@ -39,17 +39,18 @@
   gap: 0.5rem;
 }
 
-#add-project-btn {
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+#project-drawer:has(#add-project-btn input:checked) #add-project-form {
+  display: flex;
 }
 
 #add-project-form {
+  display: none;
   margin-bottom: 0.5rem;
 
   > form {
     display: flex;
     align-items: center;
+    flex: 1;
 
     > input {
       border: none;
