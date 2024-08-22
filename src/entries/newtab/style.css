@@ -8,9 +8,10 @@
 }
 
 body {
+  height: 100vh;
+
   display: flex;
   gap: 1rem;
-  height: 100vh;
 }
 
 main {
@@ -39,6 +40,16 @@ main {
   align-items: center;
   padding: 0 0.5rem;
   gap: 0.5rem;
+
+  font-size: 0.75rem;
+
+  .edit:hover {
+    color: var(--color-info);
+  }
+
+  .delete:hover {
+    color: var(--color-error);
+  }
 }
 
 /* DEFAULT */
@@ -48,11 +59,18 @@ main {
   --color-background: #fff;
   --color-primary: #0070f3;
   --color-secondary: #f3f3f3;
+
+  --color-info: #0070f3;
+  --color-success: #28a745;
+  --color-warning: #ffc107;
+  --color-error: #dc3545;
 }
 
 body {
   color: var(--color-text);
   background: var(--color-background);
+
+  font-size: 1rem;
 }
 
 button {
@@ -66,6 +84,10 @@ button {
   cursor: pointer;
 
   color: var(--color-background);
+
+  & * {
+    pointer-events: none;
+  }
 }
 
 button.clear {

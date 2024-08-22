@@ -114,7 +114,9 @@ export async function getRoot(): Promise<chrome.bookmarks.BookmarkTreeNode> {
 }
 
 export async function getCurrentProjectId(): Promise<string | null> {
-    return (await chrome.storage.local.get(PROJECT_KEY))[PROJECT_KEY];
+    const id = (await chrome.storage.local.get(PROJECT_KEY))[PROJECT_KEY];
+    const bookmark = await chrome.bookmarks.get(id).catch(() => null);
+    return bookmark?.[0]?.id ?? null;
 }
 
 export async function getCurrentProject() {

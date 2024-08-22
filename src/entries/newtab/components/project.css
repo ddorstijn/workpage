@@ -75,22 +75,21 @@
     background-color: var(--color-secondary);
   }
 
-  &:has(.project-item__btn:hover) {
-    background-color: var(--color-primary);
-    color: var(--color-background);
-  }
-
-  > .project-item__btn {
-    text-align: left;
+  > .project-item__content {
     padding: 0.5rem;
     border: none;
     width: 100%;
 
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
 
     > .project-item__title {
       font-weight: bold;
+      font-size: 1rem;
+      padding: 0;
+      background: none;
+      color: var(--color-text);
     }
 
     > .project-item__used {

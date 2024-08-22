@@ -1,7 +1,9 @@
 import "./tasks.css";
 
-export async function initTasks(projectId: string) {
-    await createTaskItems(projectId);
+export async function initTasks(projectId: string | null) {
+    if (projectId) {
+        await createTaskItems(projectId);
+    }
 
     document.getElementById('add-task-form')!.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -46,7 +48,9 @@ export async function initTasks(projectId: string) {
     });
 }
 
-export async function createTask(projectId: string, title: string) {
+export async function createTask(projectId: string | null, title: string) {
+    if (!projectId) return alert('No active project');
+
     const tasks: string[] = (await chrome.storage.sync.get(`t-${projectId}`))[`t-${projectId}`!] ?? [];
 
     const id = crypto.randomUUID();
@@ -56,7 +60,9 @@ export async function createTask(projectId: string, title: string) {
     chrome.storage.sync.set({ [`t-${projectId}`]: tasks });
 }
 
-export async function createTaskItems(projectId: string) {
+export async function createTaskItems(projectId: string | null) {
+    if (!projectId) return;
+
     const tasks: string[] = (await chrome.storage.sync.get(`t-${projectId}`))[`t-${projectId}`!];
     if (!tasks) return;
 

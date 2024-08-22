@@ -1,7 +1,7 @@
 import { createDefaultProject, getCurrentProjectId, getRoot, PROJECT_KEY } from "~/utils/bookmark";
 import { initClock } from "./components/clock";
 import { initLinks, setGroups } from "./components/links";
-import { initProject, setProjectTitle } from "./components/project";
+import { initProject } from "./components/project";
 import { initTasks } from "./components/tasks";
 
 import "@phosphor-icons/web/regular";
@@ -26,8 +26,7 @@ async function main() {
     }
 
     const projectId = await getCurrentProjectId();
-    if (!projectId) return;
-    await initProject(projectId, root);
+    await initProject(root);
     await initLinks(projectId, root);
     await initTasks(projectId);
 
@@ -35,8 +34,6 @@ async function main() {
         if (info[PROJECT_KEY]) {
             const [bookmark] = await chrome.bookmarks.get(info[PROJECT_KEY].newValue).catch(() => []);
             if (!bookmark) return;
-
-            setProjectTitle(bookmark);
 
             await setGroups(info[PROJECT_KEY].newValue);
         }

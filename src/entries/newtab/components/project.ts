@@ -1,21 +1,10 @@
-import { getCurrentProjectId, PROJECT_KEY, setCurrentProject } from "~/utils/bookmark";
+import { getCurrentProject, getCurrentProjectId, PROJECT_KEY, setCurrentProject } from "~/utils/bookmark";
 
 import './project.css';
 
-export async function initProject(projectId: string, root: chrome.bookmarks.BookmarkTreeNode) {
-    const [bookmark] = await chrome.bookmarks.get(projectId).catch(() => []);
-    if (!bookmark) return;
-
-    await setProjectTitle(bookmark);
+export async function initProject(root: chrome.bookmarks.BookmarkTreeNode) {
+    await setProjectTitle();
     await setProjectList(root);
-
-    document.getElementById('project-list')?.addEventListener('click', async (event) => {
-        const target = event.target as HTMLElement;
-        const item = target.closest('.project-item');
-        if (item) {
-            setCurrentProject(item.id);
-        }
-    });
 
     document.getElementById('project-search')?.addEventListener('input', async (event) => {
         const input = event.target as HTMLInputElement;
@@ -53,6 +42,7 @@ export async function initProject(projectId: string, root: chrome.bookmarks.Book
             const history = (await chrome.storage.sync.get("project_history"))["project_history"] ?? {};
             await chrome.storage.sync.set({ "project_history": Object.assign(history, { [info[PROJECT_KEY].newValue]: Date.now() }) });
 
+            await setProjectTitle();
             await setProjectList(root);
         }
     });
@@ -81,53 +71,83 @@ export async function initProject(projectId: string, root: chrome.bookmarks.Book
         if (!bookmark) return;
 
         if (bookmark.parentId === root.id && info.title) {
-            document.getElementById(id)!.querySelector('.project-item')!.textContent = bookmark.title;
+            const projectItemEl = document.getElementById(id) as HTMLElement;
+
+            projectItemEl.querySelector('.project-item__title')!.textContent = bookmark.title;
+            projectItemEl.querySelector('.project-item__input')!.setAttribute('value', bookmark.title);
+
+            if (id == await getCurrentProjectId()) {
+                await setProjectTitle();
+            }
         }
     });
 }
 
-export async function setProjectTitle(project: chrome.bookmarks.BookmarkTreeNode) {
-    document.getElementById('project-title')!.textContent = project.title ?? "No project";
+async function setProjectTitle() {
+    const project = await getCurrentProject();
+    document.getElementById('project-title')!.textContent = project?.title ?? "No project";
 }
 
 export async function setProjectList(root: chrome.bookmarks.BookmarkTreeNode) {
     const projects = await chrome.bookmarks.getChildren(root.id).catch(() => []);
     if (!projects.length) return;
 
-    const history = (await chrome.storage.sync.get("project_history"))["project_history"] ?? {};
-
-    projects.sort((a, b) => {
-        if (history[a.id] && history[b.id]) {
-            return history[b.id] - history[a.id];
-        } else if (history[a.id]) {
-            return -1;
-        } else if (history[b.id]) {
-            return 1;
-        } else {
-            return 0;
-        }
-    });
+    const history: Record<string, number> = (await chrome.storage.sync.get("project_history"))["project_history"] ?? {};
+    projects.sort((a, b) => (history[b.id] ?? 0) - (history[a.id] ?? 0));
 
     const fragment = document.createDocumentFragment();
     for (const project of projects) {
-        const template = document.getElementById('project-item-template') as HTMLTemplateElement;
-        const projectElement = template.content.cloneNode(true) as HTMLElement;
-
-        const button = projectElement.querySelector('.project-item')!;
-        button.id = project.id;
-
-        button.querySelector('.project-item__title')!.textContent = project.title;
-        const currentProjectId = await getCurrentProjectId();
-        if (currentProjectId === project.id) {
-            button.classList.add('active');
-        }
-
-        const dateSettings = { year: 'numeric', month: 'short', day: 'numeric' } as Intl.DateTimeFormatOptions;
-        const used = history[project.id] ? new Date(history[project.id]).toLocaleString('en-GB', dateSettings) : "unkown";
-        button.querySelector('.project-item__used')!.textContent = used;
-
+        const projectElement = await createProjectItem(project, history);
         fragment.appendChild(projectElement);
     }
 
     document.getElementById('project-list')?.replaceChildren(fragment);
+}
+
+const template = document.getElementById('project-item-template') as HTMLTemplateElement;
+async function createProjectItem(project: chrome.bookmarks.BookmarkTreeNode, history: Record<string, number>): Promise<HTMLElement> {
+    const projectElement = template.content.cloneNode(true) as HTMLElement;
+    const projectItem = projectElement.querySelector('.project-item')!;
+    projectItem.id = project.id;
+
+    const titleEl = projectItem.querySelector('.project-item__title')! as HTMLSpanElement;
+    const usedEl = projectItem.querySelector('.project-item__used')! as HTMLSpanElement;
+    const inputEl = projectItem.querySelector('.project-item__input')! as HTMLInputElement;
+    const editBtn = projectItem.querySelector('.edit')! as HTMLButtonElement;
+
+    titleEl.textContent = project.title;
+    inputEl.value = project.title;
+    usedEl.textContent = history[project.id] ? new Date(history[project.id]).toLocaleDateString('en-GB') : "unknown";
+
+    if (project.id === await getCurrentProjectId()) {
+        projectItem.classList.add('active');
+    }
+
+    titleEl.addEventListener('click', async () => {
+        await setCurrentProject(project.id);
+    });
+
+    projectItem.querySelector('.delete')!.addEventListener('click', async () => {
+        await chrome.bookmarks.remove(project.id);
+    });
+
+    editBtn.addEventListener('click', async () => {
+        inputEl.classList.remove('hidden');
+        titleEl.classList.add('hidden');
+        inputEl.focus();
+    });
+
+    inputEl.addEventListener('keydown', async (event) => {
+        if (event.key === 'Enter') {
+            inputEl.blur();
+        }
+    });
+
+    inputEl.addEventListener('blur', async () => {
+        inputEl.classList.add('hidden');
+        titleEl.classList.remove('hidden');
+        await chrome.bookmarks.update(project.id, { title: inputEl.value });
+    });
+
+    return projectElement;
 }

@@ -1,7 +1,9 @@
 import './links.css';
 
-export async function initLinks(projectId: string, root: chrome.bookmarks.BookmarkTreeNode) {
-    await setGroups(projectId);
+export async function initLinks(projectId: string | null, root: chrome.bookmarks.BookmarkTreeNode) {
+    if (projectId) {
+        await setGroups(projectId);
+    }
 
     chrome.bookmarks.onCreated.addListener(async (_, bookmark) => {
         if (!bookmark.parentId || bookmark.parentId === root.id) return;
