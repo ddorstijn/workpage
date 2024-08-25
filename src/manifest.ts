@@ -2,7 +2,7 @@ import { author, name, displayName, description, version } from '../package.json
 
 export function getManifest(): chrome.runtime.ManifestV3 {
   return {
-    author: author,
+    author: { email: author },
     description: description,
     name: displayName ?? name,
     version: version,

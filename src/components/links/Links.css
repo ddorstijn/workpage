@@ -1,0 +1,14 @@
+#links {
+  margin-top: 3rem;
+}
+
+#group-list {
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  list-style: none;
+}

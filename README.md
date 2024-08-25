@@ -1,6 +1,6 @@
-# workpage-vite
+# workpage-solid
 
-This template should help get you started developing a vanilla web extension in Vite.
+This template should help get you started developing a solid web extension in Vite.
 
 ## Usage Notes
 

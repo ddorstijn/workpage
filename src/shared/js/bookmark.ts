@@ -113,6 +113,20 @@ export async function getRoot(): Promise<chrome.bookmarks.BookmarkTreeNode> {
     return roots[0];
 }
 
+export async function getProjectsSorted(rootId: string | undefined): Promise<(chrome.bookmarks.BookmarkTreeNode & { used: number })[]> {
+    if (!rootId) {
+        return [];
+    }
+
+    const projects = await chrome.bookmarks.getChildren(rootId);
+    const history: Record<string, number> = (await chrome.storage.sync.get("project_history"))["project_history"] ?? {};
+    const projectsWithHistory = projects.map((project) => {
+        return { ...project, used: history[project.id] ?? 0 };
+    })
+
+    return projectsWithHistory!.sort((a, b) => b.used - a.used);
+}
+
 export async function getCurrentProjectId(): Promise<string | null> {
     const id = (await chrome.storage.local.get(PROJECT_KEY))[PROJECT_KEY];
     const bookmark = await chrome.bookmarks.get(id).catch(() => null);
@@ -130,5 +144,8 @@ export async function getCurrentProject() {
 }
 
 export async function setCurrentProject(projectId: string) {
+    const history = (await chrome.storage.sync.get("project_history"))["project_history"] ?? {};
+    await chrome.storage.sync.set({ "project_history": Object.assign(history, { [projectId]: Date.now() }) });
+
     await chrome.storage.local.set({ [PROJECT_KEY]: projectId });
 }

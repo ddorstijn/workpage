@@ -14,6 +14,7 @@
 #project-drawer {
   padding: 1rem;
   width: 400px;
+  max-width: calc(100% - 2rem);
 
   > header {
     display: flex;
@@ -37,6 +38,10 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+
+  max-height: 450px;
+  overflow-y: scroll;
+  scrollbar-width: thin;
 }
 
 #project-drawer:has(#add-project-btn input:checked) #add-project-form {
@@ -64,45 +69,4 @@
       border-radius: 0 4px 4px 0;
     }
   }
-}
-
-.project-item {
-  width: 100%;
-  display: flex;
-  border-radius: 4px;
-
-  &.active {
-    background-color: var(--color-secondary);
-  }
-
-  > .project-item__content {
-    padding: 0.5rem;
-    border: none;
-    width: 100%;
-
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    > .project-item__title {
-      font-weight: bold;
-      font-size: 1rem;
-      padding: 0;
-      background: none;
-      color: var(--color-text);
-    }
-
-    > .project-item__used {
-      color: var(--color-text-muted);
-      font-size: 0.75rem;
-    }
-  }
-}
-
-.toolbar {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  font-size: 0.75rem;
 }

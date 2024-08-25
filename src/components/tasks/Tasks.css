@@ -13,15 +13,6 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-
-    .task-item {
-      gap: 0.25rem;
-
-      &:has(input:checked) .task-title,
-      &:has(.checkbox:hover) .task-title {
-        text-decoration: line-through;
-      }
-    }
   }
 }
 

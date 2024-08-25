@@ -1,0 +1,8 @@
+.task-item {
+  gap: 0.25rem;
+
+  &:has(input:checked) .task-item__title,
+  &:has(.checkbox:hover) .task-item__title {
+    text-decoration: line-through;
+  }
+}
