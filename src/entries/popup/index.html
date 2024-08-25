@@ -6,8 +6,81 @@
   <title>Popup</title>
 </head>
 
-<body style="min-width: 100px">
-  <div id="app"></div>
+<body style="min-width: 300px">
+  <header>
+    <h1>Workpage</h1>
+  </header>
+  <section aria-label="Project" id="project">
+    <button id="project-button" popovertarget="project-drawer">
+      <span id="project-title"></span>
+      <i class="ph ph-caret-down"></i>
+    </button>
+    <div id="project-drawer" popover>
+      <header>
+        <h2>Projects</h2>
+        <div class="toolbar">
+          <label class="expand-search">
+            <input id="project-search" type="search" placeholder="Search project" />
+            <i class="ph ph-magnifying-glass"></i>
+          </label>
+          <label id="add-project-btn" class="toggle" aria-controls="add-project-form">
+            <input type="checkbox" />
+            <i class="open ph ph-plus"></i>
+            <i class="close ph ph-minus"></i>
+            new
+          </label>
+        </div>
+      </header>
+
+      <div id="add-project-form" class="card">
+        <form>
+          <input id="project-new" type="text" placeholder="New project" />
+          <button type="submit">Add</button>
+        </form>
+      </div>
+
+      <ol id="project-list"></ol>
+      <template id="project-item-template">
+        <li class="project-item">
+          <div class="project-item__content">
+            <input type="text" class="project-item__input hidden" />
+            <button class="project-item__title" popovertarget="project-drawer" popovertargetaction="hide"></button>
+            <span class="project-item__used"></span>
+          </div>
+          <div class="options">
+            <button class="clear edit">
+              <i class="ph-fill ph-pen"></i>
+            </button>
+            <button class="clear delete">
+              <i class="ph-fill ph-trash-simple"></i>
+            </button>
+          </div>
+        </li>
+      </template>
+    </div>
+  </section>
+  <section>
+    Timer:
+  </section>
+  <section>
+    <h2>Add link</h2>
+    <form>
+      <label>
+        <span>Group</span>
+        <select></select>
+      </label>
+      <label>
+        <span>Title</span>
+        <input type="text" />
+      </label>
+      <label>
+        <span>URL</span>
+        <input type="url" />
+      </label>
+
+      <button type="submit">Add</button>
+    </form>
+  </section>
 </body>
 
 </html>

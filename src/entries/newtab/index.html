@@ -54,8 +54,7 @@
           <li class="project-item">
             <div class="project-item__content">
               <input type="text" class="project-item__input hidden" />
-              <button class="project-item__title" popovertarget="project-drawer"
-                popovertargetaction="hide">Select</button>
+              <button class="project-item__title" popovertarget="project-drawer" popovertargetaction="hide"></button>
               <span class="project-item__used"></span>
             </div>
             <div class="options">
@@ -127,6 +126,15 @@
             <span class="checked"><i class="ph ph-check-circle"></i></span>
           </label>
           <span class="task-title"></span>
+          <textarea name="task-textarea" class="task-textarea hidden"></textarea>
+          <div class="options">
+            <button class="clear edit">
+              <i class="ph-fill ph-pen"></i>
+            </button>
+            <button class="clear delete">
+              <i class="ph-fill ph-trash-simple"></i>
+            </button>
+          </div>
         </li>
       </template>
     </section>
