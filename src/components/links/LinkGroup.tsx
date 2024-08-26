@@ -8,6 +8,9 @@ interface Props {
 }
 
 export const LinkGroup: Component<Props> = (props) => {
+    let inputEl: HTMLInputElement | undefined;
+    let titleEl: HTMLHeadingElement | undefined;
+
     const [links, { refetch: refetchLinks }] = createResource(async () => {
         if (!props.group) {
             return [];
@@ -34,12 +37,43 @@ export const LinkGroup: Component<Props> = (props) => {
         }
     });
 
+    async function edit() {
+        titleEl?.classList.add('hidden');
+        inputEl?.classList.remove('hidden');
+        inputEl?.focus();
+    }
+
+    async function remove() {
+        await chrome.bookmarks.remove(props.group.id);
+    }
+
+    async function update() {
+        inputEl?.classList.add('hidden');
+        titleEl?.classList.remove('hidden');
+        await chrome.bookmarks.update(props.group.id, { title: inputEl!.value });
+    }
+
     return (
         <li class="group-item">
             <div class="group-item__header">
-                <h2 class="group-title">{props.group.title}</h2>
+                <input
+                    ref={inputEl}
+                    class="group-item__input hidden"
+                    value={props.group.title} onBlur={update}
+                    onKeyDown={(event) => event.key === 'Enter' && inputEl?.blur()}
+                />
+                <h2 ref={titleEl} class="group-item__title">{props.group.title}</h2>
+
+                <div class="options">
+                    <button class="clear edit" onClick={edit}>
+                        <i class="ph-fill ph-pen"></i>
+                    </button>
+                    <button class="clear delete" onClick={remove}>
+                        <i class="ph-fill ph-trash-simple"></i>
+                    </button>
+                </div>
             </div>
-            <ol class="group-links">
+            <ol class="group-item__links">
                 <For each={links()}>
                     {(link) => <LinkItem link={link} />}
                 </For>
