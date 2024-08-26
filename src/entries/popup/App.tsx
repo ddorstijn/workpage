@@ -2,6 +2,7 @@ import { createMemo, createResource, For } from "solid-js";
 import { getCurrentProject, getRoot, PROJECT_KEY } from "~/shared/js/bookmark";
 
 import { Projects } from "~/components/projects/Projects";
+import { Timer } from "~/components/timer/Timer";
 
 import "modern-normalize/modern-normalize.css";
 import "@phosphor-icons/web/fill";
@@ -92,9 +93,7 @@ function App() {
     <>
       <h1>Workpage</h1>
       <Projects root={root} currentProject={currentProject} />
-      <section>
-        Timer
-      </section>
+      <Timer currentProject={currentProject} />
       <section id="add-link">
         <h2>Add link</h2>
         <form onSubmit={add}>

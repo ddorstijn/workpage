@@ -17,9 +17,6 @@ importers:
       solid-js:
         specifier: ^1.8.21
         version: 1.8.21
-      webextension-polyfill:
-        specifier: ^0.12.0
-        version: 0.12.0
     devDependencies:
       '@samrum/vite-plugin-web-extension':
         specifier: ^5.1.0
@@ -668,9 +665,6 @@ packages:
       vite:
         optional: true
 
-  webextension-polyfill@0.12.0:
-    resolution: {integrity: sha512-97TBmpoWJEE+3nFBQ4VocyCdLKfw54rFaJ6EVQYLBCXqCIpLSZkwGgASpv4oPt9gdKCJ80RJlcmNzNn008Ag6Q==}
-
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
 
@@ -1235,7 +1229,5 @@ snapshots:
   vitefu@0.2.5(vite@5.4.2(@types/node@22.5.0)):
     optionalDependencies:
       vite: 5.4.2(@types/node@22.5.0)
-
-  webextension-polyfill@0.12.0: {}
 
   yallist@3.1.1: {}

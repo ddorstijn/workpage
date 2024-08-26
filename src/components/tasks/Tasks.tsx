@@ -118,7 +118,7 @@ export const Tasks: Component<Props> = (props) => {
 
             <ol id="task-list">
                 <For each={tasks()}>
-                    {(task) => <TaskItem task={task} />}
+                    {(task) => <TaskItem currentProject={props.currentProject} task={task} />}
                 </For>
             </ol>
         </section>

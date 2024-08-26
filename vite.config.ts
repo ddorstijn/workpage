@@ -7,6 +7,9 @@ import { getManifest } from "./src/manifest";
 // https://vitejs.dev/config/
 export default defineConfig(() => {
   return {
+    build: {
+      sourcemap: true,
+    },
     plugins: [
       solid(),
       webExtension({

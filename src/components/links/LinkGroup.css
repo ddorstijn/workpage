@@ -1,5 +1,8 @@
 .group-title {
+  width: min-content;
   font-size: 1.5rem;
+  border-bottom: 3px solid var(--color-text);
+  padding: 0.5rem 0;
 }
 
 .group-item {
@@ -14,9 +17,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
-.group-title {
-  font-size: 1.5rem;
 }
 
 .group-item {

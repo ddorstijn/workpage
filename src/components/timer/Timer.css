@@ -1,0 +1,14 @@
+#timer {
+  width: 100%;
+
+  .content {
+    display: flex;
+    justify-content: space-between;
+
+    #session-time {
+      font-size: 2rem;
+      display: block;
+      font-weight: bold;
+    }
+  }
+}

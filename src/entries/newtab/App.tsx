@@ -12,6 +12,7 @@ import "@phosphor-icons/web/regular";
 
 import "~/shared/css/base.css";
 import "./App.css";
+import { Timer } from "~/components/timer/Timer";
 
 function App() {
   const [root] = createResource(getRoot);
@@ -59,8 +60,7 @@ function App() {
 
       <aside class="sidebar">
         <Tasks currentProject={currentProject} />
-        <section id="timer">
-        </section>
+        <Timer currentProject={currentProject} />
       </aside>
     </>
   );
