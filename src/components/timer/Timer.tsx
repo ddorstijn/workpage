@@ -27,6 +27,14 @@ export const Timer: Component<Props> = (props) => {
         return sessions;
     })
 
+    chrome.storage.sync.onChanged.addListener(async (info) => {
+        if (!props.currentProject()) return;
+
+        if (info[`h-${props.currentProject()!.id}`]) {
+            await refetchSessions();
+        }
+    })
+
     createEffect(async () => {
         if (!props.currentProject()) return;
 
