@@ -5,3 +5,14 @@ main {
   text-align: center;
   color: #2c3e50;
 }
+
+fieldset {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  > label {
+    display: grid;
+    grid-template-columns: 30ch 1fr;
+    gap: 1rem;
+  }
+}

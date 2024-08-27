@@ -3,6 +3,11 @@
   align-items: center;
   justify-content: space-between;
 
+  a {
+    color: var(--link-color);
+    text-decoration: var(--link-decoration);
+  }
+
   dialog {
     padding: 1rem;
 

@@ -1,10 +1,11 @@
-import { createMemo, createResource } from "solid-js";
+import { createEffect, createResource } from "solid-js";
 import { createDefaultProject, getCurrentProject, getRoot, PROJECT_KEY } from "~/shared/js/bookmark";
 
 import { Clock } from "~/components/clock/Clock";
 import { Links } from "~/components/links/Links";
 import { Projects } from "~/components/projects/Projects";
 import { Tasks } from "~/components/tasks/Tasks";
+import { Timer } from "~/components/timer/Timer";
 
 import "modern-normalize/modern-normalize.css";
 import "@phosphor-icons/web/fill";
@@ -12,7 +13,6 @@ import "@phosphor-icons/web/regular";
 
 import "~/shared/css/base.css";
 import "./App.css";
-import { Timer } from "~/components/timer/Timer";
 
 function App() {
   const [root] = createResource(getRoot);
@@ -30,7 +30,7 @@ function App() {
     }
   });
 
-  createMemo(async () => {
+  createEffect(async () => {
     if (!root()) {
       return;
     }
@@ -43,6 +43,24 @@ function App() {
       await createDefaultProject(root()!);
     }
   })
+
+  const [settings, { refetch: refetchSettings }] = createResource(async () => (await chrome.storage.sync.get("settings"))["settings"] as Record<string, string>);
+
+  createEffect(async () => {
+    if (!settings()) {
+      return;
+    }
+
+    for (const [key, value] of Object.entries(settings()!)) {
+      document.documentElement.style.setProperty(`--${key}`, value);
+    }
+  })
+
+  chrome.storage.sync.onChanged.addListener(async (info) => {
+    if (info.settings) {
+      await refetchSettings();
+    }
+  });
 
   return (
     <>

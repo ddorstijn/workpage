@@ -15,6 +15,7 @@
   padding: 1rem;
   width: 400px;
   max-width: calc(100% - 2rem);
+  background-color: var(--main-bg);
 
   > header {
     display: flex;

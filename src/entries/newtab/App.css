@@ -20,11 +20,10 @@ main {
   align-items: center;
   justify-content: center;
 
-  padding: var(--padding-md);
+  padding: var(--spacing);
 
   background-color: var(--main-bg);
-  background-image: var(--main-image);
-  color: var(--color-text);
+  color: var(--text-color);
 }
 
 .sidebar {
@@ -34,7 +33,7 @@ main {
   flex-direction: column;
   justify-content: space-between;
 
-  background-color: var(--sidebar-text);
-  color: var(--sidebar-bg);
-  padding: var(--padding-md);
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  padding: 1rem 2rem;
 }

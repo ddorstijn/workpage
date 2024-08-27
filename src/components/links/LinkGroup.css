@@ -1,9 +1,9 @@
 .group-item {
-  width: 250px;
+  width: var(--group-width);
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  background-color: var(--color-secondary);
-  color: var(--color-text);
+  background-color: var(--group-bg);
+  color: var(--group-text);
 
   .group-item__header {
     display: flex;
@@ -22,7 +22,7 @@
     outline: none;
 
     border: none;
-    border-bottom: 3px solid var(--color-text);
+    border-bottom: var(--group-border);
   }
 
   .group-item__input {

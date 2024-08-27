@@ -1,38 +1,4 @@
-:root {
-  --color-text: #000;
-  --color-text-muted: #666;
-  --color-background: #fff;
-  --color-primary: #0070f3;
-  --color-secondary: #f3f3f3;
-
-  --color-info: #0070f3;
-  --color-success: #28a745;
-  --color-warning: #ffc107;
-  --color-error: #dc3545;
-
-  --sidebar-width: 300px;
-  --sidebar-bg: #f3f3f3;
-  --sidebar-text: #000;
-
-  --main-bg: #f3f3f3;
-  --main-image: none;
-
-  --padding-sm: 0.5rem 1rem;
-  --padding-md: 1rem 2rem;
-
-  --gap-sm: 0.5rem;
-  --gap-md: 1rem;
-  --gap-lg: 1.5rem;
-  --gap-xl: 2rem;
-
-  --group-width: 250px;
-  --group-rounded: 8px;
-}
-
 body {
-  color: var(--color-text);
-  background: var(--color-background);
-
   font-size: 1rem;
 }
 
@@ -50,12 +16,12 @@ button {
   align-items: center;
   justify-content: center;
 
-  background: var(--color-primary);
+  background: var(--button-bg);
   border: none;
   padding: 0.5rem 1rem;
   cursor: pointer;
 
-  color: var(--color-background);
+  color: var(--button-text);
 
   & * {
     pointer-events: none;
@@ -64,10 +30,14 @@ button {
 
 button.clear {
   background: none;
-  color: var(--color-text);
+  color: var(--text-color);
   border: none;
   padding: 0;
   cursor: pointer;
+}
+
+input {
+  background-color: transparent;
 }
 
 [popover]::backdrop {
@@ -80,7 +50,7 @@ button.clear {
 
 .card {
   background: var(--color-secondary);
-  color: var(--color-text);
+  color: var(--text-color);
   border-radius: 4px;
   padding: 1rem;
   display: flex;
@@ -113,13 +83,13 @@ button.clear {
 
   &:has(input:not(:placeholder-shown)) {
     background-color: #fff;
-    color: var(--color-text);
+    color: var(--text-color);
   }
 
   &:has(input:focus) {
     outline: 1px solid gray;
     background-color: #fff;
-    color: var(--color-text);
+    color: var(--text-color);
   }
 }
 
@@ -197,11 +167,11 @@ li:hover > .group-item__header > .options {
   font-size: 0.75rem;
 
   .edit:hover {
-    color: var(--color-info);
+    color: var(--info-color);
   }
 
   .delete:hover {
-    color: var(--color-error);
+    color: var(--error-color);
   }
 }
 
