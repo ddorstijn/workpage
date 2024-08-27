@@ -9,9 +9,7 @@
 
 #app {
   height: 100vh;
-
   display: flex;
-  gap: 1rem;
 }
 
 main {
@@ -21,16 +19,22 @@ main {
   gap: 1rem;
   align-items: center;
   justify-content: center;
+
+  padding: var(--padding-md);
+
+  background-color: var(--main-bg);
+  background-image: var(--main-image);
+  color: var(--color-text);
 }
 
 .sidebar {
-  min-width: 400px;
+  min-width: var(--sidebar-width);
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 
-  background-color: var(--color-text);
-  color: var(--color-background);
-  padding: 1rem 2rem;
+  background-color: var(--sidebar-text);
+  color: var(--sidebar-bg);
+  padding: var(--padding-md);
 }

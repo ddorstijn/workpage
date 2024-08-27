@@ -2,4 +2,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  dialog {
+    padding: 1rem;
+
+    > form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
 }

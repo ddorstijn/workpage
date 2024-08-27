@@ -30,6 +30,7 @@ export const LinkItem: Component<Props> = (props) => {
             <a class="link-item__title" href={props.link.url}>{props.link.title}</a>
 
             <dialog ref={dialogEl}>
+                <h3>Edit link</h3>
                 <form method="dialog" onSubmit={update}>
                     <input ref={inputEl} type="text" value={props.link.title} />
                     <input type="url" value={props.link.url} />

@@ -1,17 +1,32 @@
 .group-item {
-  width: 300px;
+  width: 250px;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background-color: var(--color-secondary);
+  color: var(--color-text);
 
   .group-item__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    margin-bottom: 1rem;
   }
 
-  .group-item__title {
-    width: fit-content;
+  .group-item__title,
+  .group-item__input {
+    width: min-content;
     font-size: 1.5rem;
-    border-bottom: 3px solid var(--color-text);
+    margin: 0;
     padding: 0.5rem 0;
+    outline: none;
+
+    border: none;
+    border-bottom: 3px solid var(--color-text);
+  }
+
+  .group-item__input {
+    width: calc(var(--group-width) - 2em);
   }
 
   .group-item__links {
