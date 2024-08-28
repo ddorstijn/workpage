@@ -10,6 +10,10 @@
 #app {
   height: 100vh;
   display: flex;
+
+  color: var(--main-text);
+  background-color: var(--main-bg);
+  font: var(--main-font);
 }
 
 main {
@@ -20,10 +24,7 @@ main {
   align-items: center;
   justify-content: center;
 
-  padding: var(--spacing);
-
-  background-color: var(--main-bg);
-  color: var(--text-color);
+  padding: 2rem 1rem;
 }
 
 .sidebar {

@@ -1,9 +1,9 @@
 .group-item {
-  width: var(--group-width);
+  width: var(--link-group-width);
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  background-color: var(--group-bg);
-  color: var(--group-text);
+  background-color: var(--link-group-bg);
+  color: var(--link-group-text);
 
   .group-item__header {
     display: flex;
@@ -22,11 +22,11 @@
     outline: none;
 
     border: none;
-    border-bottom: var(--group-border);
+    border-bottom: var(--link-group-border);
   }
 
   .group-item__input {
-    width: calc(var(--group-width) - 2em);
+    width: calc(var(--link-group-width) - 2em);
   }
 
   .group-item__links {

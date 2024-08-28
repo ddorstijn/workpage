@@ -71,14 +71,14 @@ export const Tasks: Component<Props> = (props) => {
         }
     }
 
-    async function submitAddTask(event: SubmitEvent) {
+    async function add(event: KeyboardEvent) {
         event.preventDefault();
 
         if (!props.currentProject()) return;
 
-        const form = event.target as HTMLFormElement;
-        const title = form.querySelector('input')!.value;
-        form.reset();
+        const textarea = event.target as HTMLTextAreaElement;
+        const title = textarea.value;
+        textarea.value = "";
 
         const id = crypto.randomUUID();
         const newTask = { id, title, completed: false };
@@ -107,14 +107,22 @@ export const Tasks: Component<Props> = (props) => {
                         new
                     </label>
                 </div>
-            </header>
 
-            <div id="add-task-form" class="card">
-                <form onsubmit={submitAddTask}>
-                    <input id="task-new" type="text" placeholder="New task" />
-                    <button type="submit">Add</button>
-                </form>
-            </div>
+                <div id="add-task-form" class="task-item">
+                    <label class="checkbox">
+                        <input type="checkbox" disabled />
+                        <span class="unchecked"><i class="ph ph-circle"></i></span>
+                        <span class="checked"><i class="ph ph-check-circle"></i></span>
+                    </label>
+                    <textarea
+                        id="task-new"
+                        name="task-new"
+                        placeholder="New task"
+                        rows="1"
+                        onKeyDown={(event) => event.key === 'Enter' && add(event)}
+                    ></textarea>
+                </div>
+            </header>
 
             <ol id="task-list">
                 <For each={tasks()}>

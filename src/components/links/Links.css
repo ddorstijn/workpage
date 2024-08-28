@@ -8,7 +8,8 @@
 
   display: flex;
   flex-wrap: wrap;
-  gap: var(--group-spacing);
+  justify-content: center;
+  gap: var(--link-group-spacing);
 
   list-style: none;
 }

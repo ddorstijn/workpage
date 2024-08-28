@@ -98,15 +98,15 @@ export const Timer: Component<Props> = (props) => {
             </header>
             <div class="content">
                 <div id="time">
-                    <time id="session-time" datetime={formatTimediff(sessionTime()!)}>{formatTimediff(sessionTime()!)}</time>
-                    <span>Total: <time id="total-time" datetime={formatTimediff(totalTime()!)}>{formatTimediff(totalTime()!)}</time></span>
+                    <span id="session-time"><time datetime={formatTimediff(sessionTime()!)}>{formatTimediff(sessionTime()!)}</time></span>
+                    <span id="total-time">Total: <time datetime={formatTimediff(totalTime()!)}>{formatTimediff(totalTime()!)}</time></span>
                 </div>
                 <div class="controls">
                     <Show when={!isRunning()}>
-                        <button onClick={start}><i class="ph-fill ph-play"></i></button>
+                        <button onClick={start} id="timer-start"><i class="ph-fill ph-play"></i></button>
                     </Show>
                     <Show when={isRunning()}>
-                        <button onClick={end}><i class="ph-fill ph-stop"></i></button>
+                        <button onClick={end} id="timer-end"><i class="ph-fill ph-stop"></i></button>
                     </Show>
                 </div>
             </div>

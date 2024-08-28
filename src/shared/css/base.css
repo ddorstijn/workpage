@@ -100,8 +100,6 @@ input {
 
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
-  background-color: var(--color-primary);
-  color: var(--color-background);
 
   input {
     display: none;
@@ -123,7 +121,13 @@ input {
 .checkbox {
   position: relative;
   font-size: 1.25rem;
+  line-height: 1;
   cursor: pointer;
+
+  &:has(input:disabled) {
+    cursor: auto;
+    opacity: 0.75;
+  }
 
   input {
     position: absolute;
@@ -141,7 +145,7 @@ input {
   }
 
   &:has(input:checked),
-  &:hover {
+  &:has:not(:input:disabled):hover {
     & .unchecked {
       display: none;
     }

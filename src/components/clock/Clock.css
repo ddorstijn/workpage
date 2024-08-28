@@ -6,10 +6,13 @@
 
   > .clock__time {
     margin: 0;
+    font: var(--clock-time-font);
+    color: var(--clock-time-color);
   }
 
   > .clock__date {
-    font-size: 1.25rem;
     margin: 0;
+    font: var(--clock-date-font);
+    color: var(--clock-date-color);
   }
 }

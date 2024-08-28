@@ -1,5 +1,14 @@
 .task-item {
-  gap: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  padding: 0.5rem 1rem;
+  border-radius: var(--main-rounding);
+
+  font: var(--task-item-font);
+  color: var(--task-item-text);
+  background: var(--task-item-bg);
 
   &:has(input:checked) .task-item__title,
   &:has(.checkbox:hover) .task-item__title {

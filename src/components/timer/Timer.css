@@ -6,9 +6,23 @@
     justify-content: space-between;
 
     #session-time {
-      font-size: 2rem;
       display: block;
-      font-weight: bold;
+      font: var(--timer-session-font);
+      color: var(--timer-session-text);
     }
+
+    #total-time {
+      display: block;
+      font: var(--timer-total-font);
+      color: var(--timer-total-text);
+    }
+  }
+
+  #timer-start {
+    background-color: var(--main-success);
+  }
+
+  #timer-end {
+    background-color: var(--main-error);
   }
 }

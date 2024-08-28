@@ -1,5 +1,6 @@
 import { createEffect, createResource } from "solid-js";
 import { createDefaultProject, getCurrentProject, getRoot, PROJECT_KEY } from "~/shared/js/bookmark";
+import { DEFAULT_SETTINGS } from "~/shared/js/settings";
 
 import { Clock } from "~/components/clock/Clock";
 import { Links } from "~/components/links/Links";
@@ -44,7 +45,14 @@ function App() {
     }
   })
 
-  const [settings, { refetch: refetchSettings }] = createResource(async () => (await chrome.storage.sync.get("settings"))["settings"] as Record<string, string>);
+  const [settings, { refetch: refetchSettings }] = createResource(async () => {
+    const settings = (await chrome.storage.sync.get("settings"))["settings"] as typeof DEFAULT_SETTINGS | undefined;
+    if (!settings) {
+      return DEFAULT_SETTINGS;
+    }
+
+    return settings;
+  });
 
   createEffect(async () => {
     if (!settings()) {

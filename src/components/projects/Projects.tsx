@@ -38,12 +38,12 @@ export const Projects: Component<Props> = (props) => {
         }
     }
 
-    async function onSubmitProject(event: Event) {
+    async function add(event: Event) {
         event.preventDefault();
 
-        const form = event.target as HTMLFormElement;
-        const title = form.querySelector('input')!.value;
-        form.reset();
+        const input = event.target as HTMLInputElement;
+        const title = input.value;
+        input.value = "";
 
         const project = await chrome.bookmarks.create({ title, parentId: props.root()!.id });
         await setCurrentProject(project.id);
@@ -90,14 +90,13 @@ export const Projects: Component<Props> = (props) => {
                             new
                         </label>
                     </div>
-                </header>
 
-                <div id="add-project-form" class="card">
-                    <form onSubmit={onSubmitProject}>
-                        <input id="project-new" type="text" placeholder="New project" />
-                        <button type="submit">Add</button>
-                    </form>
-                </div>
+                    <div id="add-project-form" class="project-item">
+                        <div class="project-item__content">
+                            <input id="project-new" type="text" placeholder="New project" onKeyDown={(event) => event.key === "Enter" && add(event)} />
+                        </div>
+                    </div>
+                </header>
 
                 <ol id="project-list">
                     <For each={projects()}>

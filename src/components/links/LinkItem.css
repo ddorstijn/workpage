@@ -4,8 +4,9 @@
   justify-content: space-between;
 
   a {
-    color: var(--link-color);
-    text-decoration: var(--link-decoration);
+    font: var(--link-item-font);
+    color: var(--link-item-text);
+    text-decoration: var(--link-item-decoration);
   }
 
   dialog {

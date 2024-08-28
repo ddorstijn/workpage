@@ -40,7 +40,7 @@ export const TaskItem: Component<Props> = (props) => {
     }
 
     return (
-        <li class="task-item card">
+        <li class="task-item">
             <label class="checkbox">
                 <input type="checkbox" checked={props.task.completed} onChange={complete} />
                 <span class="unchecked"><i class="ph ph-circle"></i></span>
