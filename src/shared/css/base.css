@@ -139,29 +139,6 @@ input {
   }
 }
 
-li:hover > .options,
-li:hover > .group-item__header > .options {
-  display: flex;
-}
-
-.options {
-  margin-left: auto;
-  display: none;
-  align-items: center;
-  padding: 0 0.5rem;
-  gap: 0.5rem;
-
-  font-size: 0.75em;
-
-  .edit:hover {
-    color: var(--main-info);
-  }
-
-  .delete:hover {
-    color: var(--main-error);
-  }
-}
-
 .toolbar {
   display: flex;
   align-items: center;

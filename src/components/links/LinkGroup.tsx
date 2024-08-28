@@ -2,6 +2,7 @@ import { Component, createResource, For } from "solid-js";
 import { LinkItem } from "./LinkItem";
 
 import "./LinkGroup.css";
+import { Options } from "../util/Options";
 
 interface Props {
     group: chrome.bookmarks.BookmarkTreeNode
@@ -56,22 +57,15 @@ export const LinkGroup: Component<Props> = (props) => {
     return (
         <li class="group-item">
             <div class="group-item__header">
-                <input
-                    ref={inputEl}
-                    class="group-item__input hidden"
-                    value={props.group.title} onBlur={update}
-                    onKeyDown={(event) => event.key === 'Enter' && inputEl?.blur()}
-                />
-                <h2 ref={titleEl} class="group-item__title">{props.group.title}</h2>
-
-                <div class="options">
-                    <button class="clear edit" onClick={edit}>
-                        <i class="ph-fill ph-pen"></i>
-                    </button>
-                    <button class="clear delete" onClick={remove}>
-                        <i class="ph-fill ph-trash-simple"></i>
-                    </button>
-                </div>
+                <Options remove={remove} edit={edit}>
+                    <input
+                        ref={inputEl}
+                        class="group-item__input hidden"
+                        value={props.group.title} onBlur={update}
+                        onKeyDown={(event) => event.key === 'Enter' && inputEl?.blur()}
+                    />
+                    <h2 ref={titleEl} class="group-item__title">{props.group.title}</h2>
+                </Options>
             </div>
             <ol class="group-item__links">
                 <For each={links()}>

@@ -1,6 +1,7 @@
 import { Component } from "solid-js";
 
 import "./LinkItem.css";
+import { Options } from "../util/Options";
 
 interface Props {
     link: chrome.bookmarks.BookmarkTreeNode
@@ -27,7 +28,9 @@ export const LinkItem: Component<Props> = (props) => {
 
     return (
         <li class="link-item">
-            <a class="link-item__title" href={props.link.url}>{props.link.title}</a>
+            <Options edit={edit} remove={remove}>
+                <a class="link-item__title" href={props.link.url}>{props.link.title}</a>
+            </Options>
 
             <dialog ref={dialogEl}>
                 <h3>Edit link</h3>
@@ -38,15 +41,6 @@ export const LinkItem: Component<Props> = (props) => {
                     <button type="submit">Save</button>
                 </form>
             </dialog>
-
-            <div class="options">
-                <button class="clear edit" onClick={edit}>
-                    <i class="ph-fill ph-pen"></i>
-                </button>
-                <button class="clear delete" onClick={remove}>
-                    <i class="ph-fill ph-trash-simple"></i>
-                </button>
-            </div>
         </li>
     )
 }

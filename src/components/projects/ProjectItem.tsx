@@ -3,6 +3,7 @@ import { Component, Resource, Show } from "solid-js";
 import { setCurrentProject } from "~/shared/js/bookmark";
 
 import "./ProjectItem.css";
+import { Options } from "../util/Options";
 
 interface Props {
     project: chrome.bookmarks.BookmarkTreeNode & { used: number };
@@ -31,36 +32,30 @@ export const ProjectItem: Component<Props> = (props) => {
 
     return (
         <li class="project-item">
-            <div class="project-item__content">
-                <input
-                    ref={inputEl}
-                    type="text"
-                    class="project-item__input hidden"
-                    value={props.project.title}
-                    onBlur={updateProject}
-                    onKeyDown={(event) => event.key === 'Enter' && inputEl?.blur()}
-                />
-                <button
-                    ref={titleEl}
-                    onClick={() => setCurrentProject(props.project.id)}
-                    class="project-item__title"
-                    popovertarget="project-drawer"
-                    popovertargetaction="hide"
-                >
-                    {props.project.title} <Show when={props.currentProject()?.id === props.project.id}>(current)</Show>
-                </button>
-                <span class="project-item__used">
-                    {new Date(props.project.used).toLocaleDateString('en-GB')}
-                </span>
-            </div>
-            <div class="options">
-                <button class="clear edit" onClick={edit}>
-                    <i class="ph-fill ph-pen"></i>
-                </button>
-                <button class="clear delete" onClick={remove}>
-                    <i class="ph-fill ph-trash-simple"></i>
-                </button>
-            </div>
+            <Options edit={edit} remove={remove}>
+                <div>
+                    <input
+                        ref={inputEl}
+                        type="text"
+                        class="project-item__input hidden"
+                        value={props.project.title}
+                        onBlur={updateProject}
+                        onKeyDown={(event) => event.key === 'Enter' && inputEl?.blur()}
+                    />
+                    <button
+                        ref={titleEl}
+                        onClick={() => setCurrentProject(props.project.id)}
+                        class="project-item__title"
+                        popovertarget="project-drawer"
+                        popovertargetaction="hide"
+                    >
+                        {props.project.title} <Show when={props.currentProject()?.id === props.project.id}>(current)</Show>
+                    </button>
+                    <span class="project-item__used">
+                        {new Date(props.project.used).toLocaleDateString('en-GB')}
+                    </span>
+                </div>
+            </Options>
         </li>
     )
 }

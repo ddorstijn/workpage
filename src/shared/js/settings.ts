@@ -35,8 +35,8 @@ export const DEFAULT_SETTINGS = {
     "task-item-font": "0.75rem Roboto, sans-serif",
     "task-item-bg": "#ffffff",
 
-    "timer-session-font": "1.5rem Roboto, sans-serif",
-    "timer-session-text": "#000000",
+    "timer-session-font": "bold 2rem Roboto, sans-serif",
+    "timer-session-text": "#fff",
     "timer-total-font": "1rem Roboto, sans-serif",
-    "timer-total-text": "#000000",
+    "timer-total-text": "#fff",
 };

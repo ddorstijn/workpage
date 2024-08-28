@@ -1,0 +1,29 @@
+.options-container {
+  flex: 1;
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.options-container:hover > .options {
+  display: flex;
+}
+
+.options {
+  display: none;
+  margin-left: auto;
+  align-items: center;
+  gap: 0.5rem;
+
+  font-size: 0.75em;
+
+  .edit:hover {
+    color: var(--main-info);
+  }
+
+  .delete:hover {
+    color: var(--main-error);
+  }
+}

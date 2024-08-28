@@ -1,6 +1,7 @@
 import { Component, Resource } from "solid-js"
 
 import "./TaskItem.css";
+import { Options } from "../util/Options";
 
 interface Props {
     task: { id: string, title: string, completed: boolean }
@@ -46,23 +47,17 @@ export const TaskItem: Component<Props> = (props) => {
                 <span class="unchecked"><i class="ph ph-circle"></i></span>
                 <span class="checked"><i class="ph ph-check-circle"></i></span>
             </label>
-            <span ref={titleEl} class="task-item__title">{props.task.title}</span>
-            <textarea
-                name="task-item__input"
-                class="task-item__input hidden"
-                value={props.task.title}
-                ref={inputEl}
-                onBlur={update}
-                onKeyDown={(event) => event.key === 'Enter' && inputEl?.blur()}
-            ></textarea>
-            <div class="options">
-                <button class="clear edit" onClick={edit}>
-                    <i class="ph-fill ph-pen"></i>
-                </button>
-                <button class="clear delete" onClick={remove}>
-                    <i class="ph-fill ph-trash-simple"></i>
-                </button>
-            </div>
+            <Options edit={edit} remove={remove}>
+                <span ref={titleEl} class="task-item__title">{props.task.title}</span>
+                <textarea
+                    name="task-item__input"
+                    class="task-item__input hidden"
+                    value={props.task.title}
+                    ref={inputEl}
+                    onBlur={update}
+                    onKeyDown={(event) => event.key === 'Enter' && inputEl?.blur()}
+                ></textarea>
+            </Options>
         </li>
     )
 }
