@@ -8,7 +8,7 @@ interface Props {
 export const ExpandSearch: Component<Props> = (props) => {
     return (
         <label class="expand-search">
-            <input id="task-search" type="search" placeholder="Search task" onInput={props.filter} />
+            <input id="search" type="search" placeholder="Search item" onInput={props.filter} />
             <i class="ph ph-magnifying-glass"></i>
         </label>
     );

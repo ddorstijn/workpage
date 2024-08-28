@@ -1,6 +1,6 @@
 import { Component, createMemo, createResource, For, Resource } from "solid-js";
 import { TaskItem } from "./TaskItem";
-import { ExpandSearch } from "../timer/ExpandSearch";
+import { ExpandSearch } from "../util/ExpandSearch";
 
 import "./Tasks.css";
 
@@ -94,7 +94,7 @@ export const Tasks: Component<Props> = (props) => {
     return (
         <section id="tasks">
             <header>
-                <h2>Tasks</h2>
+                <button><h2>Tasks</h2><i class="ph ph-arrow-line-up-right"></i></button>
 
                 <div class="toolbar">
                     <ExpandSearch filter={filter} />

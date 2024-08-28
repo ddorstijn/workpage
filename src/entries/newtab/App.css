@@ -28,6 +28,7 @@ main {
 }
 
 .sidebar {
+  position: relative;
   width: var(--sidebar-width);
 
   display: flex;

@@ -2,7 +2,7 @@ import { Component, createMemo, createResource, For, Resource } from "solid-js";
 import { getProjectsSorted, setCurrentProject } from "~/shared/js/bookmark";
 
 import { ProjectItem } from "./ProjectItem";
-import { ExpandSearch } from "../timer/ExpandSearch";
+import { ExpandSearch } from "../util/ExpandSearch";
 
 import "./Projects.css";
 
