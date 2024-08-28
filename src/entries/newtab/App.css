@@ -28,7 +28,7 @@ main {
 }
 
 .sidebar {
-  min-width: var(--sidebar-width);
+  width: var(--sidebar-width);
 
   display: flex;
   flex-direction: column;

@@ -18,11 +18,17 @@
     }
   }
 
-  #timer-start {
-    background-color: var(--main-success);
-  }
+  .controls {
+    button {
+      border-radius: var(--main-rounding);
+    }
 
-  #timer-end {
-    background-color: var(--main-error);
+    #timer-start {
+      background-color: var(--main-success);
+    }
+
+    #timer-end {
+      background-color: var(--main-error);
+    }
   }
 }

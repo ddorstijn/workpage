@@ -14,4 +14,11 @@
   &:has(.checkbox:hover) .task-item__title {
     text-decoration: line-through;
   }
+
+  .task-item__input {
+    width: 100%;
+    field-sizing: content;
+
+    border: none;
+  }
 }
