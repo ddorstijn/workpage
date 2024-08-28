@@ -2,6 +2,7 @@ import { Component, createMemo, createResource, For, Resource } from "solid-js";
 import { getProjectsSorted, setCurrentProject } from "~/shared/js/bookmark";
 
 import { ProjectItem } from "./ProjectItem";
+import { ExpandSearch } from "../timer/ExpandSearch";
 
 import "./Projects.css";
 
@@ -21,7 +22,7 @@ export const Projects: Component<Props> = (props) => {
         await refetchProjects();
     });
 
-    async function onFilterInput(event: Event) {
+    async function filter(event: Event) {
         const input = event.target as HTMLInputElement;
         const searchTerm = input.value.trim().toLowerCase();
         const listItems = document.getElementById('project-list')!.querySelectorAll('.project-item') as NodeListOf<HTMLLIElement>;
@@ -79,10 +80,7 @@ export const Projects: Component<Props> = (props) => {
                 <header>
                     <h2>Projects</h2>
                     <div class="toolbar">
-                        <label class="expand-search">
-                            <input id="project-search" type="search" placeholder="Search project" onInput={onFilterInput} />
-                            <i class="ph ph-magnifying-glass"></i>
-                        </label>
+                        <ExpandSearch filter={filter} />
                         <label id="add-project-btn" class="toggle" aria-controls="add-project-form" onClick={() => document.getElementById('project-new')!.focus()}>
                             <input type="checkbox" />
                             <i class="open ph ph-plus"></i>

@@ -1,5 +1,6 @@
 import { Component, createMemo, createResource, For, Resource } from "solid-js";
 import { TaskItem } from "./TaskItem";
+import { ExpandSearch } from "../timer/ExpandSearch";
 
 import "./Tasks.css";
 
@@ -54,7 +55,7 @@ export const Tasks: Component<Props> = (props) => {
         }
     });
 
-    async function onFilterInput(event: Event) {
+    async function filter(event: Event) {
         const input = event.target as HTMLInputElement;
         const searchTerm = input.value.trim().toLowerCase();
         const listItems = document.getElementById('task-list')!.querySelectorAll('.task-item') as NodeListOf<HTMLLIElement>;
@@ -96,10 +97,7 @@ export const Tasks: Component<Props> = (props) => {
                 <h2>Tasks</h2>
 
                 <div class="toolbar">
-                    <label class="expand-search">
-                        <input id="task-search" type="search" placeholder="Search task" onInput={onFilterInput} />
-                        <i class="ph ph-magnifying-glass"></i>
-                    </label>
+                    <ExpandSearch filter={filter} />
                     <label id="add-task-btn" class="toggle" aria-controls="add-task-form" onClick={() => document.getElementById('task-new')!.focus()}>
                         <input type="checkbox" />
                         <i class="open ph ph-plus"></i>

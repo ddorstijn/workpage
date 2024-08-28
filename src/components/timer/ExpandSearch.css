@@ -1,0 +1,31 @@
+.expand-search {
+  display: flex;
+  align-items: center;
+  width: min-content;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--main-rounding);
+
+  justify-content: flex-end;
+
+  input {
+    width: 0px;
+    border: none;
+    outline: none;
+    padding: 0;
+
+    color: inherit;
+  }
+
+  input:focus,
+  input:not(:placeholder-shown) {
+    width: 8rem;
+  }
+
+  &:has(input:focus) {
+    outline: 1px solid gray;
+  }
+
+  i {
+    cursor: pointer;
+  }
+}
