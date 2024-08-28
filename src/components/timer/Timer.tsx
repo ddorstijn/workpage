@@ -1,4 +1,4 @@
-import { Component, createEffect, createMemo, createResource, onCleanup, Resource, Show } from "solid-js";
+import { Component, createEffect, createMemo, createResource, For, onCleanup, Resource, Show } from "solid-js";
 
 import "./Timer.css";
 
@@ -11,12 +11,24 @@ type Session = {
     end: number | null;
 }
 
-function formatTimediff(diff: number) {
+function formatTimediff(diff: number | null) {
+    if (diff === null) {
+        return '-:--';
+    }
+
     let seconds = Math.floor(diff / 1000);
     let minutes = Math.floor(seconds / 60);
     let hours = Math.floor(minutes / 60);
 
     return `${String(hours).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
+}
+
+function formatDateTime(date: number | null) {
+    if (date === null) {
+        return '-:--';
+    }
+
+    return new Date(date).toLocaleTimeString('en-gb', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
 
 export const Timer: Component<Props> = (props) => {
@@ -94,12 +106,15 @@ export const Timer: Component<Props> = (props) => {
     return (
         <section id="timer">
             <header>
-                <h2>Timer</h2>
+                <button style={{ padding: 0 }} popoverTarget="timer-drawer">
+                    <h2>Timer</h2>
+                    <i class="ph ph-arrow-up-right"></i>
+                </button>
             </header>
             <div class="content">
                 <div id="time">
-                    <span id="session-time"><time datetime={formatTimediff(sessionTime()!)}>{formatTimediff(sessionTime()!)}</time></span>
-                    <span id="total-time">Total: <time datetime={formatTimediff(totalTime()!)}>{formatTimediff(totalTime()!)}</time></span>
+                    <span id="session-time"><time datetime={formatTimediff(sessionTime())}>{formatTimediff(sessionTime())}</time></span>
+                    <span id="total-time">Total: <time datetime={formatTimediff(totalTime())}>{formatTimediff(totalTime())}</time></span>
                 </div>
                 <div class="controls">
                     <Show when={!isRunning()}>
@@ -109,6 +124,34 @@ export const Timer: Component<Props> = (props) => {
                         <button onClick={end} id="timer-end"><i class="ph-fill ph-stop"></i></button>
                     </Show>
                 </div>
+            </div>
+
+            <div id="timer-drawer" popover>
+                <header>
+                    <h2>Timer</h2>
+                </header>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Duration</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <For each={sessions() ?? []}>
+                            {(session) => (
+                                <tr>
+                                    <td><time datetime={formatDateTime(session.start)}>{formatDateTime(session.start)}</time></td>
+                                    <td><time datetime={formatDateTime(session.end)}>{formatDateTime(session.end)}</time></td>
+                                    <td><time datetime={formatTimediff(session.end ? session.end - session.start : 0)}>{formatTimediff(session.end ? session.end - session.start : 0)}</time></td>
+                                </tr>
+                            )}
+                        </For>
+                    </tbody>
+                </table>
             </div>
         </section>
     );

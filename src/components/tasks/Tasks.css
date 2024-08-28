@@ -10,10 +10,31 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    margin-bottom: calc(1.25 * var(--task-item-spacing));
+
+    #add-task-btn {
+      background: var(--main-success);
+    }
+
+    &:has(#add-task-btn input:checked) #add-task-form {
+      display: flex;
+    }
+
+    #add-task-form {
+      display: none;
+      width: 100%;
+      background: var(--task-item-bg);
+      margin-bottom: 2rem;
+
+      > #task-new {
+        width: 100%;
+        border: none;
+        outline: none;
+        resize: none;
+      }
+    }
   }
 
-  > #task-list {
+  .task-list {
     list-style: none;
 
     padding: 0;
@@ -31,25 +52,9 @@
       border-radius: 8px;
     }
   }
-}
 
-#add-task-btn {
-  background: var(--main-success);
-}
-#tasks:has(#add-task-btn input:checked) #add-task-form {
-  display: flex;
-}
-
-#add-task-form {
-  display: none;
-  width: 100%;
-  background: var(--task-item-bg);
-  margin-bottom: 1rem;
-
-  > #task-new {
-    width: 100%;
-    border: none;
-    outline: none;
-    resize: none;
+  #task-drawer {
+    position: absolute;
+    inset: 0;
   }
 }

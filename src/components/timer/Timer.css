@@ -31,4 +31,10 @@
       background-color: var(--main-error);
     }
   }
+
+  tbody {
+    max-height: 450px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
 }
