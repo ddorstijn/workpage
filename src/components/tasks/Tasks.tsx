@@ -93,7 +93,7 @@ export const Tasks: Component<Props> = (props) => {
 
     async function move(ctx: typeof window.dragCtx, index: number) {
         const ids = tasks()!.map((task) => task.id);
-        arraymove(ids, ids.indexOf(ctx!.item.id), index);
+        arraymove(ids, ids.indexOf(ctx!.item.id), index - 1);
 
         await chrome.storage.sync.set({ [getProjectTaskKey()]: ids })
     }

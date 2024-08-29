@@ -42,8 +42,6 @@ export function sortable(el: HTMLElement, group: string, mode: "horizontal" | "v
 
         window.dragCtx = { item: item, group, list: el };
 
-        console.log(window.dragCtx);
-
         if (getData) {
             const data = getData(item);
             e.dataTransfer?.setData(data.type, data.content);
@@ -70,7 +68,7 @@ export function sortable(el: HTMLElement, group: string, mode: "horizontal" | "v
 
         const afterElement = getDragAfterElement(el, e, mode);
         const children = Array.from(el.children).filter((el) => el !== document.getElementById("ghost")!);
-        const index = afterElement ? children.indexOf(afterElement) : children.length - 1;
+        const index = afterElement ? children.indexOf(afterElement) : children.length;
 
         await onDrop?.(window.dragCtx!, index);
         window.dragCtx = undefined;
