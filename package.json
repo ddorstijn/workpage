@@ -22,9 +22,7 @@
   },
   "dependencies": {
     "@phosphor-icons/web": "^2.1.1",
-    "@thisbeyond/solid-dnd": "^0.7.5",
     "modern-normalize": "^3.0.0",
-    "solid-dnd-directive": "^0.2.0",
     "solid-js": "^1.8.21"
   }
 }
