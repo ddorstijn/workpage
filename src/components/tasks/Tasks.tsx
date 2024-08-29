@@ -3,21 +3,22 @@ import { TaskItem } from "./TaskItem";
 import { ExpandSearch } from "../util/ExpandSearch";
 
 import "./Tasks.css";
+import { sortable } from "~/shared/js/sortable";
 
 interface Props {
     currentProject: Resource<chrome.bookmarks.BookmarkTreeNode | null>;
 }
 
 export const Tasks: Component<Props> = (props) => {
-    function getProjectTaskKey(project: chrome.bookmarks.BookmarkTreeNode) {
-        return `t-${project.id}`;
+    function getProjectTaskKey() {
+        return `t-${props.currentProject()!.id}`;
     }
 
     async function getTasks() {
         const project = props.currentProject();
         if (!project) return [];
 
-        const key = getProjectTaskKey(project);
+        const key = getProjectTaskKey();
         const storedTasks = (await chrome.storage.sync.get(key))[key] as string[] | undefined;
         if (!storedTasks) return [];
 
@@ -45,8 +46,7 @@ export const Tasks: Component<Props> = (props) => {
     chrome.storage.sync.onChanged.addListener(async (info) => {
         if (!props.currentProject()) return;
 
-        const project = props.currentProject()!;
-        const key = getProjectTaskKey(project);
+        const key = getProjectTaskKey();
         for (const taskKey in info) {
             if (taskKey === key || tasks()?.find((task) => task.id === taskKey)) {
                 await refetchTasks();
@@ -87,8 +87,19 @@ export const Tasks: Component<Props> = (props) => {
 
         await Promise.all([
             chrome.storage.sync.set({ [id]: { title, completed: false } }),
-            chrome.storage.sync.set({ [getProjectTaskKey(props.currentProject()!)]: newTasks.map((task) => task.id) }),
+            chrome.storage.sync.set({ [getProjectTaskKey()]: newTasks.map((task) => task.id) }),
         ]);
+    }
+
+    async function move(ctx: typeof window.dragCtx, index: number) {
+        const ids = tasks()!.map((task) => task.id);
+
+        const dragIndex = ids.indexOf(ctx!.el.id);
+        const tmp = ids[dragIndex];
+        ids[dragIndex] = ids[index];
+        ids[index] = tmp;
+
+        await chrome.storage.sync.set({ [getProjectTaskKey()]: ids })
     }
 
     return (
@@ -125,7 +136,7 @@ export const Tasks: Component<Props> = (props) => {
                 </div>
             </header>
 
-            <ol class="task-list">
+            <ol class="task-list" ref={(el) => sortable(el, "tasks", (el) => { return { type: "text/plain", content: el.querySelector('.task-item__title')!.textContent! } }, move)}>
                 <For each={tasks()?.filter((task) => !task.completed)}>
                     {(task) => <TaskItem currentProject={props.currentProject} task={task} />}
                 </For>

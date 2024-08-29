@@ -2,6 +2,7 @@ import { Component, Resource } from "solid-js"
 
 import "./TaskItem.css";
 import { Options } from "../util/Options";
+import { draggable } from "~/shared/js/sortable";
 
 interface Props {
     task: { id: string, title: string, completed: boolean }
@@ -41,7 +42,8 @@ export const TaskItem: Component<Props> = (props) => {
     }
 
     return (
-        <li class="task-item">
+        <li id={props.task.id} class="task-item" ref={(el) => draggable(el, ".task-item__handle")}>
+            <div class="task-item__handle"></div>
             <label class="checkbox">
                 <input type="checkbox" checked={props.task.completed} onChange={complete} />
                 <span class="unchecked"><i class="ph ph-circle"></i></span>
