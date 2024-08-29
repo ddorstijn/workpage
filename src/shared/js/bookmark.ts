@@ -129,18 +129,24 @@ export async function getProjectsSorted(rootId: string | undefined): Promise<(ch
 
 export async function getCurrentProjectId(): Promise<string | null> {
     const id = (await chrome.storage.local.get(PROJECT_KEY))[PROJECT_KEY];
-    const bookmark = await chrome.bookmarks.get(id).catch(() => null);
-    return bookmark?.[0]?.id ?? null;
+    try {
+        const bookmark = await chrome.bookmarks.get(id);
+        return bookmark?.[0]?.id;
+    } catch {
+        return null;
+    }
 }
 
 export async function getCurrentProject() {
     const currentProjectId = await getCurrentProjectId();
     if (!currentProjectId) return null;
 
-    const projects = await chrome.bookmarks.getSubTree(currentProjectId).catch(() => undefined);
-    if (projects === undefined) return null;
-
-    return projects[0];
+    try {
+        const projects = await chrome.bookmarks.get(currentProjectId);
+        return projects[0];
+    } catch {
+        return null
+    }
 }
 
 export async function setCurrentProject(projectId: string) {

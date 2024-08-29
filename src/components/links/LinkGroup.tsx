@@ -3,6 +3,7 @@ import { LinkItem } from "./LinkItem";
 
 import "./LinkGroup.css";
 import { Options } from "../util/Options";
+import { draggable, sortable } from "~/shared/js/sortable";
 
 interface Props {
     group: chrome.bookmarks.BookmarkTreeNode
@@ -38,6 +39,12 @@ export const LinkGroup: Component<Props> = (props) => {
         }
     });
 
+    chrome.bookmarks.onMoved.addListener(async (_, info) => {
+        if (info.parentId === props.group?.id || info.oldParentId === props.group?.id) {
+            await refetchLinks();
+        }
+    })
+
     async function edit() {
         titleEl?.classList.add('hidden');
         inputEl?.classList.remove('hidden');
@@ -54,9 +61,15 @@ export const LinkGroup: Component<Props> = (props) => {
         await chrome.bookmarks.update(props.group.id, { title: inputEl!.value });
     }
 
+    async function move(ctx: typeof window.dragCtx, index: number) {
+        console.log(`await chrome.bookmarks.move("${ctx!.item.id}", { parentId: "${props.group.id}", index: ${index} })`);
+        await chrome.bookmarks.move(ctx!.item.id, { parentId: props.group.id, index: index });
+    }
+
     return (
-        <li class="group-item">
+        <li class="group-item" id={props.group.id} ref={(el) => draggable(el, ".group-item__handle")}>
             <div class="group-item__header">
+                <div class="group-item__handle"></div>
                 <Options remove={remove} edit={edit}>
                     <input
                         ref={inputEl}
@@ -67,7 +80,7 @@ export const LinkGroup: Component<Props> = (props) => {
                     <h2 ref={titleEl} class="group-item__title">{props.group.title}</h2>
                 </Options>
             </div>
-            <ol class="group-item__links">
+            <ol class="group-item__links" ref={(el) => sortable(el, "links", "vertical", (el) => ({ type: "text/plain", content: el.querySelector('a')!.href }), move)}>
                 <For each={links()}>
                     {(link) => <LinkItem link={link} />}
                 </For>

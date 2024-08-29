@@ -2,6 +2,7 @@ import { Component } from "solid-js";
 
 import "./LinkItem.css";
 import { Options } from "../util/Options";
+import { draggable } from "~/shared/js/sortable";
 
 interface Props {
     link: chrome.bookmarks.BookmarkTreeNode
@@ -27,7 +28,8 @@ export const LinkItem: Component<Props> = (props) => {
     let dialogEl: HTMLDialogElement | undefined;
 
     return (
-        <li class="link-item">
+        <li class="link-item" id={props.link.id} ref={(el) => draggable(el, ".link-item__handle")}>
+            <div class="link-item__handle"></div>
             <Options edit={edit} remove={remove}>
                 <a class="link-item__title" href={props.link.url}>{props.link.title}</a>
             </Options>

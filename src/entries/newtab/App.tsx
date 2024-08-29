@@ -1,4 +1,4 @@
-import { createEffect, createResource } from "solid-js";
+import { createEffect, createResource, Show } from "solid-js";
 import { createDefaultProject, getCurrentProject, getRoot, PROJECT_KEY } from "~/shared/js/bookmark";
 import { DEFAULT_SETTINGS } from "~/shared/js/settings";
 
@@ -77,17 +77,19 @@ function App() {
           <i class="ph-fill ph-gear"></i>
         </button>
       </header>
-      <main>
-        <Clock />
-        <Projects root={root} currentProject={currentProject} />
+      <Show when={root()}>
+        <main>
+          <Clock />
+          <Projects root={root} currentProject={currentProject} />
 
-        <Links currentProject={currentProject} />
-      </main>
+          <Links currentProject={currentProject} />
+        </main>
 
-      <aside class="sidebar">
-        <Tasks currentProject={currentProject} />
-        <Timer currentProject={currentProject} />
-      </aside>
+        <aside class="sidebar">
+          <Tasks currentProject={currentProject} />
+          <Timer currentProject={currentProject} />
+        </aside>
+      </Show>
     </>
   );
 }

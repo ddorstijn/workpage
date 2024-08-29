@@ -3,6 +3,15 @@
   align-items: center;
   justify-content: space-between;
 
+  .link-item__handle {
+    margin-right: 0.5rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: black;
+    cursor: move;
+  }
+
   a {
     font: var(--link-item-font);
     color: var(--link-item-text);

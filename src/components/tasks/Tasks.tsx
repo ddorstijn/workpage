@@ -93,13 +93,15 @@ export const Tasks: Component<Props> = (props) => {
 
     async function move(ctx: typeof window.dragCtx, index: number) {
         const ids = tasks()!.map((task) => task.id);
-
-        const dragIndex = ids.indexOf(ctx!.el.id);
-        const tmp = ids[dragIndex];
-        ids[dragIndex] = ids[index];
-        ids[index] = tmp;
+        arraymove(ids, ids.indexOf(ctx!.item.id), index);
 
         await chrome.storage.sync.set({ [getProjectTaskKey()]: ids })
+    }
+
+    function arraymove(arr: Array<any>, fromIndex: number, toIndex: number) {
+        var element = arr[fromIndex];
+        arr.splice(fromIndex, 1);
+        arr.splice(toIndex, 0, element);
     }
 
     return (
@@ -136,7 +138,7 @@ export const Tasks: Component<Props> = (props) => {
                 </div>
             </header>
 
-            <ol class="task-list" ref={(el) => sortable(el, "tasks", (el) => { return { type: "text/plain", content: el.querySelector('.task-item__title')!.textContent! } }, move)}>
+            <ol class="task-list" ref={(el) => sortable(el, "tasks", "vertical", (el) => { return { type: "text/plain", content: el.querySelector('.task-item__title')!.textContent! } }, move)}>
                 <For each={tasks()?.filter((task) => !task.completed)}>
                     {(task) => <TaskItem currentProject={props.currentProject} task={task} />}
                 </For>

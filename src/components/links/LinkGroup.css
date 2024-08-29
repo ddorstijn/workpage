@@ -6,8 +6,21 @@
   color: var(--link-group-text);
 
   .group-item__header {
+    display: flex;
+    align-items: center;
     width: 100%;
+    margin-left: calc(-1 * (10px + 0.5rem));
     margin-bottom: 1rem;
+
+    .group-item__handle {
+      margin-right: 0.5rem;
+
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: black;
+      cursor: move;
+    }
   }
 
   .group-item__title,
@@ -27,8 +40,6 @@
   }
 
   .group-item__links {
-    padding: 0;
-    margin: 0;
     list-style: none;
 
     display: flex;

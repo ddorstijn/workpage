@@ -1,11 +1,8 @@
 #links {
-  margin-top: 3rem;
+  margin-top: 4rem;
 }
 
 #group-list {
-  padding: 0;
-  margin: 0;
-
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

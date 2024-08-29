@@ -1,5 +1,5 @@
 declare global {
-    interface Window { dragCtx: { el: HTMLElement, group: string, source: HTMLElement } | undefined; }
+    interface Window { dragCtx: { list: HTMLElement, item: HTMLElement, group: string } | undefined; }
 }
 
 import "./sortable.css";
@@ -19,13 +19,15 @@ export function draggable(el: HTMLElement, handle?: HTMLElement | string) {
     }
 
     el.classList.add("draggable");
-    el.addEventListener("dragend", () => {
+    el.addEventListener("dragend", (e) => {
+        e.stopPropagation();
+
         document.getElementById("ghost")!.remove();
         el.classList.remove("dragging");
     });
 }
 
-export function sortable(el: HTMLElement, group: string, getData?: (el: HTMLElement) => { type: string, content: string }, onDrop?: (ctx: typeof window.dragCtx, index: number) => void) {
+export function sortable(el: HTMLElement, group: string, mode: "horizontal" | "vertical", getData?: (el: HTMLElement) => { type: string, content: string }, onDrop?: (ctx: typeof window.dragCtx, index: number) => any) {
     el.classList.add("sortable");
 
     el.addEventListener("dragstart", (e: DragEvent) => {
@@ -38,7 +40,9 @@ export function sortable(el: HTMLElement, group: string, getData?: (el: HTMLElem
         ghost.id = "ghost";
         el.appendChild(ghost);
 
-        window.dragCtx = { el: item, group, source: el };
+        window.dragCtx = { item: item, group, list: el };
+
+        console.log(window.dragCtx);
 
         if (getData) {
             const data = getData(item);
@@ -47,11 +51,13 @@ export function sortable(el: HTMLElement, group: string, getData?: (el: HTMLElem
     })
 
     el.addEventListener("dragover", (e: DragEvent) => {
+        e.stopPropagation();
+
         if (!window.dragCtx || window.dragCtx.group !== group) { return; }
 
         e.preventDefault();
 
-        const afterElement = getDragAfterElement(el, e.clientY);
+        const afterElement = getDragAfterElement(el, e, mode);
         if (afterElement == null) {
             el.appendChild(document.getElementById("ghost")!);
         } else {
@@ -59,25 +65,28 @@ export function sortable(el: HTMLElement, group: string, getData?: (el: HTMLElem
         }
     });
 
-    el.addEventListener("drop", (e: DragEvent) => {
-        const afterElement = getDragAfterElement(el, e.clientY);
-        const children = Array.from(el.children).filter((el) => el !== window.dragCtx?.el);
-        const index = afterElement ? children.indexOf(afterElement) : children.length;
+    el.addEventListener("drop", async (e: DragEvent) => {
+        e.stopPropagation();
 
-        onDrop?.(window.dragCtx!, index - 1);
+        const afterElement = getDragAfterElement(el, e, mode);
+        const children = Array.from(el.children).filter((el) => el !== document.getElementById("ghost")!);
+        const index = afterElement ? children.indexOf(afterElement) : children.length - 1;
+
+        await onDrop?.(window.dragCtx!, index);
         window.dragCtx = undefined;
     });
 }
 
-function getDragAfterElement(container: HTMLElement, y: number) {
+function getDragAfterElement(container: HTMLElement, event: DragEvent, mode: "horizontal" | "vertical") {
     let closest = { offset: Number.NEGATIVE_INFINITY, element: null as HTMLElement | null };
 
-    for (const child of container.querySelectorAll<HTMLElement>(".draggable:not(.dragging)")) {
+    for (const child of container.querySelectorAll<HTMLElement>(":not(#ghost)")) {
         const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2;
 
-        if (offset < 0 && offset > closest.offset) {
-            closest = { offset, element: child };
+        const relativeOffset = mode === "horizontal" ? event.clientX - box.left - box.width / 2 : event.clientY - box.top - box.height / 2;
+
+        if (relativeOffset < 0 && relativeOffset > closest.offset) {
+            closest = { offset: mode === "horizontal" ? event.clientX : event.clientY, element: child };
         }
     }
 
