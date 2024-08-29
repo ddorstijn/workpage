@@ -62,14 +62,21 @@ export const LinkGroup: Component<Props> = (props) => {
     }
 
     async function move(ctx: typeof window.dragCtx, index: number) {
-        console.log(`await chrome.bookmarks.move("${ctx!.item.id}", { parentId: "${props.group.id}", index: ${index} })`);
         await chrome.bookmarks.move(ctx!.item.id, { parentId: props.group.id, index: index });
     }
 
+    function initDraggable(el: HTMLElement) {
+        draggable({ el, handle: ".group-item__handle" });
+    }
+
+    function initSortable(el: HTMLElement) {
+        sortable({ el, group: "links", mode: "vertical", onDrop: move });
+    }
+
     return (
-        <li class="group-item" id={props.group.id} ref={(el) => draggable(el, ".group-item__handle")}>
+        <li class="group-item" id={props.group.id} ref={initDraggable}>
             <div class="group-item__header">
-                <div class="group-item__handle"></div>
+                <div class="group-item__handle"><i class="ph ph-dots-six-vertical"></i></div>
                 <Options remove={remove} edit={edit}>
                     <input
                         ref={inputEl}
@@ -80,7 +87,7 @@ export const LinkGroup: Component<Props> = (props) => {
                     <h2 ref={titleEl} class="group-item__title">{props.group.title}</h2>
                 </Options>
             </div>
-            <ol class="group-item__links" ref={(el) => sortable(el, "links", "vertical", (el) => ({ type: "text/plain", content: el.querySelector('a')!.href }), move)}>
+            <ol class="group-item__links" ref={initSortable}>
                 <For each={links()}>
                     {(link) => <LinkItem link={link} />}
                 </For>

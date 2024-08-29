@@ -93,15 +93,22 @@ export const Tasks: Component<Props> = (props) => {
 
     async function move(ctx: typeof window.dragCtx, index: number) {
         const ids = tasks()!.map((task) => task.id);
-        arraymove(ids, ids.indexOf(ctx!.item.id), index - 1);
+        const fromIndex = ids.indexOf(ctx!.item.id);
+
+        arraymove(ids, fromIndex, index);
 
         await chrome.storage.sync.set({ [getProjectTaskKey()]: ids })
     }
+
 
     function arraymove(arr: Array<any>, fromIndex: number, toIndex: number) {
         var element = arr[fromIndex];
         arr.splice(fromIndex, 1);
         arr.splice(toIndex, 0, element);
+    }
+
+    function initSortable(el: HTMLElement) {
+        sortable({el, group: "tasks", mode: "vertical",  onDrop: move});
     }
 
     return (
@@ -138,7 +145,7 @@ export const Tasks: Component<Props> = (props) => {
                 </div>
             </header>
 
-            <ol class="task-list" ref={(el) => sortable(el, "tasks", "vertical", (el) => { return { type: "text/plain", content: el.querySelector('.task-item__title')!.textContent! } }, move)}>
+            <ol class="task-list" ref={initSortable}>
                 <For each={tasks()?.filter((task) => !task.completed)}>
                     {(task) => <TaskItem currentProject={props.currentProject} task={task} />}
                 </For>

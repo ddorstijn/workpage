@@ -1,7 +1,7 @@
 .group-item {
   width: var(--link-group-width);
   padding: 0.5rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--main-rounding);
   background-color: var(--link-group-bg);
   color: var(--link-group-text);
 
@@ -9,17 +9,17 @@
     display: flex;
     align-items: center;
     width: 100%;
-    margin-left: calc(-1 * (10px + 0.5rem));
+    margin-left: -0.5rem;
     margin-bottom: 1rem;
+
+    &:hover .group-item__handle {
+      opacity: 1;
+    }
 
     .group-item__handle {
       margin-right: 0.5rem;
-
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background-color: black;
       cursor: move;
+      opacity: 0;
     }
   }
 

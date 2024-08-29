@@ -10,6 +10,8 @@
   color: var(--task-item-text);
   background: var(--task-item-bg);
 
+  cursor: move;
+
   &:has(input:checked) .task-item__title,
   &:has(.checkbox:hover) .task-item__title {
     text-decoration: line-through;
@@ -20,13 +22,5 @@
     field-sizing: content;
 
     border: none;
-  }
-
-  .task-item__handle {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: black;
-    cursor: move;
   }
 }

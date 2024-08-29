@@ -9,7 +9,8 @@
     "build": "vite build",
     "watch": "vite build --watch --mode development --minify false",
     "dev": "vite",
-    "serve:firefox": "web-ext run -f deved --start-url \"about:newtab\" --source-dir ./dist/",
+    "serve:firefox": "web-ext run -f --start-url \"about:newtab\" --source-dir ./dist/",
+    "serve:firefox-dev": "web-ext run -f deved --start-url \"about:newtab\" --source-dir ./dist/",
     "serve:chrome": "web-ext run -t chromium --start-url \"chrome://bookmarks/\" --source-dir ./dist/"
   },
   "license": "MIT",

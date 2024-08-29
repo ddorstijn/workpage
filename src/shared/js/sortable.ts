@@ -1,92 +1,123 @@
 declare global {
-    interface Window { dragCtx: { list: HTMLElement, item: HTMLElement, group: string } | undefined; }
+  interface Window {
+    dragCtx:
+      | { list: HTMLElement; item: HTMLElement; group: string }
+      | undefined;
+  }
 }
 
 import "./sortable.css";
 
-export function draggable(el: HTMLElement, handle?: HTMLElement | string) {
-    if (handle) {
-        const handleEl: HTMLElement | undefined = typeof handle === "string" ? el.querySelector(handle) as HTMLElement ?? undefined : handle
-        handleEl.addEventListener("mousedown", () => {
-            el.draggable = true
-        });
+interface DraggableOptions {
+  el: HTMLElement;
+  handle?: string;
+}
 
-        el.addEventListener("dragend", () => {
-            el.draggable = false
-        });
+export function draggable({ el, handle }: DraggableOptions) {
+  if (handle) {
+    const handleEl = (el.querySelector(handle) as HTMLElement) ?? undefined;
+
+    handleEl.addEventListener("mousedown", () => {
+      el.draggable = true;
+    });
+
+    el.addEventListener("dragend", () => {
+      el.draggable = false;
+    });
+  } else {
+    el.draggable = true;
+  }
+
+  el.classList.add("draggable");
+  el.addEventListener("dragend", (e) => {
+    e.stopPropagation();
+
+    setTimeout(() => {
+      el.classList.remove("dragging");
+      document.getElementById("ghost")?.remove();
+      window.dragCtx = undefined;
+    }, 50);
+  });
+}
+
+interface SortableOptions {
+  el: HTMLElement;
+  group: string;
+  mode: "horizontal" | "vertical";
+  onDrop?: (ctx: typeof window.dragCtx, index: number) => any;
+}
+export function sortable({ el, group, mode, onDrop }: SortableOptions) {
+  el.classList.add("sortable");
+
+  el.addEventListener("dragstart", (e: DragEvent) => {
+    e.stopPropagation();
+
+    const item = (e.target as HTMLElement).closest(
+      ".draggable"
+    )! as HTMLElement;
+    window.dragCtx = { item, group, list: el };
+
+    const ghost = item.cloneNode(true) as HTMLElement;
+    ghost.id = "ghost";
+    el.appendChild(ghost);
+
+    item.classList.add("dragging");
+  });
+
+  el.addEventListener("dragover", (e: DragEvent) => {
+    if (!window.dragCtx || window.dragCtx.group !== group) {
+      return;
+    }
+    e.preventDefault();
+
+    const afterElement = getDragAfterElement(el, e, mode);
+    if (afterElement == null) {
+      el.appendChild(document.getElementById("ghost")!);
     } else {
-        el.draggable = true;
+      el.insertBefore(document.getElementById("ghost")!, afterElement);
     }
+  });
 
-    el.classList.add("draggable");
-    el.addEventListener("dragend", (e) => {
-        e.stopPropagation();
+  el.addEventListener("drop", async (e: DragEvent) => {
+    e.stopPropagation();
 
-        document.getElementById("ghost")!.remove();
-        el.classList.remove("dragging");
-    });
+    const children = [
+      ...el.querySelectorAll<HTMLElement>("& > .draggable:not(.dragging)"),
+    ];
+    const index = children.indexOf(document.getElementById("ghost")!);
+
+    document.getElementById("ghost")!.remove();
+    window.dragCtx!.item.classList.remove("dragging");
+
+    await onDrop?.(window.dragCtx!, index);
+    window.dragCtx = undefined;
+  });
 }
 
-export function sortable(el: HTMLElement, group: string, mode: "horizontal" | "vertical", getData?: (el: HTMLElement) => { type: string, content: string }, onDrop?: (ctx: typeof window.dragCtx, index: number) => any) {
-    el.classList.add("sortable");
+function getDragAfterElement(
+  container: HTMLElement,
+  event: DragEvent,
+  mode: "horizontal" | "vertical"
+) {
+  const children = container.children;
+  let closest = Number.NEGATIVE_INFINITY;
+  let closestElement: HTMLElement | null = null;
 
-    el.addEventListener("dragstart", (e: DragEvent) => {
-        e.stopPropagation();
+  for (let i = 0; i < children.length; i++) {
+    const child = children[i] as HTMLElement;
+    if (child.classList.contains("draggable") && child.id !== "ghost") {
+      const box = child.getBoundingClientRect();
+      const relativeOffset =
+        mode === "horizontal"
+          ? event.clientX - box.left - box.width / 2
+          : event.clientY - box.top - box.height / 2;
 
-        const item = (e.target as HTMLElement).closest('.draggable')! as HTMLElement;
-        item.classList.add("dragging");
-
-        const ghost = document.createElement("li");
-        ghost.id = "ghost";
-        el.appendChild(ghost);
-
-        window.dragCtx = { item: item, group, list: el };
-
-        if (getData) {
-            const data = getData(item);
-            e.dataTransfer?.setData(data.type, data.content);
-        }
-    })
-
-    el.addEventListener("dragover", (e: DragEvent) => {
-        e.stopPropagation();
-
-        if (!window.dragCtx || window.dragCtx.group !== group) { return; }
-
-        e.preventDefault();
-
-        const afterElement = getDragAfterElement(el, e, mode);
-        if (afterElement == null) {
-            el.appendChild(document.getElementById("ghost")!);
-        } else {
-            el.insertBefore(document.getElementById("ghost")!, afterElement);
-        }
-    });
-
-    el.addEventListener("drop", async (e: DragEvent) => {
-        e.stopPropagation();
-
-        const afterElement = getDragAfterElement(el, e, mode);
-        const children = Array.from(el.children).filter((el) => el !== document.getElementById("ghost")!);
-        const index = afterElement ? children.indexOf(afterElement) : children.length;
-
-        await onDrop?.(window.dragCtx!, index);
-        window.dragCtx = undefined;
-    });
-}
-
-function getDragAfterElement(container: HTMLElement, event: DragEvent, mode: "horizontal" | "vertical") {
-    let closest = { offset: Number.NEGATIVE_INFINITY, element: null as HTMLElement | null };
-
-    for (const child of container.querySelectorAll<HTMLElement>(":not(#ghost)")) {
-        const box = child.getBoundingClientRect();
-
-        const relativeOffset = mode === "horizontal" ? event.clientX - box.left - box.width / 2 : event.clientY - box.top - box.height / 2;
-
-        if (relativeOffset < 0 && relativeOffset > closest.offset) {
-            closest = { offset: mode === "horizontal" ? event.clientX : event.clientY, element: child };
-        }
+      if (relativeOffset < 0 && relativeOffset > closest) {
+        closest = relativeOffset;
+        closestElement = child;
+      }
     }
+  }
 
-    return closest.element;
-};
+  return closestElement;
+}

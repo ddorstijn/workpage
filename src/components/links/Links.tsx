@@ -52,9 +52,13 @@ export const Links: Component<Props> = (props) => {
         await chrome.bookmarks.move(ctx!.item.id, { parentId: props.currentProject()!.id, index: index });
     }
 
+    function initSortable(el: HTMLElement) {
+        sortable({ el, group: "linkgroups", mode: "horizontal", onDrop: move });
+    }
+
     return (
         <section aria-label="Links" id="links">
-            <ol id="group-list" ref={(el) => sortable(el, "linkgroups", "horizontal", (el) => ({ type: "text/plain", content: el.querySelector(".group-item__title")!.textContent! }), move)}>
+            <ol id="group-list" ref={initSortable}>
                 <For each={groups()}>
                     {(group) => <LinkGroup group={group} />}
                 </For>

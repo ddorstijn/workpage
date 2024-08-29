@@ -1,15 +1,17 @@
 .link-item {
+  margin-left: -0.5rem;
+  
   display: flex;
   align-items: center;
   justify-content: space-between;
 
+  &:hover .link-item__handle {
+    opacity: 1;
+  }
   .link-item__handle {
     margin-right: 0.5rem;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: black;
     cursor: move;
+    opacity: 0;
   }
 
   a {

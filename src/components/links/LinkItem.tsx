@@ -27,11 +27,15 @@ export const LinkItem: Component<Props> = (props) => {
     let inputEl: HTMLInputElement | undefined;
     let dialogEl: HTMLDialogElement | undefined;
 
+    function initDraggable(el: HTMLElement) {
+        draggable({el, handle: ".link-item__handle"});
+    }
+
     return (
-        <li class="link-item" id={props.link.id} ref={(el) => draggable(el, ".link-item__handle")}>
-            <div class="link-item__handle"></div>
+        <li class="link-item" id={props.link.id} ref={initDraggable}>
+            <div class="link-item__handle"><i class="ph ph-dots-six-vertical"></i></div>
             <Options edit={edit} remove={remove}>
-                <a class="link-item__title" href={props.link.url}>{props.link.title}</a>
+                <a onDragStart={(e) => e.stopPropagation()} class="link-item__title" href={props.link.url}>{props.link.title}</a>
             </Options>
 
             <dialog ref={dialogEl}>

@@ -41,9 +41,12 @@ export const TaskItem: Component<Props> = (props) => {
         await chrome.storage.sync.set({ [props.task.id]: { title: props.task.title, completed: checkbox.checked } });
     }
 
+    function initDraggable(el: HTMLElement) {
+        draggable({ el });
+    }
+
     return (
-        <li id={props.task.id} class="task-item" ref={(el) => draggable(el, ".task-item__handle")}>
-            <div class="task-item__handle"></div>
+        <li id={props.task.id} class="task-item" ref={initDraggable}>
             <label class="checkbox">
                 <input type="checkbox" checked={props.task.completed} onChange={complete} />
                 <span class="unchecked"><i class="ph ph-circle"></i></span>

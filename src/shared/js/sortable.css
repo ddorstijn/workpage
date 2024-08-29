@@ -1,19 +1,13 @@
 #ghost {
-  min-width: 100px;
-  height: 20px;
-
-  background-color: white;
-  border: 1px dashed black;
-
-  border-radius: var(--main-rounding);
+  opacity: 0.5;
 }
 
 .dragging {
-  opacity: 0.25;
+  transition: 0.1s;
+  display: none !important;
 }
 
 .sortable {
-  border: 1px solid yellow;
   padding: 1rem;
   margin: -1rem;
 }
