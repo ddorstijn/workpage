@@ -6,13 +6,23 @@ main {
   color: #2c3e50;
 }
 
-fieldset {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+form {
+  display: flex;
+  flex-wrap: wrap;
 
-  > label {
-    display: grid;
-    grid-template-columns: 30ch 1fr;
-    gap: 1rem;
+  > fieldset {
+    max-width: 500px;
+
+    > div {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+
+      > label {
+        display: grid;
+        grid-template-columns: 25ch 30ch 50px;
+        place-items: top;
+      }
+    }
   }
 }

@@ -1,10 +1,19 @@
-import { Component, createMemo, createResource, For, Resource } from "solid-js";
+import {
+  Component,
+  createEffect,
+  createMemo,
+  createResource,
+  createSignal,
+  For,
+  Resource,
+} from "solid-js";
 import { sortable } from "~/shared/js/sortable";
 
 import { TaskItem } from "./TaskItem";
 import { ExpandSearch } from "../util/ExpandSearch";
 
 import "./Tasks.css";
+import { TaskDrawer } from "./TaskDrawer";
 
 interface Props {
   currentProject: Resource<chrome.bookmarks.BookmarkTreeNode | null>;
@@ -19,6 +28,8 @@ export type Task = {
 };
 
 export const Tasks: Component<Props> = (props) => {
+  const [search, setSearch] = createSignal("");
+
   const [tasks, { refetch: refetchTasks }] = createResource<Task[]>(
     async () => {
       if (!props.currentProject()) return [];
@@ -28,7 +39,20 @@ export const Tasks: Component<Props> = (props) => {
     }
   );
 
-  createMemo(async () => {
+  const filteredTasks = createMemo(() => {
+    const filteredTasks =
+      tasks()?.filter((task) => task.completed === undefined) ?? [];
+
+    if (!search()) {
+      return filteredTasks;
+    }
+
+    return filteredTasks.filter((task) =>
+      task.title.toLowerCase().includes(search().toLowerCase())
+    );
+  });
+
+  createEffect(async () => {
     if (!props.currentProject()) return;
 
     await refetchTasks();
@@ -42,31 +66,6 @@ export const Tasks: Component<Props> = (props) => {
       await refetchTasks();
     }
   });
-
-  async function filter(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const searchTerm = input.value.trim().toLowerCase();
-    const listItems = document
-      .getElementById("task-list")!
-      .querySelectorAll(".task-item") as NodeListOf<HTMLLIElement>;
-
-    for (let i = 0; i < listItems.length; i++) {
-      const item = listItems[i];
-
-      if (
-        !item
-          .querySelector(".task-item__title")!
-          .textContent!.trim()
-          .toLowerCase()
-          .includes(searchTerm)
-      ) {
-        item.classList.add("hidden");
-        continue;
-      }
-
-      item.classList.remove("hidden");
-    }
-  }
 
   async function addTask(event: KeyboardEvent) {
     event.preventDefault();
@@ -140,7 +139,7 @@ export const Tasks: Component<Props> = (props) => {
         </button>
 
         <div class="toolbar">
-          <ExpandSearch filter={filter} />
+          <ExpandSearch setSearch={setSearch} />
           <label
             id="add-task-btn"
             class="toggle"
@@ -175,36 +174,14 @@ export const Tasks: Component<Props> = (props) => {
       </header>
 
       <ol id="task-list" ref={initSortable}>
-        <For each={tasks()?.filter((task) => !task.completed)}>
+        <For each={filteredTasks()}>
           {(task) => (
             <TaskItem task={task} update={updateTask} remove={removeTask} />
           )}
         </For>
       </ol>
 
-      <div id="task-drawer" popover>
-        <header>
-          <h2>Tasks</h2>
-        </header>
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Completed</th>
-            </tr>
-          </thead>
-          <tbody>
-            <For each={tasks()}>
-              {(task) => (
-                <tr>
-                  <td>{task.title}</td>
-                  <td>{task.completed ? "✓" : ""}</td>
-                </tr>
-              )}
-            </For>
-          </tbody>
-        </table>
-      </div>
+      <TaskDrawer tasks={tasks} remove={removeTask} />
     </section>
   );
 };

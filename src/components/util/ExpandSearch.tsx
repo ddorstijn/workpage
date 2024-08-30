@@ -1,15 +1,20 @@
-import { Component } from "solid-js";
+import { Component, Setter } from "solid-js";
 import "./ExpandSearch.css";
 
 interface Props {
-    filter: (event: Event) => any;
+  setSearch: Setter<string>;
 }
 
 export const ExpandSearch: Component<Props> = (props) => {
-    return (
-        <label class="expand-search">
-            <input name="search" type="search" placeholder="Search item" onInput={props.filter} />
-            <i class="ph ph-magnifying-glass"></i>
-        </label>
-    );
-}
+  return (
+    <label class="expand-search">
+      <input
+        name="search"
+        type="search"
+        placeholder="Search item"
+        onInput={(e) => props.setSearch((e.target as HTMLInputElement).value)}
+      />
+      <i class="ph ph-magnifying-glass"></i>
+    </label>
+  );
+};

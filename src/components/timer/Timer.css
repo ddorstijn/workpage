@@ -34,10 +34,12 @@
   .controls {
     #timer-start {
       background-color: var(--main-success);
+      color: var(--sidebar-text);
     }
 
     #timer-end {
       background-color: var(--main-error);
+      color: var(--sidebar-text);
     }
   }
 }

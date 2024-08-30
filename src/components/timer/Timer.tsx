@@ -3,13 +3,14 @@ import {
   createEffect,
   createMemo,
   createResource,
-  For,
   onCleanup,
   Resource,
   Show,
 } from "solid-js";
 
 import "./Timer.css";
+import { formatTimediff } from "~/shared/js/format";
+import { TimerDrawer } from "./TimerDrawer";
 
 interface Props {
   currentProject: Resource<chrome.bookmarks.BookmarkTreeNode | null>;
@@ -21,35 +22,6 @@ export type Session = {
   start: number;
   end: number | null;
 };
-
-function formatTimediff(diff: number | null) {
-  if (diff === null) {
-    return "-:--";
-  }
-
-  let seconds = Math.floor(diff / 1000);
-  let minutes = Math.floor(seconds / 60);
-  let hours = Math.floor(minutes / 60);
-
-  return `${String(hours).padStart(2, "0")}:${String(minutes % 60).padStart(
-    2,
-    "0"
-  )}`;
-}
-
-function formatDateTime(date: number | null) {
-  if (date === null) {
-    return "-:--";
-  }
-
-  return new Date(date).toLocaleTimeString("en-gb", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
 
 export const Timer: Component<Props> = (props) => {
   const [sessions, { refetch: refetchSessions }] = createResource<Session[]>(
@@ -123,10 +95,13 @@ export const Timer: Component<Props> = (props) => {
   async function end() {
     if (!props.currentProject() || !sessions()) return;
 
-    let newSessions = [...(sessions() ?? [])];
-    const latestSession = newSessions[newSessions.length - 1];
-    if (!latestSession || latestSession.end) return;
-    latestSession.end = Date.now();
+    const newSessions = sessions()?.map((session) => {
+      if (!session.end) {
+        return { ...session, end: Date.now() };
+      }
+
+      return session;
+    });
 
     const key = SESSIONS_PREFIX + props.currentProject()!.id;
     await chrome.storage.sync.set({ [key]: newSessions });
@@ -172,51 +147,7 @@ export const Timer: Component<Props> = (props) => {
         </div>
       </div>
 
-      <div id="timer-drawer" popover>
-        <header>
-          <h2>Timer</h2>
-        </header>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Start</th>
-              <th>End</th>
-              <th>Duration</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <For each={sessions() ?? []}>
-              {(session) => (
-                <tr>
-                  <td>
-                    <time datetime={formatDateTime(session.start)}>
-                      {formatDateTime(session.start)}
-                    </time>
-                  </td>
-                  <td>
-                    <time datetime={formatDateTime(session.end)}>
-                      {formatDateTime(session.end)}
-                    </time>
-                  </td>
-                  <td>
-                    <time
-                      datetime={formatTimediff(
-                        session.end ? session.end - session.start : 0
-                      )}
-                    >
-                      {formatTimediff(
-                        session.end ? session.end - session.start : 0
-                      )}
-                    </time>
-                  </td>
-                </tr>
-              )}
-            </For>
-          </tbody>
-        </table>
-      </div>
+      <TimerDrawer sessions={sessions} />
     </section>
   );
 };
