@@ -48,8 +48,8 @@ export const Links: Component<Props> = (props) => {
         }
     })
 
-    async function move(ctx: typeof window.dragCtx, index: number) {
-        await chrome.bookmarks.move(ctx!.item.id, { parentId: props.currentProject()!.id, index: index });
+    async function move(index: number) {
+        await chrome.bookmarks.move(window.dragCtx!.item.id, { parentId: props.currentProject()!.id, index: index });
     }
 
     function initSortable(el: HTMLElement) {

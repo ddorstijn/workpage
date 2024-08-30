@@ -14,9 +14,11 @@ interface DraggableOptions {
 }
 
 export function draggable({ el, handle }: DraggableOptions) {
-  if (handle) {
-    const handleEl = (el.querySelector(handle) as HTMLElement) ?? undefined;
+  const handleEl = handle
+    ? (el.querySelector(handle) as HTMLElement)
+    : undefined;
 
+  if (handleEl) {
     handleEl.addEventListener("mousedown", () => {
       el.draggable = true;
     });
@@ -28,18 +30,16 @@ export function draggable({ el, handle }: DraggableOptions) {
     el.draggable = true;
   }
 
-  el.addEventListener("drag", (e) => {
-    e.stopPropagation();
-
-    el.style.setProperty("display", "none");
+  el.addEventListener("drag", (ev) => {
+    ev.stopPropagation();
+    el.style.display = "none";
   });
 
   el.classList.add("draggable");
-  el.addEventListener("dragend", (e) => {
-    e.stopPropagation();
-
+  el.addEventListener("dragend", (ev) => {
+    ev.stopPropagation();
     setTimeout(() => {
-      el.style.removeProperty("display");
+      el.style.display = "";
       el.classList.remove("dragging");
       document.getElementById("ghost")?.remove();
       window.dragCtx = undefined;
@@ -51,17 +51,16 @@ interface SortableOptions {
   el: HTMLElement;
   group: string;
   mode: "horizontal" | "vertical";
-  onDrop?: (ctx: typeof window.dragCtx, index: number) => any;
+  onDrop?: (index: number) => any;
 }
+
 export function sortable({ el, group, mode, onDrop }: SortableOptions) {
   el.classList.add("sortable");
 
   el.addEventListener("dragstart", (e: DragEvent) => {
     e.stopPropagation();
 
-    const item = (e.target as HTMLElement).closest(
-      ".draggable"
-    )! as HTMLElement;
+    const item = (e.target as HTMLElement).closest(".draggable") as HTMLElement;
     window.dragCtx = { item, group, list: el };
 
     const ghost = item.cloneNode(true) as HTMLElement;
@@ -72,93 +71,71 @@ export function sortable({ el, group, mode, onDrop }: SortableOptions) {
   });
 
   el.addEventListener("dragover", (e: DragEvent) => {
-    if (!window.dragCtx || window.dragCtx.group !== group) {
-      return;
-    }
+    if (!window.dragCtx || window.dragCtx.group !== group) return;
+
     e.preventDefault();
 
     const afterElement = getDragAfterElement(el, e, mode);
+    const ghost = document.getElementById("ghost")!;
     if (afterElement == null) {
-      el.appendChild(document.getElementById("ghost")!);
+      el.appendChild(ghost);
     } else {
-      el.insertBefore(document.getElementById("ghost")!, afterElement);
+      el.insertBefore(ghost, afterElement);
     }
   });
 
-  el.addEventListener("drop", async (e: DragEvent) => {
-    e.stopPropagation();
+  el.addEventListener("drop", async (ev: DragEvent) => {
+    ev.stopPropagation();
 
-    const children = [
-      ...el.querySelectorAll<HTMLElement>("& > .draggable:not(.dragging)"),
-    ];
+    const children = Array.from(
+      el.querySelectorAll<HTMLElement>("& > .draggable:not(.dragging)")
+    );
     const index = children.indexOf(document.getElementById("ghost")!);
 
     document.getElementById("ghost")!.remove();
     window.dragCtx!.item.classList.remove("dragging");
 
-    await onDrop?.(window.dragCtx!, index);
+    await onDrop?.(index);
     window.dragCtx = undefined;
   });
 }
 
 function getDragAfterElement(
   container: HTMLElement,
-  event: DragEvent,
+  ev: DragEvent,
   mode: "horizontal" | "vertical"
-) {
-  const children = container.children;
-  let closestDistance = Number.NEGATIVE_INFINITY;
-  let closestIndex: number = Number.NEGATIVE_INFINITY;
+): HTMLElement | null {
+  let closestElement: HTMLElement | null = null;
+  let closestDistance = Number.POSITIVE_INFINITY;
 
-  for (let i = 0; i < children.length; i++) {
-    const child = children[i] as HTMLElement;
+  for (let i = 0; i < container.children.length; i++) {
+    const child = container.children[i] as HTMLElement;
+
     if (
-      child.classList.contains("draggable") &&
-      !child.classList.contains("dragging") &&
-      child.id !== "ghost"
+      !child.classList.contains("draggable") &&
+      child.classList.contains("dragging") &&
+      child.id === "ghost"
     ) {
-      const box = child.getBoundingClientRect();
+      continue;
+    }
 
-      // Skip if not on the same row
-      if (
-        mode === "horizontal" &&
-        (event.clientY > box.bottom || event.clientY < box.top)
-      ) {
-        continue;
-      }
+    const box = child.getBoundingClientRect();
+    let offset: number;
+    if (mode === "horizontal") {
+      if (ev.clientY < box.top || ev.clientY > box.bottom) continue;
+      offset = ev.clientX - (box.left + box.width / 2);
+    } else {
+      if (ev.clientX < box.left || ev.clientX > box.right) continue;
+      offset = ev.clientY - (box.top + box.height / 2);
+    }
 
-      if (
-        mode === "vertical" &&
-        (event.clientX > box.right || event.clientX < box.left)
-      ) {
-        continue;
-      }
-
-      const relativeOffset =
-        mode === "horizontal"
-          ? event.clientX - box.left - box.width / 2
-          : event.clientY - box.top - box.height / 2;
-
-      // If closer to 0, that's the new closest distance
-      if (closestDistance < 0 && relativeOffset > closestDistance) {
-        closestDistance = relativeOffset;
-        closestIndex = i;
-        continue;
-      }
-
-      if (closestDistance > 0 && relativeOffset < closestDistance) {
-        closestDistance = relativeOffset;
-        closestIndex = i;
-      }
+    if (Math.abs(offset) < Math.abs(closestDistance)) {
+      closestDistance = offset;
+      closestElement = child;
     }
   }
 
-  if (closestIndex === Number.NEGATIVE_INFINITY) {
-    return null;
-  }
-
-  if (closestDistance > 0) {
-    return children[closestIndex + 1] as HTMLElement;
-  }
-  return children[closestIndex] as HTMLElement;
+  return closestElement && closestDistance > 0
+    ? (closestElement.nextElementSibling as HTMLElement)
+    : closestElement;
 }

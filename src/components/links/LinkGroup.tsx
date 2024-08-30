@@ -62,8 +62,8 @@ export const LinkGroup: Component<Props> = (props) => {
         await chrome.bookmarks.update(props.group.id, { title: inputEl!.value });
     }
 
-    async function move(ctx: typeof window.dragCtx, index: number) {
-        await chrome.bookmarks.move(ctx!.item.id, { parentId: props.group.id, index: index });
+    async function move(index: number) {
+        await chrome.bookmarks.move(window.dragCtx!.item.id, { parentId: props.group.id, index: index });
     }
 
     function initDraggable(el: HTMLElement) {

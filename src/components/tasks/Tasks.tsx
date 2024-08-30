@@ -93,20 +93,15 @@ export const Tasks: Component<Props> = (props) => {
         ]);
     }
 
-    async function move(ctx: typeof window.dragCtx, index: number) {
+    async function move(index: number) {
         const ids = tasks()!.map((task) => task.id);
-        const fromIndex = ids.indexOf(ctx!.item.id);
+        const fromIndex = ids.indexOf(window.dragCtx!.item.id);
 
-        arraymove(ids, fromIndex, index);
+        let element = ids[fromIndex];
+        ids.splice(fromIndex, 1);
+        ids.splice(index, 0, element);
 
         await chrome.storage.sync.set({ [getProjectTaskKey()]: ids })
-    }
-
-
-    function arraymove(arr: Array<any>, fromIndex: number, toIndex: number) {
-        var element = arr[fromIndex];
-        arr.splice(fromIndex, 1);
-        arr.splice(toIndex, 0, element);
     }
 
     function initSortable(el: HTMLElement) {
