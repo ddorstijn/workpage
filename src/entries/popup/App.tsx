@@ -1,5 +1,6 @@
-import { createResource } from "solid-js";
+import { createEffect, createResource } from "solid-js";
 import { getCurrentProject, getRoot, PROJECT_KEY } from "~/shared/js/bookmark";
+import { DEFAULT_SETTINGS } from "~/shared/js/settings";
 
 import { Projects } from "~/components/projects/Projects";
 import { Timer } from "~/components/timer/Timer";
@@ -28,9 +29,36 @@ function App() {
     }
   });
 
+  const [settings, { refetch: refetchSettings }] = createResource(async () => {
+    const settings = (await chrome.storage.sync.get("settings"))["settings"] as typeof DEFAULT_SETTINGS | undefined;
+    if (!settings) {
+      return DEFAULT_SETTINGS;
+    }
+
+    return settings;
+  });
+
+  createEffect(async () => {
+    if (!settings()) {
+      return;
+    }
+
+    for (const [key, value] of Object.entries(settings()!)) {
+      document.documentElement.style.setProperty(`--${key}`, value);
+    }
+  })
+
+  chrome.storage.sync.onChanged.addListener(async (info) => {
+    if (info.settings) {
+      await refetchSettings();
+    }
+  });
+
   return (
     <>
-      <h1>Workpage</h1>
+      <header>
+        <h1>Workpage</h1>
+      </header>
       <Projects root={root} currentProject={currentProject} />
       <Timer currentProject={currentProject} />
       <LinkAdd currentProject={currentProject} />

@@ -5,11 +5,20 @@
   flex-direction: column;
   overflow: hidden;
 
+  background-color: var(--sidebar-bg);
+  border-radius: var(--main-rounding);
+  padding: 1rem;
+
   > header {
+    margin-bottom: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+
+    h2 {
+      margin: 0;
+    }
 
     #add-task-btn {
       background: var(--main-success);
@@ -34,7 +43,7 @@
     }
   }
 
-  .task-list {
+  #task-list {
     list-style: none;
 
     display: flex;

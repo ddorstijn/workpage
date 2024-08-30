@@ -1,5 +1,7 @@
 import { Component, createEffect, createMemo, createResource, createSignal, For, Resource, Show } from "solid-js";
 
+import "./LinkAdd.css";
+
 interface Props {
     currentProject: Resource<chrome.bookmarks.BookmarkTreeNode | null>
 }
@@ -57,7 +59,9 @@ export const LinkAdd: Component<Props> = (props) => {
 
     return (
         <section id="add-link">
-            <h2>Add link</h2>
+            <header>
+                <h2>Add link</h2>
+            </header>
             <form onSubmit={add}>
                 <div class="group-select">
                     <label>

@@ -106,7 +106,7 @@ export const Timer: Component<Props> = (props) => {
     return (
         <section id="timer">
             <header>
-                <button style={{ padding: 0 }} popoverTarget="timer-drawer">
+                <button class="clear" style={{ color: "var(--sidebar-text)"}} popoverTarget="timer-drawer">
                     <h2>Timer</h2>
                     <i class="ph ph-arrow-up-right"></i>
                 </button>

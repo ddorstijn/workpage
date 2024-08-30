@@ -57,10 +57,14 @@ interface SortableOptions {
 export function sortable({ el, group, mode, onDrop }: SortableOptions) {
   el.classList.add("sortable");
 
-  el.addEventListener("dragstart", (e: DragEvent) => {
-    e.stopPropagation();
+  el.addEventListener("dragstart", (ev: DragEvent) => {
+    ev.stopPropagation();
 
-    const item = (e.target as HTMLElement).closest(".draggable") as HTMLElement;
+    ev.dataTransfer!.effectAllowed = "move";
+
+    const item = (ev.target as HTMLElement).closest(
+      ".draggable"
+    ) as HTMLElement;
     window.dragCtx = { item, group, list: el };
 
     const ghost = item.cloneNode(true) as HTMLElement;
@@ -70,12 +74,12 @@ export function sortable({ el, group, mode, onDrop }: SortableOptions) {
     item.classList.add("dragging");
   });
 
-  el.addEventListener("dragover", (e: DragEvent) => {
+  el.addEventListener("dragover", (ev: DragEvent) => {
     if (!window.dragCtx || window.dragCtx.group !== group) return;
 
-    e.preventDefault();
+    ev.preventDefault();
 
-    const afterElement = getDragAfterElement(el, e, mode);
+    const afterElement = getDragAfterElement(el, ev, mode);
     const ghost = document.getElementById("ghost")!;
     if (afterElement == null) {
       el.appendChild(ghost);

@@ -4,7 +4,6 @@
 
 #project-button {
   font: var(--project-button-font);
-  border-radius: var(--main-rounding);
   color: var(--project-button-text);
   background-color: var(--project-button-bg);
 

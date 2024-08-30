@@ -1,5 +1,18 @@
 #timer {
   width: 100%;
+  margin-top: 1rem;
+  padding: 1rem;
+
+  background-color: var(--sidebar-bg);
+  border-radius: var(--main-rounding);
+
+  header {
+    h2 {
+      margin: 0;
+    }
+
+    margin-bottom: 1rem;
+  }
 
   .content {
     display: flex;
@@ -19,10 +32,6 @@
   }
 
   .controls {
-    button {
-      border-radius: var(--main-rounding);
-    }
-
     #timer-start {
       background-color: var(--main-success);
     }
@@ -30,11 +39,5 @@
     #timer-end {
       background-color: var(--main-error);
     }
-  }
-
-  tbody {
-    max-height: 450px;
-    overflow-y: auto;
-    scrollbar-width: thin;
   }
 }

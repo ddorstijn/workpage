@@ -111,7 +111,7 @@ export const Tasks: Component<Props> = (props) => {
     return (
         <section id="tasks">
             <header>
-                <button style={{ padding: "0" }} popoverTarget="task-drawer">
+                <button class="clear" style={{ color: "var(--sidebar-text)"}} popoverTarget="task-drawer">
                     <h2>Tasks</h2>
                     <i class="ph ph-arrow-up-right"></i>
                 </button>
@@ -142,7 +142,7 @@ export const Tasks: Component<Props> = (props) => {
                 </div>
             </header>
 
-            <ol class="task-list" ref={initSortable}>
+            <ol id="task-list" ref={initSortable}>
                 <For each={tasks()?.filter((task) => !task.completed)}>
                     {(task) => <TaskItem currentProject={props.currentProject} task={task} />}
                 </For>
@@ -152,11 +152,19 @@ export const Tasks: Component<Props> = (props) => {
                 <header>
                     <h2>Tasks</h2>
                 </header>
-                <ol class="task-list">
-                    <For each={tasks()}>
-                        {(task) => <TaskItem currentProject={props.currentProject} task={task} />}
-                    </For>
-                </ol>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Completed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <For each={tasks()}>
+                            {(task) => <tr><td>{task.title}</td><td>{task.completed ? '✓' : ''}</td></tr>}
+                        </For>
+                    </tbody>
+                </table>
             </div>
         </section>
     );

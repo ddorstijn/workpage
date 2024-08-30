@@ -2,26 +2,16 @@ body {
   font-size: 1rem;
 }
 
-h1 {
-  font-size: 4rem;
-}
-
-h2 {
-  font-size: 1.5rem;
-}
-
 button {
   display: flex;
   gap: 0.25rem;
   align-items: center;
   justify-content: center;
+  border-radius: var(--main-rounding);
 
-  background: var(--button-bg);
   border: none;
   padding: 0.5rem 1rem;
   cursor: pointer;
-
-  color: var(--button-text);
 
   & * {
     pointer-events: none;
@@ -30,14 +20,19 @@ button {
 
 button.clear {
   background: none;
-  color: var(--text-color);
+  color: inherit;
   border: none;
   padding: 0;
   cursor: pointer;
 }
 
-input {
+input,
+select,
+textarea {
   background-color: transparent;
+  margin: 0;
+  padding: 0.25rem 0.5rem;
+  border: none;
 }
 
 label {
@@ -147,15 +142,16 @@ table caption {
   text-align: left;
 }
 
+tbody {
+  max-height: 450px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
 td,
 th {
   padding: 6px;
   text-align: left;
   vertical-align: top;
   word-wrap: break-word;
-}
-
-::-webkit-scrollbar {
-  height: 10px;
-  width: 10px;
 }

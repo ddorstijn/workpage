@@ -37,5 +37,5 @@ main {
 
   background-color: var(--sidebar-bg);
   color: var(--sidebar-text);
-  padding: 1rem 2rem;
+  padding: 0.5rem 1rem;
 }
