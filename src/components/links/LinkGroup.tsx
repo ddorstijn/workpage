@@ -1,9 +1,10 @@
 import { Component, createResource, For } from "solid-js";
+import { draggable, sortable } from "~/shared/js/sortable";
+
 import { LinkItem } from "./LinkItem";
+import { Options } from "../util/Options";
 
 import "./LinkGroup.css";
-import { Options } from "../util/Options";
-import { draggable, sortable } from "~/shared/js/sortable";
 
 interface Props {
     group: chrome.bookmarks.BookmarkTreeNode
@@ -80,6 +81,7 @@ export const LinkGroup: Component<Props> = (props) => {
                 <Options remove={remove} edit={edit}>
                     <input
                         ref={inputEl}
+                        name="group-item__input"
                         class="group-item__input hidden"
                         value={props.group.title} onBlur={update}
                         onKeyDown={(event) => event.key === 'Enter' && inputEl?.blur()}

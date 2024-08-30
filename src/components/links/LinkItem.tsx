@@ -1,8 +1,9 @@
 import { Component } from "solid-js";
+import { draggable } from "~/shared/js/sortable";
+
+import { Options } from "../util/Options";
 
 import "./LinkItem.css";
-import { Options } from "../util/Options";
-import { draggable } from "~/shared/js/sortable";
 
 interface Props {
     link: chrome.bookmarks.BookmarkTreeNode
@@ -41,8 +42,8 @@ export const LinkItem: Component<Props> = (props) => {
             <dialog ref={dialogEl}>
                 <h3>Edit link</h3>
                 <form method="dialog" onSubmit={update}>
-                    <input ref={inputEl} type="text" value={props.link.title} />
-                    <input type="url" value={props.link.url} />
+                    <input ref={inputEl} name="title" type="text" value={props.link.title} />
+                    <input name="url" type="url" value={props.link.url} />
 
                     <button type="submit">Save</button>
                 </form>

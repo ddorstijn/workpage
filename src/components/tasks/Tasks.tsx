@@ -79,6 +79,8 @@ export const Tasks: Component<Props> = (props) => {
 
         const textarea = event.target as HTMLTextAreaElement;
         const title = textarea.value;
+
+        if (!title) return;
         textarea.value = "";
 
         const id = crypto.randomUUID();
@@ -122,7 +124,7 @@ export const Tasks: Component<Props> = (props) => {
                 <div class="toolbar">
                     <ExpandSearch filter={filter} />
                     <label id="add-task-btn" class="toggle" aria-controls="add-task-form" onClick={() => document.getElementById('task-new')!.focus()}>
-                        <input type="checkbox" />
+                        <input name="open-form" type="checkbox" />
                         <i class="open ph ph-plus"></i>
                         <i class="close ph ph-minus"></i>
                         new
@@ -131,7 +133,7 @@ export const Tasks: Component<Props> = (props) => {
 
                 <div id="add-task-form" class="task-item">
                     <label class="checkbox">
-                        <input type="checkbox" disabled />
+                        <input name="fake-checkbox" type="checkbox" disabled />
                         <span class="unchecked"><i class="ph ph-circle"></i></span>
                         <span class="checked"><i class="ph ph-check-circle"></i></span>
                     </label>

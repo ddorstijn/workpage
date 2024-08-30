@@ -2,11 +2,6 @@
   opacity: 0.5;
 }
 
-.dragging {
-  transition: 0.1s;
-  display: none !important;
-}
-
 .sortable {
   padding: 1rem;
   margin: -1rem;

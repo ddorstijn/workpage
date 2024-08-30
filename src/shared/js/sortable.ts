@@ -28,11 +28,18 @@ export function draggable({ el, handle }: DraggableOptions) {
     el.draggable = true;
   }
 
+  el.addEventListener("drag", (e) => {
+    e.stopPropagation();
+
+    el.style.setProperty("display", "none");
+  });
+
   el.classList.add("draggable");
   el.addEventListener("dragend", (e) => {
     e.stopPropagation();
 
     setTimeout(() => {
+      el.style.removeProperty("display");
       el.classList.remove("dragging");
       document.getElementById("ghost")?.remove();
       window.dragCtx = undefined;
@@ -100,24 +107,58 @@ function getDragAfterElement(
   mode: "horizontal" | "vertical"
 ) {
   const children = container.children;
-  let closest = Number.NEGATIVE_INFINITY;
-  let closestElement: HTMLElement | null = null;
+  let closestDistance = Number.NEGATIVE_INFINITY;
+  let closestIndex: number = Number.NEGATIVE_INFINITY;
 
   for (let i = 0; i < children.length; i++) {
     const child = children[i] as HTMLElement;
-    if (child.classList.contains("draggable") && child.id !== "ghost") {
+    if (
+      child.classList.contains("draggable") &&
+      !child.classList.contains("dragging") &&
+      child.id !== "ghost"
+    ) {
       const box = child.getBoundingClientRect();
+
+      // Skip if not on the same row
+      if (
+        mode === "horizontal" &&
+        (event.clientY > box.bottom || event.clientY < box.top)
+      ) {
+        continue;
+      }
+
+      if (
+        mode === "vertical" &&
+        (event.clientX > box.right || event.clientX < box.left)
+      ) {
+        continue;
+      }
+
       const relativeOffset =
         mode === "horizontal"
           ? event.clientX - box.left - box.width / 2
           : event.clientY - box.top - box.height / 2;
 
-      if (relativeOffset < 0 && relativeOffset > closest) {
-        closest = relativeOffset;
-        closestElement = child;
+      // If closer to 0, that's the new closest distance
+      if (closestDistance < 0 && relativeOffset > closestDistance) {
+        closestDistance = relativeOffset;
+        closestIndex = i;
+        continue;
+      }
+
+      if (closestDistance > 0 && relativeOffset < closestDistance) {
+        closestDistance = relativeOffset;
+        closestIndex = i;
       }
     }
   }
 
-  return closestElement;
+  if (closestIndex === Number.NEGATIVE_INFINITY) {
+    return null;
+  }
+
+  if (closestDistance > 0) {
+    return children[closestIndex + 1] as HTMLElement;
+  }
+  return children[closestIndex] as HTMLElement;
 }

@@ -82,7 +82,7 @@ export const Projects: Component<Props> = (props) => {
                     <div class="toolbar">
                         <ExpandSearch filter={filter} />
                         <label id="add-project-btn" class="toggle" aria-controls="add-project-form" onClick={() => document.getElementById('project-new')!.focus()}>
-                            <input type="checkbox" />
+                            <input name="open-form" type="checkbox" />
                             <i class="open ph ph-plus"></i>
                             <i class="close ph ph-minus"></i>
                             new

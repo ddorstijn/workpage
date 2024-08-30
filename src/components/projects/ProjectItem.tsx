@@ -37,6 +37,7 @@ export const ProjectItem: Component<Props> = (props) => {
                     <input
                         ref={inputEl}
                         type="text"
+                        name="project-item__input"
                         class="project-item__input hidden"
                         value={props.project.title}
                         onBlur={updateProject}
